@@ -239,3 +239,9 @@ export function getPathBrightspaceUrl(path: Path) {
 export function getModuleBrightspaceUrl(module: Module) {
   return module.brightspaceModuleUrl ?? module.moduleAnchorUrl ?? module.brightspaceCourseUrl;
 }
+
+export function getLearningItemUrl(item: LearningItem) {
+  if (item.type === "PATH") return getPathBrightspaceUrl(item);
+  if (item.type === "MODULE") return getModuleBrightspaceUrl(item);
+  return item.brightspaceUrl;
+}
