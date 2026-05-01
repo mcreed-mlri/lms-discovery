@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --font-sans: "Segoe UI Variable", "Segoe UI", "Aptos", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Segoe UI Variable", "Segoe UI", "Aptos", ui-sans-serif, system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  background:
+    radial-gradient(circle at 78% 0%, rgba(42, 155, 214, 0.14), transparent 30rem),
+    linear-gradient(180deg, #f7fbff 0%, #ffffff 42%);
+  color: #0b1f35;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+input::placeholder {
+  color: #64748b;
+  opacity: 1;
+}
+
+::selection {
+  background: rgba(42, 155, 214, 0.24);
+}
+
+.hub-shell {
+  background-image:
+    linear-gradient(rgba(8, 45, 87, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(8, 45, 87, 0.035) 1px, transparent 1px);
+  background-size: 44px 44px;
+}

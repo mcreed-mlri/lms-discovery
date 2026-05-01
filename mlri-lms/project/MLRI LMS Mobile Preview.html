@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MLRI LMS — Mobile Preview</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="data.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      background: #0d1b2e;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      padding: 40px 20px;
+      gap: 48px;
+    }
+    #root { display: flex; align-items: center; justify-content: center; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef, useMemo } = React;
+
+/* ─── Brand tokens ─────────────────────────────────────── */
+const T = {
+  navy:        "#154377",
+  navyDark:    "#0d2d52",
+  accent:      "#259ace",
+  accentLight: "rgba(37,154,206,0.12)",
+  lime:        "#bae665",
+  limeText:    "#2a4000",
+  bg:          "#f5f7fa",
+  surface:     "#ffffff",
+  border:      "#e2e8f0",
+  borderStrong:"#b8c4d4",
+  text:        "#0f1e30",
+  textMuted:   "#4a5e78",
+  textFaint:   "#94a3b8",
+  filterBg:    "#edf1f7",
+  bands: ["#154377","#259ace","#1a5490","#0e7490","#1d4ed8","#2d6a4f"],
+};
+
+const FONT = "'DM Sans', -apple-system, sans-serif";
+const SERIF = "'DM Serif Display', Georgia, serif";
+
+const TYPE_ICONS = {
+  path: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M7 12h4l4-5"/><path d="M11 12l4 5"/></svg>,
+  course: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg>,
+  module: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>,
+};
+const TYPE_LABEL = { path: "Path", course: "Course", module: "Module" };
+const TYPE_COLOR = { path: { bg: "#fef3c7", text: "#92400e" }, course: { bg: "#dbeafe", text: "#1d4ed8" }, module: { bg: "#f3e8ff", text: "#6b21a8" } };
+const LEVEL_COLOR = { Foundations: { bg: "#dbeafe", text: "#1d4ed8" }, Intermediate: { bg: "#fef3c7", text: "#92400e" }, Advanced: { bg: "#fee2e2", text: "#991b1b" } };
+
+/* ─── Phone Shell ───────────────────────────────────────── */
+/* Fixed 390×844 (iPhone 14 logical pts). Status bar = 59px. */
+const PHONE_W = 390;
+const PHONE_H = 844;
+const STATUS_H = 59;   /* room for dynamic island + clearance */
+const NAV_H    = 72;   /* bottom tab bar incl. home indicator area */
+const CONTENT_H = PHONE_H - STATUS_H - NAV_H; /* 713px scrollable */
+
+function PhoneShell({ children }) {
+  return (
+    <div style={{
+      width: PHONE_W, height: PHONE_H,
+      borderRadius: 52,
+      background: "#f2f2f7",
+      boxShadow: "0 0 0 1px rgba(0,0,0,0.14), 0 0 0 8px #1a1a1a, 0 40px 80px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.3)",
+      overflow: "hidden",
+      position: "relative",
+      fontFamily: FONT,
+    }}>
+      {/* Dynamic Island */}
+      <div style={{
+        position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)",
+        width: 120, height: 34, borderRadius: 20, background: "#000",
+        zIndex: 200, pointerEvents: "none",
+      }} />
+      {/* Status bar background — solid so content doesn't bleed */}
+      <div style={{
+        position: "absolute", top: 0, left: 0, right: 0,
+        height: STATUS_H, zIndex: 100, pointerEvents: "none",
+        display: "flex", alignItems: "flex-end", justifyContent: "space-between",
+        padding: "0 24px 8px",
+      }}>
+        <span style={{ fontSize: 15, fontWeight: 600, color: "inherit", fontFamily: FONT }}>9:41</span>
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+          <svg width="16" height="12" viewBox="0 0 19 12"><rect x="0" y="7.5" width="3.2" height="4.5" rx="0.7" fill="currentColor"/><rect x="4.8" y="5" width="3.2" height="7" rx="0.7" fill="currentColor"/><rect x="9.6" y="2.5" width="3.2" height="9.5" rx="0.7" fill="currentColor"/><rect x="14.4" y="0" width="3.2" height="12" rx="0.7" fill="currentColor"/></svg>
+          <svg width="14" height="10" viewBox="0 0 17 12"><path d="M8.5 3.2C10.8 3.2 12.9 4.1 14.4 5.6L15.5 4.5C13.7 2.7 11.2 1.5 8.5 1.5C5.8 1.5 3.3 2.7 1.5 4.5L2.6 5.6C4.1 4.1 6.2 3.2 8.5 3.2Z" fill="currentColor"/><path d="M8.5 6.8C9.9 6.8 11.1 7.3 12 8.2L13.1 7.1C11.8 5.9 10.2 5.1 8.5 5.1C6.8 5.1 5.2 5.9 3.9 7.1L5 8.2C5.9 7.3 7.1 6.8 8.5 6.8Z" fill="currentColor"/><circle cx="8.5" cy="10.5" r="1.5" fill="currentColor"/></svg>
+          <svg width="24" height="12" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="23" height="12" rx="3.5" stroke="currentColor" strokeOpacity="0.35" fill="none"/><rect x="2" y="2" width="18" height="9" rx="2" fill="currentColor"/></svg>
+        </div>
+      </div>
+      {/* Content area — positioned below status bar, above bottom nav */}
+      <div style={{
+        position: "absolute",
+        top: STATUS_H, left: 0, right: 0,
+        bottom: NAV_H,
+        overflow: "hidden",
+      }}>
+        {children}
+      </div>
+      {/* Home indicator */}
+      <div style={{
+        position: "absolute", bottom: 8, left: "50%", transform: "translateX(-50%)",
+        width: 134, height: 5, borderRadius: 3,
+        background: "rgba(0,0,0,0.25)", zIndex: 200, pointerEvents: "none",
+      }} />
+    </div>
+  );
+}
+
+/* ─── Bottom Tab Bar — modern floating pill ─────────────── */
+function BottomTabs({ active, onNavigate }) {
+  const tabs = [
+    { id: "home",     label: "Home",
+      icon: (filled) => filled
+        ? <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    },
+    { id: "search",   label: "Search",
+      icon: (filled) => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={filled ? 2.5 : 1.8} strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+    },
+    { id: "paths",    label: "Paths",
+      icon: (filled) => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={filled ? 2.5 : 1.8} strokeLinecap="round" strokeLinejoin="round"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M7 12h4l4-5"/><path d="M11 12l4 5"/></svg>
+    },
+    { id: "progress", label: "Progress",
+      icon: (filled) => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={filled ? 2.5 : 1.8} strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    },
+  ];
+
+  return (
+    <div style={{
+      position: "absolute", bottom: 0, left: 0, right: 0,
+      height: NAV_H,
+      background: "rgba(255,255,255,0.92)",
+      backdropFilter: "blur(20px)",
+      WebkitBackdropFilter: "blur(20px)",
+      borderTop: "1px solid rgba(0,0,0,0.06)",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      padding: "0 12px 18px",
+      zIndex: 150,
+    }}>
+      {/* Floating pill container */}
+      <div style={{
+        display: "flex", alignItems: "center",
+        background: "rgba(255,255,255,0.85)",
+        borderRadius: 28,
+        padding: "6px 8px",
+        gap: 4,
+        boxShadow: "0 2px 16px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.06)",
+      }}>
+        {tabs.map(tab => {
+          const isActive = active === tab.id;
+          return (
+            <button key={tab.id} onClick={() => onNavigate(tab.id)} style={{
+              display: "flex", alignItems: "center", justifyContent: "center",
+              gap: isActive ? 6 : 0,
+              padding: isActive ? "8px 16px" : "8px 14px",
+              borderRadius: 22,
+              background: isActive ? T.navy : "transparent",
+              color: isActive ? "#fff" : T.textFaint,
+              fontFamily: FONT, cursor: "pointer",
+              transition: "all 0.22s cubic-bezier(.34,1.2,.64,1)",
+              whiteSpace: "nowrap", overflow: "hidden",
+            }}>
+              <div style={{ flexShrink: 0, lineHeight: 0 }}>{tab.icon(isActive)}</div>
+              {isActive && (
+                <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: "-0.01em", lineHeight: 1 }}>
+                  {tab.label}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Home Screen ───────────────────────────────────────── */
+function HomeScreen({ onSearch, onOpenPaths, onOpenItem }) {
+  const allItems = window.LMS_DATA.items;
+  const newItems = allItems.filter(i => i.isNew).slice(0, 3);
+  const paths = allItems.filter(i => i.type === "path").slice(0, 3);
+
+  return (
+    <div style={{ height: "100%", overflowY: "auto", background: T.bg }}>
+      {/* Hero */}
+      <div style={{
+        background: `linear-gradient(145deg, ${T.navyDark} 0%, ${T.navy} 100%)`,
+        padding: "20px 20px 24px",
+        position: "relative", overflow: "hidden",
+      }}>
+        <div style={{ position: "absolute", top: -50, right: -50, width: 160, height: 160, borderRadius: "50%", background: "rgba(37,154,206,0.1)", pointerEvents: "none" }} />
+        {/* Top row */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ width: 26, height: 26, borderRadius: 6, background: T.accent, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+            </div>
+            <span style={{ fontSize: 14, fontWeight: 700, color: "#fff", letterSpacing: "-0.01em" }}>Law Skills</span>
+            <div style={{ width: 1, height: 12, background: "rgba(255,255,255,0.2)" }} />
+            <span style={{ fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.45)", letterSpacing: "0.08em", textTransform: "uppercase" }}>MLRI</span>
+          </div>
+          <div style={{ width: 30, height: 30, borderRadius: "50%", background: T.accent, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, color: "#fff" }}>MC</div>
+        </div>
+        {/* Welcome */}
+        <p style={{ fontSize: 11, color: T.accent, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4 }}>Good morning</p>
+        <h1 style={{ fontSize: 22, fontWeight: 700, color: "#fff", lineHeight: 1.15, marginBottom: 16, fontFamily: SERIF }}>
+          Find what you need,{" "}
+          <em style={{ color: T.accent, fontStyle: "italic" }}>fast.</em>
+        </h1>
+        {/* Compact quick-search */}
+        <button onClick={onSearch} style={{
+          width: "100%", display: "flex", alignItems: "center", gap: 10,
+          background: "rgba(255,255,255,0.96)", borderRadius: 10, padding: "9px 12px",
+          border: `1px solid rgba(255,255,255,0.35)`, fontFamily: FONT, cursor: "pointer", textAlign: "left",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.16)",
+        }}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.textFaint} strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+          <span style={{ fontSize: 13, color: T.textMuted, flex: 1, fontFamily: FONT, fontWeight: 500 }}>Quick search</span>
+          <span style={{ fontSize: 10, color: T.textFaint, background: T.filterBg, border: `1px solid ${T.border}`, padding: "2px 6px", borderRadius: 4, fontFamily: FONT }}>⌘K</span>
+        </button>
+      </div>
+
+      {/* What's New */}
+      <div style={{ padding: "18px 18px 0" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+          <span style={{ background: T.lime, color: T.limeText, fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", padding: "3px 9px", borderRadius: 20 }}>What's New</span>
+          <span style={{ fontSize: 12, color: T.textFaint }}>Recently updated</span>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {newItems.map((item, i) => (
+            <button key={item.id} onClick={() => onOpenItem(item, "home")} style={{
+              display: "flex", alignItems: "center", gap: 12,
+              background: T.surface, border: `1px solid ${T.border}`,
+              borderRadius: 10, padding: "11px 14px",
+              fontFamily: FONT, cursor: "pointer", textAlign: "left", width: "100%",
+              animation: `fadeUp 0.3s ease ${i * 40}ms both`,
+            }}>
+              <div style={{
+                width: 34, height: 34, borderRadius: 8, flexShrink: 0,
+                background: `${T.bands[i % T.bands.length]}18`,
+                color: T.bands[i % T.bands.length],
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>{TYPE_ICONS[item.type]}</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: T.text, marginBottom: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.title}</div>
+                <div style={{ fontSize: 11, color: T.textFaint }}>{item.duration} · {item.practiceArea}</div>
+              </div>
+              <span style={{ background: T.lime, color: T.limeText, fontSize: 8, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", padding: "2px 7px", borderRadius: 10, flexShrink: 0 }}>New</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Learning Paths */}
+      <div style={{ padding: "20px 18px 0" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+          <h2 style={{ fontSize: 15, fontWeight: 700, color: T.text }}>Learning Paths</h2>
+          <button onClick={onOpenPaths} style={{ fontSize: 12, color: T.accent, fontFamily: FONT, fontWeight: 600 }}>See all →</button>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {paths.map((item, i) => (
+            <MiniCard key={item.id} item={item} index={i} onClick={() => onOpenItem(item, "home")} />
+          ))}
+        </div>
+      </div>
+
+      {/* Practice Areas */}
+      <div style={{ padding: "20px 18px 24px" }}>
+        <h2 style={{ fontSize: 15, fontWeight: 700, color: T.text, marginBottom: 12 }}>Browse by Practice Area</h2>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          {window.LMS_DATA.practiceAreas.slice(0, 8).map(area => (
+            <button key={area} onClick={onSearch} style={{
+              fontSize: 12, fontWeight: 500, padding: "7px 13px", borderRadius: 20,
+              background: T.surface, border: `1px solid ${T.border}`,
+              color: T.textMuted, fontFamily: FONT, cursor: "pointer",
+            }}>{area}</button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Mini Card (home) ──────────────────────────────────── */
+function MiniCard({ item, index, onClick }) {
+  const band = T.bands[index % T.bands.length];
+  return (
+    <button onClick={onClick} style={{
+      display: "flex", alignItems: "center", gap: 12,
+      background: T.surface, border: `1px solid ${T.border}`,
+      borderRadius: 10, padding: "12px 14px",
+      fontFamily: FONT, cursor: "pointer", textAlign: "left", width: "100%",
+      animation: `fadeUp 0.3s ease ${index * 35}ms both`,
+    }}>
+      <div style={{ width: 4, alignSelf: "stretch", borderRadius: 2, background: band, flexShrink: 0, minHeight: 32 }} />
+      <div style={{
+        width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+        background: `${band}18`, color: band,
+        display: "flex", alignItems: "center", justifyContent: "center",
+      }}>{TYPE_ICONS[item.type]}</div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 13, fontWeight: 600, color: T.text, marginBottom: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.title}</div>
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+          <span style={{ fontSize: 11, color: T.textFaint }}>{item.duration}</span>
+          {item.courses && <span style={{ fontSize: 11, color: T.textFaint }}>· {item.courses} courses</span>}
+        </div>
+      </div>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={T.textFaint} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  );
+}
+
+/* ─── Search Screen ─────────────────────────────────────── */
+function SearchScreen({ onBack, onOpenItem }) {
+  const [query, setQuery] = useState("");
+  const [focused, setFocused] = useState(false);
+  const [viewMode, setViewMode] = useState("list");
+  const inputRef = useRef(null);
+  const allItems = window.LMS_DATA.items;
+
+  useEffect(() => { setTimeout(() => inputRef.current?.focus(), 80); }, []);
+
+  const suggestions = useMemo(() => {
+    if (!query.trim() || query.length < 2) return [];
+    const q = query.toLowerCase();
+    return allItems.filter(i =>
+      i.title.toLowerCase().includes(q) ||
+      i.tags?.some(t => t.toLowerCase().startsWith(q))
+    ).slice(0, 5);
+  }, [query]);
+
+  const results = useMemo(() => {
+    let items = allItems;
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      items = items.filter(i =>
+        i.title.toLowerCase().includes(q) ||
+        i.description?.toLowerCase().includes(q) ||
+        i.tags?.some(t => t.toLowerCase().includes(q)) ||
+        i.parentCourse?.toLowerCase().includes(q) ||
+        i.practiceArea?.toLowerCase().includes(q)
+      );
+    }
+    return items;
+  }, [query]);
+
+  return (
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", background: T.bg }}>
+      {/* Search bar */}
+      <div style={{ background: T.navy, padding: "12px 14px", flexShrink: 0, display: "flex", alignItems: "center", gap: 10 }}>
+        <button onClick={onBack} style={{ color: "rgba(255,255,255,0.75)", flexShrink: 0, padding: 4 }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div style={{
+          flex: 1, display: "flex", alignItems: "center", gap: 8,
+          background: focused ? "rgba(255,255,255,0.16)" : "rgba(255,255,255,0.11)",
+          borderRadius: 10, padding: "9px 12px",
+          border: `1px solid ${focused ? T.accent : "rgba(255,255,255,0.18)"}`,
+          transition: "all 0.15s",
+        }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+          <input
+            ref={inputRef}
+            type="search"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setTimeout(() => setFocused(false), 150)}
+            placeholder="Search anything…"
+            style={{ flex: 1, border: "none", outline: "none", background: "transparent", fontSize: 15, color: "#fff", fontFamily: FONT }}
+          />
+          {query && (
+            <button onClick={() => setQuery("")} style={{ color: "rgba(255,255,255,0.45)", padding: 2 }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Autocomplete */}
+      {focused && suggestions.length > 0 && (
+        <div style={{ background: T.surface, borderBottom: `1px solid ${T.border}`, flexShrink: 0, animation: "slideDown 0.15s ease" }}>
+          {suggestions.map((s, i) => (
+            <button key={i} onMouseDown={() => { setQuery(s.title); setFocused(false); }} style={{
+              width: "100%", display: "flex", alignItems: "center", gap: 12,
+              padding: "10px 16px", background: "transparent", textAlign: "left",
+              borderBottom: i < suggestions.length - 1 ? `1px solid ${T.border}` : "none",
+              fontFamily: FONT, cursor: "pointer",
+            }}>
+              <span style={{
+                width: 26, height: 26, borderRadius: 6, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center",
+                background: TYPE_COLOR[s.type].bg, color: TYPE_COLOR[s.type].text,
+              }}>{TYPE_ICONS[s.type]}</span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: T.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.title}</div>
+                {s.parentCourse && <div style={{ fontSize: 11, color: T.textFaint }}>in {s.parentCourse}</div>}
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* View toggle */}
+      <div style={{
+        padding: "10px 14px", background: T.surface, borderBottom: `1px solid ${T.border}`,
+        display: "flex", flexShrink: 0, alignItems: "center",
+      }}>
+        <span style={{ fontSize: 11, color: T.textFaint }}>
+          <strong style={{ color: T.text }}>{results.length}</strong> results{query && <span> for "<em>{query}</em>"</span>}
+        </span>
+        <div style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
+          {["list","grid"].map(mode => (
+            <button key={mode} onClick={() => setViewMode(mode)} style={{
+              width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
+              borderRadius: 6, background: viewMode === mode ? T.navy : T.filterBg,
+              color: viewMode === mode ? "#fff" : T.textMuted,
+              border: `1px solid ${viewMode === mode ? T.navy : T.border}`,
+              transition: "all 0.12s",
+            }}>
+              {mode === "grid"
+                ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                : <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              }
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Results */}
+      <div style={{ flex: 1, overflowY: "auto", padding: "0 14px 12px" }}>
+        {results.length === 0 ? (
+          <div style={{ textAlign: "center", padding: "40px 0", color: T.textFaint }}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: "0 auto 10px", opacity: 0.35 }}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <p style={{ fontSize: 14, fontWeight: 600, color: T.textMuted, marginBottom: 4 }}>No results</p>
+            <p style={{ fontSize: 12 }}>Try different keywords</p>
+          </div>
+        ) : viewMode === "list" ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingTop: 8 }}>
+            {results.map((item, i) => <ResultRow key={item.id} item={item} index={i} onClick={() => onOpenItem(item, "search")} />)}
+          </div>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, paddingTop: 8 }}>
+            {results.map((item, i) => <MiniCard key={item.id} item={item} index={i} onClick={() => onOpenItem(item, "search")} />)}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Paths Screen ──────────────────────────────────────── */
+function PathsScreen({ onSearch, onOpenItem }) {
+  const paths = window.LMS_DATA.items.filter(i => i.type === "path");
+
+  return (
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", background: T.bg }}>
+      <div style={{
+        background: `linear-gradient(145deg, ${T.navyDark} 0%, ${T.navy} 100%)`,
+        padding: "14px 16px 16px",
+        flexShrink: 0,
+      }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+          <h2 style={{ fontSize: 20, fontWeight: 700, color: "#fff", fontFamily: SERIF }}>Learning Paths</h2>
+          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.7)", fontWeight: 600 }}>
+            {paths.length} total
+          </span>
+        </div>
+        <button onClick={onSearch} style={{
+          width: "100%", display: "flex", alignItems: "center", gap: 8,
+          background: "rgba(255,255,255,0.12)", borderRadius: 10, padding: "9px 11px",
+          border: "1px solid rgba(255,255,255,0.2)",
+          color: "rgba(255,255,255,0.8)", fontSize: 12, fontFamily: FONT, cursor: "pointer",
+        }}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+          Search all content
+        </button>
+      </div>
+
+      <div style={{ flex: 1, overflowY: "auto", padding: "14px 14px 16px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {paths.map((item, i) => (
+            <ResultRow key={item.id} item={item} index={i} onClick={() => onOpenItem(item, "paths")} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Result Row ────────────────────────────────────────── */
+function ResultRow({ item, index, onClick }) {
+  const band = T.bands[index % T.bands.length];
+  return (
+    <button onClick={onClick} style={{
+      display: "flex", alignItems: "center", gap: 12,
+      background: T.surface, border: `1px solid ${T.border}`,
+      borderRadius: 10, padding: "12px 14px",
+      fontFamily: FONT, cursor: "pointer", textAlign: "left", width: "100%",
+      animation: `fadeUp 0.25s ease ${index * 18}ms both`,
+    }}>
+      <div style={{ width: 3, alignSelf: "stretch", borderRadius: 2, background: band, flexShrink: 0, minHeight: 32 }} />
+      <div style={{ width: 32, height: 32, borderRadius: 8, flexShrink: 0, background: `${band}18`, color: band, display: "flex", alignItems: "center", justifyContent: "center" }}>{TYPE_ICONS[item.type]}</div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        {item.parentCourse && <div style={{ fontSize: 10, color: T.textFaint, marginBottom: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>↳ {item.parentCourse}</div>}
+        <div style={{ fontSize: 13, fontWeight: 600, color: T.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom: 2 }}>{item.title}</div>
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+          <span style={{ fontSize: 11, color: T.textFaint, display: "flex", alignItems: "center", gap: 3 }}>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            {item.duration}
+          </span>
+          <span style={{ fontSize: 10, color: T.textFaint }}>{item.practiceArea}</span>
+        </div>
+      </div>
+      {item.isNew && <span style={{ background: T.lime, color: T.limeText, fontSize: 8, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", padding: "2px 7px", borderRadius: 10, flexShrink: 0 }}>New</span>}
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={T.textFaint} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  );
+}
+
+/* ─── Detail Screen ─────────────────────────────────────── */
+function DetailScreen({ item, onBack }) {
+  if (!item) return null;
+  const band = T.bands[0];
+  const levelStyle = LEVEL_COLOR[item.level] || {};
+  return (
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", background: T.bg }}>
+      {/* Colored band header */}
+      <div style={{
+        background: band,
+        backgroundImage: `linear-gradient(135deg, ${band} 0%, ${T.accent} 100%)`,
+        padding: "14px 18px 20px", flexShrink: 0, position: "relative", overflow: "hidden",
+      }}>
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "repeating-linear-gradient(-45deg, transparent, transparent 18px, rgba(255,255,255,0.04) 18px, rgba(255,255,255,0.04) 36px)" }} />
+        {/* Back + type badge */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14, position: "relative", zIndex: 1 }}>
+          <button onClick={onBack} style={{ color: "rgba(255,255,255,0.8)", padding: 4 }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span style={{
+            fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em",
+            padding: "3px 10px", borderRadius: 10,
+            background: "rgba(0,0,0,0.28)", color: "rgba(255,255,255,0.92)",
+            display: "flex", alignItems: "center", gap: 4,
+          }}>{TYPE_ICONS[item.type]} {TYPE_LABEL[item.type]}</span>
+          {item.isNew && <span style={{ background: T.lime, color: T.limeText, fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", padding: "3px 8px", borderRadius: 10 }}>Updated</span>}
+        </div>
+        {item.parentCourse && (
+          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.6)", marginBottom: 5, position: "relative", zIndex: 1 }}>↳ {item.parentCourse}</div>
+        )}
+        <h1 style={{ fontSize: 18, fontWeight: 700, color: "#fff", lineHeight: 1.25, fontFamily: SERIF, position: "relative", zIndex: 1 }}>{item.title}</h1>
+      </div>
+
+      {/* Scrollable body */}
+      <div style={{ flex: 1, overflowY: "auto", padding: "18px 18px 16px" }}>
+        {/* Meta chips */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 14 }}>
+          <span style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: T.textMuted, background: T.surface, border: `1px solid ${T.border}`, padding: "5px 12px", borderRadius: 8 }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            {item.duration}
+          </span>
+          {item.level && <span style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", padding: "5px 12px", borderRadius: 8, background: levelStyle.bg, color: levelStyle.text }}>{item.level}</span>}
+          <span style={{ fontSize: 12, color: T.textMuted, background: T.surface, border: `1px solid ${T.border}`, padding: "5px 12px", borderRadius: 8 }}>{item.practiceArea}</span>
+        </div>
+        {/* Description */}
+        <p style={{ fontSize: 14, color: T.textMuted, lineHeight: 1.7, marginBottom: 16 }}>{item.description}</p>
+        {/* Tags */}
+        {item.tags && (
+          <div style={{ marginBottom: 16 }}>
+            <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: T.textFaint, marginBottom: 8 }}>Topics</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              {item.tags.map(tag => (
+                <span key={tag} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 20, background: "rgba(37,154,206,0.1)", color: T.navy, fontWeight: 500 }}>{tag}</span>
+              ))}
+            </div>
+          </div>
+        )}
+        <div style={{ fontSize: 11, color: T.textFaint, display: "flex", alignItems: "center", gap: 5 }}>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Last updated {new Date(item.updated).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+        </div>
+      </div>
+
+      {/* Pinned CTA */}
+      <div style={{ padding: "12px 18px 16px", background: T.surface, borderTop: `1px solid ${T.border}`, flexShrink: 0 }}>
+        <a href={item.brightspaceUrl || "#"} style={{
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+          background: T.navy, color: "#fff",
+          padding: "14px", borderRadius: 12,
+          fontSize: 14, fontWeight: 700, fontFamily: FONT, textDecoration: "none",
+        }}>
+          Open in Brightspace
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+    </div>
+  );
+}
+
+/* ─── App Controller ────────────────────────────────────── */
+function App() {
+  const [screen, setScreen] = useState("home");
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [detailReturnScreen, setDetailReturnScreen] = useState("home");
+
+  const defaultDetail = window.LMS_DATA.items.find(i => i.isNew) || window.LMS_DATA.items[0];
+
+  function openItem(item, returnScreen = "home") {
+    setSelectedItem(item);
+    setDetailReturnScreen(returnScreen);
+    setScreen("detail");
+  }
+
+  function handleNav(id) {
+    if (id === "search") setScreen("search");
+    else if (id === "home") setScreen("home");
+    else if (id === "paths") setScreen("paths");
+    else setScreen("home");
+  }
+
+  const activeTab = screen === "detail" ? detailReturnScreen : screen;
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 24 }}>
+      {/* Title */}
+      <div style={{ textAlign: "center" }}>
+        <h1 style={{ color: "#fff", fontSize: 22, fontWeight: 700, letterSpacing: "-0.02em", marginBottom: 4, fontFamily: SERIF }}>
+          Law Skills <span style={{ color: T.accent }}>Mobile</span>
+        </h1>
+        <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>MLRI LMS Discovery · iOS Preview</p>
+      </div>
+
+      {/* Screen switcher */}
+      <div style={{ display: "flex", gap: 6, background: "rgba(255,255,255,0.07)", borderRadius: 10, padding: 4 }}>
+        {[
+          { key: "home", label: "Home" },
+          { key: "search", label: "Search" },
+          { key: "paths", label: "Paths" },
+          { key: "detail", label: "Detail" },
+        ].map(s => (
+          <button key={s.key} onClick={() => {
+            if (s.key === "detail") {
+              setSelectedItem(defaultDetail);
+              setDetailReturnScreen("search");
+              setScreen("detail");
+            }
+            else setScreen(s.key);
+          }} style={{
+            padding: "6px 20px", borderRadius: 7, fontSize: 12, fontWeight: screen === s.key ? 700 : 500,
+            background: screen === s.key ? T.navy : "transparent",
+            color: screen === s.key ? "#fff" : "rgba(255,255,255,0.45)",
+            fontFamily: FONT, transition: "all 0.15s",
+          }}>{s.label}</button>
+        ))}
+      </div>
+
+      {/* Phone */}
+      <div style={{ position: "relative" }}>
+        <PhoneShell>
+          {screen === "home" && <HomeScreen onSearch={() => setScreen("search")} onOpenPaths={() => setScreen("paths")} onOpenItem={openItem} />}
+          {screen === "search" && <SearchScreen onBack={() => setScreen("home")} onOpenItem={openItem} />}
+          {screen === "paths" && <PathsScreen onSearch={() => setScreen("search")} onOpenItem={openItem} />}
+          {screen === "detail" && <DetailScreen item={selectedItem || defaultDetail} onBack={() => setScreen(detailReturnScreen)} />}
+          <BottomTabs active={activeTab} onNavigate={handleNav} />
+        </PhoneShell>
+      </div>
+
+      <p style={{ color: "rgba(255,255,255,0.25)", fontSize: 11, textAlign: "center", maxWidth: 300 }}>
+        Use the switcher above to preview each screen state.<br/>Search and navigation are fully interactive.
+      </p>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

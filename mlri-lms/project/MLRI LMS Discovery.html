@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Law Skills — Find Training | MLRI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="data.js"></script>
+  <style>
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    svg { display: block; flex-shrink: 0; }
+    :focus-visible { outline: 2px solid #259ace; outline-offset: 2px; border-radius: 3px; }
+    * { -webkit-tap-highlight-color: transparent; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,0,0,.18); border-radius: 3px; }
+
+    #root { min-height: 100vh; }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(.95); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+    .anim-fade-up   { animation: fadeUp .35s ease both; }
+    .anim-fade-in   { animation: fadeIn .25s ease both; }
+    .anim-scale-in  { animation: scaleIn .25s cubic-bezier(.34,1.56,.64,1) both; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+// ── Theme Tokens ────────────────────────────────────────────
+const THEMES = {
+  navy: {
+    name: "Professional Navy",
+    topbarBg: "#154377",
+    topbarBorder: "#259ace",
+    heroBg: "linear-gradient(135deg, #0d2d52 0%, #154377 50%, #1a5490 100%)",
+    heroText: "#fff",
+    heroSubText: "rgba(255,255,255,0.72)",
+    accent: "#259ace",
+    accentHover: "#1e84b0",
+    accentLight: "rgba(37,154,206,0.12)",
+    lime: "#bae665",
+    bg: "#f5f7fa",
+    surface: "#ffffff",
+    surfaceHover: "#f0f4f8",
+    border: "#dde3ec",
+    borderStrong: "#b8c4d4",
+    text: "#0f1e30",
+    textMuted: "#4a5e78",
+    textFaint: "#8096b0",
+    filterBg: "#edf1f7",
+    filterActive: "#154377",
+    filterActiveText: "#fff",
+    newBadgeBg: "#bae665",
+    newBadgeText: "#2a4000",
+    tagBg: "rgba(37,154,206,0.1)",
+    tagText: "#154377",
+    cardBandColors: ["#154377","#259ace","#1a5490","#0e7490","#1d4ed8","#2d6a4f"],
+    modalOverlay: "rgba(10,20,40,0.65)",
+    searchShadow: "0 4px 24px rgba(21,67,119,0.18)",
+    pillBg: "#edf1f7",
+  },
+  minimal: {
+    name: "Clean Minimal",
+    topbarBg: "#ffffff",
+    topbarBorder: "#e8ecf2",
+    heroBg: "#ffffff",
+    heroText: "#0f1e30",
+    heroSubText: "#4a5e78",
+    accent: "#154377",
+    accentHover: "#0d2d52",
+    accentLight: "rgba(21,67,119,0.08)",
+    lime: "#bae665",
+    bg: "#f8f9fb",
+    surface: "#ffffff",
+    surfaceHover: "#f3f5f8",
+    border: "#e8ecf2",
+    borderStrong: "#c8d0de",
+    text: "#0f1e30",
+    textMuted: "#4a5e78",
+    textFaint: "#8096b0",
+    filterBg: "#edf1f7",
+    filterActive: "#0f1e30",
+    filterActiveText: "#fff",
+    newBadgeBg: "#bae665",
+    newBadgeText: "#2a4000",
+    tagBg: "rgba(21,67,119,0.07)",
+    tagText: "#154377",
+    cardBandColors: ["#154377","#259ace","#0e7490","#1d4ed8","#374151","#2d6a4f"],
+    modalOverlay: "rgba(10,20,40,0.5)",
+    searchShadow: "0 4px 24px rgba(0,0,0,0.10)",
+    pillBg: "#edf1f7",
+  },
+  advocate: {
+    name: "Bold Advocate",
+    topbarBg: "#0d1117",
+    topbarBorder: "#bae665",
+    heroBg: "linear-gradient(135deg, #0d1117 0%, #0f1e30 60%, #131e30 100%)",
+    heroText: "#fff",
+    heroSubText: "rgba(255,255,255,0.65)",
+    accent: "#bae665",
+    accentHover: "#a6d455",
+    accentLight: "rgba(186,230,101,0.12)",
+    lime: "#259ace",
+    bg: "#0d1117",
+    surface: "#161c25",
+    surfaceHover: "#1d2535",
+    border: "#252f40",
+    borderStrong: "#2e3d54",
+    text: "#e8f0f8",
+    textMuted: "#8496b0",
+    textFaint: "#4e607a",
+    filterBg: "#1a2234",
+    filterActive: "#bae665",
+    filterActiveText: "#0d1117",
+    newBadgeBg: "#bae665",
+    newBadgeText: "#0d1117",
+    tagBg: "rgba(186,230,101,0.1)",
+    tagText: "#bae665",
+    cardBandColors: ["#1a5490","#259ace","#bae665","#2d6a4f","#374151","#7c3aed"],
+    modalOverlay: "rgba(0,0,0,0.8)",
+    searchShadow: "0 4px 32px rgba(186,230,101,0.12)",
+    pillBg: "#1a2234",
+  }
+};
+
+const TYPE_ICONS = {
+  path: (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="5" cy="12" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="19" r="2"/>
+      <path d="M7 12h4l4-5"/><path d="M11 12l4 5"/>
+    </svg>
+  ),
+  course: (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+    </svg>
+  ),
+  module: (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+    </svg>
+  ),
+};
+
+const TYPE_LABELS = { path: "Path", course: "Course", module: "Module" };
+const LEVEL_COLORS = {
+  Foundations: { bg: "#dbeafe", text: "#1d4ed8" },
+  Intermediate: { bg: "#fef3c7", text: "#92400e" },
+  Advanced:     { bg: "#fee2e2", text: "#991b1b" },
+};
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function isRecent(dateStr) {
+  const d = new Date(dateStr);
+  const now = new Date('2026-05-01');
+  return (now - d) / (1000 * 60 * 60 * 24) < 60;
+}
+
+// ── Topbar ──────────────────────────────────────────────────
+function Topbar({ t, searchQuery, onSearch, onFocus, searchFocused }) {
+  const inputRef = useRef(null);
+  useEffect(() => {
+    function onKey(e) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  const isLight = t.topbarBg === '#ffffff';
+
+  return (
+    <header style={{
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200,
+      height: 56, background: t.topbarBg,
+      borderBottom: `2px solid ${t.topbarBorder}`,
+      display: 'flex', alignItems: 'center', gap: 16, padding: '0 20px',
+      boxShadow: isLight ? '0 1px 8px rgba(0,0,0,0.08)' : '0 2px 12px rgba(0,0,0,0.25)',
+    }}>
+      {/* Brand */}
+      <a href="#" style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0, textDecoration: 'none' }}>
+        <div style={{
+          width: 30, height: 30, borderRadius: 6,
+          background: t.accent, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 6h18M3 12h18M3 18h18"/>
+          </svg>
+        </div>
+        <span style={{
+          fontSize: 15, fontWeight: 700, letterSpacing: '-0.01em',
+          color: isLight ? t.text : '#fff', whiteSpace: 'nowrap'
+        }}>Law Skills</span>
+        <span style={{ width: 1, height: 14, background: isLight ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.2)', display: 'block' }}></span>
+        <span style={{ fontSize: 11, fontWeight: 600, color: isLight ? t.textMuted : 'rgba(255,255,255,0.5)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>MLRI</span>
+      </a>
+
+      {/* Search — hidden on mobile, shown on wider screens */}
+      <div style={{ flex: 1, maxWidth: 440, display: 'flex' }} className="topbar-search-wrap">
+        <form onSubmit={e => e.preventDefault()} style={{ width: '100%' }}>
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            background: isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.1)',
+            border: `1px solid ${isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.15)'}`,
+            borderRadius: 24, padding: '7px 14px',
+            transition: 'all 0.15s',
+            boxShadow: searchFocused ? t.searchShadow : 'none',
+          }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={isLight ? t.textFaint : 'rgba(255,255,255,0.45)'} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+            </svg>
+            <input
+              ref={inputRef}
+              type="search"
+              value={searchQuery}
+              onChange={e => onSearch(e.target.value)}
+              onFocus={() => onFocus(true)}
+              onBlur={() => setTimeout(() => onFocus(false), 200)}
+              placeholder="Search courses, modules, paths…"
+              style={{
+                flex: 1, border: 'none', outline: 'none', background: 'transparent',
+                fontSize: 13, color: isLight ? t.text : '#fff',
+                fontFamily: 'inherit',
+              }}
+            />
+            <kbd style={{
+              fontSize: 10, color: isLight ? t.textFaint : 'rgba(255,255,255,0.3)',
+              background: isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.08)',
+              border: `1px solid ${isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)'}`,
+              borderRadius: 4, padding: '1px 5px', fontFamily: 'inherit',
+            }}>⌘K</kbd>
+          </div>
+        </form>
+      </div>
+
+      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <button style={{
+          width: 34, height: 34, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: isLight ? t.textMuted : 'rgba(255,255,255,0.6)',
+          transition: 'background 0.12s',
+        }}
+        onMouseEnter={e => e.currentTarget.style.background = isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.1)'}
+        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+        aria-label="Help">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </button>
+        <div style={{
+          width: 32, height: 32, borderRadius: '50%',
+          background: t.accent, color: t.name === 'Bold Advocate' ? '#0d1117' : '#fff',
+          fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'pointer', letterSpacing: '0.04em',
+          border: `2px solid ${isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.15)'}`,
+        }}>MC</div>
+      </div>
+    </header>
+  );
+}
+
+// ── Hero ────────────────────────────────────────────────────
+function Hero({ t, searchQuery, onSearch, suggestions, onSelectSuggestion, searchFocused, onFocus, resultCount, hasQuery }) {
+  const inputRef = useRef(null);
+
+  return (
+    <div style={{
+      background: t.heroBg,
+      padding: '52px 24px 40px',
+      marginTop: 56,
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      {/* Decorative elements */}
+      <div style={{
+        position: 'absolute', top: -80, right: -80, width: 320, height: 320,
+        borderRadius: '50%', background: `${t.accent}18`, pointerEvents: 'none',
+      }}></div>
+      <div style={{
+        position: 'absolute', bottom: -40, left: '30%', width: 180, height: 180,
+        borderRadius: '50%', background: `${t.lime}10`, pointerEvents: 'none',
+      }}></div>
+
+      <div style={{ maxWidth: 720, margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <p style={{
+          fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase',
+          color: t.accent, marginBottom: 10,
+        }}>MLRI Training Platform · 2025</p>
+        <h1 style={{
+          fontSize: 'clamp(26px, 5vw, 44px)',
+          fontWeight: 700, lineHeight: 1.1,
+          color: t.heroText, marginBottom: 12,
+          fontFamily: "'DM Serif Display', 'Georgia', serif",
+          letterSpacing: '-0.02em',
+        }}>
+          Find what you need. <em style={{ fontStyle: 'italic', color: t.accent }}>Fast.</em>
+        </h1>
+        <p style={{
+          fontSize: 15, color: t.heroSubText, lineHeight: 1.6, marginBottom: 28, maxWidth: 520,
+        }}>
+          Search across every course, module, and learning path. Built for legal aid attorneys who need answers quickly.
+        </p>
+
+        {/* Hero Search */}
+        <div style={{ position: 'relative', maxWidth: 580 }}>
+          <form onSubmit={e => e.preventDefault()}>
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 12,
+              background: '#fff',
+              borderRadius: 12,
+              padding: '14px 18px',
+              boxShadow: searchFocused ? t.searchShadow : '0 4px 20px rgba(0,0,0,0.18)',
+              border: `2px solid ${searchFocused ? t.accent : 'transparent'}`,
+              transition: 'all 0.2s',
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={t.textFaint} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+              </svg>
+              <input
+                ref={inputRef}
+                type="search"
+                value={searchQuery}
+                onChange={e => onSearch(e.target.value)}
+                onFocus={() => onFocus(true)}
+                onBlur={() => setTimeout(() => onFocus(false), 200)}
+                placeholder="Try 'eviction', 'objections', '4th amendment'…"
+                style={{
+                  flex: 1, border: 'none', outline: 'none', background: 'transparent',
+                  fontSize: 16, color: '#0f1e30', fontFamily: 'inherit',
+                }}
+                autoComplete="off"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => onSearch('')}
+                  style={{ color: '#8096b0', padding: 4, borderRadius: 4, transition: 'color 0.12s' }}
+                  onMouseEnter={e => e.currentTarget.style.color = '#0f1e30'}
+                  onMouseLeave={e => e.currentTarget.style.color = '#8096b0'}
+                  aria-label="Clear search"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+              )}
+              <button style={{
+                background: t.accent, color: t.name === 'Bold Advocate' ? '#0d1117' : '#fff',
+                padding: '8px 20px', borderRadius: 8, fontSize: 13, fontWeight: 700,
+                fontFamily: 'inherit', letterSpacing: '0.04em',
+                transition: 'background 0.12s, transform 0.1s',
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = t.accentHover; e.currentTarget.style.transform = 'scale(1.02)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = t.accent; e.currentTarget.style.transform = 'scale(1)'; }}
+              >Search</button>
+            </div>
+          </form>
+
+          {/* Autocomplete Dropdown */}
+          {searchFocused && suggestions.length > 0 && (
+            <div style={{
+              position: 'absolute', top: 'calc(100% + 6px)', left: 0, right: 0,
+              background: '#fff', borderRadius: 12,
+              border: '1px solid rgba(0,0,0,0.1)',
+              boxShadow: '0 12px 40px rgba(0,0,0,0.18)',
+              overflow: 'hidden', zIndex: 300,
+              animation: 'slideDown 0.15s ease both',
+            }}>
+              {suggestions.map((s, i) => (
+                <button key={i} onMouseDown={() => onSelectSuggestion(s.title)} style={{
+                  width: '100%', display: 'flex', alignItems: 'center', gap: 12,
+                  padding: '11px 16px', background: 'transparent', textAlign: 'left',
+                  transition: 'background 0.1s', borderBottom: i < suggestions.length - 1 ? '1px solid rgba(0,0,0,0.05)' : 'none',
+                  fontFamily: 'inherit',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = '#f5f7fa'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                >
+                  <span style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    width: 26, height: 26, borderRadius: 6,
+                    background: s.type === 'path' ? '#fef3c7' : s.type === 'course' ? '#dbeafe' : '#f3e8ff',
+                    color: s.type === 'path' ? '#92400e' : s.type === 'course' ? '#1d4ed8' : '#6b21a8',
+                    flexShrink: 0,
+                  }}>{TYPE_ICONS[s.type]}</span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: '#0f1e30', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.title}</div>
+                    {s.parentCourse && <div style={{ fontSize: 11, color: '#8096b0', marginTop: 1 }}>in {s.parentCourse}</div>}
+                  </div>
+                  <span style={{
+                    fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em',
+                    color: s.type === 'path' ? '#92400e' : s.type === 'course' ? '#1d4ed8' : '#6b21a8',
+                    background: s.type === 'path' ? '#fef3c7' : s.type === 'course' ? '#dbeafe' : '#f3e8ff',
+                    padding: '2px 8px', borderRadius: 10,
+                  }}>{TYPE_LABELS[s.type]}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {hasQuery && (
+          <p style={{ marginTop: 14, fontSize: 13, color: t.heroSubText, animation: 'fadeIn 0.2s ease' }}>
+            <strong style={{ color: t.heroText }}>{resultCount}</strong> results for "<em>{searchQuery}</em>"
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── What's New Banner ───────────────────────────────────────
+function WhatsNewBanner({ t, items, onItemClick }) {
+  const [visible, setVisible] = useState(true);
+  const newItems = items.filter(i => i.isNew).slice(0, 3);
+  if (!visible || newItems.length === 0) return null;
+
+  return (
+    <div style={{
+      background: t.name === 'Bold Advocate' ? '#161c25' : '#fff',
+      borderBottom: `1px solid ${t.border}`,
+      padding: '10px 24px',
+    }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+        <span style={{
+          background: t.newBadgeBg, color: t.newBadgeText,
+          fontSize: 10, fontWeight: 700, letterSpacing: '0.1em',
+          padding: '3px 9px', borderRadius: 20, whiteSpace: 'nowrap',
+          textTransform: 'uppercase',
+        }}>What's New</span>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', flex: 1, alignItems: 'center' }}>
+          {newItems.map(item => (
+            <button key={item.id} onClick={() => onItemClick(item)} style={{
+              fontSize: 12, color: t.accent, fontWeight: 600, fontFamily: 'inherit',
+              padding: '3px 10px', borderRadius: 6,
+              border: `1px solid ${t.accent}40`,
+              background: `${t.accent}10`,
+              transition: 'all 0.12s', whiteSpace: 'nowrap',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = `${t.accent}20`; }}
+            onMouseLeave={e => { e.currentTarget.style.background = `${t.accent}10`; }}
+            >
+              ↳ {item.title}
+            </button>
+          ))}
+        </div>
+        <span style={{ fontSize: 11, color: t.textFaint }}>Updated {formatDate(newItems[0]?.updated)}</span>
+        <button
+          onClick={() => setVisible(false)}
+          style={{ color: t.textFaint, padding: 4, borderRadius: 4, transition: 'color 0.12s', flexShrink: 0 }}
+          onMouseEnter={e => e.currentTarget.style.color = t.text}
+          onMouseLeave={e => e.currentTarget.style.color = t.textFaint}
+          aria-label="Dismiss"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Filter Bar ──────────────────────────────────────────────
+function FilterBar({ t, typeFilter, setTypeFilter, areaFilter, setAreaFilter, viewMode, setViewMode, resultCount }) {
+  const areas = ['All Areas', ...window.LMS_DATA.practiceAreas];
+
+  return (
+    <div style={{
+      background: t.name === 'Bold Advocate' ? '#111820' : t.surface,
+      borderBottom: `1px solid ${t.border}`,
+      padding: '0 24px',
+      position: 'sticky', top: 56, zIndex: 100,
+      boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+    }}>
+      <div style={{
+        maxWidth: 1200, margin: '0 auto',
+        display: 'flex', alignItems: 'center', gap: 12,
+        padding: '10px 0', flexWrap: 'wrap',
+      }}>
+        {/* Type filters */}
+        <div className="filter-bar-type" style={{ display: 'flex', gap: 4, background: t.filterBg, borderRadius: 8, padding: 3 }}>
+          {['All', 'Paths', 'Courses', 'Modules'].map(f => {
+            const val = f === 'All' ? 'all' : f.toLowerCase().replace('s','');
+            const isActive = typeFilter === val;
+            return (
+              <button key={f} onClick={() => setTypeFilter(val)} style={{
+                padding: '5px 14px', borderRadius: 6, fontSize: 12, fontWeight: isActive ? 700 : 500,
+                background: isActive ? t.filterActive : 'transparent',
+                color: isActive ? t.filterActiveText : t.textMuted,
+                transition: 'all 0.15s', fontFamily: 'inherit', letterSpacing: '0.02em',
+                boxShadow: isActive ? '0 1px 4px rgba(0,0,0,0.18)' : 'none',
+              }}>{f}</button>
+            );
+          })}
+        </div>
+
+        {/* Practice area dropdown */}
+        <select
+          className="filter-bar-area"
+          value={areaFilter}
+          onChange={e => setAreaFilter(e.target.value)}
+          style={{
+            padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 500,
+            border: `1px solid ${t.border}`, background: t.filterBg,
+            color: t.text, fontFamily: 'inherit', cursor: 'pointer',
+            appearance: 'auto',
+          }}
+        >
+          {areas.map(a => <option key={a} value={a}>{a}</option>)}
+        </select>
+
+        {/* Result count */}
+        <span className="filter-bar-count" style={{ fontSize: 12, color: t.textFaint, marginLeft: 4 }}>
+          <strong style={{ color: t.text }}>{resultCount}</strong> items
+        </span>
+
+        {/* View toggle */}
+        <div style={{ marginLeft: 'auto', display: 'flex', gap: 4, background: t.filterBg, borderRadius: 8, padding: 3 }}>
+          {[
+            { mode: 'grid', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> },
+            { mode: 'list', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg> },
+          ].map(({ mode, icon }) => (
+            <button key={mode} onClick={() => setViewMode(mode)} style={{
+              padding: '5px 10px', borderRadius: 6,
+              background: viewMode === mode ? t.filterActive : 'transparent',
+              color: viewMode === mode ? t.filterActiveText : t.textMuted,
+              transition: 'all 0.15s',
+              boxShadow: viewMode === mode ? '0 1px 4px rgba(0,0,0,0.18)' : 'none',
+            }} aria-label={mode + ' view'}>{icon}</button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Card ────────────────────────────────────────────────────
+function ContentCard({ item, t, index, onClick }) {
+  const [hovered, setHovered] = useState(false);
+  const bandColor = t.cardBandColors[index % t.cardBandColors.length];
+  const levelStyle = LEVEL_COLORS[item.level] || {};
+
+  return (
+    <article
+      onClick={() => onClick(item)}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: t.surface,
+        border: `1px solid ${hovered ? t.borderStrong : t.border}`,
+        borderRadius: 12, overflow: 'hidden',
+        cursor: 'pointer', display: 'flex', flexDirection: 'column',
+        transition: 'all 0.18s',
+        boxShadow: hovered ? '0 8px 28px rgba(0,0,0,0.14)' : '0 1px 4px rgba(0,0,0,0.06)',
+        transform: hovered ? 'translateY(-3px)' : 'translateY(0)',
+        animation: `fadeUp 0.3s ease ${index * 30}ms both`,
+      }}
+    >
+      {/* Band */}
+      <div style={{
+        height: 72, background: bandColor,
+        backgroundImage: `linear-gradient(135deg, ${bandColor} 0%, ${bandColor}cc 100%)`,
+        display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+        padding: '10px 14px', position: 'relative', overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'repeating-linear-gradient(-45deg, transparent, transparent 18px, rgba(255,255,255,0.03) 18px, rgba(255,255,255,0.03) 36px)',
+        }}></div>
+        <span style={{
+          fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em',
+          padding: '3px 9px', borderRadius: 10,
+          background: 'rgba(0,0,0,0.3)', color: 'rgba(255,255,255,0.92)',
+          border: '1px solid rgba(255,255,255,0.2)',
+          display: 'flex', alignItems: 'center', gap: 4, position: 'relative', zIndex: 1,
+        }}>
+          {TYPE_ICONS[item.type]}
+          {TYPE_LABELS[item.type]}
+        </span>
+        {item.isNew && (
+          <span style={{
+            fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em',
+            padding: '3px 8px', borderRadius: 10,
+            background: t.newBadgeBg, color: t.newBadgeText,
+            position: 'relative', zIndex: 1,
+          }}>Updated</span>
+        )}
+      </div>
+
+      {/* Body */}
+      <div style={{ flex: 1, padding: '14px 16px 10px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {/* Breadcrumb for modules */}
+        {item.parentCourse && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: t.textFaint }}>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg>
+            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.parentCourse}</span>
+          </div>
+        )}
+        <h3 style={{
+          fontSize: 14, fontWeight: 700, color: t.text, lineHeight: 1.3,
+          transition: 'color 0.12s',
+          color: hovered ? t.accent : t.text,
+        }}>{item.title}</h3>
+        <p style={{ fontSize: 12, color: t.textMuted, lineHeight: 1.5, flex: 1,
+          display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+        }}>{item.description}</p>
+
+        {/* Meta row */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginTop: 4 }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: t.textFaint }}>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            {item.duration}
+          </span>
+          {item.level && (
+            <span style={{
+              fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em',
+              padding: '2px 7px', borderRadius: 4,
+              background: levelStyle.bg || t.accentLight, color: levelStyle.text || t.accent,
+            }}>{item.level}</span>
+          )}
+          {(item.modules || item.courses) && (
+            <span style={{ fontSize: 11, color: t.textFaint }}>
+              {item.modules ? `${item.modules} modules` : `${item.courses} courses`}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '10px 16px 14px', borderTop: `1px solid ${t.border}`,
+      }}>
+        <span style={{ fontSize: 11, color: t.textFaint }}>{item.practiceArea}</span>
+        <button style={{
+          background: hovered ? t.accent : t.accentLight,
+          color: hovered ? (t.name === 'Bold Advocate' ? '#0d1117' : '#fff') : t.accent,
+          padding: '5px 14px', borderRadius: 6, fontSize: 12, fontWeight: 700,
+          fontFamily: 'inherit', transition: 'all 0.15s',
+          border: `1px solid ${hovered ? t.accent : 'transparent'}`,
+        }}>Open →</button>
+      </div>
+    </article>
+  );
+}
+
+// ── List Row ────────────────────────────────────────────────
+function ContentRow({ item, t, index, onClick }) {
+  const [hovered, setHovered] = useState(false);
+  const bandColor = t.cardBandColors[index % t.cardBandColors.length];
+  const levelStyle = LEVEL_COLORS[item.level] || {};
+
+  return (
+    <article
+      onClick={() => onClick(item)}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: hovered ? t.surfaceHover : t.surface,
+        border: `1px solid ${hovered ? t.borderStrong : t.border}`,
+        borderRadius: 10, padding: '14px 18px',
+        display: 'flex', alignItems: 'center', gap: 16,
+        cursor: 'pointer', transition: 'all 0.15s',
+        animation: `fadeUp 0.25s ease ${index * 20}ms both`,
+        boxShadow: hovered ? '0 4px 16px rgba(0,0,0,0.1)' : '0 1px 3px rgba(0,0,0,0.05)',
+      }}
+    >
+      {/* Color dot */}
+      <div style={{
+        width: 4, alignSelf: 'stretch', borderRadius: 2,
+        background: bandColor, flexShrink: 0, minHeight: 40,
+      }}></div>
+
+      {/* Type icon */}
+      <div style={{
+        width: 36, height: 36, borderRadius: 8, flexShrink: 0,
+        background: `${bandColor}20`, color: bandColor,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        {TYPE_ICONS[item.type]}
+      </div>
+
+      {/* Content */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        {item.parentCourse && (
+          <div style={{ fontSize: 11, color: t.textFaint, marginBottom: 2 }}>
+            ↳ {item.parentCourse}
+          </div>
+        )}
+        <h3 style={{
+          fontSize: 14, fontWeight: 700,
+          color: hovered ? t.accent : t.text,
+          transition: 'color 0.12s',
+          marginBottom: 3,
+        }}>{item.title}</h3>
+        <p style={{
+          fontSize: 12, color: t.textMuted, lineHeight: 1.4,
+          whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+          maxWidth: '60ch',
+        }}>{item.description}</p>
+      </div>
+
+      {/* Right meta */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+        <span style={{
+          fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em',
+          padding: '3px 9px', borderRadius: 10,
+          background: item.type === 'path' ? '#fef3c7' : item.type === 'course' ? '#dbeafe' : '#f3e8ff',
+          color: item.type === 'path' ? '#92400e' : item.type === 'course' ? '#1d4ed8' : '#6b21a8',
+        }}>{TYPE_LABELS[item.type]}</span>
+        {item.level && (
+          <span style={{
+            fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em',
+            padding: '2px 7px', borderRadius: 4,
+            background: levelStyle.bg || t.accentLight, color: levelStyle.text || t.accent,
+          }}>{item.level}</span>
+        )}
+        <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: t.textFaint, minWidth: 70 }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          {item.duration}
+        </span>
+        {item.isNew && (
+          <span style={{
+            fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em',
+            padding: '3px 8px', borderRadius: 10,
+            background: t.newBadgeBg, color: t.newBadgeText,
+          }}>Updated</span>
+        )}
+        <button style={{
+          background: hovered ? t.accent : t.accentLight,
+          color: hovered ? (t.name === 'Bold Advocate' ? '#0d1117' : '#fff') : t.accent,
+          padding: '5px 14px', borderRadius: 6, fontSize: 12, fontWeight: 700,
+          fontFamily: 'inherit', transition: 'all 0.15s',
+        }}>Open →</button>
+      </div>
+    </article>
+  );
+}
+
+// ── Grouped Results (by type) ────────────────────────────────
+function GroupedResults({ items, t, viewMode, onItemClick }) {
+  const paths = items.filter(i => i.type === 'path');
+  const courses = items.filter(i => i.type === 'course');
+  const modules = items.filter(i => i.type === 'module');
+
+  const groups = [
+    { label: 'Learning Paths', icon: TYPE_ICONS.path, items: paths, color: '#92400e', bg: '#fef3c7' },
+    { label: 'Courses', icon: TYPE_ICONS.course, items: courses, color: '#1d4ed8', bg: '#dbeafe' },
+    { label: 'Modules', icon: TYPE_ICONS.module, items: modules, color: '#6b21a8', bg: '#f3e8ff' },
+  ].filter(g => g.items.length > 0);
+
+  if (groups.length === 0) {
+    return (
+      <div style={{ textAlign: 'center', padding: '80px 24px', color: t.textFaint }}>
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto 16px', opacity: 0.4 }}>
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <p style={{ fontSize: 16, fontWeight: 600, color: t.textMuted, marginBottom: 6 }}>No results found</p>
+        <p style={{ fontSize: 13 }}>Try different keywords or clear your filters</p>
+      </div>
+    );
+  }
+
+  let globalIndex = 0;
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 36 }}>
+      {groups.map(group => {
+        const startIndex = globalIndex;
+        globalIndex += group.items.length;
+        return (
+          <section key={group.label}>
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16,
+              paddingBottom: 10, borderBottom: `1px solid ${t.border}`,
+            }}>
+              <span style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: 28, height: 28, borderRadius: 8,
+                background: group.bg, color: group.color,
+              }}>{group.icon}</span>
+              <h2 style={{ fontSize: 18, fontWeight: 700, color: t.text, letterSpacing: '-0.01em' }}>{group.label}</h2>
+              <span style={{
+                fontSize: 11, color: t.textFaint,
+                background: t.filterBg, padding: '2px 8px', borderRadius: 10,
+              }}>{group.items.length}</span>
+            </div>
+            {viewMode === 'grid' ? (
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                gap: 14,
+              }}>
+                {group.items.map((item, i) => (
+                  <ContentCard key={item.id} item={item} t={t} index={startIndex + i} onClick={onItemClick} />
+                ))}
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {group.items.map((item, i) => (
+                  <ContentRow key={item.id} item={item} t={t} index={startIndex + i} onClick={onItemClick} />
+                ))}
+              </div>
+            )}
+          </section>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Content Modal ───────────────────────────────────────────
+function ContentModal({ item, t, onClose }) {
+  useEffect(() => {
+    function onKey(e) { if (e.key === 'Escape') onClose(); }
+    window.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = ''; };
+  }, []);
+
+  if (!item) return null;
+  const bandColor = t.cardBandColors[0];
+  const levelStyle = LEVEL_COLORS[item.level] || {};
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 500,
+      background: t.modalOverlay,
+      display: 'flex', alignItems: 'flex-end',
+      animation: 'fadeIn 0.2s ease',
+    }} onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+      <div style={{
+        background: t.surface,
+        borderRadius: '16px 16px 0 0',
+        width: '100%', maxWidth: 600,
+        margin: '0 auto',
+        maxHeight: '80vh',
+        overflow: 'auto',
+        animation: 'slideDown 0.25s cubic-bezier(.34,1.2,.64,1) both',
+        position: 'relative',
+      }}>
+        {/* Band header */}
+        <div style={{
+          height: 90, background: bandColor,
+          backgroundImage: `linear-gradient(135deg, ${bandColor} 0%, ${bandColor}bb 100%)`,
+          padding: '20px 24px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+          position: 'relative', overflow: 'hidden',
+        }}>
+          <div style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: 'repeating-linear-gradient(-45deg, transparent, transparent 18px, rgba(255,255,255,0.04) 18px, rgba(255,255,255,0.04) 36px)',
+          }}></div>
+          <span style={{
+            fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em',
+            padding: '4px 12px', borderRadius: 10,
+            background: 'rgba(0,0,0,0.3)', color: 'rgba(255,255,255,0.92)',
+            display: 'flex', alignItems: 'center', gap: 5, position: 'relative', zIndex: 1,
+          }}>
+            {TYPE_ICONS[item.type]}
+            {TYPE_LABELS[item.type]}
+          </span>
+          <button onClick={onClose} style={{
+            color: 'rgba(255,255,255,0.8)', position: 'relative', zIndex: 1,
+            width: 32, height: 32, borderRadius: 8,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'background 0.12s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.2)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+          aria-label="Close">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        {/* Content */}
+        <div style={{ padding: '24px 24px 32px' }}>
+          {item.parentCourse && (
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10,
+              fontSize: 12, color: t.textFaint,
+            }}>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg>
+              <span>Part of:</span>
+              <strong style={{ color: t.accent }}>{item.parentCourse}</strong>
+            </div>
+          )}
+
+          <h2 style={{
+            fontSize: 22, fontWeight: 700, color: t.text, lineHeight: 1.2, marginBottom: 14,
+            fontFamily: "'DM Serif Display', Georgia, serif",
+          }}>{item.title}</h2>
+
+          <p style={{ fontSize: 14, color: t.textMuted, lineHeight: 1.7, marginBottom: 20 }}>
+            {item.description}
+          </p>
+
+          {/* Meta chips */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
+            <span style={{
+              display: 'flex', alignItems: 'center', gap: 5,
+              fontSize: 12, color: t.textMuted,
+              background: t.filterBg, padding: '5px 12px', borderRadius: 8,
+            }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              {item.duration}
+            </span>
+            {item.level && (
+              <span style={{
+                fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em',
+                padding: '5px 12px', borderRadius: 8,
+                background: levelStyle.bg || t.accentLight, color: levelStyle.text || t.accent,
+              }}>{item.level}</span>
+            )}
+            <span style={{
+              fontSize: 12, color: t.textMuted, background: t.filterBg, padding: '5px 12px', borderRadius: 8,
+            }}>{item.practiceArea}</span>
+            {item.modules && (
+              <span style={{ fontSize: 12, color: t.textMuted, background: t.filterBg, padding: '5px 12px', borderRadius: 8 }}>
+                {item.modules} modules
+              </span>
+            )}
+            {item.courses && (
+              <span style={{ fontSize: 12, color: t.textMuted, background: t.filterBg, padding: '5px 12px', borderRadius: 8 }}>
+                {item.courses} courses
+              </span>
+            )}
+          </div>
+
+          {/* Tags */}
+          {item.tags && (
+            <div style={{ marginBottom: 24 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: t.textFaint, marginBottom: 8 }}>Topics</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {item.tags.map(tag => (
+                  <span key={tag} style={{
+                    fontSize: 11, padding: '3px 10px', borderRadius: 20,
+                    background: t.tagBg, color: t.tagText,
+                    fontWeight: 500,
+                  }}>{tag}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Updated */}
+          <div style={{
+            fontSize: 11, color: t.textFaint,
+            marginBottom: 24, display: 'flex', alignItems: 'center', gap: 6,
+          }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Last updated {formatDate(item.updated)}
+            {item.isNew && (
+              <span style={{
+                marginLeft: 4, background: t.newBadgeBg, color: t.newBadgeText,
+                fontSize: 9, fontWeight: 700, textTransform: 'uppercase',
+                letterSpacing: '0.1em', padding: '2px 8px', borderRadius: 10,
+              }}>Recently Updated</span>
+            )}
+          </div>
+
+          {/* Brightspace CTA */}
+          <div style={{ display: 'flex', gap: 10 }}>
+            <a href={item.brightspaceUrl || '#'} style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              background: t.accent,
+              color: t.name === 'Bold Advocate' ? '#0d1117' : '#fff',
+              padding: '12px 24px', borderRadius: 10, fontSize: 14, fontWeight: 700,
+              fontFamily: 'inherit', textDecoration: 'none',
+              transition: 'all 0.15s', flex: 1, justifyContent: 'center',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = t.accentHover; e.currentTarget.style.transform = 'scale(1.01)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = t.accent; e.currentTarget.style.transform = 'scale(1)'; }}
+            >
+              Open in Brightspace
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+            </a>
+            <button onClick={onClose} style={{
+              padding: '12px 20px', borderRadius: 10, fontSize: 14, fontWeight: 600,
+              fontFamily: 'inherit', border: `1px solid ${t.border}`,
+              color: t.textMuted, background: 'transparent', transition: 'all 0.15s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = t.filterBg; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
+            >Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Main App ────────────────────────────────────────────────
+function App() {
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "theme": "navy",
+    "groupByType": true,
+    "showWhatsNew": true
+  }/*EDITMODE-END*/;
+
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const t = THEMES[tweaks.theme] || THEMES.navy;
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [typeFilter, setTypeFilter] = useState('all');
+  const [areaFilter, setAreaFilter] = useState('All Areas');
+  const [viewMode, setViewMode] = useState('grid');
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const allItems = window.LMS_DATA.items;
+
+  // Filtered items
+  const filteredItems = useMemo(() => {
+    let items = allItems;
+    if (typeFilter !== 'all') items = items.filter(i => i.type === typeFilter);
+    if (areaFilter !== 'All Areas') items = items.filter(i => i.practiceArea === areaFilter || i.practiceArea === 'All Practice Areas');
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      items = items.filter(i =>
+        i.title.toLowerCase().includes(q) ||
+        i.description?.toLowerCase().includes(q) ||
+        i.tags?.some(tag => tag.toLowerCase().includes(q)) ||
+        i.parentCourse?.toLowerCase().includes(q) ||
+        i.practiceArea?.toLowerCase().includes(q)
+      );
+    }
+    return items;
+  }, [searchQuery, typeFilter, areaFilter]);
+
+  // Autocomplete suggestions
+  const suggestions = useMemo(() => {
+    if (!searchQuery.trim() || searchQuery.length < 2) return [];
+    const q = searchQuery.trim().toLowerCase();
+    return allItems
+      .filter(i =>
+        i.title.toLowerCase().includes(q) ||
+        i.tags?.some(t => t.toLowerCase().startsWith(q))
+      )
+      .slice(0, 6);
+  }, [searchQuery]);
+
+  return (
+    <div style={{ background: t.bg, minHeight: '100vh', fontFamily: "'DM Sans', -apple-system, sans-serif" }}>
+      <Topbar
+        t={t}
+        searchQuery={searchQuery}
+        onSearch={setSearchQuery}
+        searchFocused={searchFocused}
+        onFocus={setSearchFocused}
+      />
+
+      <Hero
+        t={t}
+        searchQuery={searchQuery}
+        onSearch={setSearchQuery}
+        suggestions={suggestions}
+        onSelectSuggestion={q => { setSearchQuery(q); setSearchFocused(false); }}
+        searchFocused={searchFocused}
+        onFocus={setSearchFocused}
+        resultCount={filteredItems.length}
+        hasQuery={!!searchQuery.trim()}
+      />
+
+      {tweaks.showWhatsNew && (
+        <WhatsNewBanner t={t} items={allItems} onItemClick={item => setSelectedItem(item)} />
+      )}
+
+      <FilterBar
+        t={t}
+        typeFilter={typeFilter}
+        setTypeFilter={setTypeFilter}
+        areaFilter={areaFilter}
+        setAreaFilter={setAreaFilter}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+        resultCount={filteredItems.length}
+      />
+
+      <main style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 28px 80px' }}>
+        <GroupedResults
+          items={filteredItems}
+          t={t}
+          viewMode={viewMode}
+          onItemClick={setSelectedItem}
+        />
+      </main>
+
+      {selectedItem && (
+        <ContentModal item={selectedItem} t={t} onClose={() => setSelectedItem(null)} />
+      )}
+
+      {/* Tweaks Panel */}
+      <TweaksPanel>
+        <TweakSection title="Visual Theme">
+          <TweakRadio
+            label="Theme"
+            value={tweaks.theme}
+            options={[
+              { value: 'navy', label: 'Navy' },
+              { value: 'minimal', label: 'Minimal' },
+              { value: 'advocate', label: 'Advocate' },
+            ]}
+            onChange={v => setTweak('theme', v)}
+          />
+        </TweakSection>
+        <TweakSection title="Features">
+          <TweakToggle
+            label="What's New Banner"
+            value={tweaks.showWhatsNew}
+            onChange={v => setTweak('showWhatsNew', v)}
+          />
+        </TweakSection>
+      </TweaksPanel>
+
+      <style>{`
+        @media (max-width: 600px) {
+          .topbar-search-wrap { display: none !important; }
+        }
+        @media (max-width: 480px) {
+          .filter-bar-type { display: none !important; }
+          .filter-bar-area { display: none; }
+          .filter-bar-count { display: none !important; }
+        }
+        * { -webkit-tap-highlight-color: transparent; }
+      `}</style>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

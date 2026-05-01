@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Law Skills — Find Training | MLRI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ── Topbar ──────────────────────────────────────────── -->
+  <header class="topbar" id="topbar">
+    <a class="brand" href="#">
+      <div class="brand-logo">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18M3 12h18M3 18h18"/>
+        </svg>
+      </div>
+      <span class="brand-name">Law Skills</span>
+      <span class="brand-sep"></span>
+      <span class="brand-org">MLRI</span>
+    </a>
+
+    <div class="topbar-search-wrap">
+      <form onsubmit="return false" autocomplete="off">
+        <div class="topbar-search-pill" id="topbar-search-pill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+          </svg>
+          <input id="topbar-search-input" type="search" placeholder="Search courses, modules, paths…" autocomplete="off" spellcheck="false">
+          <kbd>⌘K</kbd>
+        </div>
+      </form>
+    </div>
+
+    <!-- Mobile search overlay (shown over topbar on small screens) -->
+    <div class="topbar-mobile-search" id="topbar-mobile-search" hidden>
+      <button class="topbar-mobile-back" id="topbar-mobile-cancel" aria-label="Back">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="topbar-mobile-input-wrap">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+        </svg>
+        <input id="topbar-mobile-input" type="search" placeholder="Search courses, modules, paths…" autocomplete="off" spellcheck="false">
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <button class="topbar-search-toggle" id="topbar-search-toggle" aria-label="Search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+        </svg>
+      </button>
+      <button class="topbar-icon-btn" aria-label="Help">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </button>
+      <div class="topbar-avatar">MC</div>
+    </div>
+  </header>
+
+  <!-- ── Hero ────────────────────────────────────────────── -->
+  <section class="hero" id="hero">
+    <div class="hero-deco hero-deco--1"></div>
+    <div class="hero-deco hero-deco--2"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Massachusetts Legal Reform Institute</p>
+      <h1 class="hero-heading">Legal Aid Training</h1>
+      <p class="hero-sub">Courses, modules, and learning paths for legal aid attorneys. Search to find what you need.</p>
+
+      <div class="hero-search-wrap" id="hero-search-wrap">
+        <form id="hero-search-form" autocomplete="off" onsubmit="return false">
+          <div class="hero-search-box" id="hero-search-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8096b0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+            </svg>
+            <input
+              id="hero-search-input"
+              type="search"
+              placeholder="Try 'eviction', 'objections', '4th amendment'…"
+              autocomplete="off"
+              spellcheck="false"
+            >
+            <button type="button" id="hero-clear-btn" class="hero-clear-btn" aria-label="Clear search" hidden>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+            <button type="submit" class="hero-search-btn" id="hero-search-btn">Search</button>
+          </div>
+        </form>
+        <div id="autocomplete-dropdown" class="autocomplete-dropdown" hidden></div>
+      </div>
+
+      <p id="hero-count" class="hero-count" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- ── What's New Banner ────────────────────────────────── -->
+  <div id="whats-new-banner" class="whats-new-banner" hidden></div>
+
+  <!-- ── Filter Bar ──────────────────────────────────────── -->
+  <div id="filter-bar" class="filter-bar"></div>
+
+  <!-- ── Main Content ────────────────────────────────────── -->
+  <main class="main-content">
+    <div id="results-container" class="results-container"></div>
+  </main>
+
+  <!-- ── Modal ───────────────────────────────────────────── -->
+  <div id="content-modal" class="modal-overlay" hidden>
+    <div id="modal-panel" class="modal-panel"></div>
+  </div>
+
+  <!-- ── Mobile Bottom Nav ────────────────────────────────── -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Main navigation">
+    <button class="mbn-tab mbn-tab--active" data-mbn="home" aria-label="Home">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="mbn-tab" data-mbn="search" aria-label="Search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+      <span>Search</span>
+    </button>
+    <button class="mbn-tab" data-mbn="saved" aria-label="Saved">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      <span>Saved</span>
+    </button>
+    <button class="mbn-tab" data-mbn="progress" aria-label="Progress">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span>Progress</span>
+    </button>
+  </nav>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
