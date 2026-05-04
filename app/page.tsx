@@ -1,12 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { BookIcon, FolderIcon, GridIcon, HelpIcon, HomeIcon, ListIcon, PathIcon, SearchIcon, SparkIcon } from "@/components/icons";
 import { ContentCard, ContentListRow, PathCard } from "@/components/content-card";
 import { ContinueCard } from "@/components/continue-card";
 import { SearchBox } from "@/components/search-box";
-import { continueLearning, getLearningItems, popularTopics, type LearningItem } from "@/lib/data";
+import { getCourseLabel, getCourseTheme } from "@/lib/course-theme";
+import { continueLearning, courses, getLearningItems, popularTopics, type LearningItem } from "@/lib/data";
 import { searchLearningItems, type SearchResult } from "@/lib/search";
+import { useAuth } from "@/lib/auth";
 
 type Filter = "All" | "Paths" | "Courses" | "Modules";
 type ViewMode = "grid" | "list";
@@ -66,6 +69,12 @@ function sectionEyebrow(type: LearningItem["type"]) {
   return "Modules Inside Courses";
 }
 
+function sectionDescription(type: LearningItem["type"]) {
+  if (type === "PATH") return "Structured routes through related training areas.";
+  if (type === "COURSE") return "Core Brightspace courses organized by practice focus.";
+  return "Focused training units inside the course catalog.";
+}
+
 function ResultSection({
   title,
   eyebrow,
@@ -78,17 +87,23 @@ function ResultSection({
   viewMode: ViewMode;
 }) {
   if (items.length === 0) return null;
+  const isPathSection = items[0]?.type === "PATH";
+  const gridColumns = isPathSection ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
 
   return (
-    <div className="mb-14">
-      <div className="mb-6 flex items-end justify-between gap-4 border-b border-slate-200/70 pb-4">
+    <div className="mb-12">
+      <div className={`mb-4 flex items-end justify-between gap-4 pb-3 ${isPathSection ? "border-b-2 border-mlri-blue/20" : "border-b border-slate-200/80"}`}>
         <div>
-          <p className="text-sm font-black uppercase tracking-[0.12em] text-mlri-blue">{eyebrow}</p>
-          <h2 className="mt-2 text-3xl font-extrabold text-slate-950">{title}</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-mlri-blue">{eyebrow}</p>
+          <h2 className={`${isPathSection ? "text-2xl" : "text-xl"} mt-1 font-bold text-slate-800`}>{title}</h2>
+          <p className="mt-1 text-sm font-medium text-slate-500">{sectionDescription(items[0].type)}</p>
         </div>
+        <p className="hidden rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-500 sm:block">
+          {items.length} item{items.length === 1 ? "" : "s"}
+        </p>
       </div>
       {viewMode === "grid" ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className={`grid gap-4 ${gridColumns}`}>
           {items.map((item) =>
             item.type === "PATH" ? (
               <PathCard key={`${item.type}-${item.id}`} item={item} />
@@ -109,6 +124,13 @@ function ResultSection({
 }
 
 export default function Home() {
+  const { user, ready, logout } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (ready && !user) router.replace("/login");
+  }, [ready, user, router]);
+
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("All");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
@@ -134,97 +156,103 @@ export default function Home() {
   }
 
   function openSearchResult(result: SearchResult) {
-    window.location.href = result.href;
+    setQuery(result.item.title);
   }
+
+  if (!ready || !user) return null;
 
   return (
     <div className="hub-shell min-h-screen pb-24 md:pb-0">
       <header className="sticky top-0 z-40 border-b border-white/10 bg-mlri-navy text-white shadow-lg shadow-slate-900/10">
-        <div className="mx-auto flex h-20 max-w-7xl items-center gap-5 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
           <a href="#" className="flex min-w-fit items-center gap-3" aria-label="MLRI Learning Hub home">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/20 bg-white/10">
-              <BookIcon className="h-6 w-6" />
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/20 bg-white/10">
+              <BookIcon className="h-5 w-5" />
             </span>
             <span className="leading-tight">
-              <span className="block text-lg font-extrabold">MLRI</span>
-              <span className="block text-[15px] font-semibold text-sky-50">Learning Hub</span>
+              <span className="block text-base font-extrabold">MLRI</span>
+              <span className="block text-sm font-semibold text-sky-50">Learning Hub</span>
             </span>
           </a>
 
-          <div className="hidden flex-1 justify-center md:flex">
-            <SearchBox value={query} onChange={setQuery} suggestions={searchSuggestions} onSelect={openSearchResult} compact />
-          </div>
-
-          <nav className="ml-auto hidden items-center gap-7 text-base font-bold text-sky-50 md:flex">
+          <nav className="ml-auto hidden items-center gap-5 text-sm font-bold text-sky-50 md:flex">
             <a className="transition hover:text-white" href="#browse">Browse</a>
             <a className="transition hover:text-white" href="#learning">My Learning</a>
+            <div className="flex items-center gap-3 border-l border-white/15 pl-6">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-mlri-sky/30 text-xs font-bold text-white ring-2 ring-white/20">
+                {user.initials}
+              </div>
+              <span className="text-sm font-semibold text-sky-100">{user.firstName}</span>
+              <button
+                onClick={logout}
+                className="text-sm font-semibold text-sky-300 transition hover:text-white focus:outline-none"
+              >
+                Sign out
+              </button>
+            </div>
           </nav>
         </div>
       </header>
 
       <main>
-        <section className="relative overflow-hidden border-b border-slate-200 bg-white">
-          <div className="absolute right-0 top-0 h-72 w-72 rounded-bl-[7rem] bg-sky-100/70" />
-          <div className="absolute right-36 top-24 h-48 w-48 rounded-full bg-emerald-100/70" />
-          <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 md:py-14 lg:px-8">
-            <div className="max-w-3xl">
-              <p className="text-base font-extrabold text-mlri-blue">Discovery layer for Brightspace</p>
-              <h1 className="mt-4 max-w-3xl text-4xl font-extrabold leading-[1.08] text-mlri-ink sm:text-5xl">
-                What do you need help with?
-              </h1>
-              <p className="mt-5 max-w-2xl text-xl leading-8 text-slate-700">
-                Find training quickly across courses, modules inside courses, and learning paths, then jump directly into Brightspace when you are ready to continue.
-              </p>
-              <div className="mt-7 md:hidden">
-                <SearchBox value={query} onChange={setQuery} suggestions={searchSuggestions} onSelect={openSearchResult} />
+        <section className="border-b border-slate-200/70 bg-white/70">
+          <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
+            <div className="dashboard-command rounded-2xl border border-slate-200 bg-white p-4 shadow-soft sm:p-5">
+              <div className="grid gap-4 lg:grid-cols-[minmax(12rem,0.75fr)_minmax(22rem,1.5fr)_auto] lg:items-center">
+                <div>
+                  <p className="text-base font-bold text-slate-800">Welcome back, {user.firstName}.</p>
+                  <p className="mt-0.5 text-sm font-medium text-slate-500">{user.title} &middot; {user.unit}</p>
+                </div>
+                <div className="lg:max-w-2xl">
+                  <SearchBox value={query} onChange={setQuery} suggestions={searchSuggestions} onSelect={openSearchResult} />
+                </div>
+                <p className="hidden rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-600 xl:block">
+                  {visibleItems.length} available
+                </p>
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2 border-t border-slate-100 pt-3">
+                {quickActions.map((action) => {
+                  const Icon = action.icon;
+                  return (
+                    <button
+                      key={action.title}
+                      className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-semibold text-slate-600 transition hover:border-sky-200 hover:bg-white hover:text-mlri-blue focus:outline-none focus:ring-4 focus:ring-sky-100"
+                      type="button"
+                      onClick={() => action.title === "Learning Paths" && setFilter("Paths")}
+                    >
+                      <span className={`flex h-4 w-4 items-center justify-center rounded text-white/95 ${action.color}`}>
+                        <Icon className="h-2.5 w-2.5" />
+                      </span>
+                      {action.title}
+                    </button>
+                  );
+                })}
               </div>
             </div>
-
-            <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {quickActions.map((action) => {
-                const Icon = action.icon;
-                return (
-                  <button
-                    key={action.title}
-                    className="rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-soft transition hover:-translate-y-0.5 hover:shadow-lift focus:outline-none focus:ring-4 focus:ring-sky-100"
-                    type="button"
-                    onClick={() => action.title === "Learning Paths" && setFilter("Paths")}
-                  >
-                    <span className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl text-white ${action.color}`}>
-                      <Icon className="h-6 w-6" />
-                    </span>
-                    <span className="block text-lg font-extrabold text-slate-950">{action.title}</span>
-                    <span className="mt-1 block text-[15px] leading-6 text-slate-700">{action.description}</span>
-                  </button>
-                );
-              })}
-            </div>
           </div>
         </section>
 
-        <section id="learning" className="mx-auto max-w-7xl px-4 py-14 sm:px-6 md:py-16 lg:px-8">
-          <div className="mb-7 flex items-end justify-between gap-4">
+        <section id="learning" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 md:py-12 lg:px-8">
+          <div className="mb-5 flex items-end justify-between gap-4 border-b-2 border-mlri-blue/20 pb-3">
             <div>
-              <p className="text-sm font-black uppercase tracking-[0.12em] text-mlri-blue">My Learning</p>
-              <h2 className="mt-2 text-3xl font-extrabold text-slate-950">Continue Learning</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-mlri-blue">{user.firstName}&rsquo;s Learning</p>
+              <h2 className="mt-1 text-2xl font-bold text-slate-800">Pick up where you left off</h2>
             </div>
-            <a href="#browse" className="text-base font-extrabold text-mlri-blue">View all</a>
+            <a href="#browse" className="text-sm font-semibold text-mlri-blue">View all</a>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {continueLearning.map((item) => (
-              <ContinueCard key={item.id} item={item} />
-            ))}
+          <div>
+            <ContinueCard item={continueLearning[0]} priority="primary" />
           </div>
         </section>
 
-        <section id="browse" className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
-          <div className="sticky-filter mb-9 flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-sm backdrop-blur lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <div className="inline-flex rounded-2xl bg-slate-100 p-1.5">
+        <section id="browse" className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+          <div className="sticky-filter mb-8 flex flex-col gap-3 rounded-xl border border-slate-200 bg-white/95 p-3 shadow-sm backdrop-blur lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+              <div className="inline-flex rounded-xl bg-slate-100 p-1">
                 {filters.map((entry) => (
                   <button
                     key={entry}
-                    className={`h-11 rounded-xl px-4 text-sm font-black transition duration-200 ease-out ${
+                    className={`h-9 rounded-lg px-3 text-xs font-semibold transition duration-200 ease-out ${
                       filter === entry ? "bg-mlri-navy text-white shadow-sm" : "text-slate-600 hover:bg-white hover:text-slate-950"
                     }`}
                     type="button"
@@ -234,35 +262,49 @@ export default function Home() {
                   </button>
                 ))}
               </div>
-              <div className="inline-flex w-fit rounded-2xl bg-slate-100 p-1.5" aria-label="Choose result layout">
+              <div className="inline-flex w-fit rounded-xl bg-slate-100 p-1" aria-label="Choose result layout">
                 <button
-                  className={`flex h-11 items-center gap-2 rounded-xl px-4 text-sm font-black transition duration-200 ease-out ${
-                    viewMode === "grid" ? "bg-white text-mlri-navy shadow-sm" : "text-slate-600 hover:bg-white hover:text-slate-950"
+                  className={`flex h-9 items-center gap-2 rounded-lg px-3 text-xs font-semibold transition duration-200 ease-out ${
+                    viewMode === "grid" ? "bg-white text-mlri-navy shadow-sm" : "text-slate-500 hover:bg-white hover:text-slate-800"
                   }`}
                   type="button"
                   onClick={() => setViewMode("grid")}
                   aria-pressed={viewMode === "grid"}
                 >
-                  <GridIcon className="h-4 w-4" />
+                  <GridIcon className="h-3.5 w-3.5" />
                   Grid
                 </button>
                 <button
-                  className={`flex h-11 items-center gap-2 rounded-xl px-4 text-sm font-black transition duration-200 ease-out ${
-                    viewMode === "list" ? "bg-white text-mlri-navy shadow-sm" : "text-slate-600 hover:bg-white hover:text-slate-950"
+                  className={`flex h-9 items-center gap-2 rounded-lg px-3 text-xs font-semibold transition duration-200 ease-out ${
+                    viewMode === "list" ? "bg-white text-mlri-navy shadow-sm" : "text-slate-500 hover:bg-white hover:text-slate-800"
                   }`}
                   type="button"
                   onClick={() => setViewMode("list")}
                   aria-pressed={viewMode === "list"}
                 >
-                  <ListIcon className="h-4 w-4" />
+                  <ListIcon className="h-3.5 w-3.5" />
                   List
                 </button>
               </div>
             </div>
-            <p className="rounded-xl bg-slate-50 px-4 py-3 text-base font-black text-slate-800 ring-1 ring-slate-200" aria-live="polite">
-              {visibleItems.length} result{visibleItems.length === 1 ? "" : "s"} - {filterContext[filter]}
-              {query ? ` - "${query}"` : ""}
-            </p>
+            <div className="flex flex-col gap-2 lg:ml-auto lg:items-end">
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="mr-1 text-xs font-semibold text-slate-500">Course areas</span>
+                {courses.map((course) => {
+                  const theme = getCourseTheme(course.id);
+                  return (
+                    <span key={course.id} className={`inline-flex items-center gap-1.5 rounded-full border bg-white/70 px-2 py-1 text-[0.68rem] font-semibold opacity-65 ${theme.chip}`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} />
+                      {getCourseLabel(course)}
+                    </span>
+                  );
+                })}
+              </div>
+              <p className="rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium text-slate-600 ring-1 ring-slate-200" aria-live="polite">
+                {visibleItems.length} result{visibleItems.length === 1 ? "" : "s"} - {filterContext[filter]}
+                {query ? ` - "${query}"` : ""}
+              </p>
+            </div>
           </div>
 
           {filter === "All" ? (
@@ -277,13 +319,13 @@ export default function Home() {
             ))
           ) : viewMode === "grid" ? (
             filter === "Paths" ? (
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {pathItems.map((item) => (
                   <PathCard key={`${item.type}-${item.id}`} item={item} />
                 ))}
               </div>
             ) : (
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {visibleItems.map((item) => (
                   <ContentCard key={`${item.type}-${item.id}`} item={item} />
                 ))}
@@ -298,25 +340,25 @@ export default function Home() {
           )}
 
           {visibleItems.length === 0 && (
-            <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center">
+            <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center">
               <SearchIcon className="mx-auto h-9 w-9 text-slate-400" />
-              <h2 className="mt-4 text-2xl font-extrabold text-slate-950">No matching learning content</h2>
-              <p className="mt-2 text-lg text-slate-700">Try a topic like evictions, client intake, motions, or courtroom procedures.</p>
+              <h2 className="mt-4 text-xl font-extrabold text-slate-950">No matching learning content</h2>
+              <p className="mt-2 text-base text-slate-700">Try a topic like evictions, client intake, motions, or courtroom procedures.</p>
             </div>
           )}
         </section>
 
-        <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
-          <div className="rounded-3xl border border-slate-200 bg-mlri-mist p-6 sm:flex sm:items-center sm:justify-between">
+        <section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+          <div className="rounded-xl border border-slate-200 bg-mlri-mist p-4 sm:flex sm:items-center sm:justify-between">
             <div>
-              <h2 className="text-xl font-extrabold text-slate-950">Popular Topics</h2>
-              <p className="mt-1 text-base font-semibold text-slate-700">Fast routes into the most-used training areas.</p>
+              <h2 className="text-lg font-bold text-slate-800">Popular Topics</h2>
+              <p className="mt-0.5 text-sm text-slate-600">Fast routes into the most-used training areas.</p>
             </div>
             <div className="mt-4 flex flex-wrap gap-2 sm:mt-0 sm:justify-end">
               {popularTopics.map((topic) => (
                 <button
                   key={topic}
-                  className="rounded-full bg-white px-4 py-2 text-base font-extrabold text-slate-800 shadow-sm ring-1 ring-slate-200 transition hover:text-mlri-blue hover:ring-sky-200 focus:outline-none focus:ring-4 focus:ring-sky-100"
+                  className="rounded-full bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200 transition hover:text-mlri-blue hover:ring-sky-200 focus:outline-none focus:ring-4 focus:ring-sky-100"
                   type="button"
                   onClick={() => selectTopic(topic)}
                 >
@@ -329,19 +371,25 @@ export default function Home() {
       </main>
 
       <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white/95 px-5 py-2 shadow-[0_-14px_32px_rgba(8,45,87,0.10)] backdrop-blur md:hidden">
-        <div className="mx-auto grid max-w-md grid-cols-3">
+        <div className="mx-auto grid max-w-md grid-cols-4">
           <a href="#" className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-extrabold text-mlri-blue">
             <HomeIcon className="h-5 w-5" />
             Home
           </a>
           <a href="#browse" className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-extrabold text-slate-600">
             <SearchIcon className="h-5 w-5" />
-            Search
+            Browse
           </a>
           <a href="#learning" className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-extrabold text-slate-600">
             <BookIcon className="h-5 w-5" />
-            My Learning
+            Learning
           </a>
+          <button onClick={logout} className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-semibold text-slate-500">
+            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-mlri-navy text-[10px] font-bold text-white">
+              {user.initials}
+            </div>
+            Sign out
+          </button>
         </div>
       </nav>
     </div>

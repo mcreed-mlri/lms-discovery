@@ -1,14 +1,18 @@
+import { BookIcon, FolderIcon, PathIcon } from "@/components/icons";
 import type { LearningItem } from "@/lib/data";
 
-const styles: Record<LearningItem["type"], string> = {
-  COURSE: "bg-blue-100 text-blue-800 ring-blue-300",
-  MODULE: "bg-emerald-100 text-emerald-800 ring-emerald-300",
-  PATH: "bg-violet-100 text-violet-800 ring-violet-300",
+const icons = {
+  COURSE: BookIcon,
+  MODULE: FolderIcon,
+  PATH: PathIcon,
 };
 
 export function TypeBadge({ type }: { type: LearningItem["type"] }) {
+  const Icon = icons[type];
+
   return (
-    <span className={`inline-flex w-fit items-center rounded-md px-3 py-1.5 text-[0.72rem] font-black uppercase leading-none tracking-[0.08em] ring-1 ${styles[type]}`}>
+    <span className="inline-flex w-fit items-center gap-1.5 rounded-md bg-slate-100 px-2.5 py-1 text-[0.68rem] font-black uppercase leading-none tracking-[0.08em] text-slate-600 ring-1 ring-slate-200">
+      <Icon className="h-3 w-3 text-slate-500" />
       {type}
     </span>
   );

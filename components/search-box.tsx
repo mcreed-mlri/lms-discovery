@@ -64,7 +64,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
       <label className="sr-only" htmlFor={inputId}>
         Search courses, modules, paths, or topics
       </label>
-      <SearchIcon className={`pointer-events-none absolute left-4 z-10 h-5 w-5 -translate-y-1/2 text-slate-400 transition group-focus-within:text-mlri-blue ${compact ? "top-6" : "top-7"}`} />
+      <SearchIcon className={`pointer-events-none absolute left-3.5 z-10 h-4 w-4 -translate-y-1/2 text-slate-400 transition group-focus-within:text-mlri-blue ${compact ? "top-5" : "top-6"}`} />
       <input
         aria-activedescendant={showSuggestions && suggestions[activeIndex] ? `${listboxId}-${activeIndex}` : undefined}
         aria-autocomplete="list"
@@ -78,8 +78,8 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
         }}
         onFocus={() => setIsOpen(true)}
         onKeyDown={handleKeyDown}
-        className={`w-full rounded-2xl border border-slate-300 bg-white pl-12 pr-4 text-base font-semibold text-slate-950 shadow-soft outline-none transition placeholder:text-slate-500 focus:border-mlri-sky focus:ring-4 focus:ring-sky-100 ${
-          compact ? "h-12" : "h-14"
+        className={`w-full rounded-xl border border-slate-300 bg-white pl-10 pr-4 text-base font-semibold text-slate-950 shadow-soft outline-none transition placeholder:text-slate-500 focus:border-mlri-sky focus:ring-4 focus:ring-sky-100 ${
+          compact ? "h-10" : "h-12"
         }`}
         id={inputId}
         placeholder="Search courses, modules, paths, or topics..."
@@ -88,7 +88,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
       />
       {showSuggestions && (
         <div
-          className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white text-slate-950 shadow-lift"
+          className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-slate-200 bg-white text-slate-950 shadow-lift"
           id={listboxId}
           role="listbox"
         >
@@ -96,7 +96,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
             suggestions.map((result, index) => (
               <button
                 aria-selected={activeIndex === index}
-                className={`grid w-full grid-cols-[1fr_auto] gap-3 px-4 py-3 text-left transition ${
+                className={`grid w-full grid-cols-[1fr_auto] gap-3 px-3 py-2.5 text-left transition ${
                   activeIndex === index ? "bg-mlri-mist" : "bg-white hover:bg-slate-50"
                 }`}
                 id={`${listboxId}-${index}`}
@@ -105,17 +105,18 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
                 onMouseEnter={() => setActiveIndex(index)}
                 onClick={() => selectResult(result)}
                 role="option"
+                title="Details coming soon"
                 type="button"
               >
                 <span className="min-w-0">
                   <span className="mb-2 flex flex-wrap items-center gap-2">
                     <TypeBadge type={result.item.type} />
-                    <span className="truncate text-sm font-bold text-slate-600">{result.context}</span>
+                    <span className="truncate text-xs font-bold text-slate-600">{result.context}</span>
                   </span>
-                  <span className="block truncate text-base font-extrabold text-slate-950">{result.item.title}</span>
+                  <span className="block truncate text-sm font-extrabold text-slate-950">{result.item.title}</span>
                 </span>
-                <span className="self-center rounded-full bg-mlri-blue px-3 py-1.5 text-xs font-black uppercase tracking-wide text-white">
-                  Open
+                <span className="self-center rounded-full bg-slate-100 px-2.5 py-1 text-[0.68rem] font-black uppercase tracking-wide text-slate-600">
+                  Preview
                 </span>
               </button>
             ))

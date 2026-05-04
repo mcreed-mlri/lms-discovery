@@ -14,6 +14,7 @@ export type Module = {
   id: string;
   title: string;
   description: string;
+  contentStatus?: "New" | "Updated";
   courseId: string;
   parentCourseTitle: string;
   practiceArea: string;
@@ -40,160 +41,174 @@ export type LearningItem =
 
 export const courses: Course[] = [
   {
-    id: "courtroom-basics",
-    title: "Court Procedure & Courtroom Basics",
+    id: "professional-foundations",
+    title: "Professional Foundations for Legal Aid",
     description:
-      "A practical introduction to hearings, courtroom roles, etiquette, timelines, and client-centered preparation.",
+      "Understand your ethical obligations, the legal aid mission, and the professional standards that shape your daily practice as a new attorney.",
     level: "Foundations",
     practiceArea: "All Practice Areas",
-    duration: "2 hr 20 min",
-    brightspaceUrl: "https://brightspace.example.edu/d2l/home/courtroom-basics",
+    duration: "1 hr 45 min",
+    brightspaceUrl: "https://brightspace.example.edu/d2l/home/professional-foundations",
   },
   {
-    id: "housing-eviction-defense",
-    title: "Housing & Eviction Defense",
+    id: "client-centered-practice",
+    title: "Client-Centered Communication",
     description:
-      "Learn how to analyze notices, prepare defenses, support tenants, and navigate common housing court workflows.",
-    level: "Intermediate",
-    practiceArea: "Housing",
-    duration: "3 hr 10 min",
-    brightspaceUrl: "https://brightspace.example.edu/d2l/home/housing-eviction-defense",
-  },
-  {
-    id: "client-intake",
-    title: "Client Intake Essentials",
-    description:
-      "Build a reliable intake conversation, identify urgent issues, and document facts for legal aid teams.",
+      "Develop the interviewing, listening, and counseling skills that build trust and surface the full picture of a client's legal situation.",
     level: "Foundations",
     practiceArea: "Client Services",
-    duration: "1 hr 15 min",
-    brightspaceUrl: "https://brightspace.example.edu/d2l/home/client-intake",
+    duration: "1 hr 50 min",
+    brightspaceUrl: "https://brightspace.example.edu/d2l/home/client-centered-practice",
   },
   {
-    id: "motions-practice",
-    title: "Motions Practice for Legal Aid",
+    id: "first-steps-in-court",
+    title: "Your First Steps in Court",
     description:
-      "Draft, file, and argue common motions with examples from housing, benefits, and family law contexts.",
-    level: "Intermediate",
-    practiceArea: "Civil Practice",
-    duration: "2 hr 45 min",
-    brightspaceUrl: "https://brightspace.example.edu/d2l/home/motions-practice",
-  },
-  {
-    id: "evidence-advocacy",
-    title: "Evidence & Objections in Hearings",
-    description:
-      "A focused course on exhibits, foundations, hearsay, objections, and preserving the record.",
-    level: "Advanced",
-    practiceArea: "Litigation",
-    duration: "2 hr",
-    brightspaceUrl: "https://brightspace.example.edu/d2l/home/evidence-advocacy",
+      "A practical guide to showing up prepared — understanding court procedure, interacting professionally, and getting your client ready for their hearing.",
+    level: "Foundations",
+    practiceArea: "All Practice Areas",
+    duration: "1 hr 55 min",
+    brightspaceUrl: "https://brightspace.example.edu/d2l/home/first-steps-in-court",
   },
 ];
 
 export const modules: Module[] = [
+  // Professional Foundations modules
   {
-    id: "motion-dismiss",
-    title: "Filing a Motion to Dismiss",
+    id: "ethics-and-confidentiality",
+    title: "Ethics and Confidentiality in Legal Aid",
     description:
-      "Use a short checklist to evaluate grounds, draft the filing, and prepare for argument.",
-    courseId: "motions-practice",
-    parentCourseTitle: "Motions Practice for Legal Aid",
-    practiceArea: "Civil Practice",
-    level: "Intermediate",
-    tags: ["motions", "civil practice", "filing"],
-    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/motions-practice",
-    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/motions-practice/viewContent/1001/View",
-  },
-  {
-    id: "client-interview",
-    title: "Client Interview Best Practices",
-    description:
-      "Trauma-informed interviewing techniques for gathering facts without overwhelming the client.",
-    courseId: "client-intake",
-    parentCourseTitle: "Client Intake Essentials",
-    practiceArea: "Client Services",
-    level: "Foundations",
-    tags: ["client intake", "interviewing", "ethics"],
-    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/client-intake",
-    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/client-intake/viewContent/1002/View",
-  },
-  {
-    id: "notice-to-quit",
-    title: "Reading a Notice to Quit",
-    description:
-      "Spot deadline issues, defective notices, and facts that may shape an eviction defense.",
-    courseId: "housing-eviction-defense",
-    parentCourseTitle: "Housing & Eviction Defense",
-    practiceArea: "Housing",
-    level: "Intermediate",
-    tags: ["evictions", "housing", "notices"],
-    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/housing-eviction-defense",
-    moduleAnchorUrl: "https://brightspace.example.edu/d2l/le/content/housing-eviction-defense/Home?itemIdentifier=notice-to-quit",
-  },
-  {
-    id: "exhibit-foundation",
-    title: "Laying a Foundation for Exhibits",
-    description:
-      "Practice the sequence of authentication questions for common documents and photos.",
-    courseId: "evidence-advocacy",
-    parentCourseTitle: "Evidence & Objections in Hearings",
-    practiceArea: "Litigation",
-    level: "Advanced",
-    tags: ["evidence", "courtroom procedures", "hearings"],
-    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/evidence-advocacy",
-    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/evidence-advocacy/viewContent/1004/View",
-  },
-  {
-    id: "remote-hearings",
-    title: "Preparing Clients for Remote Hearings",
-    description:
-      "Help clients understand technology, documents, expectations, and what to do when problems arise.",
-    courseId: "courtroom-basics",
-    parentCourseTitle: "Court Procedure & Courtroom Basics",
+      "Cover the core rules of professional conduct, attorney-client privilege, and how to navigate conflicts of interest in a high-volume practice.",
+    courseId: "professional-foundations",
+    parentCourseTitle: "Professional Foundations for Legal Aid",
     practiceArea: "All Practice Areas",
     level: "Foundations",
-    tags: ["courtroom procedures", "client preparation", "hearings"],
-    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/courtroom-basics",
+    tags: ["ethics", "confidentiality", "professional conduct"],
+    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/professional-foundations",
+    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/professional-foundations/viewContent/1001/View",
+  },
+  {
+    id: "legal-aid-environment",
+    title: "Working in a Legal Aid Environment",
+    description:
+      "Learn how legal aid organizations are structured, how cases are prioritized, and what the mission means for how you serve clients every day.",
+    courseId: "professional-foundations",
+    parentCourseTitle: "Professional Foundations for Legal Aid",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["legal aid", "organization", "mission"],
+    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/professional-foundations",
+    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/professional-foundations/viewContent/1002/View",
+  },
+  {
+    id: "case-notes-and-compliance",
+    title: "Case Notes, Time Records, and Compliance",
+    description:
+      "Build habits around accurate time tracking, case documentation standards, and grant-reporting requirements from your very first week.",
+    courseId: "professional-foundations",
+    parentCourseTitle: "Professional Foundations for Legal Aid",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["documentation", "compliance", "time records"],
+    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/professional-foundations",
+    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/professional-foundations/viewContent/1003/View",
+  },
+
+  // Client-Centered Communication modules
+  {
+    id: "first-client-interview",
+    title: "Conducting Your First Client Interview",
+    description:
+      "Structure an intake conversation to gather facts efficiently, identify urgent legal issues, and help the client feel heard.",
+    contentStatus: "Updated",
+    courseId: "client-centered-practice",
+    parentCourseTitle: "Client-Centered Communication",
+    practiceArea: "Client Services",
+    level: "Foundations",
+    tags: ["client intake", "interviewing", "fact gathering"],
+    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/client-centered-practice",
+    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/client-centered-practice/viewContent/2001/View",
+  },
+  {
+    id: "trauma-informed-communication",
+    title: "Trauma-Informed Communication",
+    description:
+      "Recognize signs of trauma, adjust your communication style, and avoid re-traumatization when working through sensitive facts with clients.",
+    courseId: "client-centered-practice",
+    parentCourseTitle: "Client-Centered Communication",
+    practiceArea: "Client Services",
+    level: "Foundations",
+    tags: ["trauma-informed", "communication", "client services"],
+    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/client-centered-practice",
+    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/client-centered-practice/viewContent/2002/View",
+  },
+  {
+    id: "safety-screening",
+    title: "Safety Screening and Crisis Recognition",
+    description:
+      "Identify domestic violence, housing instability, and other safety risks early, and connect clients to the right resources before problems escalate.",
+    contentStatus: "New",
+    courseId: "client-centered-practice",
+    parentCourseTitle: "Client-Centered Communication",
+    practiceArea: "Client Services",
+    level: "Foundations",
+    tags: ["safety screening", "crisis", "domestic violence"],
+    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/client-centered-practice",
+    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/client-centered-practice/viewContent/2003/View",
+  },
+
+  // First Steps in Court modules
+  {
+    id: "courtroom-roles-etiquette",
+    title: "Courtroom Roles and Etiquette",
+    description:
+      "Learn who does what in a courtroom, how to address the bench, interact with clerks, and carry yourself professionally as a new advocate.",
+    courseId: "first-steps-in-court",
+    parentCourseTitle: "Your First Steps in Court",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["courtroom procedures", "etiquette", "professionalism"],
+    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/first-steps-in-court",
+    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/first-steps-in-court/viewContent/3001/View",
+  },
+  {
+    id: "preparing-client-for-court",
+    title: "Preparing Your Client for Court",
+    description:
+      "Walk through what clients need to know before a hearing — what to wear, what to bring, what to expect, and how to manage anxiety on the day.",
+    courseId: "first-steps-in-court",
+    parentCourseTitle: "Your First Steps in Court",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["client preparation", "hearings", "courtroom procedures"],
+    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/first-steps-in-court",
+    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/first-steps-in-court/viewContent/3002/View",
+  },
+  {
+    id: "first-appearance-checklist",
+    title: "The First Appearance Checklist",
+    description:
+      "Use a step-by-step framework to organize your file, confirm the facts, and know exactly what to say when the judge calls your case for the first time.",
+    contentStatus: "Updated",
+    courseId: "first-steps-in-court",
+    parentCourseTitle: "Your First Steps in Court",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["courtroom procedures", "first appearance", "preparation"],
+    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/first-steps-in-court",
+    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/first-steps-in-court/viewContent/3003/View",
   },
 ];
 
 export const paths: Path[] = [
   {
-    id: "new-attorney",
-    title: "New Attorney Onboarding",
+    id: "new-attorney-foundations",
+    title: "New Attorney Foundations",
     description:
-      "A guided first-year path from client intake through first hearing, with essential practice foundations.",
-    courseIds: ["client-intake", "courtroom-basics", "motions-practice"],
-    totalDuration: "6 hr total",
+      "A structured first-year path covering the core skills every new legal aid attorney needs — from ethics and client communication to your first day in court.",
+    courseIds: ["professional-foundations", "client-centered-practice", "first-steps-in-court"],
+    totalDuration: "5 hr 30 min total",
     level: "Foundations",
-  },
-  {
-    id: "civil-litigation",
-    title: "Civil Litigation Fundamentals",
-    description:
-      "Build practical litigation confidence through motions, evidence, procedure, and hearing preparation.",
-    courseIds: ["courtroom-basics", "motions-practice", "evidence-advocacy"],
-    totalDuration: "7 hr total",
-    level: "Intermediate",
-  },
-  {
-    id: "housing-defense",
-    title: "Housing & Eviction Defense",
-    description:
-      "A focused path for representing tenants from intake through notices, negotiation, and court appearances.",
-    courseIds: ["client-intake", "housing-eviction-defense", "courtroom-basics"],
-    totalDuration: "6.5 hr total",
-    level: "Intermediate",
-  },
-  {
-    id: "advocacy-ready",
-    title: "Hearing Advocacy Ready",
-    description:
-      "Sharpen courtroom procedure, objections, exhibits, and client preparation for contested hearings.",
-    courseIds: ["courtroom-basics", "evidence-advocacy"],
-    totalDuration: "4 hr total",
-    level: "Advanced",
   },
 ];
 
@@ -216,12 +231,12 @@ export type ContinueLearningItem =
     };
 
 export const continueLearning: ContinueLearningItem[] = [
-  { id: "courtroom-basics", type: "COURSE", title: "Court Procedure & Courtroom Basics", detail: "Mock course progress", progress: 60 },
-  { id: "motion-dismiss", type: "MODULE", title: "Filing a Motion to Dismiss", detail: "Prototype module status", status: "In progress" },
-  { id: "civil-litigation", type: "PATH", title: "Civil Litigation Fundamentals", detail: "4 of 6 completed", progress: 68 },
+  { id: "professional-foundations", type: "COURSE", title: "Professional Foundations for Legal Aid", detail: "Module 2 of 3", progress: 45 },
+  { id: "first-client-interview", type: "MODULE", title: "Conducting Your First Client Interview", detail: "Client-Centered Communication", status: "In progress" },
+  { id: "new-attorney-foundations", type: "PATH", title: "New Attorney Foundations", detail: "1 of 3 courses complete", progress: 33 },
 ];
 
-export const popularTopics = ["Evictions", "Client Intake", "Motions", "Courtroom Procedures"];
+export const popularTopics = ["Ethics & Confidentiality", "Client Interviews", "Courtroom Etiquette", "Trauma-Informed Practice"];
 
 export function getLearningItems(): LearningItem[] {
   return [
@@ -241,7 +256,5 @@ export function getModuleBrightspaceUrl(module: Module) {
 }
 
 export function getLearningItemUrl(item: LearningItem) {
-  if (item.type === "PATH") return getPathBrightspaceUrl(item);
-  if (item.type === "MODULE") return getModuleBrightspaceUrl(item);
-  return item.brightspaceUrl;
+  return "#content-coming-soon";
 }
