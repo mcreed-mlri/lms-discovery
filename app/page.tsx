@@ -50,6 +50,15 @@ const quickActions = [
   },
 ];
 
+const sideNavItems = [
+  { title: "Home", href: "#", icon: HomeIcon },
+  { title: "Browse", href: "#browse", icon: SearchIcon },
+  { title: "My Learning", href: "#learning", icon: BookIcon },
+  { title: "Paths", href: "#browse", icon: PathIcon, filter: "Paths" as Filter },
+  { title: "Topics", href: "#topics", icon: FolderIcon },
+  { title: "New", href: "#browse", icon: SparkIcon },
+];
+
 function filterMatches(item: LearningItem, filter: Filter) {
   if (filter === "All") return true;
   if (filter === "Paths") return item.type === "PATH";
@@ -194,45 +203,53 @@ export default function Home() {
         </div>
       </header>
 
-      <main>
-        <section className="border-b border-slate-200/70 bg-white/70">
-          <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
-            <div className="dashboard-command rounded-2xl border border-slate-200 bg-white p-4 shadow-soft sm:p-5">
-              <div className="grid gap-4 lg:grid-cols-[minmax(12rem,0.75fr)_minmax(22rem,1.5fr)_auto] lg:items-center">
-                <div>
-                  <p className="text-base font-bold text-slate-800">Welcome back, {user.firstName}.</p>
-                  <p className="mt-0.5 text-sm font-medium text-slate-500">{user.title} &middot; {user.unit}</p>
-                </div>
-                <div className="lg:max-w-2xl">
-                  <SearchBox value={query} onChange={setQuery} suggestions={searchSuggestions} onSelect={openSearchResult} />
-                </div>
-                <p className="hidden rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-600 xl:block">
-                  {visibleItems.length} available
-                </p>
+      <aside className="fixed bottom-0 left-0 top-16 z-30 hidden w-16 border-r border-slate-200 bg-white/90 shadow-[16px_0_40px_rgba(8,45,87,0.05)] backdrop-blur lg:block">
+        <nav className="flex h-full flex-col items-center gap-2 px-2 py-5" aria-label="Primary">
+          {sideNavItems.map((item, index) => {
+            const Icon = item.icon;
+            const isActive = index === 0;
+            return (
+              <a
+                key={item.title}
+                href={item.href}
+                onClick={() => item.filter && setFilter(item.filter)}
+                className={`group relative flex h-11 w-11 items-center justify-center rounded-lg transition focus:outline-none focus:ring-4 focus:ring-sky-100 ${
+                  isActive ? "bg-mlri-navy text-white shadow-sm" : "text-slate-500 hover:bg-sky-50 hover:text-mlri-blue"
+                }`}
+                aria-label={item.title}
+              >
+                <Icon className="h-5 w-5" />
+                <span className="pointer-events-none absolute left-[3.35rem] top-1/2 z-50 -translate-y-1/2 whitespace-nowrap rounded-md border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
+                  {item.title}
+                </span>
+              </a>
+            );
+          })}
+          <div className="mt-auto flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-xs font-bold text-mlri-navy">
+            {user.initials}
+          </div>
+        </nav>
+      </aside>
+
+      <main className="lg:pl-16">
+        <section className="border-b border-slate-200/70 bg-white/80">
+          <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+            <div className="grid gap-3 lg:grid-cols-[minmax(12rem,0.72fr)_minmax(22rem,1.55fr)_auto] lg:items-center">
+              <div>
+                <p className="text-base font-bold text-slate-800">Welcome back, {user.firstName}.</p>
+                <p className="mt-0.5 text-sm font-medium text-slate-500">{user.title} &middot; {user.unit}</p>
               </div>
-              <div className="mt-3 flex flex-wrap gap-2 border-t border-slate-100 pt-3">
-                {quickActions.map((action) => {
-                  const Icon = action.icon;
-                  return (
-                    <button
-                      key={action.title}
-                      className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-semibold text-slate-600 transition hover:border-sky-200 hover:bg-white hover:text-mlri-blue focus:outline-none focus:ring-4 focus:ring-sky-100"
-                      type="button"
-                      onClick={() => action.title === "Learning Paths" && setFilter("Paths")}
-                    >
-                      <span className={`flex h-4 w-4 items-center justify-center rounded text-white/95 ${action.color}`}>
-                        <Icon className="h-2.5 w-2.5" />
-                      </span>
-                      {action.title}
-                    </button>
-                  );
-                })}
+              <div className="lg:max-w-2xl">
+                <SearchBox value={query} onChange={setQuery} suggestions={searchSuggestions} onSelect={openSearchResult} />
               </div>
+              <p className="w-fit rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 shadow-sm">
+                {visibleItems.length} available
+              </p>
             </div>
           </div>
         </section>
 
-        <section id="learning" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 md:py-12 lg:px-8">
+        <section id="learning" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:py-10 lg:px-8">
           <div className="mb-5 flex items-end justify-between gap-4 border-b-2 border-mlri-blue/20 pb-3">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.12em] text-mlri-blue">{user.firstName}&rsquo;s Learning</p>
@@ -246,7 +263,7 @@ export default function Home() {
         </section>
 
         <section id="browse" className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-          <div className="sticky-filter mb-8 flex flex-col gap-3 rounded-xl border border-slate-200 bg-white/95 p-3 shadow-sm backdrop-blur lg:flex-row lg:items-center lg:justify-between">
+          <div className="sticky-filter mb-8 grid gap-3 rounded-xl border border-slate-200 bg-white/95 p-3 shadow-sm backdrop-blur lg:grid-cols-[auto_minmax(18rem,30rem)_auto] lg:items-center">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
               <div className="inline-flex rounded-xl bg-slate-100 p-1">
                 {filters.map((entry) => (
@@ -286,9 +303,29 @@ export default function Home() {
                   List
                 </button>
               </div>
+              <div className="hidden h-8 w-px bg-slate-200 2xl:block" />
+              <div className="hidden flex-wrap gap-1.5 2xl:flex" aria-label="Shortcuts">
+                {quickActions.slice(0, 3).map((action) => {
+                  const Icon = action.icon;
+                  return (
+                    <button
+                      key={action.title}
+                      className="flex h-9 items-center gap-2 rounded-lg px-2.5 text-xs font-semibold text-slate-500 transition hover:bg-sky-50 hover:text-mlri-blue focus:outline-none focus:ring-4 focus:ring-sky-100"
+                      type="button"
+                      onClick={() => action.title === "Learning Paths" && setFilter("Paths")}
+                    >
+                      <Icon className="h-3.5 w-3.5" />
+                      {action.title}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-            <div className="flex flex-col gap-2 lg:ml-auto lg:items-end">
-              <div className="flex flex-wrap items-center gap-1.5">
+            <div className="min-w-0">
+              <SearchBox value={query} onChange={setQuery} suggestions={searchSuggestions} onSelect={openSearchResult} compact />
+            </div>
+            <div className="flex flex-col gap-2 lg:items-end">
+              <div className="hidden flex-wrap items-center gap-1.5 xl:flex">
                 <span className="mr-1 text-xs font-semibold text-slate-500">Course areas</span>
                 {courses.map((course) => {
                   const theme = getCourseTheme(course.id);
@@ -348,7 +385,7 @@ export default function Home() {
           )}
         </section>
 
-        <section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+        <section id="topics" className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
           <div className="rounded-xl border border-slate-200 bg-mlri-mist p-4 sm:flex sm:items-center sm:justify-between">
             <div>
               <h2 className="text-lg font-bold text-slate-800">Popular Topics</h2>
