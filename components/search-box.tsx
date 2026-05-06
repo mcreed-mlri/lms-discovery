@@ -11,9 +11,10 @@ type SearchBoxProps = {
   suggestions?: SearchResult[];
   onSelect?: (result: SearchResult) => void;
   compact?: boolean;
+  prominent?: boolean;
 };
 
-export function SearchBox({ value, onChange, suggestions = [], onSelect, compact = false }: SearchBoxProps) {
+export function SearchBox({ value, onChange, suggestions = [], onSelect, compact = false, prominent = false }: SearchBoxProps) {
   const inputId = useId();
   const listboxId = useId();
   const [isOpen, setIsOpen] = useState(false);
@@ -60,11 +61,11 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
   }
 
   return (
-    <div className={`group relative ${compact ? "w-full" : "w-full max-w-2xl"}`}>
+    <div className={`group relative ${compact || prominent ? "w-full" : "w-full max-w-2xl"}`}>
       <label className="sr-only" htmlFor={inputId}>
         Search courses, modules, paths, or topics
       </label>
-      <SearchIcon className={`pointer-events-none absolute left-3.5 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-slate-400 transition group-focus-within:text-mlri-blue`} />
+      <SearchIcon className={`pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-slate-400 transition group-focus-within:text-mlri-blue ${prominent ? "left-5 h-5 w-5" : "left-3.5 h-4 w-4"}`} />
       <input
         aria-activedescendant={showSuggestions && suggestions[activeIndex] ? `${listboxId}-${activeIndex}` : undefined}
         aria-autocomplete="list"
@@ -78,8 +79,10 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
         }}
         onFocus={() => setIsOpen(true)}
         onKeyDown={handleKeyDown}
-        className={`w-full rounded-xl border border-slate-300 bg-white pl-10 pr-4 text-base font-semibold text-slate-950 shadow-soft outline-none transition placeholder:text-slate-500 focus:border-mlri-sky focus:ring-4 focus:ring-sky-100 ${
-          compact ? "h-9 text-sm" : "h-12"
+        className={`w-full border border-slate-300 bg-white font-semibold text-slate-950 outline-none transition placeholder:text-slate-500 focus:border-mlri-sky focus:ring-4 focus:ring-sky-100 ${
+          prominent
+            ? "h-14 rounded-2xl pl-14 pr-5 text-base shadow-[0_18px_50px_rgba(8,45,87,0.13)]"
+            : `rounded-xl pl-10 pr-4 text-base shadow-soft ${compact ? "h-9 text-sm" : "h-12"}`
         }`}
         id={inputId}
         placeholder="Search courses, modules, paths, or topics..."

@@ -152,6 +152,7 @@ export default function Home() {
   }, [allItems, query, filter, searchResults]);
 
   const pathItems = visibleItems.filter((item): item is Extract<LearningItem, { type: "PATH" }> => item.type === "PATH");
+  const selectedCourseTopic = courses.find((course) => getCourseLabel(course) === query)?.id ?? "";
   const learningSummary = {
     completedCourses: 1,
     totalCourses: courses.length,
@@ -179,6 +180,9 @@ export default function Home() {
 
   return (
     <div className="hub-shell min-h-screen pb-24 md:pb-0">
+      <a className="skip-link" href="#browse">
+        Skip to learning content
+      </a>
       <header className="sticky top-0 z-40 border-b border-white/10 bg-mlri-navy text-white shadow-lg shadow-slate-900/10">
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
           <a href="#" className="flex min-w-fit items-center gap-3" aria-label="MLRI Learning Hub home">
@@ -191,9 +195,9 @@ export default function Home() {
             </span>
           </a>
 
-          <nav className="ml-auto hidden items-center gap-5 text-sm font-bold text-sky-50 md:flex">
-            <a className="transition hover:text-white" href="#browse">Browse</a>
-            <a className="transition hover:text-white" href="#learning">My Learning</a>
+          <nav className="ml-auto hidden items-center gap-5 text-sm font-bold text-sky-50 md:flex" aria-label="Account">
+            <a className="rounded-md transition hover:text-white focus:outline-none focus:ring-4 focus:ring-sky-300/30" href="#browse">Browse</a>
+            <a className="rounded-md transition hover:text-white focus:outline-none focus:ring-4 focus:ring-sky-300/30" href="#learning">My Learning</a>
             <div className="flex items-center gap-3 border-l border-white/15 pl-6">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-mlri-sky/30 text-xs font-bold text-white ring-2 ring-white/20">
                 {user.initials}
@@ -202,6 +206,7 @@ export default function Home() {
               <button
                 onClick={logout}
                 className="text-sm font-semibold text-sky-300 transition hover:text-white focus:outline-none"
+                aria-label={`Sign out ${user.firstName}`}
               >
                 Sign out
               </button>
@@ -224,6 +229,7 @@ export default function Home() {
                   isActive ? "bg-mlri-navy text-white shadow-sm" : "text-slate-500 hover:bg-sky-50 hover:text-mlri-blue"
                 }`}
                 aria-label={item.title}
+                aria-current={isActive ? "page" : undefined}
               >
                 <Icon className="h-5 w-5" />
                 <span className="pointer-events-none absolute left-[3.35rem] top-1/2 z-50 -translate-y-1/2 whitespace-nowrap rounded-md border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
@@ -238,104 +244,114 @@ export default function Home() {
         </nav>
       </aside>
 
-      <main className="lg:pl-16">
-        <section id="learning" className="relative overflow-hidden border-b border-slate-200/70 bg-[linear-gradient(135deg,#ffffff_0%,#eef5ff_58%,#f8fbff_100%)]">
-          <div className="absolute right-[-8rem] top-[-16rem] h-[30rem] w-[44rem] rounded-full bg-blue-100/55 blur-3xl" />
-          <div className="absolute right-[12rem] top-[4rem] h-44 w-72 rounded-full bg-white/45 blur-2xl" />
-          <div className="relative mx-auto grid max-w-7xl gap-5 px-4 py-8 sm:px-6 md:py-10 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,0.58fr)] lg:items-end lg:px-8">
-            <div className="max-w-2xl">
-              <p className="text-base font-bold text-blue-600">Welcome back, {user.firstName}.</p>
-              <h1 className="mt-3 text-3xl font-black leading-tight text-slate-950 sm:text-4xl">
-                Continue your learning journey
-              </h1>
-              <p className="mt-3 text-base font-semibold text-slate-500">{user.title} &bull; {user.unit}</p>
+      <main id="main-content" className="lg:pl-16">
+        <section id="learning" className="relative overflow-hidden bg-[linear-gradient(135deg,#ffffff_0%,#eef5ff_62%,#f8fbff_100%)]">
+          <div className="absolute right-[-12rem] top-[-18rem] h-[30rem] w-[44rem] rounded-full bg-blue-100/45 blur-3xl" />
+          <div className="absolute right-[10rem] top-[2rem] h-36 w-64 rounded-full bg-white/45 blur-2xl" />
+          <div className="relative mx-auto grid max-w-7xl gap-5 px-4 py-7 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.48fr)] lg:items-center lg:px-8">
+            <div className="max-w-xl">
+              <h1 className="text-2xl font-black leading-tight text-slate-950 sm:text-3xl">Welcome back, {user.firstName}.</h1>
+              <p className="mt-2 text-base font-semibold text-slate-500">{user.title} &bull; {user.unit}</p>
+              <dl className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+                <div className="flex items-baseline gap-1.5">
+                  <dt className="font-semibold text-slate-500">Courses</dt>
+                  <dd className="font-black text-slate-950">{learningSummary.completedCourses}/{learningSummary.totalCourses}</dd>
+                </div>
+                <div className="flex items-baseline gap-1.5">
+                  <dt className="font-semibold text-slate-500">Modules</dt>
+                  <dd className="font-black text-slate-950">{learningSummary.completedModules}/{learningSummary.totalModules}</dd>
+                </div>
+                <div className="flex items-baseline gap-1.5">
+                  <dt className="font-semibold text-slate-500">Month</dt>
+                  <dd className="font-black text-slate-950">{learningSummary.hoursThisMonth} hrs</dd>
+                </div>
+              </dl>
             </div>
-            <aside className="rounded-xl border border-slate-200 bg-white/80 p-3.5 shadow-sm backdrop-blur" aria-label="Learning snapshot">
+            <aside className="rounded-2xl border border-white/70 bg-white/55 p-3 shadow-[0_14px_44px_rgba(8,45,87,0.08)] ring-1 ring-slate-200/40 backdrop-blur-xl" aria-label="Learning snapshot">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">Resume</p>
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-blue-600">Resume</p>
                   <h2 className="mt-1 truncate text-sm font-black text-slate-950">{resumeItem.title}</h2>
                   <p className="mt-1 text-xs font-semibold text-slate-500">{resumeItem.detail} &bull; {resumeItem.progress}%</p>
                 </div>
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600 ring-1 ring-blue-100">
-                  <PlayIcon className="h-4 w-4 fill-blue-600 stroke-blue-600" />
-                </span>
+                <button className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm ring-1 ring-blue-500/20 transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-sky-100" type="button" aria-label="Resume Professional Foundations for Legal Aid">
+                  <PlayIcon className="h-4 w-4 fill-white stroke-white" />
+                </button>
               </div>
-              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200">
+              <div
+                className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-slate-200/90"
+                role="progressbar"
+                aria-label={`${resumeItem.title} progress`}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={resumeItem.progress}
+              >
                 <div className="h-full rounded-full bg-blue-600" style={{ width: `${resumeItem.progress}%` }} />
               </div>
-              <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
-                <div>
-                  <p className="font-bold text-slate-500">Courses</p>
-                  <p className="mt-0.5 font-black text-slate-950">{learningSummary.completedCourses}/{learningSummary.totalCourses}</p>
-                </div>
-                <div>
-                  <p className="font-bold text-slate-500">Modules</p>
-                  <p className="mt-0.5 font-black text-slate-950">{learningSummary.completedModules}/{learningSummary.totalModules}</p>
-                </div>
-                <div>
-                  <p className="font-bold text-slate-500">Month</p>
-                  <p className="mt-0.5 font-black text-slate-950">{learningSummary.hoursThisMonth} hrs</p>
-                </div>
-              </div>
-              <div className="mt-3 flex items-center justify-between gap-3 border-t border-slate-100 pt-3">
+              <div className="mt-2.5 flex items-center gap-2">
                 <p className="flex min-w-0 items-center gap-2 text-xs font-semibold text-slate-500">
                   <FlagIcon className="h-4 w-4 shrink-0 text-blue-600" />
                   <span className="truncate">Next: Professional Foundations</span>
-                </p>
-                <p className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-2.5 py-1 text-xs font-bold text-slate-700 ring-1 ring-slate-200">
-                  <CalendarIcon className="h-3.5 w-3.5 text-mlri-blue" />
-                  {visibleItems.length} available
                 </p>
               </div>
             </aside>
           </div>
         </section>
 
-        <section className="sticky-filter z-30 border-b border-slate-200 bg-white/95 shadow-[0_10px_30px_rgba(8,45,87,0.08)] backdrop-blur-xl">
-          <div className="mx-auto grid max-w-7xl gap-3 px-4 py-3 sm:px-6 lg:grid-cols-[minmax(20rem,1fr)_auto] lg:items-center lg:px-8">
-            <div className="min-w-0">
-              <SearchBox value={query} onChange={setQuery} suggestions={searchSuggestions} onSelect={openSearchResult} compact />
+        <section className="sticky-filter z-30 bg-white/85 shadow-[0_18px_44px_rgba(8,45,87,0.09)] backdrop-blur-xl" aria-label="Search and filter learning content">
+          <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+            <div className="grid gap-3 lg:grid-cols-[minmax(28rem,1fr)_auto] lg:items-start">
+              <div className="min-w-0">
+                <SearchBox value={query} onChange={setQuery} suggestions={searchSuggestions} onSelect={openSearchResult} prominent />
+              </div>
+              <p className="inline-flex h-10 w-fit items-center gap-2 rounded-full bg-slate-50 px-3 text-xs font-bold text-slate-600 ring-1 ring-slate-200 lg:mt-2 lg:justify-self-end" role="status" aria-live="polite">
+                <CalendarIcon className="h-4 w-4 text-mlri-blue" />
+                {visibleItems.length} available
+              </p>
             </div>
-            <div className="flex flex-wrap items-center gap-2 lg:justify-end">
-              <div className="inline-flex rounded-full bg-slate-100 p-1 shadow-sm ring-1 ring-slate-200">
+            <div className="mt-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] sm:flex-wrap sm:overflow-visible sm:pb-0" aria-label="Learning filters">
+              <div className="inline-flex shrink-0 rounded-full bg-slate-100 p-1 shadow-sm ring-1 ring-slate-200">
                 {filters.map((entry) => (
                   <button
                     key={entry}
-                    className={`h-8 rounded-full px-3 text-xs font-bold transition duration-200 ease-out ${
+                    className={`h-9 rounded-full px-4 text-xs font-bold transition duration-200 ease-out focus:outline-none focus:ring-4 focus:ring-sky-100 ${
                       filter === entry ? "bg-mlri-navy text-white shadow-sm" : "text-slate-700 hover:bg-white hover:text-slate-950"
                     }`}
                     type="button"
                     onClick={() => setFilter(entry)}
+                    aria-pressed={filter === entry}
                   >
                     {entry}
                   </button>
                 ))}
               </div>
-              <span className="hidden h-7 w-px bg-slate-200 xl:block" />
-              <span className="hidden text-xs font-bold text-slate-500 xl:inline">Filter by</span>
-              {courses.map((course) => {
-                const theme = getCourseTheme(course.id);
-                return (
-                  <button
-                    key={course.id}
-                    className={`inline-flex h-8 items-center gap-2 rounded-full border bg-white px-3 text-xs font-bold shadow-sm transition hover:-translate-y-0.5 ${theme.chip}`}
-                    type="button"
-                    onClick={() => setQuery(getCourseLabel(course))}
-                  >
-                    <span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} />
+              <span className="hidden h-8 w-px shrink-0 bg-slate-200 sm:block" />
+              <label className="sr-only" htmlFor="topic-filter">Topic</label>
+              <select
+                id="topic-filter"
+                value={selectedCourseTopic}
+                onChange={(event) => {
+                  const course = courses.find((entry) => entry.id === event.target.value);
+                  setQuery(course ? getCourseLabel(course) : "");
+                  setFilter("All");
+                }}
+                className="h-11 w-44 shrink-0 rounded-full border border-slate-200 bg-white px-4 pr-9 text-sm font-bold text-slate-700 shadow-sm outline-none transition hover:border-sky-200 hover:text-mlri-blue focus:border-mlri-sky focus:ring-4 focus:ring-sky-100"
+              >
+                <option value="">All topics</option>
+                {courses.map((course) => (
+                  <option key={course.id} value={course.id}>
                     {getCourseLabel(course)}
-                  </button>
-                );
-              })}
-              <button className="inline-flex h-8 items-center gap-2 rounded-full bg-white px-3 text-xs font-bold text-slate-700 shadow-sm ring-1 ring-slate-200" type="button">
-                More filters <FilterIcon className="h-3.5 w-3.5" />
+                  </option>
+                ))}
+              </select>
+              <button className="inline-flex h-11 w-44 shrink-0 items-center justify-center gap-2 rounded-full bg-white px-4 text-sm font-bold text-slate-700 shadow-sm ring-1 ring-slate-200 focus:outline-none focus:ring-4 focus:ring-sky-100" type="button" aria-haspopup="dialog" aria-label="Open more filters">
+                More filters <FilterIcon className="h-4 w-4" />
               </button>
             </div>
           </div>
         </section>
 
-        <section id="browse" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <section id="browse" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8" tabIndex={-1} aria-label="Learning content">
 
           {filter === "All" ? (
             (["PATH", "COURSE", "MODULE"] as const).map((type) => (
@@ -402,19 +418,19 @@ export default function Home() {
 
       <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white/95 px-5 py-2 shadow-[0_-14px_32px_rgba(8,45,87,0.10)] backdrop-blur md:hidden">
         <div className="mx-auto grid max-w-md grid-cols-4">
-          <a href="#" className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-extrabold text-mlri-blue">
+          <a href="#" className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-extrabold text-mlri-blue focus:outline-none focus:ring-4 focus:ring-sky-100" aria-current="page">
             <HomeIcon className="h-5 w-5" />
             Home
           </a>
-          <a href="#browse" className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-extrabold text-slate-600">
+          <a href="#browse" className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-extrabold text-slate-600 focus:outline-none focus:ring-4 focus:ring-sky-100">
             <SearchIcon className="h-5 w-5" />
             Browse
           </a>
-          <a href="#learning" className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-extrabold text-slate-600">
+          <a href="#learning" className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-extrabold text-slate-600 focus:outline-none focus:ring-4 focus:ring-sky-100">
             <BookIcon className="h-5 w-5" />
             Learning
           </a>
-          <button onClick={logout} className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-semibold text-slate-500">
+          <button onClick={logout} className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-semibold text-slate-500 focus:outline-none focus:ring-4 focus:ring-sky-100" aria-label={`Sign out ${user.firstName}`}>
             <div className="flex h-5 w-5 items-center justify-center rounded-full bg-mlri-navy text-[10px] font-bold text-white">
               {user.initials}
             </div>
