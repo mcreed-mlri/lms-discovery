@@ -63,10 +63,8 @@ input::placeholder {
     linear-gradient(90deg, rgba(8, 45, 87, 0.06), transparent 36%);
 }
 
-@media (min-width: 640px) {
-  .sticky-filter {
-    position: sticky;
-    top: 4.75rem;
-    z-index: 30;
-  }
+.sticky-filter {
+  position: sticky;
+  top: 4rem;
+  z-index: 35;
 }

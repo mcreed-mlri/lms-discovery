@@ -2,12 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { BookIcon, FolderIcon, GridIcon, HelpIcon, HomeIcon, ListIcon, PathIcon, SearchIcon, SparkIcon } from "@/components/icons";
+import { BookIcon, CalendarIcon, FilterIcon, FlagIcon, FolderIcon, HelpIcon, HomeIcon, PathIcon, PlayIcon, SearchIcon, SparkIcon } from "@/components/icons";
 import { ContentCard, ContentListRow, PathCard } from "@/components/content-card";
-import { ContinueCard } from "@/components/continue-card";
 import { SearchBox } from "@/components/search-box";
 import { getCourseLabel, getCourseTheme } from "@/lib/course-theme";
-import { continueLearning, courses, getLearningItems, popularTopics, type LearningItem } from "@/lib/data";
+import { continueLearning, courses, getLearningItems, modules, popularTopics, type LearningItem } from "@/lib/data";
 import { searchLearningItems, type SearchResult } from "@/lib/search";
 import { useAuth } from "@/lib/auth";
 
@@ -153,6 +152,14 @@ export default function Home() {
   }, [allItems, query, filter, searchResults]);
 
   const pathItems = visibleItems.filter((item): item is Extract<LearningItem, { type: "PATH" }> => item.type === "PATH");
+  const learningSummary = {
+    completedCourses: 1,
+    totalCourses: courses.length,
+    completedModules: 4,
+    totalModules: modules.length,
+    hoursThisMonth: 6.5,
+  };
+  const resumeItem = continueLearning[0] as Extract<(typeof continueLearning)[number], { progress: number }>;
   const groupedItems = {
     PATH: visibleItems.filter((item) => item.type === "PATH"),
     COURSE: visibleItems.filter((item) => item.type === "COURSE"),
@@ -232,45 +239,71 @@ export default function Home() {
       </aside>
 
       <main className="lg:pl-16">
-        <section className="border-b border-slate-200/70 bg-white/80">
-          <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-            <div className="grid gap-3 lg:grid-cols-[minmax(12rem,0.72fr)_minmax(22rem,1.55fr)_auto] lg:items-center">
-              <div>
-                <p className="text-base font-bold text-slate-800">Welcome back, {user.firstName}.</p>
-                <p className="mt-0.5 text-sm font-medium text-slate-500">{user.title} &middot; {user.unit}</p>
-              </div>
-              <div className="lg:max-w-2xl">
-                <SearchBox value={query} onChange={setQuery} suggestions={searchSuggestions} onSelect={openSearchResult} />
-              </div>
-              <p className="w-fit rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 shadow-sm">
-                {visibleItems.length} available
-              </p>
+        <section id="learning" className="relative overflow-hidden border-b border-slate-200/70 bg-[linear-gradient(135deg,#ffffff_0%,#eef5ff_58%,#f8fbff_100%)]">
+          <div className="absolute right-[-8rem] top-[-16rem] h-[30rem] w-[44rem] rounded-full bg-blue-100/55 blur-3xl" />
+          <div className="absolute right-[12rem] top-[4rem] h-44 w-72 rounded-full bg-white/45 blur-2xl" />
+          <div className="relative mx-auto grid max-w-7xl gap-5 px-4 py-8 sm:px-6 md:py-10 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,0.58fr)] lg:items-end lg:px-8">
+            <div className="max-w-2xl">
+              <p className="text-base font-bold text-blue-600">Welcome back, {user.firstName}.</p>
+              <h1 className="mt-3 text-3xl font-black leading-tight text-slate-950 sm:text-4xl">
+                Continue your learning journey
+              </h1>
+              <p className="mt-3 text-base font-semibold text-slate-500">{user.title} &bull; {user.unit}</p>
             </div>
+            <aside className="rounded-xl border border-slate-200 bg-white/80 p-3.5 shadow-sm backdrop-blur" aria-label="Learning snapshot">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">Resume</p>
+                  <h2 className="mt-1 truncate text-sm font-black text-slate-950">{resumeItem.title}</h2>
+                  <p className="mt-1 text-xs font-semibold text-slate-500">{resumeItem.detail} &bull; {resumeItem.progress}%</p>
+                </div>
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600 ring-1 ring-blue-100">
+                  <PlayIcon className="h-4 w-4 fill-blue-600 stroke-blue-600" />
+                </span>
+              </div>
+              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200">
+                <div className="h-full rounded-full bg-blue-600" style={{ width: `${resumeItem.progress}%` }} />
+              </div>
+              <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
+                <div>
+                  <p className="font-bold text-slate-500">Courses</p>
+                  <p className="mt-0.5 font-black text-slate-950">{learningSummary.completedCourses}/{learningSummary.totalCourses}</p>
+                </div>
+                <div>
+                  <p className="font-bold text-slate-500">Modules</p>
+                  <p className="mt-0.5 font-black text-slate-950">{learningSummary.completedModules}/{learningSummary.totalModules}</p>
+                </div>
+                <div>
+                  <p className="font-bold text-slate-500">Month</p>
+                  <p className="mt-0.5 font-black text-slate-950">{learningSummary.hoursThisMonth} hrs</p>
+                </div>
+              </div>
+              <div className="mt-3 flex items-center justify-between gap-3 border-t border-slate-100 pt-3">
+                <p className="flex min-w-0 items-center gap-2 text-xs font-semibold text-slate-500">
+                  <FlagIcon className="h-4 w-4 shrink-0 text-blue-600" />
+                  <span className="truncate">Next: Professional Foundations</span>
+                </p>
+                <p className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-2.5 py-1 text-xs font-bold text-slate-700 ring-1 ring-slate-200">
+                  <CalendarIcon className="h-3.5 w-3.5 text-mlri-blue" />
+                  {visibleItems.length} available
+                </p>
+              </div>
+            </aside>
           </div>
         </section>
 
-        <section id="learning" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:py-10 lg:px-8">
-          <div className="mb-5 flex items-end justify-between gap-4 border-b-2 border-mlri-blue/20 pb-3">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-mlri-blue">{user.firstName}&rsquo;s Learning</p>
-              <h2 className="mt-1 text-2xl font-bold text-slate-800">Pick up where you left off</h2>
+        <section className="sticky-filter z-30 border-b border-slate-200 bg-white/95 shadow-[0_10px_30px_rgba(8,45,87,0.08)] backdrop-blur-xl">
+          <div className="mx-auto grid max-w-7xl gap-3 px-4 py-3 sm:px-6 lg:grid-cols-[minmax(20rem,1fr)_auto] lg:items-center lg:px-8">
+            <div className="min-w-0">
+              <SearchBox value={query} onChange={setQuery} suggestions={searchSuggestions} onSelect={openSearchResult} compact />
             </div>
-            <a href="#browse" className="text-sm font-semibold text-mlri-blue">View all</a>
-          </div>
-          <div>
-            <ContinueCard item={continueLearning[0]} priority="primary" />
-          </div>
-        </section>
-
-        <section id="browse" className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-          <div className="sticky-filter mb-8 grid gap-3 rounded-xl border border-slate-200 bg-white/95 p-3 shadow-sm backdrop-blur lg:grid-cols-[auto_minmax(18rem,30rem)_auto] lg:items-center">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-              <div className="inline-flex rounded-xl bg-slate-100 p-1">
+            <div className="flex flex-wrap items-center gap-2 lg:justify-end">
+              <div className="inline-flex rounded-full bg-slate-100 p-1 shadow-sm ring-1 ring-slate-200">
                 {filters.map((entry) => (
                   <button
                     key={entry}
-                    className={`h-9 rounded-lg px-3 text-xs font-semibold transition duration-200 ease-out ${
-                      filter === entry ? "bg-mlri-navy text-white shadow-sm" : "text-slate-600 hover:bg-white hover:text-slate-950"
+                    className={`h-8 rounded-full px-3 text-xs font-bold transition duration-200 ease-out ${
+                      filter === entry ? "bg-mlri-navy text-white shadow-sm" : "text-slate-700 hover:bg-white hover:text-slate-950"
                     }`}
                     type="button"
                     onClick={() => setFilter(entry)}
@@ -279,70 +312,30 @@ export default function Home() {
                   </button>
                 ))}
               </div>
-              <div className="inline-flex w-fit rounded-xl bg-slate-100 p-1" aria-label="Choose result layout">
-                <button
-                  className={`flex h-9 items-center gap-2 rounded-lg px-3 text-xs font-semibold transition duration-200 ease-out ${
-                    viewMode === "grid" ? "bg-white text-mlri-navy shadow-sm" : "text-slate-500 hover:bg-white hover:text-slate-800"
-                  }`}
-                  type="button"
-                  onClick={() => setViewMode("grid")}
-                  aria-pressed={viewMode === "grid"}
-                >
-                  <GridIcon className="h-3.5 w-3.5" />
-                  Grid
-                </button>
-                <button
-                  className={`flex h-9 items-center gap-2 rounded-lg px-3 text-xs font-semibold transition duration-200 ease-out ${
-                    viewMode === "list" ? "bg-white text-mlri-navy shadow-sm" : "text-slate-500 hover:bg-white hover:text-slate-800"
-                  }`}
-                  type="button"
-                  onClick={() => setViewMode("list")}
-                  aria-pressed={viewMode === "list"}
-                >
-                  <ListIcon className="h-3.5 w-3.5" />
-                  List
-                </button>
-              </div>
-              <div className="hidden h-8 w-px bg-slate-200 2xl:block" />
-              <div className="hidden flex-wrap gap-1.5 2xl:flex" aria-label="Shortcuts">
-                {quickActions.slice(0, 3).map((action) => {
-                  const Icon = action.icon;
-                  return (
-                    <button
-                      key={action.title}
-                      className="flex h-9 items-center gap-2 rounded-lg px-2.5 text-xs font-semibold text-slate-500 transition hover:bg-sky-50 hover:text-mlri-blue focus:outline-none focus:ring-4 focus:ring-sky-100"
-                      type="button"
-                      onClick={() => action.title === "Learning Paths" && setFilter("Paths")}
-                    >
-                      <Icon className="h-3.5 w-3.5" />
-                      {action.title}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="min-w-0">
-              <SearchBox value={query} onChange={setQuery} suggestions={searchSuggestions} onSelect={openSearchResult} compact />
-            </div>
-            <div className="flex flex-col gap-2 lg:items-end">
-              <div className="hidden flex-wrap items-center gap-1.5 xl:flex">
-                <span className="mr-1 text-xs font-semibold text-slate-500">Course areas</span>
-                {courses.map((course) => {
-                  const theme = getCourseTheme(course.id);
-                  return (
-                    <span key={course.id} className={`inline-flex items-center gap-1.5 rounded-full border bg-white/70 px-2 py-1 text-[0.68rem] font-semibold opacity-65 ${theme.chip}`}>
-                      <span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} />
-                      {getCourseLabel(course)}
-                    </span>
-                  );
-                })}
-              </div>
-              <p className="rounded-lg bg-slate-50 px-3 py-2 text-sm font-medium text-slate-600 ring-1 ring-slate-200" aria-live="polite">
-                {visibleItems.length} result{visibleItems.length === 1 ? "" : "s"} - {filterContext[filter]}
-                {query ? ` - "${query}"` : ""}
-              </p>
+              <span className="hidden h-7 w-px bg-slate-200 xl:block" />
+              <span className="hidden text-xs font-bold text-slate-500 xl:inline">Filter by</span>
+              {courses.map((course) => {
+                const theme = getCourseTheme(course.id);
+                return (
+                  <button
+                    key={course.id}
+                    className={`inline-flex h-8 items-center gap-2 rounded-full border bg-white px-3 text-xs font-bold shadow-sm transition hover:-translate-y-0.5 ${theme.chip}`}
+                    type="button"
+                    onClick={() => setQuery(getCourseLabel(course))}
+                  >
+                    <span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} />
+                    {getCourseLabel(course)}
+                  </button>
+                );
+              })}
+              <button className="inline-flex h-8 items-center gap-2 rounded-full bg-white px-3 text-xs font-bold text-slate-700 shadow-sm ring-1 ring-slate-200" type="button">
+                More filters <FilterIcon className="h-3.5 w-3.5" />
+              </button>
             </div>
           </div>
+        </section>
+
+        <section id="browse" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
 
           {filter === "All" ? (
             (["PATH", "COURSE", "MODULE"] as const).map((type) => (

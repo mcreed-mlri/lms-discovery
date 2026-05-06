@@ -109,3 +109,53 @@ export function ListIcon({ className }: IconProps) {
     </svg>
   );
 }
+
+export function CalendarIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} className={className} aria-hidden="true">
+      <path d="M8 2v4" />
+      <path d="M16 2v4" />
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M3 10h18" />
+    </svg>
+  );
+}
+
+export function ChartIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} className={className} aria-hidden="true">
+      <path d="M4 19h16" />
+      <path d="M7 16V9" />
+      <path d="M12 16V5" />
+      <path d="M17 16v-4" />
+      <path d="m7 11 5-5 5 5" />
+    </svg>
+  );
+}
+
+export function FilterIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} className={className} aria-hidden="true">
+      <path d="M4 6h16" />
+      <path d="M7 12h10" />
+      <path d="M10 18h4" />
+    </svg>
+  );
+}
+
+export function FlagIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} className={className} aria-hidden="true">
+      <path d="M5 21V4" />
+      <path d="M5 4h10l-1 4 1 4H5" />
+    </svg>
+  );
+}
+
+export function PlayIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} className={className} aria-hidden="true">
+      <path d="m8 5 11 7-11 7z" />
+    </svg>
+  );
+}

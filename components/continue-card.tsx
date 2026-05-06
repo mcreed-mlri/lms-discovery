@@ -39,7 +39,7 @@ export function ContinueCard({ item, priority = "standard" }: { item: ContinueIt
       title={comingSoonLabel}
       aria-label={`${item.title}. ${comingSoonLabel}.`}
       className={`group relative block cursor-pointer overflow-hidden rounded-xl border bg-white transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 hover:-translate-y-0.5 hover:shadow-lift focus:outline-none focus:ring-4 focus:ring-sky-100 ${
-        isPrimary ? "p-5 pt-6 shadow-soft before:h-1.5 md:col-span-2" : "p-4 pt-5 shadow-sm before:h-1"
+        isPrimary ? "p-4 pt-5 shadow-soft before:h-1.5 md:col-span-2" : "p-4 pt-5 shadow-sm before:h-1"
       } ${
         courseTheme ? `${courseTheme.border} ${courseTheme.hoverBorder} ${courseTheme.rail}` : "border-slate-200 before:bg-slate-200 hover:border-sky-200"
       }`}
@@ -53,10 +53,10 @@ export function ContinueCard({ item, priority = "standard" }: { item: ContinueIt
         </span>
       </div>
       {isPrimary && (
-        <p className="mt-5 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Resume course</p>
+        <p className="mt-3 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Resume course</p>
       )}
-      <h3 className={`${isPrimary ? "mt-1 text-2xl" : "mt-4 min-h-10 text-lg"} font-bold leading-snug text-slate-800`}>{item.title}</h3>
-      <div className={isPrimary ? "mt-5" : "mt-4"}>
+      <h3 className={`${isPrimary ? "mt-1 text-xl" : "mt-4 min-h-10 text-lg"} font-bold leading-snug text-slate-800`}>{item.title}</h3>
+      <div className={isPrimary ? "mt-4" : "mt-4"}>
         {item.type === "MODULE" ? (
           <div className={`rounded-lg border px-3 py-2.5 ${courseTheme?.chip}`}>
             <p className="text-[0.68rem] font-semibold uppercase tracking-wide text-current opacity-90">{item.detail}</p>
@@ -64,11 +64,11 @@ export function ContinueCard({ item, priority = "standard" }: { item: ContinueIt
           </div>
         ) : (
           <>
-            <div className="mb-2 flex items-center justify-between text-xs font-bold text-slate-600">
+            <div className="mb-1.5 flex items-center justify-between text-xs font-bold text-slate-600">
               <span>{item.detail}</span>
               <span>{item.progress}%</span>
             </div>
-            <div className={`${isPrimary ? "h-2.5" : "h-2"} overflow-hidden rounded-full bg-slate-200/80 ring-1 ring-slate-200`}>
+            <div className={`${isPrimary ? "h-2" : "h-2"} overflow-hidden rounded-full bg-slate-200/80 ring-1 ring-slate-200`}>
               <div className={`h-full rounded-full ${courseTheme?.progress ?? "bg-mlri-blue"}`} style={{ width: `${item.progress}%` }} />
             </div>
           </>

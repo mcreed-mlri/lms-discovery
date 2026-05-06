@@ -64,7 +64,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
       <label className="sr-only" htmlFor={inputId}>
         Search courses, modules, paths, or topics
       </label>
-      <SearchIcon className={`pointer-events-none absolute left-3.5 z-10 h-4 w-4 -translate-y-1/2 text-slate-400 transition group-focus-within:text-mlri-blue ${compact ? "top-5" : "top-6"}`} />
+      <SearchIcon className={`pointer-events-none absolute left-3.5 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-slate-400 transition group-focus-within:text-mlri-blue`} />
       <input
         aria-activedescendant={showSuggestions && suggestions[activeIndex] ? `${listboxId}-${activeIndex}` : undefined}
         aria-autocomplete="list"
@@ -79,7 +79,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
         onFocus={() => setIsOpen(true)}
         onKeyDown={handleKeyDown}
         className={`w-full rounded-xl border border-slate-300 bg-white pl-10 pr-4 text-base font-semibold text-slate-950 shadow-soft outline-none transition placeholder:text-slate-500 focus:border-mlri-sky focus:ring-4 focus:ring-sky-100 ${
-          compact ? "h-10" : "h-12"
+          compact ? "h-9 text-sm" : "h-12"
         }`}
         id={inputId}
         placeholder="Search courses, modules, paths, or topics..."

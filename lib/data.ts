@@ -210,6 +210,24 @@ export const paths: Path[] = [
     totalDuration: "5 hr 30 min total",
     level: "Foundations",
   },
+  {
+    id: "client-centered-communication-path",
+    title: "Client-Centered Communication",
+    description:
+      "Develop the interviewing, listening, and counseling skills that build trust and surface the full picture of a client's legal needs.",
+    courseIds: ["client-centered-practice"],
+    totalDuration: "1 hr 50 min total",
+    level: "Foundations",
+  },
+  {
+    id: "courtroom-readiness",
+    title: "Your First Steps in Court",
+    description:
+      "A practical guide to showing up prepared - understanding court procedure, interacting professionally, and getting started with confidence.",
+    courseIds: ["first-steps-in-court"],
+    totalDuration: "1 hr 55 min total",
+    level: "Foundations",
+  },
 ];
 
 export type LearningStatus = "Not started" | "In progress" | "Completed";
