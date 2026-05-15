@@ -198,7 +198,7 @@ export default function Home() {
         <div className="mx-auto flex min-h-[4.75rem] max-w-7xl items-center gap-4 px-4 py-3 sm:px-6 lg:px-8">
           <a href="#" className="flex min-w-fit items-center gap-3 rounded-md focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15" aria-label="MLRI Learning Hub home">
             <span className="leading-none">
-              <span className="block text-[1.85rem] font-light tracking-[-0.055em]">LACE</span>
+              <span className="block text-[1.85rem] font-normal tracking-[-0.055em]">LACE</span>
               <span className="nav-label mt-1 block text-[#786f62]">Learning Hub</span>
             </span>
           </a>
