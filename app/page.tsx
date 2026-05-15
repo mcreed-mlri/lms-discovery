@@ -10,6 +10,7 @@ import { getCourseLabel } from "@/lib/course-theme";
 import { continueLearning, courses, getLearningItems, modules, popularTopics, type LearningItem } from "@/lib/data";
 import { searchLearningItems, type SearchResult } from "@/lib/search";
 import { demoUser, useAuth } from "@/lib/auth";
+import { useSavedLearning } from "@/lib/saved-learning";
 
 type Filter = "All" | "Paths" | "Courses" | "Modules";
 type ViewMode = "grid" | "list";
@@ -26,7 +27,7 @@ const filterContext: Record<Filter, string> = {
 const sideNavItems = [
   { title: "Home", href: "#", icon: HomeIcon },
   { title: "Browse", href: "#browse", icon: SearchIcon },
-  { title: "My Learning", href: "#learning", icon: BookIcon },
+  { title: "My Learning", href: "/my-learning", icon: BookIcon },
   { title: "Paths", href: "#browse", icon: PathIcon, filter: "Paths" as Filter },
   { title: "Topics", href: "#topics", icon: FolderIcon },
   { title: "New", href: "#browse", icon: SparkIcon },
@@ -119,6 +120,7 @@ export default function Home() {
   const [filter, setFilter] = useState<Filter>("All");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [selectedItem, setSelectedItem] = useState<LearningItem | null>(null);
+  const savedLearning = useSavedLearning();
   const allItems = useMemo(() => getLearningItems(), []);
   const searchResults = useMemo(() => searchLearningItems(allItems, query), [allItems, query]);
   const searchSuggestions = useMemo(() => searchResults.slice(0, 6), [searchResults]);
@@ -245,7 +247,7 @@ export default function Home() {
             );
           })}
           <div className="mt-auto border-t border-[color:var(--lace-hairline)] pt-4">
-            <p className="text-sm font-bold text-[#25221d]">Maya Okafor</p>
+            <p className="text-sm font-bold text-[#25221d]">{user.name}</p>
             <p className="text-xs font-semibold text-[#81786a]">{user.title}</p>
           </div>
         </nav>
@@ -434,7 +436,12 @@ export default function Home() {
         </section>
       </main>
 
-      <DetailModal item={selectedItem} onClose={() => setSelectedItem(null)} />
+      <DetailModal
+        item={selectedItem}
+        onClose={() => setSelectedItem(null)}
+        isSaved={selectedItem ? savedLearning.isSaved(selectedItem) : false}
+        onToggleSaved={savedLearning.toggleSaved}
+      />
 
       <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-[color:var(--lace-hairline)] bg-[#f8f2e8]/95 px-5 py-2 shadow-[0_-14px_32px_rgba(65,52,32,0.10)] backdrop-blur md:hidden">
         <div className="mx-auto grid max-w-md grid-cols-4">
@@ -446,7 +453,7 @@ export default function Home() {
             <SearchIcon className="h-5 w-5" />
             Browse
           </a>
-          <a href="#learning" className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-bold text-[#706a5f] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15">
+          <a href="/my-learning" className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-bold text-[#706a5f] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15">
             <BookIcon className="h-5 w-5" />
             Learning
           </a>

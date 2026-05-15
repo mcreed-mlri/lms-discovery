@@ -63,7 +63,17 @@ function getSyllabus(item: LearningItem) {
   ];
 }
 
-export function DetailModal({ item, onClose }: { item: LearningItem | null; onClose: () => void }) {
+export function DetailModal({
+  item,
+  onClose,
+  isSaved = false,
+  onToggleSaved,
+}: {
+  item: LearningItem | null;
+  onClose: () => void;
+  isSaved?: boolean;
+  onToggleSaved?: (item: LearningItem) => void;
+}) {
   useEffect(() => {
     if (!item) return;
     function handleKeyDown(event: KeyboardEvent) {
@@ -113,8 +123,16 @@ export function DetailModal({ item, onClose }: { item: LearningItem | null; onCl
                 <BookIcon className="h-4 w-4" />
                 Open in Brightspace
               </a>
-              <button className="inline-flex h-11 items-center justify-center rounded-full border border-[color:var(--lace-hairline)] bg-[#fffdf7] px-5 text-sm font-bold text-[#3a352d] transition hover:border-[#b88a2d]/45 focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15" type="button">
-                Add to my list
+              <button
+                className={`inline-flex h-11 items-center justify-center rounded-full border px-5 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 ${
+                  isSaved
+                    ? "border-[#b88a2d]/45 bg-[#f5ead0] text-[#7d5919]"
+                    : "border-[color:var(--lace-hairline)] bg-[#fffdf7] text-[#3a352d] hover:border-[#b88a2d]/45"
+                }`}
+                type="button"
+                onClick={() => item && onToggleSaved?.(item)}
+              >
+                {isSaved ? "Saved to my list" : "Add to my list"}
               </button>
             </div>
           </div>
