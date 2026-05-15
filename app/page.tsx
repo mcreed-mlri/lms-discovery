@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowIcon, BookIcon, CalendarIcon, FilterIcon, FlagIcon, FolderIcon, GridIcon, HomeIcon, ListIcon, PathIcon, SearchIcon, SparkIcon } from "@/components/icons";
 import { ContentCard, ContentListRow, PathCard } from "@/components/content-card";
@@ -231,19 +232,34 @@ export default function Home() {
             const Icon = item.icon;
             const isActive = index === 0;
             return (
-              <a
-                key={item.title}
-                href={item.href}
-                onClick={() => item.filter && setFilter(item.filter)}
-                className={`group relative flex h-11 items-center gap-3 rounded-lg px-3 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 ${
-                  isActive ? "bg-[#e5d7c2] text-[#171713] shadow-[inset_0_0_0_1px_rgba(23,23,19,0.08)]" : "text-[#5f5a4f] hover:bg-[#fffaf0] hover:text-[#171713]"
-                }`}
-                aria-label={item.title}
-                aria-current={isActive ? "page" : undefined}
-              >
-                <Icon className="h-5 w-5" />
-                <span>{item.title}</span>
-              </a>
+              item.href.startsWith("/") ? (
+                <Link
+                  key={item.title}
+                  href={item.href}
+                  className={`group relative flex h-11 items-center gap-3 rounded-lg px-3 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 ${
+                    isActive ? "bg-[#e5d7c2] text-[#171713] shadow-[inset_0_0_0_1px_rgba(23,23,19,0.08)]" : "text-[#5f5a4f] hover:bg-[#fffaf0] hover:text-[#171713]"
+                  }`}
+                  aria-label={item.title}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  <Icon className="h-5 w-5" />
+                  <span>{item.title}</span>
+                </Link>
+              ) : (
+                <a
+                  key={item.title}
+                  href={item.href}
+                  onClick={() => item.filter && setFilter(item.filter)}
+                  className={`group relative flex h-11 items-center gap-3 rounded-lg px-3 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 ${
+                    isActive ? "bg-[#e5d7c2] text-[#171713] shadow-[inset_0_0_0_1px_rgba(23,23,19,0.08)]" : "text-[#5f5a4f] hover:bg-[#fffaf0] hover:text-[#171713]"
+                  }`}
+                  aria-label={item.title}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  <Icon className="h-5 w-5" />
+                  <span>{item.title}</span>
+                </a>
+              )
             );
           })}
           <div className="mt-auto border-t border-[color:var(--lace-hairline)] pt-4">
@@ -453,10 +469,10 @@ export default function Home() {
             <SearchIcon className="h-5 w-5" />
             Browse
           </a>
-          <a href="/my-learning" className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-bold text-[#706a5f] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15">
+          <Link href="/my-learning" className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-bold text-[#706a5f] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15">
             <BookIcon className="h-5 w-5" />
             Learning
-          </a>
+          </Link>
           <button onClick={logout} className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-semibold text-[#81786a] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15" aria-label={`Sign out ${user.firstName}`}>
             <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#1f1d19] text-[10px] font-bold text-[#fffaf0]">
               {user.initials}
