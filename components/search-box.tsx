@@ -65,7 +65,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
       <label className="sr-only" htmlFor={inputId}>
         Search courses, modules, paths, or topics
       </label>
-      <SearchIcon className={`pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-slate-400 transition group-focus-within:text-mlri-blue ${prominent ? "left-5 h-5 w-5" : "left-3.5 h-4 w-4"}`} />
+      <SearchIcon className={`pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[#71685c] transition group-focus-within:text-[#9d7a35] ${prominent ? "left-5 h-5 w-5" : "left-3.5 h-4 w-4"}`} />
       <input
         aria-activedescendant={showSuggestions && suggestions[activeIndex] ? `${listboxId}-${activeIndex}` : undefined}
         aria-autocomplete="list"
@@ -79,19 +79,19 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
         }}
         onFocus={() => setIsOpen(true)}
         onKeyDown={handleKeyDown}
-        className={`w-full border border-slate-300 bg-white font-semibold text-slate-950 outline-none transition placeholder:text-slate-500 focus:border-mlri-sky focus:ring-4 focus:ring-sky-100 ${
+        className={`w-full border border-[color:var(--border-strong)] bg-[#fffdf7]/94 font-semibold text-[#171713] outline-none transition placeholder:text-[#81786a] hover:border-[color:var(--border-strong)] focus:border-[#b88a2d] focus:bg-[#fffdf7] focus:ring-4 focus:ring-[#b88a2d]/15 ${
           prominent
-            ? "h-14 rounded-2xl pl-14 pr-5 text-base shadow-[0_18px_50px_rgba(8,45,87,0.13)]"
-            : `rounded-xl pl-10 pr-4 text-base shadow-soft ${compact ? "h-9 text-sm" : "h-12"}`
+            ? "h-14 rounded-[var(--radius-control)] pl-14 pr-5 text-[1.02rem] shadow-[0_14px_34px_rgba(40,32,20,0.07)]"
+            : `rounded-[var(--radius-control)] pl-10 pr-4 text-base shadow-[0_8px_22px_rgba(40,32,20,0.055)] ${compact ? "h-9 text-sm" : "h-12"}`
         }`}
         id={inputId}
-        placeholder="Search courses, modules, paths, or topics..."
+        placeholder="Search the library - ethics, intake, first appearance..."
         role="combobox"
         type="search"
       />
       {showSuggestions && (
         <div
-          className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-slate-200 bg-white text-slate-950 shadow-lift"
+          className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-[color:var(--lace-hairline)] bg-[#fffdf7] text-[#1f1d19] shadow-[0_22px_55px_rgba(65,52,32,0.14)]"
           id={listboxId}
           role="listbox"
         >
@@ -100,7 +100,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
               <button
                 aria-selected={activeIndex === index}
                 className={`grid w-full grid-cols-[1fr_auto] gap-3 px-3 py-2.5 text-left transition ${
-                  activeIndex === index ? "bg-mlri-mist" : "bg-white hover:bg-slate-50"
+                  activeIndex === index ? "bg-[#f5ead0]" : "bg-[#fffdf7] hover:bg-[#faf4e8]"
                 }`}
                 id={`${listboxId}-${index}`}
                 key={`${result.item.type}-${result.item.id}`}
@@ -114,11 +114,11 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
                 <span className="min-w-0">
                   <span className="mb-2 flex flex-wrap items-center gap-2">
                     <TypeBadge type={result.item.type} />
-                    <span className="truncate text-xs font-bold text-slate-600">{result.context}</span>
+                    <span className="metadata truncate text-[#706a5f]">{result.context}</span>
                   </span>
-                  <span className="block truncate text-sm font-extrabold text-slate-950">{result.item.title}</span>
+                  <span className="block truncate text-sm font-bold text-[#1f1d19]">{result.item.title}</span>
                 </span>
-                <span className="self-center rounded-full bg-slate-100 px-2.5 py-1 text-[0.68rem] font-black uppercase tracking-wide text-slate-600">
+                <span className="metadata self-center rounded-full bg-[#f3eadb] px-2.5 py-1 text-[#706a5f]">
                   Preview
                 </span>
               </button>

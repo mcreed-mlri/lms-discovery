@@ -34,17 +34,20 @@ const AuthCtx = createContext<AuthState | null>(null);
 const STORAGE_KEY = "mlri-demo-user";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [ready, setReady] = useState(false);
+  const [user, setUser] = useState<User | null>(demoUser);
+  const [ready, setReady] = useState(true);
 
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) setUser(JSON.parse(stored));
+      if (stored) {
+        setUser(JSON.parse(stored));
+      } else {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(demoUser));
+      }
     } catch {
       // ignore malformed storage
     }
-    setReady(true);
   }, []);
 
   function login() {
