@@ -196,10 +196,17 @@ input::placeholder {
 }
 
 .card-description {
+  font-family: "Segoe UI Variable", "Segoe UI", Aptos, ui-sans-serif, system-ui, sans-serif;
   color: #463f36;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.62;
+}
+
+.readable-copy {
+  font-family: "Segoe UI Variable", "Segoe UI", Aptos, ui-sans-serif, system-ui, sans-serif;
+  color: #463f36;
+  font-weight: 400;
 }
 
 .text-balance {

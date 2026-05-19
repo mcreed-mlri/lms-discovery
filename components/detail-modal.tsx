@@ -112,7 +112,7 @@ export function DetailModal({
             <h2 id="learning-detail-title" className="modal-title mt-5 max-w-2xl text-4xl text-[#181713] sm:text-5xl">
               {item.title}
             </h2>
-            <p className="mt-5 max-w-2xl text-[1.02rem] font-medium leading-7 text-[#463f36]">{getSummary(item)}</p>
+            <p className="readable-copy mt-5 max-w-2xl text-[1.02rem] leading-7">{getSummary(item)}</p>
             <div className="mt-7 flex flex-wrap gap-3">
               <a
                 className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#1f1d19] px-5 text-sm font-bold text-[#fffaf0] shadow-[0_14px_30px_rgba(31,29,25,0.18)] transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-[#1f1d19]/15"
@@ -179,7 +179,7 @@ export function DetailModal({
                   </span>
                   <span className="min-w-0">
                     <span className="card-title block text-[1.02rem] leading-snug">{entry.title}</span>
-                    <span className="mt-1 block max-w-2xl text-[0.95rem] font-medium leading-6 text-[#463f36]">{entry.description}</span>
+                    <span className="readable-copy mt-1 block max-w-2xl text-[0.95rem] leading-6">{entry.description}</span>
                   </span>
                   <span className="inline-flex items-center gap-3 justify-self-start whitespace-nowrap pt-1 text-sm font-semibold text-[color:var(--lace-muted-strong)] md:justify-self-end">
                     {entry.duration}

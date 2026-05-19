@@ -10,14 +10,6 @@ type Theme = {
 };
 
 const themes: Record<string, Theme> = {
-  "using-interactive-elements": {
-    rail: "before:bg-[#2f8a9a]",
-    border: "border-[#a7cdd3]",
-    hoverBorder: "hover:border-[#2f8a9a]",
-    chip: "border-[#a7cdd3] bg-[#e3f1f2] text-[#256775]",
-    dot: "bg-[#2f8a9a]",
-    progress: "bg-[#2f8a9a]",
-  },
   "brightspace-wrapper-demo": {
     rail: "before:bg-[#7f6a3c]",
     border: "border-[#d1c19b]",
@@ -71,7 +63,6 @@ export function getCourseId(item: Course | Module) {
 
 export function getCourseLabel(course: Course) {
   const labels: Record<string, string> = {
-    "using-interactive-elements": "Interactive Elements",
     "brightspace-wrapper-demo": "Wrapper Demo",
     "professional-foundations": "Foundations",
     "client-centered-practice": "Client Communication",

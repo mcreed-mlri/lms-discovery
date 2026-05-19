@@ -301,9 +301,6 @@ export default function Home() {
                   <h2 className="mt-3 max-w-[17rem] text-[1.04rem] font-bold leading-snug tracking-[-0.005em] text-[#25221d]">{resumeItem.title}</h2>
                   <p className="mt-2 font-mono text-[0.72rem] font-bold uppercase leading-4 tracking-[0.055em] text-[#6f6658]">{resumeItem.detail} - {resumeItem.progress}% complete</p>
                 </div>
-                <button className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--radius-control)] bg-[#f3e5c2] text-sm font-bold text-[#7d5919] shadow-[inset_0_0_0_1px_rgba(184,137,47,0.12)] transition hover:bg-[#ead8ae] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15" type="button" aria-label="Resume Professional Foundations for Legal Aid">
-                  PF
-                </button>
               </div>
               <div
                 className="mt-5 h-2 overflow-hidden rounded-full bg-[#e6dccb] shadow-[inset_0_1px_2px_rgba(40,32,20,0.08)]"
@@ -318,7 +315,7 @@ export default function Home() {
               <div className="mt-5 flex items-center justify-between gap-3">
                 <p className="flex min-w-0 items-center gap-2 text-sm font-semibold text-[color:var(--lace-muted-strong)]">
                   <FlagIcon className="h-4 w-4 shrink-0 text-[#b88a2d]" />
-                  <span className="truncate">Next: Inside a Legal Aid Office</span>
+                  <span className="truncate">Next: Self Checks</span>
                 </p>
                 <a
                   className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-[#171713] px-4 text-sm font-bold text-[#fffaf0] shadow-[0_10px_22px_rgba(23,23,19,0.16)] transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-[#1f1d19]/15"
