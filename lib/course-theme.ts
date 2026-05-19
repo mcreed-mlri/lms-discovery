@@ -18,6 +18,14 @@ const themes: Record<string, Theme> = {
     dot: "bg-[#2f8a9a]",
     progress: "bg-[#2f8a9a]",
   },
+  "brightspace-wrapper-demo": {
+    rail: "before:bg-[#7f6a3c]",
+    border: "border-[#d1c19b]",
+    hoverBorder: "hover:border-[#7f6a3c]",
+    chip: "border-[#d1c19b] bg-[#efe6d0] text-[#6d5628]",
+    dot: "bg-[#7f6a3c]",
+    progress: "bg-[#7f6a3c]",
+  },
   "professional-foundations": {
     rail: "before:bg-[#b88a2d]",
     border: "border-[#d9c69d]",
@@ -64,6 +72,7 @@ export function getCourseId(item: Course | Module) {
 export function getCourseLabel(course: Course) {
   const labels: Record<string, string> = {
     "using-interactive-elements": "Interactive Elements",
+    "brightspace-wrapper-demo": "Wrapper Demo",
     "professional-foundations": "Foundations",
     "client-centered-practice": "Client Communication",
     "first-steps-in-court": "Court Skills",

@@ -34,6 +34,9 @@ const sideNavItems = [
   { title: "New", href: "#browse", icon: SparkIcon },
 ];
 
+const resumeBrightspaceUrl =
+  "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Sequencing.html?ou=6698&d2l_body_type=3&ou=6698";
+
 function filterMatches(item: LearningItem, filter: Filter) {
   if (filter === "All") return true;
   if (filter === "Paths") return item.type === "PATH";
@@ -317,9 +320,14 @@ export default function Home() {
                   <FlagIcon className="h-4 w-4 shrink-0 text-[#b88a2d]" />
                   <span className="truncate">Next: Inside a Legal Aid Office</span>
                 </p>
-                <button className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-[#171713] px-4 text-sm font-bold text-[#fffaf0] shadow-[0_10px_22px_rgba(23,23,19,0.16)] transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-[#1f1d19]/15" type="button">
-                  Resume Reading <ArrowIcon className="h-4 w-4" />
-                </button>
+                <a
+                  className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-[#171713] px-4 text-sm font-bold text-[#fffaf0] shadow-[0_10px_22px_rgba(23,23,19,0.16)] transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-[#1f1d19]/15"
+                  href={resumeBrightspaceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Resume Learning <ArrowIcon className="h-4 w-4" />
+                </a>
               </div>
             </aside>
           </div>

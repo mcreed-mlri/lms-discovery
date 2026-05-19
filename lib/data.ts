@@ -52,6 +52,17 @@ export const courses: Course[] = [
       "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3",
   },
   {
+    id: "brightspace-wrapper-demo",
+    title: "Brightspace Wrapper Demo",
+    description:
+      "A short demo course for reviewing LACE wrapper behavior before handing learners into Brightspace.",
+    level: "Foundations",
+    practiceArea: "All Practice Areas",
+    duration: "~2 hr",
+    brightspaceUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3",
+  },
+  {
     id: "professional-foundations",
     title: "Professional Foundations for Legal Aid",
     description:
@@ -84,6 +95,53 @@ export const courses: Course[] = [
 ];
 
 export const modules: Module[] = [
+  // Brightspace Wrapper Demo modules
+  {
+    id: "wrapper-static-layouts",
+    title: "Module 1 - Static Layouts",
+    description:
+      "Preview static wrapper patterns for accordions, tabs, callouts, and stylized quotes inside Brightspace.",
+    courseId: "brightspace-wrapper-demo",
+    parentCourseTitle: "Brightspace Wrapper Demo",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["brightspace wrapper", "static layouts", "accordion", "tabs", "callouts"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3#static-layouts",
+  },
+  {
+    id: "wrapper-self-checks",
+    title: "Module 2 - Self Checks",
+    description:
+      "Review interactive checks such as sorting galleries, sequencing, flip cards, and fill-in-the-blank prompts.",
+    courseId: "brightspace-wrapper-demo",
+    parentCourseTitle: "Brightspace Wrapper Demo",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["brightspace wrapper", "self checks", "sequencing", "flip cards"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Sequencing.html?ou=6698&d2l_body_type=3&ou=6698",
+  },
+  {
+    id: "wrapper-insert-media",
+    title: "Module 3 - Insert Media",
+    description:
+      "Mock upcoming media examples for image hotspots and integrated video inside the Brightspace wrapper.",
+    courseId: "brightspace-wrapper-demo",
+    parentCourseTitle: "Brightspace Wrapper Demo",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["brightspace wrapper", "insert media", "image hotspots", "video"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3#insert-media",
+  },
+
   // Brightspace Interactive Elements modules
   {
     id: "interactive-accordion",
@@ -350,15 +408,6 @@ export const modules: Module[] = [
 ];
 
 export const paths: Path[] = [
-  {
-    id: "brightspace-wrapper-demo",
-    title: "Brightspace Wrapper Demo",
-    description:
-      "A short demo path for reviewing LACE wrapper behavior before handing learners into Brightspace.",
-    courseIds: ["using-interactive-elements"],
-    totalDuration: "~2 hr total",
-    level: "Foundations",
-  },
   {
     id: "new-attorney-foundations",
     title: "New Attorney Foundations",
