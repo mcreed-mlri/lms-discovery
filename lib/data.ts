@@ -41,6 +41,17 @@ export type LearningItem =
 
 export const courses: Course[] = [
   {
+    id: "using-interactive-elements",
+    title: "Using Interactive Elements in Brightspace",
+    description:
+      "Demo course for LACE wrappers - accordions, tabs, callouts, and interactive checks.",
+    level: "Foundations",
+    practiceArea: "All Practice Areas",
+    duration: "~2 hr",
+    brightspaceUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3",
+  },
+  {
     id: "professional-foundations",
     title: "Professional Foundations for Legal Aid",
     description:
@@ -73,6 +84,144 @@ export const courses: Course[] = [
 ];
 
 export const modules: Module[] = [
+  // Brightspace Interactive Elements modules
+  {
+    id: "interactive-accordion",
+    title: "Accordion",
+    description:
+      "Use accordions to reveal supporting content in small, scannable sections without overwhelming the learner.",
+    courseId: "using-interactive-elements",
+    parentCourseTitle: "Using Interactive Elements in Brightspace",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["accordion", "interactive elements", "static layouts", "brightspace"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3#accordion",
+  },
+  {
+    id: "interactive-tabs",
+    title: "Tabs",
+    description:
+      "Compare related ideas in a compact tabbed layout that keeps learners oriented inside one Brightspace topic.",
+    courseId: "using-interactive-elements",
+    parentCourseTitle: "Using Interactive Elements in Brightspace",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["tabs", "interactive elements", "static layouts", "brightspace"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3#tabs",
+  },
+  {
+    id: "interactive-callouts",
+    title: "Callouts",
+    description:
+      "Create visual emphasis for cautions, practice tips, definitions, and reminders using consistent callout styles.",
+    contentStatus: "Updated",
+    courseId: "using-interactive-elements",
+    parentCourseTitle: "Using Interactive Elements in Brightspace",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["callouts", "interactive elements", "static layouts", "brightspace"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3#callouts",
+  },
+  {
+    id: "interactive-stylized-quotes",
+    title: "Stylized Quotes",
+    description:
+      "Highlight quoted material with accessible styling that draws attention without breaking reading flow.",
+    courseId: "using-interactive-elements",
+    parentCourseTitle: "Using Interactive Elements in Brightspace",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["quotes", "interactive elements", "static layouts", "brightspace"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3#stylized-quotes",
+  },
+  {
+    id: "interactive-sorting-gallery",
+    title: "Sorting Gallery",
+    description:
+      "Let learners classify examples into categories and receive lightweight feedback as they practice.",
+    contentStatus: "New",
+    courseId: "using-interactive-elements",
+    parentCourseTitle: "Using Interactive Elements in Brightspace",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["sorting", "gallery", "self checks", "interactive elements"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3#sorting-gallery",
+  },
+  {
+    id: "interactive-sequencing",
+    title: "Sequencing",
+    description:
+      "Ask learners to place steps in the correct order before moving into a practical application.",
+    courseId: "using-interactive-elements",
+    parentCourseTitle: "Using Interactive Elements in Brightspace",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["sequencing", "self checks", "interactive elements", "brightspace"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3#sequencing",
+  },
+  {
+    id: "interactive-flip-cards",
+    title: "Flip Cards",
+    description:
+      "Use flip cards for vocabulary, concept checks, and quick reveal moments that keep the page compact.",
+    courseId: "using-interactive-elements",
+    parentCourseTitle: "Using Interactive Elements in Brightspace",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["flip cards", "self checks", "interactive elements", "brightspace"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3#flip-cards",
+  },
+  {
+    id: "interactive-fill-in-the-blanks",
+    title: "Fill in the Blanks",
+    description:
+      "Prompt learners to recall key terms or decisions inside a short formative check.",
+    courseId: "using-interactive-elements",
+    parentCourseTitle: "Using Interactive Elements in Brightspace",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["fill in the blanks", "self checks", "interactive elements", "brightspace"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3#fill-in-the-blanks",
+  },
+  {
+    id: "interactive-image-hotspots",
+    title: "Image Hotspots",
+    description:
+      "Preview an upcoming media interaction where learners explore annotated areas of a single image.",
+    courseId: "using-interactive-elements",
+    parentCourseTitle: "Using Interactive Elements in Brightspace",
+    practiceArea: "All Practice Areas",
+    level: "Foundations",
+    tags: ["image hotspots", "insert media", "interactive elements", "brightspace"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3#image-hotspots",
+  },
   // Professional Foundations modules
   {
     id: "ethics-and-confidentiality",
@@ -202,6 +351,15 @@ export const modules: Module[] = [
 
 export const paths: Path[] = [
   {
+    id: "brightspace-wrapper-demo",
+    title: "Brightspace Wrapper Demo",
+    description:
+      "A short demo path for reviewing LACE wrapper behavior before handing learners into Brightspace.",
+    courseIds: ["using-interactive-elements"],
+    totalDuration: "~2 hr total",
+    level: "Foundations",
+  },
+  {
     id: "new-attorney-foundations",
     title: "New Attorney Foundations",
     description:
@@ -249,12 +407,14 @@ export type ContinueLearningItem =
     };
 
 export const continueLearning: ContinueLearningItem[] = [
+  { id: "using-interactive-elements", type: "COURSE", title: "Using Interactive Elements in Brightspace", detail: "5 of 9 modules complete", progress: 56 },
+  { id: "interactive-stylized-quotes", type: "MODULE", title: "Stylized Quotes", detail: "Using Interactive Elements in Brightspace", status: "In progress" },
   { id: "professional-foundations", type: "COURSE", title: "Professional Foundations for Legal Aid", detail: "Module 2 of 3", progress: 45 },
   { id: "first-client-interview", type: "MODULE", title: "Conducting Your First Client Interview", detail: "Client-Centered Communication", status: "In progress" },
   { id: "new-attorney-foundations", type: "PATH", title: "New Attorney Foundations", detail: "1 of 3 courses complete", progress: 33 },
 ];
 
-export const popularTopics = ["Ethics & Confidentiality", "Client Interviews", "Courtroom Etiquette", "Trauma-Informed Practice"];
+export const popularTopics = ["Interactive Elements", "Brightspace Wrappers", "Ethics & Confidentiality", "Client Interviews", "Courtroom Etiquette", "Trauma-Informed Practice"];
 
 export function getLearningItems(): LearningItem[] {
   return [
