@@ -196,9 +196,10 @@ input::placeholder {
 }
 
 .card-description {
-  color: var(--ink-muted);
-  font-size: 0.9rem;
-  line-height: 1.5;
+  color: #463f36;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.62;
 }
 
 .text-balance {

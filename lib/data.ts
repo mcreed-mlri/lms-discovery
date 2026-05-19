@@ -98,7 +98,7 @@ export const modules: Module[] = [
   // Brightspace Wrapper Demo modules
   {
     id: "wrapper-static-layouts",
-    title: "Module 1 - Static Layouts",
+    title: "Static Layouts",
     description:
       "Preview static wrapper patterns for accordions, tabs, callouts, and stylized quotes inside Brightspace.",
     courseId: "brightspace-wrapper-demo",
@@ -113,7 +113,7 @@ export const modules: Module[] = [
   },
   {
     id: "wrapper-self-checks",
-    title: "Module 2 - Self Checks",
+    title: "Self Checks",
     description:
       "Review interactive checks such as sorting galleries, sequencing, flip cards, and fill-in-the-blank prompts.",
     courseId: "brightspace-wrapper-demo",
@@ -128,7 +128,7 @@ export const modules: Module[] = [
   },
   {
     id: "wrapper-insert-media",
-    title: "Module 3 - Insert Media",
+    title: "Insert Media",
     description:
       "Mock upcoming media examples for image hotspots and integrated video inside the Brightspace wrapper.",
     courseId: "brightspace-wrapper-demo",
