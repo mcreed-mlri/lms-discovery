@@ -13,12 +13,29 @@ npm run dev
 
 Then open `http://localhost:3000`.
 
+## LACE Hub dashboard (Phase 1 mock)
+
+Unified role-based dashboard at `/dashboard` (alias `/me`). Uses **mock data only** — no Brightspace OAuth or Supabase yet.
+
+- **Learner** (`/dashboard`): full My Learning UI with course progress cards
+- **Manager** (`/dashboard/team`), **Program** (`/dashboard/program`): Phase 3 scaffolds
+- **Super-admin** (`/dashboard/admin`): integration status scaffold
+
+Use the **dev role switcher** (bottom-left on dashboard routes) to preview nav for `learner`, `manager`, `program`, or `super_admin`. Choice persists in `localStorage` key `lace-dev-role`.
+
+Data layer: `lib/services/dashboardService.ts` — today returns mocks from `mocks/dashboard.ts`. **Replace mocks with `fetch('/api/me/dashboard')` in Phase 1** when the server route ships. Types live in `types/dashboard.ts`.
+
 ## Project structure
 
 ```text
 app/                         Next.js App Router pages and global styles
+app/dashboard/               LACE Hub unified dashboard (mock Phase 1)
 components/                  Reusable UI components for the learning hub
+components/dashboard/        Dashboard-specific UI (cards, shell, role gate)
 lib/                         Local demo data and Brightspace URL helpers
+lib/services/                dashboardService (mock → API swap point)
+mocks/                       Dashboard mock payloads
+types/                       Dashboard TypeScript contracts
 archive/standalone-prototype Earlier static HTML/CSS/JS prototype
 archive/mlri-lms             Saved project exports, screenshots, and uploads
 ```

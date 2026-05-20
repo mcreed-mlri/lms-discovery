@@ -212,3 +212,38 @@ input::placeholder {
 .text-balance {
   text-wrap: balance;
 }
+
+/* LACE Hub dashboard — navy-teal showcase (Phase 1 mock) */
+.lace-dashboard-root {
+  --lace-dash-navy: #0a1628;
+  --lace-dash-teal: #2dd4bf;
+  --lace-dash-cyan: #60a5fa;
+  --lace-dash-text: #e8f0fa;
+  --lace-dash-text-soft: #b8c9e0;
+  --lace-dash-muted: #7a8fa8;
+  --font-dash-sans: var(--font-dm-sans, "DM Sans"), ui-sans-serif, system-ui, sans-serif;
+  --font-dash-mono: var(--font-dm-mono, "DM Mono"), ui-monospace, monospace;
+}
+
+.lace-dashboard {
+  font-family: var(--font-dash-sans);
+  color: var(--lace-dash-text);
+  background-color: var(--lace-dash-navy);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 100% -10%, rgba(45, 212, 191, 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 0% 100%, rgba(96, 165, 250, 0.06), transparent),
+    linear-gradient(180deg, #0a1628 0%, #0d1e35 100%);
+  min-height: 100vh;
+}
+
+.lace-dashboard .lace-dash-mono {
+  font-family: var(--font-dash-mono);
+}
+
+.lace-dash-card {
+  border: 1px solid rgba(45, 212, 191, 0.12);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(15, 32, 55, 0.95) 0%, rgba(10, 22, 40, 0.98) 100%);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  border-left: 3px solid var(--lace-dash-teal);
+}

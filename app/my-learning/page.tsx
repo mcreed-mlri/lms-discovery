@@ -86,7 +86,9 @@ export default function MyLearningPage() {
             <Link className="rounded-md transition hover:text-[#9d7a35] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15" href="/">
               Library
             </Link>
-            <span className="text-[#9d7a35]">My Learning</span>
+            <Link className="rounded-md transition hover:text-[#9d7a35] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15" href="/dashboard">
+              My Learning
+            </Link>
             <div className="flex items-center gap-3 border-l border-[color:var(--lace-hairline)] pl-6">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1f1d19] text-xs font-bold text-[#fffaf0]">
                 {user.initials}
@@ -109,7 +111,7 @@ export default function MyLearningPage() {
             <SearchIcon className="h-5 w-5" />
             <span>Browse</span>
           </Link>
-          <Link href="/my-learning" className="group relative flex h-11 items-center gap-3 rounded-lg bg-[#e5d7c2] px-3 text-sm font-bold text-[#171713] shadow-[inset_0_0_0_1px_rgba(23,23,19,0.08)] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15" aria-current="page">
+          <Link href="/dashboard" className="group relative flex h-11 items-center gap-3 rounded-lg bg-[#e5d7c2] px-3 text-sm font-bold text-[#171713] shadow-[inset_0_0_0_1px_rgba(23,23,19,0.08)] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15" aria-current="page">
             <BookIcon className="h-5 w-5" />
             <span>My Learning</span>
           </Link>
