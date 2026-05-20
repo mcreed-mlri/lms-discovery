@@ -63,7 +63,7 @@ export function HubShell({
 
   return (
     <div className="hub-shell min-h-screen pb-24 md:pb-0">
-      <header className="sticky top-0 z-40 border-b border-[color:var(--border-subtle)] bg-[color:var(--bg-surface-soft)]/92 text-[color:var(--ink)] shadow-[0_8px_26px_rgba(40,32,20,0.055)] backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-[color:var(--border-subtle)] bg-[color:var(--bg-surface-soft)]/92 text-[color:var(--ink)] shadow-[0_8px_26px_rgba(40,32,20,0.055)] backdrop-blur-xl pt-[env(safe-area-inset-top)]">
         <div className="mx-auto flex min-h-[4.75rem] max-w-7xl items-center gap-4 px-4 py-3 sm:px-6 lg:px-8">
           <Link
             href="/"
@@ -169,7 +169,7 @@ export function HubShell({
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">{children}</div>
       </main>
 
-      <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-[color:var(--lace-hairline)] bg-[#f8f2e8]/95 px-5 py-2 shadow-[0_-14px_32px_rgba(65,52,32,0.10)] backdrop-blur md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-[color:var(--lace-hairline)] bg-[#f8f2e8]/95 px-5 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-[0_-14px_32px_rgba(65,52,32,0.10)] backdrop-blur md:hidden">
         <div className="mx-auto grid max-w-md grid-cols-4">
           <Link
             href="/"

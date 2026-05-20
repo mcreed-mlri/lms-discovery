@@ -212,3 +212,44 @@ input::placeholder {
 .text-balance {
   text-wrap: balance;
 }
+
+/* PWA Bottom Sheet & Modal Animations */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Standalone PWA Optimizations */
+@media (display-mode: standalone) {
+  body {
+    overscroll-behavior-y: none; /* Prevents browser shell elastic pulling */
+  }
+}
+
+body {
+  -webkit-tap-highlight-color: transparent; /* Smooth native tapping */
+}
+

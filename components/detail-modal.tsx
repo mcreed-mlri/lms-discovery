@@ -94,17 +94,20 @@ export function DetailModal({
   const syllabusLabel = item.type === "PATH" ? `${syllabus.length} courses` : `${syllabus.length} modules`;
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-[#1f1d19]/35 px-4 py-6 backdrop-blur-sm sm:py-10" role="dialog" aria-modal="true" aria-labelledby="learning-detail-title">
+    <div className="fixed inset-0 z-[80] flex items-end justify-center bg-[#1f1d19]/35 backdrop-blur-sm sm:items-start sm:py-10 sm:overflow-y-auto sm:px-4" role="dialog" aria-modal="true" aria-labelledby="learning-detail-title">
       <button className="absolute inset-0 cursor-default" type="button" aria-label="Close detail view" onClick={onClose} />
-      <section className="editorial-panel relative w-full max-w-4xl overflow-hidden rounded-2xl bg-[#fffaf0] p-5 text-[#1f1d19] sm:p-8">
+      <section className="editorial-panel animate-slide-up sm:animate-fade-in-scale relative w-full max-w-4xl bg-[#fffaf0] p-5 text-[#1f1d19] sm:p-8 rounded-t-2xl rounded-b-none sm:rounded-b-2xl sm:rounded-2xl max-sm:max-h-[88vh] max-sm:overflow-y-auto pb-[calc(1.25rem+env(safe-area-inset-bottom))]">
+        {/* Pull handle for mobile drawer */}
+        <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-[#8a8173]/30 sm:hidden" />
         <button
-          className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--lace-hairline)] bg-[#fffdf7] text-xl leading-none text-[#62594b] transition hover:text-[#1f1d19] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15"
+          className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--lace-hairline)] bg-[#fffdf7] text-xl leading-none text-[#62594b] transition hover:text-[#1f1d19] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 max-sm:top-3"
           type="button"
           onClick={onClose}
           aria-label="Close detail view"
         >
-          x
+          &times;
         </button>
+
 
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_15rem]">
           <div className="pr-8">
