@@ -4,25 +4,25 @@ import type { LearnerCourse } from "@/types/dashboard";
 import { ProgressBar } from "./ProgressBar";
 
 const statusStyles: Record<LearnerCourse["status"], string> = {
-  not_started: "bg-[rgba(96,165,250,0.12)] text-[var(--lace-dash-cyan)]",
-  in_progress: "bg-[rgba(45,212,191,0.15)] text-[var(--lace-dash-teal)]",
-  completed: "bg-[rgba(45,212,191,0.22)] text-[#a7f3ec]",
+  not_started: "border-[color:var(--lace-hairline)] bg-[#fffdf7] text-[#706a5f]",
+  in_progress: "border-[#d4b87a] bg-[#f5edd8] text-[#7a5f1f]",
+  completed: "border-[#a8c4b0] bg-[#e8f0ea] text-[#3d5c47]",
 };
 
 export function CourseProgressCard({ course }: { course: LearnerCourse }) {
   return (
-    <article className="lace-dash-card flex flex-col p-5">
+    <article className="editorial-card flex flex-col border-l-4 border-l-[#b88a2d] p-5">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <h3 className="text-lg font-semibold leading-snug text-[var(--lace-dash-text)]">{course.title}</h3>
+          <h3 className="card-title text-lg">{course.title}</h3>
           {course.trainingArea ? (
-            <span className="lace-dash-mono mt-2 inline-block rounded-md border border-[rgba(45,212,191,0.25)] bg-[rgba(45,212,191,0.08)] px-2 py-0.5 text-[0.62rem] font-medium uppercase tracking-wider text-[var(--lace-dash-teal)]">
+            <span className="metadata mt-2 inline-block rounded-full border border-[color:var(--lace-hairline)] bg-[#fffdf7] px-2.5 py-0.5 text-[#706a5f]">
               {course.trainingArea}
             </span>
           ) : null}
         </div>
         <span
-          className={`lace-dash-mono shrink-0 rounded-full px-2.5 py-1 text-[0.62rem] font-medium uppercase tracking-wider ${statusStyles[course.status]}`}
+          className={`metadata shrink-0 rounded-full border px-2.5 py-1 ${statusStyles[course.status]}`}
         >
           {statusLabel(course.status)}
         </span>
@@ -32,13 +32,13 @@ export function CourseProgressCard({ course }: { course: LearnerCourse }) {
         <ProgressBar value={course.completionPct} label={`${course.title} progress`} />
       </div>
 
-      <p className="mt-4 text-sm text-[var(--lace-dash-muted)]">
-        Last visited <span className="text-[var(--lace-dash-text-soft)]">{formatRelativeDate(course.lastAccessedAt)}</span>
+      <p className="mt-4 text-sm font-medium text-[color:var(--ink-muted)]">
+        Last visited <span className="text-[#25221d]">{formatRelativeDate(course.lastAccessedAt)}</span>
         {course.dueDate ? (
           <>
             {" "}
             · Due{" "}
-            <span className="text-[var(--lace-dash-text-soft)]">
+            <span className="text-[#25221d]">
               {new Date(course.dueDate).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
             </span>
           </>
@@ -47,7 +47,7 @@ export function CourseProgressCard({ course }: { course: LearnerCourse }) {
 
       <a
         href={course.resumeUrl}
-        className="mt-5 inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-[var(--lace-dash-teal)] px-4 text-sm font-semibold text-[var(--lace-dash-navy)] transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-[var(--lace-dash-cyan)] focus:ring-offset-2 focus:ring-offset-[var(--lace-dash-navy)] sm:w-auto"
+        className="mt-5 inline-flex h-10 w-full items-center justify-center gap-2 rounded-[var(--radius-control)] bg-[#171713] px-4 text-sm font-bold text-[#fffaf0] shadow-[0_10px_22px_rgba(23,23,19,0.16)] transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-[#1f1d19]/15 sm:w-auto"
         target={course.resumeUrl.startsWith("http") ? "_blank" : undefined}
         rel={course.resumeUrl.startsWith("http") ? "noreferrer" : undefined}
         aria-label={`Continue learning ${course.title}`}

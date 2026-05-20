@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { DashboardPageHeader } from "@/components/dashboard/DashboardShell";
+import { DashboardPageHeader } from "@/components/dashboard/DashboardPageHeader";
 import { DashboardStat } from "@/components/dashboard/DashboardStat";
 import { PreviewBadge } from "@/components/dashboard/PreviewBadge";
 import { formatRelativeDate } from "@/lib/dashboard-utils";
@@ -28,10 +28,10 @@ export function ManagerDashboardView() {
   if (loading || !data) {
     return (
       <div className="animate-pulse space-y-4" aria-busy>
-        <div className="h-8 w-48 rounded bg-[rgba(96,165,250,0.12)]" />
+        <div className="h-8 w-48 rounded bg-[#e6dccb]" />
         <div className="grid gap-4 sm:grid-cols-3">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="lace-dash-card h-28" />
+            <div key={i} className="editorial-panel h-28 rounded-[var(--radius-card)]" />
           ))}
         </div>
       </div>
@@ -55,31 +55,33 @@ export function ManagerDashboardView() {
         <DashboardStat label="Gaps" value={String(summary.gapCount)} detail="Incomplete required training" />
       </div>
 
-      <div className="lace-dash-card overflow-hidden">
+      <div className="editorial-panel overflow-hidden rounded-[var(--radius-card)]">
         <table className="w-full min-w-[32rem] text-left text-sm">
           <thead>
-            <tr className="border-b border-[rgba(45,212,191,0.12)] text-[var(--lace-dash-muted)]">
-              <th className="lace-dash-mono px-4 py-3 text-[0.62rem] font-medium uppercase tracking-wider">Name</th>
-              <th className="lace-dash-mono px-4 py-3 text-[0.62rem] font-medium uppercase tracking-wider">Course</th>
-              <th className="lace-dash-mono px-4 py-3 text-[0.62rem] font-medium uppercase tracking-wider">Completion</th>
-              <th className="lace-dash-mono px-4 py-3 text-[0.62rem] font-medium uppercase tracking-wider">Last active</th>
-              <th className="lace-dash-mono px-4 py-3 text-[0.62rem] font-medium uppercase tracking-wider">Gap</th>
+            <tr className="border-b border-[color:var(--border-subtle)] text-[color:var(--ink-muted)]">
+              <th className="stat-label px-4 py-3">Name</th>
+              <th className="stat-label px-4 py-3">Course</th>
+              <th className="stat-label px-4 py-3">Completion</th>
+              <th className="stat-label px-4 py-3">Last active</th>
+              <th className="stat-label px-4 py-3">Gap</th>
             </tr>
           </thead>
           <tbody>
             {members.map((member) => (
-              <tr key={member.id} className="border-b border-[rgba(96,165,250,0.08)] last:border-0">
-                <td className="px-4 py-3 font-medium text-[var(--lace-dash-text)]">{member.name}</td>
-                <td className="px-4 py-3 text-[var(--lace-dash-muted)]">{member.course}</td>
-                <td className="px-4 py-3 text-[var(--lace-dash-cyan)]">{member.completionPct}%</td>
-                <td className="px-4 py-3 text-[var(--lace-dash-muted)]">{formatRelativeDate(member.lastActiveAt)}</td>
+              <tr key={member.id} className="border-b border-[color:var(--lace-hairline)] last:border-0">
+                <td className="px-4 py-3 font-bold text-[#25221d]">{member.name}</td>
+                <td className="px-4 py-3 font-medium text-[color:var(--ink-muted)]">{member.course}</td>
+                <td className="px-4 py-3 font-bold text-[#9d7a35]">{member.completionPct}%</td>
+                <td className="px-4 py-3 font-medium text-[color:var(--ink-muted)]">
+                  {formatRelativeDate(member.lastActiveAt)}
+                </td>
                 <td className="px-4 py-3">
                   {member.hasGap ? (
-                    <span className="lace-dash-mono rounded-full bg-amber-500/15 px-2 py-0.5 text-[0.62rem] font-medium uppercase text-amber-300">
+                    <span className="metadata rounded-full border border-[#d4a090] bg-[#f8ebe6] px-2 py-0.5 text-[#8b4a32]">
                       Gap
                     </span>
                   ) : (
-                    <span className="text-[var(--lace-dash-muted)]">—</span>
+                    <span className="text-[color:var(--ink-muted)]">—</span>
                   )}
                 </td>
               </tr>

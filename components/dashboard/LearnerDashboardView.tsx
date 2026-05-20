@@ -2,19 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { CourseProgressCard } from "@/components/dashboard/CourseProgressCard";
-import { DashboardPageHeader } from "@/components/dashboard/DashboardShell";
+import { DashboardPageHeader } from "@/components/dashboard/DashboardPageHeader";
 import { greetingForHour } from "@/lib/dashboard-utils";
 import { dashboardService } from "@/lib/services/dashboardService";
 import type { LearnerDashboardPayload } from "@/types/dashboard";
 
 function CourseCardSkeleton() {
   return (
-    <div className="lace-dash-card animate-pulse p-5" aria-hidden>
-      <div className="h-5 w-3/4 rounded bg-[rgba(96,165,250,0.15)]" />
-      <div className="mt-3 h-4 w-1/4 rounded bg-[rgba(96,165,250,0.1)]" />
-      <div className="mt-6 h-2 rounded-full bg-[rgba(96,165,250,0.12)]" />
-      <div className="mt-4 h-4 w-1/2 rounded bg-[rgba(96,165,250,0.08)]" />
-      <div className="mt-5 h-10 rounded-lg bg-[rgba(45,212,191,0.12)]" />
+    <div className="editorial-card animate-pulse border-l-4 border-l-[#e6dccb] p-5" aria-hidden>
+      <div className="h-5 w-3/4 rounded bg-[#e6dccb]" />
+      <div className="mt-3 h-4 w-1/4 rounded bg-[#eee4d3]" />
+      <div className="mt-6 h-2 rounded-full bg-[#e6dccb]" />
+      <div className="mt-4 h-4 w-1/2 rounded bg-[#eee4d3]" />
+      <div className="mt-5 h-10 rounded-[var(--radius-control)] bg-[#e6dccb]" />
     </div>
   );
 }
@@ -30,16 +30,14 @@ function NoticeBanner({
 
   return (
     <aside
-      className={`lace-dash-card mb-6 border-l-4 p-4 ${
-        isWarning ? "border-l-amber-400" : "border-l-[var(--lace-dash-cyan)]"
+      className={`editorial-panel mb-6 rounded-[var(--radius-card)] border-l-4 p-4 ${
+        isWarning ? "border-l-[#b76545]" : "border-l-[#b88a2d]"
       }`}
       role="status"
     >
-      <p className="lace-dash-mono text-[0.62rem] font-medium uppercase tracking-wider text-[var(--lace-dash-teal)]">
-        {isWarning ? "Notice" : "Update"}
-      </p>
-      <h2 className="mt-1 font-semibold text-[var(--lace-dash-text)]">{notice.title}</h2>
-      <p className="mt-1 text-sm text-[var(--lace-dash-muted)]">{notice.body}</p>
+      <p className="section-kicker primary">{isWarning ? "Notice" : "Update"}</p>
+      <h2 className="card-title mt-1 text-lg">{notice.title}</h2>
+      <p className="mt-1 text-sm font-medium text-[color:var(--ink-muted)]">{notice.body}</p>
     </aside>
   );
 }
@@ -88,12 +86,12 @@ export function LearnerDashboardView() {
 
   if (error) {
     return (
-      <div className="lace-dash-card p-8 text-center" role="alert">
-        <h2 className="text-lg font-semibold text-[var(--lace-dash-text)]">Could not load your dashboard</h2>
-        <p className="mt-2 text-sm text-[var(--lace-dash-muted)]">{error}</p>
+      <div className="editorial-panel rounded-[var(--radius-card)] p-8 text-center" role="alert">
+        <h2 className="section-title text-lg text-[#171713]">Could not load your dashboard</h2>
+        <p className="mt-2 text-sm font-medium text-[color:var(--ink-muted)]">{error}</p>
         <button
           type="button"
-          className="mt-6 rounded-lg bg-[var(--lace-dash-teal)] px-5 py-2.5 text-sm font-semibold text-[var(--lace-dash-navy)] focus:outline-none focus:ring-2 focus:ring-[var(--lace-dash-cyan)]"
+          className="mt-6 inline-flex h-11 items-center rounded-[var(--radius-control)] bg-[#171713] px-5 text-sm font-bold text-[#fffaf0] focus:outline-none focus:ring-4 focus:ring-[#1f1d19]/15"
           onClick={() => window.location.reload()}
         >
           Try again
@@ -112,29 +110,27 @@ export function LearnerDashboardView() {
       <NoticeBanner notices={notices ?? []} />
 
       <DashboardPageHeader
-        eyebrow="My Learning"
+        eyebrow="My learning"
         title={greetingForHour(user.displayName)}
         subtitle={subtitle}
       />
 
       {courses.length === 0 ? (
-        <div className="lace-dash-card p-10 text-center">
-          <h2 className="text-lg font-semibold text-[var(--lace-dash-text)]">No courses yet</h2>
-          <p className="mx-auto mt-2 max-w-md text-sm text-[var(--lace-dash-muted)]">
+        <div className="editorial-panel rounded-[var(--radius-card)] p-10 text-center">
+          <h2 className="section-title text-lg text-[#171713]">No courses yet</h2>
+          <p className="mx-auto mt-2 max-w-md text-sm font-medium text-[color:var(--ink-muted)]">
             When you are enrolled in Brightspace trainings, they will appear here with progress and a link to continue.
           </p>
           <a
             href="/"
-            className="mt-6 inline-flex rounded-lg border border-[rgba(45,212,191,0.35)] px-5 py-2.5 text-sm font-semibold text-[var(--lace-dash-teal)] hover:bg-[rgba(45,212,191,0.08)]"
+            className="mt-6 inline-flex h-11 items-center rounded-[var(--radius-control)] border border-[color:var(--border-subtle)] bg-[#fffdf7] px-5 text-sm font-bold text-[#5f5a4f] shadow-sm transition hover:text-[#171713] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15"
           >
             Browse the discovery library
           </a>
         </div>
       ) : (
         <section aria-label="Your courses">
-          <h2 className="lace-dash-mono mb-4 text-[0.65rem] font-medium uppercase tracking-wider text-[var(--lace-dash-muted)]">
-            Your courses
-          </h2>
+          <h2 className="section-kicker secondary mb-4">Your courses</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {courses.map((course) => (
               <CourseProgressCard key={course.offeringId} course={course} />

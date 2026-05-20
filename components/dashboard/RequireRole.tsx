@@ -16,15 +16,15 @@ export function RequireRole({
 
   if (!allow.includes(role)) {
     return (
-      <div className="lace-dash-card p-8 text-center">
-        <h2 className="text-lg font-semibold text-[var(--lace-dash-text)]">View not available for this role</h2>
-        <p className="mt-2 text-sm text-[var(--lace-dash-muted)]">
-          You are previewing as <strong className="text-[var(--lace-dash-teal)]">{roleLabel(role)}</strong>. Use the dev
-          role switcher (bottom left) or open a view your role can access.
+      <div className="editorial-panel rounded-[var(--radius-card)] p-8 text-center">
+        <h2 className="section-title text-lg text-[#171713]">View not available for this role</h2>
+        <p className="mt-2 text-sm font-medium text-[color:var(--ink-muted)]">
+          You are previewing as <strong className="text-[#9d7a35]">{roleLabel(role)}</strong>. Use the dev role
+          switcher (bottom left) or open a view your role can access.
         </p>
         <Link
-          href="/dashboard"
-          className="mt-6 inline-flex rounded-lg bg-[var(--lace-dash-teal)] px-5 py-2.5 text-sm font-semibold text-[var(--lace-dash-navy)]"
+          href="/my-learning"
+          className="mt-6 inline-flex h-11 items-center rounded-[var(--radius-control)] bg-[#171713] px-5 text-sm font-bold text-[#fffaf0] focus:outline-none focus:ring-4 focus:ring-[#1f1d19]/15"
         >
           Back to My Learning
         </Link>

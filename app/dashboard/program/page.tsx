@@ -1,10 +1,5 @@
-import { ProgramDashboardView } from "@/components/dashboard/ProgramDashboardView";
-import { RequireRole } from "@/components/dashboard/RequireRole";
+import { redirect } from "next/navigation";
 
-export default function ProgramDashboardPage() {
-  return (
-    <RequireRole allow={["program", "super_admin"]}>
-      <ProgramDashboardView />
-    </RequireRole>
-  );
+export default function DashboardProgramRedirect() {
+  redirect("/my-learning/program");
 }

@@ -28,7 +28,7 @@ const filterContext: Record<Filter, string> = {
 const sideNavItems = [
   { title: "Home", href: "#", icon: HomeIcon },
   { title: "Browse", href: "#browse", icon: SearchIcon },
-  { title: "My Learning", href: "/dashboard", icon: BookIcon },
+  { title: "My Learning", href: "/my-learning", icon: BookIcon },
   { title: "Paths", href: "#browse", icon: PathIcon, filter: "Paths" as Filter },
   { title: "Topics", href: "#topics", icon: FolderIcon },
   { title: "New", href: "#browse", icon: SparkIcon },
@@ -211,7 +211,7 @@ export default function Home() {
 
           <nav className="nav-label ml-auto hidden items-center gap-5 text-[#3a352d] md:flex" aria-label="Account">
             <a className="rounded-md transition hover:text-[#9d7a35] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15" href="#browse">Library</a>
-            <a className="rounded-md transition hover:text-[#9d7a35] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15" href="#learning">Programs</a>
+            <Link className="rounded-md transition hover:text-[#9d7a35] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15" href="/my-learning">My Learning</Link>
             <div className="flex items-center gap-3 border-l border-[color:var(--lace-hairline)] pl-6">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1f1d19] text-xs font-bold text-[#fffaf0]">
                 {user.initials}
@@ -474,7 +474,7 @@ export default function Home() {
             <SearchIcon className="h-5 w-5" />
             Browse
           </a>
-          <Link href="/dashboard" className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-bold text-[#706a5f] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15">
+          <Link href="/my-learning" className="flex flex-col items-center gap-1 rounded-xl py-2 text-sm font-bold text-[#706a5f] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15">
             <BookIcon className="h-5 w-5" />
             Learning
           </Link>

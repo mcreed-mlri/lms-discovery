@@ -1,10 +1,5 @@
-import { AdminDashboardView } from "@/components/dashboard/AdminDashboardView";
-import { RequireRole } from "@/components/dashboard/RequireRole";
+import { redirect } from "next/navigation";
 
-export default function AdminDashboardPage() {
-  return (
-    <RequireRole allow={["super_admin"]}>
-      <AdminDashboardView />
-    </RequireRole>
-  );
+export default function DashboardAdminRedirect() {
+  redirect("/my-learning/admin");
 }

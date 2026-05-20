@@ -1,5 +1,5 @@
-import { LearnerDashboardView } from "@/components/dashboard/LearnerDashboardView";
+import { redirect } from "next/navigation";
 
-export default function DashboardPage() {
-  return <LearnerDashboardView />;
+export default function DashboardRedirect() {
+  redirect("/my-learning");
 }

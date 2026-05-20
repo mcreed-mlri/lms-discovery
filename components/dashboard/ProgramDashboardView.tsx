@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { DashboardPageHeader } from "@/components/dashboard/DashboardShell";
+import { DashboardPageHeader } from "@/components/dashboard/DashboardPageHeader";
 import { DashboardStat } from "@/components/dashboard/DashboardStat";
 import { PreviewBadge } from "@/components/dashboard/PreviewBadge";
 import { dashboardService } from "@/lib/services/dashboardService";
@@ -25,7 +25,7 @@ export function ProgramDashboardView() {
   }, []);
 
   if (loading || !data) {
-    return <div className="animate-pulse lace-dash-card h-64" aria-busy />;
+    return <div className="animate-pulse editorial-panel h-64 rounded-[var(--radius-card)]" aria-busy />;
   }
 
   return (
@@ -43,24 +43,24 @@ export function ProgramDashboardView() {
         ))}
       </div>
 
-      <div className="lace-dash-card overflow-hidden">
-        <h2 className="lace-dash-mono border-b border-[rgba(45,212,191,0.12)] px-4 py-3 text-[0.62rem] font-medium uppercase tracking-wider text-[var(--lace-dash-muted)]">
+      <div className="editorial-panel overflow-hidden rounded-[var(--radius-card)]">
+        <h2 className="section-kicker secondary border-b border-[color:var(--border-subtle)] px-4 py-3">
           By training area
         </h2>
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-[rgba(45,212,191,0.08)] text-[var(--lace-dash-muted)]">
-              <th className="lace-dash-mono px-4 py-2 text-[0.62rem] font-medium uppercase tracking-wider">Area</th>
-              <th className="lace-dash-mono px-4 py-2 text-[0.62rem] font-medium uppercase tracking-wider">Enrolled</th>
-              <th className="lace-dash-mono px-4 py-2 text-[0.62rem] font-medium uppercase tracking-wider">Completion</th>
+            <tr className="border-b border-[color:var(--lace-hairline)] text-[color:var(--ink-muted)]">
+              <th className="stat-label px-4 py-2">Area</th>
+              <th className="stat-label px-4 py-2">Enrolled</th>
+              <th className="stat-label px-4 py-2">Completion</th>
             </tr>
           </thead>
           <tbody>
             {data.byArea.map((row) => (
-              <tr key={row.trainingArea} className="border-b border-[rgba(96,165,250,0.06)] last:border-0">
-                <td className="px-4 py-3 font-medium text-[var(--lace-dash-text)]">{row.trainingArea}</td>
-                <td className="px-4 py-3 text-[var(--lace-dash-muted)]">{row.enrolled}</td>
-                <td className="px-4 py-3 text-[var(--lace-dash-teal)]">{row.completionRate}%</td>
+              <tr key={row.trainingArea} className="border-b border-[color:var(--lace-hairline)] last:border-0">
+                <td className="px-4 py-3 font-bold text-[#25221d]">{row.trainingArea}</td>
+                <td className="px-4 py-3 font-medium text-[color:var(--ink-muted)]">{row.enrolled}</td>
+                <td className="px-4 py-3 font-bold text-[#9d7a35]">{row.completionRate}%</td>
               </tr>
             ))}
           </tbody>

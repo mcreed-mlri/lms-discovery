@@ -6,14 +6,10 @@ type DashboardStatProps = {
 
 export function DashboardStat({ label, value, detail }: DashboardStatProps) {
   return (
-    <article className="lace-dash-card p-5">
-      <p className="lace-dash-mono text-[0.65rem] font-medium uppercase tracking-wider text-[var(--lace-dash-muted)]">
-        {label}
-      </p>
-      <p className="mt-2 text-3xl font-semibold tracking-tight text-[var(--lace-dash-text)]">{value}</p>
-      {detail ? (
-        <p className="mt-2 text-sm text-[var(--lace-dash-muted)]">{detail}</p>
-      ) : null}
+    <article className="editorial-panel rounded-[var(--radius-card)] p-5">
+      <p className="stat-label text-[#7d7467]">{label}</p>
+      <p className="mt-2 text-3xl font-bold tracking-tight text-[#171713]">{value}</p>
+      {detail ? <p className="mt-2 text-sm font-medium text-[color:var(--ink-muted)]">{detail}</p> : null}
     </article>
   );
 }

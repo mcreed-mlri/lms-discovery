@@ -15,11 +15,11 @@ Then open `http://localhost:3000`.
 
 ## LACE Hub dashboard (Phase 1 mock)
 
-Unified role-based dashboard at `/dashboard` (alias `/me`). Uses **mock data only** — no Brightspace OAuth or Supabase yet.
+Unified role-based dashboard at **`/my-learning`** (aliases `/dashboard` and `/me` redirect here). Uses the same LACE hub shell and editorial theme as the discovery library. **Mock data only** — no Brightspace OAuth or Supabase yet.
 
-- **Learner** (`/dashboard`): full My Learning UI with course progress cards
-- **Manager** (`/dashboard/team`), **Program** (`/dashboard/program`): Phase 3 scaffolds
-- **Super-admin** (`/dashboard/admin`): integration status scaffold
+- **Learner** (`/my-learning`): full My Learning UI with course progress cards
+- **Manager** (`/my-learning/team`), **Program** (`/my-learning/program`): Phase 3 scaffolds
+- **Super-admin** (`/my-learning/admin`): integration status scaffold
 
 Use the **dev role switcher** (bottom-left on dashboard routes) to preview nav for `learner`, `manager`, `program`, or `super_admin`. Choice persists in `localStorage` key `lace-dev-role`.
 
