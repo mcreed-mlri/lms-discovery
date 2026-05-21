@@ -54,7 +54,45 @@ Courses, modules, users, enrollments, activities, completions, records
 | Tags and practice areas | Learning Hub | MLRI-specific metadata likely belongs outside Brightspace. |
 | Recommendations | Learning Hub | Start simple with curated recommendations before personalization. |
 
+## Role-Aware Dashboard Model
+
+The dashboard should be designed around roles and permissions, not fixed user types. A person may be a learner today, become a supervisor later, or hold more than one role at the same time. For example, a supervisor may have lawyers assigned to them while also being enrolled in learning themselves.
+
+The first role set should account for:
+
+- **Learners**: see their own courses, progress, deadlines, notices, feedback, certificates, and next recommended actions.
+- **Supervisors**: see progress and risk signals for the lawyers or learners assigned to them, while retaining access to their own learning view if they are also enrolled.
+- **Super-admins**: the training unit leadership group with full program insight across enrollment, progress, completion, engagement, course performance, supervisor coverage, alerts, exports, and admin controls.
+- **Program or cohort managers**: optional future role for people managing specific programs, cohorts, offices, practice areas, or reporting slices without needing full super-admin access.
+- **Instructors or content managers**: optional future role for people responsible for course facilitation, content updates, or learning materials.
+- **Report viewers or observers**: optional future role for leadership or stakeholders who need read-only reporting access.
+
+The data model should keep a stable user record and attach role assignments over time instead of overwriting a single user type. A future user-role assignment could include:
+
+```text
+user_id
+role
+scope_type        program, team, cohort, course, practice_area, or global
+scope_id
+start_date
+end_date
+status
+```
+
+This allows a learner to transition into a supervisor without losing learner history, certificates, cohort participation, or audit context. It also allows one person to see multiple dashboard lenses such as **My Learning**, **My Team**, and **Program Admin** when their permissions allow it.
+
+May 21 D2L planning note: Brightspace manager reporting is optional and depends on manager-role setup. A learner cannot have two direct managers, so the hub should not assume many-to-many direct manager relationships unless MLRI owns that logic outside Brightspace.
+
+The dashboard should therefore use:
+
+- A shared shell for navigation, profile, notifications, search, and account controls.
+- Role-aware landing views such as Learner Home, Supervisor Overview, Program Overview, and Super-admin Overview.
+- Shared underlying objects such as users, courses, cohorts, assignments, progress, completions, alerts, and reports.
+- Permission-gated views that use the same data but limit scope and available actions by role assignment.
+
 ## Brightspace Data We May Use
+
+Before relying on reporting automation, MLRI needs a clean User Attributes and Learning Groups plan. Attributes can drive automatic Learning Groups, due dates, enrollment/routing, and reporting, but the current planning constraint is a maximum of 10 User Attributes. Some groups may need to remain manually controlled.
 
 Brightspace developer documentation suggests this companion model is feasible:
 
@@ -111,6 +149,8 @@ Evaluate whether the hub should be embedded inside Brightspace or remain a separ
 | Custom layer becomes too complex | Keep the first version thin: discovery, metadata, and links only. |
 | Brightspace API permissions are limited | Validate API access early with a technical discovery session. |
 | Metadata gets stale | Define one owner and a simple update workflow. |
+| Attributes or groups are defined casually | Freeze the minimum User Attributes and Learning Groups before using them for automation or reports. |
+| Video completion is overstated | Treat page visits/time-on-page as weak signals; use H5P, check-in questions, quizzes, reflections, completion conditions, or a mark-complete step when completion must mean more than visited. |
 | D2L support will not cover custom behavior | Treat the hub as MLRI-owned and keep Brightspace responsibilities clear. |
 | Team capacity is limited | Start with a maintainable MVP before adding personalization. |
 | Users get confused between systems | Use clear language: the hub helps find content; Brightspace delivers it. |
