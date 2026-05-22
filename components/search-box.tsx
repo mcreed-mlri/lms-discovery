@@ -65,7 +65,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
       <label className="sr-only" htmlFor={inputId}>
         Search courses, modules, paths, or topics
       </label>
-      <SearchIcon className={`pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[#71685c] transition group-focus-within:text-[#9d7a35] ${prominent ? "left-5 h-5 w-5" : "left-3.5 h-4 w-4"}`} />
+      <SearchIcon className={`pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[color:var(--ink-soft)] transition group-focus-within:text-[color:var(--brand)] ${prominent ? "left-5 h-5 w-5" : "left-3.5 h-4 w-4"}`} />
       <input
         aria-activedescendant={showSuggestions && suggestions[activeIndex] ? `${listboxId}-${activeIndex}` : undefined}
         aria-autocomplete="list"
@@ -79,10 +79,10 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
         }}
         onFocus={() => setIsOpen(true)}
         onKeyDown={handleKeyDown}
-        className={`w-full border border-[color:var(--border-strong)] bg-[#fffdf7]/94 font-semibold text-[#171713] outline-none transition placeholder:text-[#81786a] hover:border-[color:var(--border-strong)] focus:border-[#b88a2d] focus:bg-[#fffdf7] focus:ring-4 focus:ring-[#b88a2d]/15 ${
+        className={`w-full border border-[color:var(--line)] bg-[color:var(--surface-raised)] font-semibold text-[color:var(--ink)] outline-none transition placeholder:text-[color:var(--ink-soft)] hover:border-[color:var(--line-strong)] focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[#b88a2d]/15 ${
           prominent
-            ? "h-14 rounded-[var(--radius-control)] pl-14 pr-5 text-[1.02rem] shadow-[0_14px_34px_rgba(40,32,20,0.07)]"
-            : `rounded-[var(--radius-control)] pl-10 pr-4 text-base shadow-[0_8px_22px_rgba(40,32,20,0.055)] ${compact ? "h-9 text-sm" : "h-12"}`
+            ? "h-14 rounded-[var(--radius-control)] pl-14 pr-5 text-[1.02rem] shadow-[var(--shadow-sm)]"
+            : `rounded-[var(--radius-control)] pl-10 pr-4 text-base shadow-[var(--shadow-xs)] ${compact ? "h-9 text-sm" : "h-12"}`
         }`}
         id={inputId}
         placeholder="Search the library - ethics, intake, first appearance..."
@@ -91,7 +91,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
       />
       {showSuggestions && (
         <div
-          className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-[color:var(--lace-hairline)] bg-[#fffdf7] text-[#1f1d19] shadow-[0_22px_55px_rgba(65,52,32,0.14)]"
+          className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-[color:var(--line)] bg-[color:var(--surface-raised)] text-[color:var(--ink)] shadow-[var(--shadow-lg)]"
           id={listboxId}
           role="listbox"
         >
@@ -100,7 +100,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
               <button
                 aria-selected={activeIndex === index}
                 className={`grid w-full grid-cols-[1fr_auto] gap-3 px-3 py-2.5 text-left transition ${
-                  activeIndex === index ? "bg-[#f5ead0]" : "bg-[#fffdf7] hover:bg-[#faf4e8]"
+                  activeIndex === index ? "bg-[color:var(--surface-sunken)]" : "bg-[color:var(--surface-raised)] hover:bg-[color:var(--surface)]"
                 }`}
                 id={`${listboxId}-${index}`}
                 key={`${result.item.type}-${result.item.id}`}
@@ -114,17 +114,17 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
                 <span className="min-w-0">
                   <span className="mb-2 flex flex-wrap items-center gap-2">
                     <TypeBadge type={result.item.type} />
-                    <span className="metadata truncate text-[#706a5f]">{result.context}</span>
+                    <span className="metadata truncate text-[color:var(--ink-soft)]">{result.context}</span>
                   </span>
-                  <span className="block truncate text-sm font-bold text-[#1f1d19]">{result.item.title}</span>
+                  <span className="block truncate text-sm font-bold text-[color:var(--ink)]">{result.item.title}</span>
                 </span>
-                <span className="metadata self-center rounded-full bg-[#f3eadb] px-2.5 py-1 text-[#706a5f]">
+                <span className="metadata self-center rounded-full border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-2.5 py-1 text-[color:var(--ink-soft)]">
                   Preview
                 </span>
               </button>
             ))
           ) : (
-            <div className="px-4 py-4 text-sm font-bold text-slate-600" role="option" aria-selected="false">
+            <div className="px-4 py-4 text-sm font-bold text-[color:var(--ink-muted)]" role="option" aria-selected="false">
               No matches. Try evictions, intake, motions, or courtroom procedures.
             </div>
           )}

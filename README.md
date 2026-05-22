@@ -2,6 +2,8 @@
 
 A Next.js App Router MVP for discovering MLRI learning content and navigating into Brightspace.
 
+> **Local folder:** `learning-hub/` · **Workspace map:** [`../README.md`](../README.md)
+
 Brightspace remains the system of record for courses, users, enrollment, and progress. This app only handles local discovery UI, search, browsing, learning paths, and simulated Brightspace handoff links.
 
 ## Run locally
@@ -20,6 +22,15 @@ Unified role-based dashboard at **`/my-learning`** (aliases `/dashboard` and `/m
 - **Learner** (`/my-learning`): full My Learning UI with course progress cards
 - **Manager** (`/my-learning/team`), **Program** (`/my-learning/program`): Phase 3 scaffolds
 - **Super-admin** (`/my-learning/admin`): integration status scaffold
+
+Longer-term, the dashboard should support **multiple role assignments per user over time**, not one permanent user type. A learner may later become a supervisor, and supervisors or super-admins may still have their own learning activity. Keep one stable user record, then attach current and historical roles with scope, such as learner, supervisor/manager, program manager, super-admin, instructor/content manager, or report viewer.
+
+Expected dashboard lenses:
+
+- **My Learning**: personal progress, courses, deadlines, notices, feedback, and certificates.
+- **My Team**: assigned learners, progress, gaps, overdue work, and supervisor actions.
+- **Program Overview**: cohort, practice area, or program-level reporting.
+- **Admin**: cross-program insight, integrations, exports, permissions, and system status.
 
 Use the **dev role switcher** (bottom-left on dashboard routes) to preview nav for `learner`, `manager`, `program`, or `super_admin`. Choice persists in `localStorage` key `lace-dev-role`.
 

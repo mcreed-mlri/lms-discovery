@@ -2,37 +2,91 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================================
+   LACE Learning Hub — design tokens
+   ----------------------------------------------------------------------------
+   A restrained, durable system. Clean ivory/stone surfaces stay calm over long
+   sessions; colour is reserved as a *signal*:
+     · topic colours  — orientation / navigation (which course family am I in?)
+     · status colours — lifecycle / progress  (what state is this content in?)
+   The same token names + values are mirrored in the Brightspace course
+   wrapper (course-style.css) so hub → course feels like one product.
+   ========================================================================= */
 :root {
   color-scheme: light;
   --font-sans: var(--font-lato, "Lato"), "Lato", "Geist", "Inter", "Aptos", "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-lato, "Lato"), "Lato", "Geist", "Inter", "Aptos", "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", "SFMono-Regular", "Cascadia Mono", Consolas, ui-monospace, monospace;
-  --bg-main: #f5efe4;
-  --bg-surface: #fffaf0;
-  --bg-surface-soft: #f8f2e8;
-  --ink: #171713;
-  --ink-muted: #5f5a4f;
-  --ink-soft: #8a8173;
-  --border-subtle: rgba(23, 23, 19, 0.12);
-  --border-strong: rgba(23, 23, 19, 0.18);
-  --accent-gold: #b9892f;
-  --accent-sage: #5f8a78;
-  --accent-rust: #a45f49;
-  --shadow-soft: 0 8px 24px rgba(40, 32, 20, 0.06);
+
+  /* ── Neutral base — clean ivory/stone canvas; warmth lives in accents,
+        not in full-page parchment wash. Mirrors course-style.css. ───────── */
+  --paper: #f7f6f3;            /* warm stone — page canvas, not parchment */
+  --paper-deep: #f0efec;        /* subtle section foot — use sparingly */
+  --surface: #fefefe;           /* bright off-white — default card */
+  --surface-raised: #ffffff;    /* clean white — modals, inputs, raised chips */
+  --surface-sunken: #eceae6;    /* neutral sunken — tracks, segmented controls */
+  --hover-tint: #f2f1ed;       /* whisper hover — warm, not tan */
+  --ink: #211f1b;              /* charcoal — primary text */
+  --ink-muted: #504a44;        /* muted — body copy, descriptions */
+  --ink-soft: #6e6860;         /* soft — metadata, captions, eyebrows */
+  --line: rgba(32, 30, 28, 0.10);        /* neutral stone hairline */
+  --line-strong: rgba(32, 30, 28, 0.16);
+  --shadow-xs: 0 1px 2px rgba(28, 26, 24, 0.04);
+  --shadow-card: 0 1px 2px rgba(28, 26, 24, 0.04), 0 2px 8px rgba(28, 26, 24, 0.05);
+  --shadow-sm: 0 1px 3px rgba(28, 26, 24, 0.05), 0 4px 14px rgba(28, 26, 24, 0.07);
+  --shadow-md: 0 12px 32px rgba(28, 26, 24, 0.09), 0 22px 48px rgba(28, 26, 24, 0.08);
+  --shadow-lg: 0 20px 48px rgba(28, 26, 24, 0.11);
+
+  /* ── Brand — the LACE editorial gold. Used sparingly, never as wallpaper ─ */
+  --brand: #9a7a34;
+  --brand-ink: #806014;        /* gold dark enough for text on light */
+
+  /* ── Topic families — one accent per course family ────────────────────── */
+  /* line = borders / dots / icons · soft = pale tint · ink = text on tint   */
+  --topic-court: #b07458;          --topic-court-soft: #f0e5de;        --topic-court-ink: #8a4d31;
+  --topic-client: #5d8a6e;         --topic-client-soft: #e5ede6;       --topic-client-ink: #3d6048;
+  --topic-ethics: #5e7793;         --topic-ethics-soft: #e6e9f0;       --topic-ethics-ink: #41536d;
+  --topic-research: #4e827b;       --topic-research-soft: #e2ebe9;     --topic-research-ink: #345e58;
+  --topic-drafting: #9c7e3d;       --topic-drafting-soft: #efe8d3;     --topic-drafting-ink: #6f5418;
+  --topic-trauma: #a06f87;         --topic-trauma-soft: #eee2e8;       --topic-trauma-ink: #794a60;
+  --topic-foundations: #9a8a66;    --topic-foundations-soft: #ebe5d8;  --topic-foundations-ink: #6a5b3c;
+  --topic-neutral: #8c8579;        --topic-neutral-soft: #eeedea;      --topic-neutral-ink: #5d574d;
+
+  /* ── Status — lifecycle / progress signal. Kept distinct from topics ──── */
+  --status-progress: #4d7c57;      --status-progress-soft: #e4efe5;    --status-progress-ink: #305a3c;
+  --status-next: #506f9c;          --status-next-soft: #e7ebf3;        --status-next-ink: #3a5279;
+  --status-done: #5a6b60;          --status-done-soft: #e7eae6;        --status-done-ink: #3e4c43;
+  --status-new: #bf8f33;           --status-new-soft: #f6ecca;         --status-new-ink: #876219;
+  --status-updated: #5078a6;       --status-updated-soft: #e6edf3;     --status-updated-ink: #3b5d84;
+  --status-changed: #b0533a;       --status-changed-soft: #f3e1da;     --status-changed-ink: #893e28;
+  --status-later: #8a8278;         --status-later-soft: #eeedea;       --status-later-ink: #5e584f;
+
   --radius-card: 14px;
-  --radius-control: 12px;
-  --lace-ivory: #f6f1e7;
-  --lace-paper: #fffcf4;
-  --lace-panel: rgba(255, 252, 244, 0.86);
-  --lace-ink: #1f1d19;
-  --lace-muted: #706a5f;
-  --lace-muted-strong: #5f584d;
-  --lace-hairline: rgba(69, 58, 41, 0.16);
-  --lace-hairline-strong: rgba(69, 58, 41, 0.24);
-  --lace-gold: #b88a2d;
-  --lace-sage: #6f927b;
-  --lace-rust: #b76545;
-  --lace-shadow: 0 20px 55px rgba(65, 52, 32, 0.09);
+  --radius-control: 10px;
+
+  /* ── Legacy aliases — kept so existing utility classes keep resolving ─── */
+  --bg-main: var(--paper);
+  --bg-surface: var(--surface);
+  --bg-surface-soft: #fcfbf9;
+  --border-subtle: var(--line);
+  --border-strong: var(--line-strong);
+  --accent-gold: var(--brand);
+  --accent-sage: var(--status-progress);
+  --accent-rust: var(--status-changed);
+  --shadow-soft: var(--shadow-sm);
+  --shadow-featured: var(--shadow-md);
+  --lace-ivory: var(--paper);
+  --lace-paper: var(--surface);
+  --lace-panel: var(--surface);
+  --lace-ink: var(--ink);
+  --lace-muted: var(--ink-soft);
+  --lace-muted-strong: var(--ink-muted);
+  --lace-hairline: var(--line);
+  --lace-hairline-strong: var(--line-strong);
+  --lace-gold: var(--brand);
+  --lace-sage: var(--status-progress);
+  --lace-rust: var(--status-changed);
+  --lace-shadow: var(--shadow-md);
 }
 
 * {
@@ -50,11 +104,10 @@ body {
   font-weight: 400;
   font-size: 15px;
   line-height: 1.5;
-  background:
-    radial-gradient(circle at 82% -5%, rgba(184, 138, 45, 0.08), transparent 28rem),
-    radial-gradient(circle at 10% 22%, rgba(95, 138, 120, 0.07), transparent 26rem),
-    linear-gradient(180deg, var(--bg-main) 0%, #fbf7ef 48%, #f4ede1 100%);
-  color: var(--lace-ink);
+  /* A flat, calm stone field — no coloured radials, no gold wallpaper,
+     no gradient. Stable and durable over long sessions. */
+  background: var(--paper);
+  color: var(--ink);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -72,17 +125,17 @@ a {
   z-index: 100;
   transform: translateY(-150%);
   border-radius: 0.75rem;
-  background: #ffffff;
+  background: var(--surface-raised);
   padding: 0.75rem 1rem;
-  color: #082d57;
+  color: var(--ink);
   font-weight: 900;
-  box-shadow: 0 18px 44px rgba(8, 45, 87, 0.18);
+  box-shadow: var(--shadow-lg);
   transition: transform 160ms ease;
 }
 
 .skip-link:focus {
   transform: translateY(0);
-  outline: 3px solid rgba(42, 155, 214, 0.45);
+  outline: 3px solid var(--brand);
   outline-offset: 3px;
 }
 
@@ -92,25 +145,24 @@ input {
 }
 
 input::placeholder {
-  color: #8a8173;
+  color: var(--ink-soft);
   opacity: 1;
 }
 
 ::selection {
-  background: rgba(184, 138, 45, 0.24);
+  background: rgba(154, 122, 52, 0.22);
 }
 
 .hub-shell {
+  /* A faint structural grid — neutral, not decorative. */
   background-image:
-    linear-gradient(rgba(69, 58, 41, 0.014) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(69, 58, 41, 0.012) 1px, transparent 1px);
+    linear-gradient(rgba(32, 30, 28, 0.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(32, 30, 28, 0.012) 1px, transparent 1px);
   background-size: 56px 56px;
 }
 
 .dashboard-command {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 251, 254, 0.96)),
-    linear-gradient(90deg, rgba(8, 45, 87, 0.06), transparent 36%);
+  background: var(--surface);
 }
 
 .sticky-filter {
@@ -119,25 +171,66 @@ input::placeholder {
   z-index: 35;
 }
 
+/* ── Surfaces ───────────────────────────────────────────────────────────── */
 .editorial-panel {
-  border: 1px solid var(--border-subtle);
-  background: var(--lace-panel);
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(18px);
+  border: 1px solid var(--line);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
 }
 
+/* The default card: a clean, flat white surface with a subtle hairline.
+   Topic colour is layered on top as a thin accent, never as a fill. */
 .editorial-card {
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--line);
   border-radius: var(--radius-card);
-  background:
-    linear-gradient(180deg, rgba(255, 252, 244, 0.94), rgba(250, 245, 235, 0.78)),
-    var(--lace-paper);
-  box-shadow: var(--shadow-soft);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-card);
 }
 
+/* Featured surfaces — Continue card, lead update, popular topics panel. */
+.surface-featured {
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-card);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-featured);
+}
+
+.hero-continue {
+  border: 1px solid var(--line-strong);
+  border-left: 3px solid var(--brand);
+  box-shadow: var(--shadow-featured);
+}
+
+/* Shared nav active state — warm tint without a full beige block. */
+.nav-link-active {
+  background: color-mix(in srgb, var(--brand) 14%, var(--surface-raised));
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+/* Catalog / control active states — clear but not heavy. */
+.control-active {
+  background: var(--ink);
+  color: var(--surface-raised);
+  box-shadow: var(--shadow-xs), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.control-toggle-active {
+  background: var(--surface-raised);
+  color: var(--ink);
+  box-shadow: var(--shadow-xs);
+  border: 1px solid var(--line);
+}
+
+.chip-label {
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+/* ── Text atoms ─────────────────────────────────────────────────────────── */
 .editorial-eyebrow {
   font-family: var(--font-mono);
-  color: var(--accent-gold);
+  color: var(--ink-soft);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -148,12 +241,13 @@ input::placeholder {
   color: var(--ink-soft);
 }
 
-.section-kicker.primary {
-  color: var(--accent-gold);
+.section-kicker.secondary {
+  color: var(--ink-soft);
 }
 
-.section-kicker.secondary {
-  color: #81786a;
+.section-kicker.primary {
+  color: var(--brand-ink);
+  font-weight: 700;
 }
 
 .hero-title,
@@ -189,23 +283,29 @@ input::placeholder {
 }
 
 .card-title {
-  color: #25221d;
+  color: var(--ink);
   font-weight: 700;
-  letter-spacing: -0.005em;
+  letter-spacing: -0.012em;
   line-height: 1.2;
 }
 
 .card-description {
   font-family: "Segoe UI Variable", "Segoe UI", Aptos, ui-sans-serif, system-ui, sans-serif;
-  color: #463f36;
+  color: var(--ink-muted);
   font-size: 0.95rem;
   font-weight: 400;
-  line-height: 1.62;
+  line-height: 1.58;
+}
+
+.card-meta {
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 .readable-copy {
   font-family: "Segoe UI Variable", "Segoe UI", Aptos, ui-sans-serif, system-ui, sans-serif;
-  color: #463f36;
+  color: var(--ink-muted);
   font-weight: 400;
 }
 
@@ -253,3 +353,13 @@ body {
   -webkit-tap-highlight-color: transparent; /* Smooth native tapping */
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

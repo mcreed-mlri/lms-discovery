@@ -1,7 +1,7 @@
 import { ArrowIcon } from "@/components/icons";
 import { TypeBadge } from "@/components/type-badge";
-import { getCourseId, getCourseLabel, getCourseTheme } from "@/lib/course-theme";
-import { courses, type LearningItem } from "@/lib/data";
+import { getCourseId, getCourseLabel, getCourseTheme, getStatusTheme, resolveStatusKey } from "@/lib/course-theme";
+import { courses, getModuleMinutes, type LearningItem } from "@/lib/data";
 import type { MouseEvent } from "react";
 
 const comingSoonHref = "#content-coming-soon";
@@ -13,7 +13,7 @@ function preventPlaceholderNavigation(event: MouseEvent<HTMLAnchorElement>) {
 
 function ComingSoonTooltip() {
   return (
-    <span className="pointer-events-none absolute right-3 top-3 z-10 rounded-md border border-[color:var(--lace-hairline)] bg-[#fffdf7] px-2.5 py-1 text-xs font-semibold text-[#706a5f] opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
+    <span className="pointer-events-none absolute right-3 top-3 z-10 rounded-md border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-2.5 py-1 text-xs font-semibold text-[color:var(--ink-soft)] opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
       {comingSoonLabel}
     </span>
   );
@@ -21,19 +21,30 @@ function ComingSoonTooltip() {
 
 function getMeta(item: LearningItem) {
   if (item.type === "PATH") return `${item.courseIds.length} courses - ${item.totalDuration}`;
-  if (item.type === "MODULE") return item.practiceArea;
+  if (item.type === "MODULE") return `${getModuleMinutes(item.id)} min`;
   return `${item.practiceArea} - ${item.duration}`;
 }
 
+// Lifecycle badge — a status signal, kept visually separate from topic colour.
+// The text label carries the meaning; colour only reinforces it.
 function ContentStatusChip({ status }: { status: "New" | "Updated" }) {
-  const styles =
-    status === "New"
-      ? "border-amber-200 bg-amber-50 text-amber-700"
-      : "border-sky-200 bg-sky-50 text-sky-700";
+  const theme = getStatusTheme(resolveStatusKey(status));
 
   return (
-    <span className={`metadata inline-flex items-center rounded-md border px-2 py-1 leading-none ${styles}`}>
+    <span className={`metadata inline-flex items-center gap-1.5 rounded-md border px-2 py-1 leading-none ${theme.pill}`}>
+      <span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} aria-hidden="true" />
       {status}
+    </span>
+  );
+}
+
+// A subtle "Details" affordance — neutral so it never competes for attention.
+function DetailsAffordance({ className = "" }: { className?: string }) {
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] text-xs font-semibold text-[color:var(--ink-muted)] shadow-[var(--shadow-xs)] transition duration-200 ease-out group-hover:border-[color:var(--line-strong)] group-hover:text-[color:var(--ink)] ${className}`}
+    >
+      Details <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
     </span>
   );
 }
@@ -54,10 +65,10 @@ export function ContentCard({ item, onOpen }: { item: LearningItem; onOpen?: (it
       onClick={(event) => (onOpen ? handleOpen(event, item, onOpen) : preventPlaceholderNavigation(event))}
       title={comingSoonLabel}
       aria-label={`${item.title}. Open detail view.`}
-      className={`editorial-card group relative flex h-full cursor-pointer flex-col overflow-hidden transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 hover:-translate-y-0.5 hover:shadow-[0_16px_38px_rgba(40,32,20,0.10)] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 ${
+      className={`editorial-card group relative flex h-full cursor-pointer flex-col overflow-hidden transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
         isModule ? "min-h-36 p-4 pt-4 before:h-0.5" : "min-h-48 p-5 pt-5 before:h-0.5"
       } ${
-        courseTheme ? `${courseTheme.hoverBorder} ${courseTheme.rail}` : "before:bg-slate-200"
+        courseTheme ? `${courseTheme.hoverBorder} ${courseTheme.rail}` : "before:bg-[color:var(--line-strong)]"
       }`}
     >
       <ComingSoonTooltip />
@@ -65,19 +76,17 @@ export function ContentCard({ item, onOpen }: { item: LearningItem; onOpen?: (it
         <TypeBadge type={item.type} />
         {isModule && item.contentStatus && <ContentStatusChip status={item.contentStatus} />}
       </div>
-      <h3 className={`card-title ${isModule ? "text-[1.02rem]" : "text-[1.08rem]"} leading-snug`}>{item.title}</h3>
+      <h3 className={`card-title ${isModule ? "text-[1.04rem]" : "text-[1.1rem]"} leading-snug`}>{item.title}</h3>
       {isModule && (
         <p className={`mt-2 inline-flex w-fit items-center gap-1.5 rounded-md border px-2 py-1 text-xs font-semibold leading-5 ${courseTheme?.chip}`}>
-          <span className={`h-1.5 w-1.5 rounded-full ${courseTheme?.dot}`} />
+          <span className={`h-1.5 w-1.5 rounded-full ${courseTheme?.dot}`} aria-hidden="true" />
           {item.parentCourseTitle}
         </p>
       )}
-      {!isModule && <p className="card-description mt-2.5 line-clamp-3">{item.description}</p>}
+      <p className={`card-description mt-2.5 ${isModule ? "line-clamp-2 text-[0.88rem] leading-relaxed" : "line-clamp-3"}`}>{item.description}</p>
       <div className={`${isModule ? "pt-4" : "pt-5"} mt-auto flex items-end justify-between gap-3`}>
-        <span className="text-sm font-medium text-[color:var(--lace-muted-strong)]">{isModule ? item.practiceArea : getMeta(item)}</span>
-        <span className={`inline-flex h-8 items-center gap-1.5 rounded-full border border-[color:var(--lace-hairline)] bg-[#fffdf7] text-xs font-semibold text-[#62594b] shadow-sm transition duration-200 ease-out group-hover:border-[#b88a2d]/45 group-hover:text-[#1f1d19] ${isCourse ? "px-3" : "px-2.5"}`}>
-          Details <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-        </span>
+        <span className="text-sm font-semibold text-[color:var(--ink-soft)]">{getMeta(item)}</span>
+        <DetailsAffordance className={`h-8 ${isCourse ? "px-3" : "px-2.5"}`} />
       </div>
     </a>
   );
@@ -93,8 +102,8 @@ export function ContentListRow({ item, onOpen }: { item: LearningItem; onOpen?: 
       onClick={(event) => (onOpen ? handleOpen(event, item, onOpen) : preventPlaceholderNavigation(event))}
       title={comingSoonLabel}
       aria-label={`${item.title}. ${comingSoonLabel}.`}
-      className={`editorial-card group relative grid cursor-pointer gap-4 overflow-hidden p-5 pl-5 transition duration-200 ease-out before:absolute before:inset-y-0 before:left-0 before:w-0.5 hover:-translate-y-0.5 hover:shadow-[0_16px_38px_rgba(40,32,20,0.10)] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 md:grid-cols-[minmax(0,1fr)_auto] md:items-center ${
-        courseTheme ? `${courseTheme.hoverBorder} ${courseTheme.rail}` : "before:bg-slate-200"
+      className={`editorial-card group relative grid cursor-pointer gap-4 overflow-hidden p-5 pl-5 transition duration-200 ease-out before:absolute before:inset-y-0 before:left-0 before:w-0.5 hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 md:grid-cols-[minmax(0,1fr)_auto] md:items-center ${
+        courseTheme ? `${courseTheme.hoverBorder} ${courseTheme.rail}` : "before:bg-[color:var(--line-strong)]"
       }`}
     >
       <ComingSoonTooltip />
@@ -102,20 +111,18 @@ export function ContentListRow({ item, onOpen }: { item: LearningItem; onOpen?: 
         <div className="mb-2.5 flex flex-wrap items-center gap-2">
           <TypeBadge type={item.type} />
           {isModule && item.contentStatus && <ContentStatusChip status={item.contentStatus} />}
-          <span className="text-sm font-medium text-[color:var(--lace-muted-strong)]">{getMeta(item)}</span>
+          <span className="text-sm font-semibold text-[color:var(--ink-soft)]">{getMeta(item)}</span>
         </div>
         <h3 className="card-title text-lg leading-snug">{item.title}</h3>
         {isModule && (
           <p className={`mt-2 inline-flex w-fit items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-semibold leading-5 ${courseTheme?.chip}`}>
-            <span className={`h-1.5 w-1.5 rounded-full ${courseTheme?.dot}`} />
+            <span className={`h-1.5 w-1.5 rounded-full ${courseTheme?.dot}`} aria-hidden="true" />
             {item.parentCourseTitle}
           </p>
         )}
         {!isModule && <p className="card-description mt-2 max-w-4xl">{item.description}</p>}
       </div>
-      <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-[color:var(--lace-hairline)] bg-[#fffdf7] px-3 py-1.5 text-xs font-semibold text-[#62594b] shadow-sm transition duration-200 ease-out group-hover:border-[#b88a2d]/45 group-hover:text-[#1f1d19]">
-        Details <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-      </span>
+      <DetailsAffordance className="w-fit px-3 py-1.5" />
     </a>
   );
 }
@@ -130,11 +137,11 @@ export function PathCard({ item, onOpen }: { item: Extract<LearningItem, { type:
       onClick={(event) => (onOpen ? handleOpen(event, item, onOpen) : preventPlaceholderNavigation(event))}
       title={comingSoonLabel}
       aria-label={`${item.title}. ${comingSoonLabel}.`}
-      className={`editorial-card group relative block cursor-pointer overflow-hidden p-5 transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 before:h-0.5 hover:-translate-y-0.5 hover:shadow-[0_16px_38px_rgba(40,32,20,0.10)] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 ${
-        pathTheme ? `${pathTheme.hoverBorder} ${pathTheme.rail}` : "before:bg-slate-200"
+      className={`editorial-card group relative block cursor-pointer overflow-hidden p-5 transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 before:h-0.5 hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
+        pathTheme ? `${pathTheme.hoverBorder} ${pathTheme.rail}` : "before:bg-[color:var(--line-strong)]"
       }`}
     >
-      <span className="pointer-events-none absolute right-3 top-3 z-10 rounded-md border border-[color:var(--lace-hairline)] bg-[#fffdf7] px-2.5 py-1 text-xs font-semibold text-[#706a5f] opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
+      <span className="pointer-events-none absolute right-3 top-3 z-10 rounded-md border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-2.5 py-1 text-xs font-semibold text-[color:var(--ink-soft)] opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
         {comingSoonLabel}
       </span>
       <div className="flex items-start">
@@ -145,18 +152,16 @@ export function PathCard({ item, onOpen }: { item: Extract<LearningItem, { type:
       <div className="mt-5 flex flex-wrap gap-1.5">
         {relatedCourses.slice(0, 3).map((course) => (
           <span key={course.id} className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${getCourseTheme(course.id).chip}`}>
-            <span className={`h-1.5 w-1.5 rounded-full ${getCourseTheme(course.id).dot}`} />
+            <span className={`h-1.5 w-1.5 rounded-full ${getCourseTheme(course.id).dot}`} aria-hidden="true" />
             {getCourseLabel(course)}
           </span>
         ))}
       </div>
-      <div className="mt-6 flex items-center justify-between border-t border-[color:var(--lace-hairline)] pt-4">
-        <span className="text-sm font-medium text-[color:var(--lace-muted-strong)]">
+      <div className="mt-6 flex items-center justify-between border-t border-[color:var(--line)] pt-4">
+        <span className="text-sm font-medium text-[color:var(--ink-muted)]">
           {item.courseIds.length} courses - {item.totalDuration}
         </span>
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--lace-hairline)] bg-[#fffdf7] px-3 py-1.5 text-xs font-semibold text-[#62594b] shadow-sm transition duration-200 ease-out group-hover:border-[#b88a2d]/45 group-hover:text-[#1f1d19]">
-          Details <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-        </span>
+        <DetailsAffordance className="px-3 py-1.5" />
       </div>
     </a>
   );

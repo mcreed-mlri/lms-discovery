@@ -159,3 +159,81 @@ export function PlayIcon({ className }: IconProps) {
     </svg>
   );
 }
+
+export function FlameIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} className={className} aria-hidden="true">
+      <path d="M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4-.5 2 .5 3 2 3 1-3-1-5 1-9" />
+    </svg>
+  );
+}
+
+export function ClockIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} className={className} aria-hidden="true">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3 2" />
+    </svg>
+  );
+}
+
+export function BookmarkIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} className={className} aria-hidden="true">
+      <path d="M6 4h12v17l-6-4-6 4z" />
+    </svg>
+  );
+}
+
+export function BookmarkFilledIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} className={className} fill="currentColor" aria-hidden="true">
+      <path d="M6 4h12v17l-6-4-6 4z" />
+    </svg>
+  );
+}
+
+export function AlertIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} className={className} aria-hidden="true">
+      <path d="m12 3 10 18H2z" />
+      <path d="M12 10v4" />
+      <path d="M12 17h.01" />
+    </svg>
+  );
+}
+
+export function BellIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} className={className} aria-hidden="true">
+      <path d="M6 9a6 6 0 1 1 12 0c0 6 3 7 3 7H3s3-1 3-7" />
+      <path d="M10 20a2 2 0 0 0 4 0" />
+    </svg>
+  );
+}
+
+export function CommandIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} className={className} aria-hidden="true">
+      <path d="M9 6a2 2 0 1 0-2 2h2zm0 0v10m0 0a2 2 0 1 0 2-2H9zm0 0h6m0 0V6m0 0a2 2 0 1 1 2 2h-2zm0 10a2 2 0 1 1-2-2h2z" />
+    </svg>
+  );
+}
+
+export function CheckIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} className={className} aria-hidden="true">
+      <path d="m5 12 4 4L19 6" />
+    </svg>
+  );
+}
+
+export function CertificateIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} className={className} aria-hidden="true">
+      <path d="M6 4h12v12H6z" />
+      <path d="m8 17 4 3 4-3" />
+      <circle cx="12" cy="10" r="2.5" />
+    </svg>
+  );
+}

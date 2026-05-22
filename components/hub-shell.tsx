@@ -25,8 +25,8 @@ const roleNavItems: RoleNavItem[] = [
 function navLinkClass(active: boolean) {
   return `group relative flex h-11 items-center gap-3 rounded-lg px-3 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 ${
     active
-      ? "bg-[#e5d7c2] text-[#171713] shadow-[inset_0_0_0_1px_rgba(23,23,19,0.08)]"
-      : "text-[#5f5a4f] hover:bg-[#fffaf0] hover:text-[#171713]"
+      ? "nav-link-active"
+      : "text-[color:var(--ink-muted)] hover:bg-[color:var(--surface)] hover:text-[color:var(--ink)]"
   }`;
 }
 
@@ -169,7 +169,7 @@ export function HubShell({
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">{children}</div>
       </main>
 
-      <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-[color:var(--lace-hairline)] bg-[#f8f2e8]/95 px-5 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-[0_-14px_32px_rgba(65,52,32,0.10)] backdrop-blur md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-[color:var(--lace-hairline)] bg-[color:var(--bg-surface-soft)]/95 px-5 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-[var(--shadow-md)] backdrop-blur md:hidden">
         <div className="mx-auto grid max-w-md grid-cols-4">
           <Link
             href="/"

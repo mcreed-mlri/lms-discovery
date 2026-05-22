@@ -21,7 +21,7 @@ export function RoleSwitcher() {
         id="lace-dev-role"
         value={role}
         onChange={(e) => setRole(e.target.value as LaceRole)}
-        className="h-10 w-full rounded-[var(--radius-control)] border border-[color:var(--border-subtle)] bg-[#fffdf7] px-3 text-sm font-bold text-[#5f5a4f] outline-none focus:border-[#b88a2d] focus:ring-4 focus:ring-[#b88a2d]/15"
+        className="h-10 w-full rounded-[var(--radius-control)] border border-[color:var(--border-subtle)] bg-[color:var(--surface-raised)] px-3 text-sm font-bold text-[color:var(--ink-muted)] outline-none focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[#b88a2d]/15"
       >
         {ROLES.map((r) => (
           <option key={r} value={r}>

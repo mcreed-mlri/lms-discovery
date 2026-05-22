@@ -7,13 +7,16 @@ const icons = {
   PATH: PathIcon,
 };
 
+// Format label (Path / Course / Module). Deliberately neutral — it describes
+// the *shape* of the content, not its topic or status, so it never competes
+// with the topic and status colours on the same card.
 export function TypeBadge({ type }: { type: LearningItem["type"] }) {
   const Icon = icons[type];
   const label = type === "PATH" ? "Path" : type === "COURSE" ? "Course" : "Module";
 
   return (
-    <span className="metadata inline-flex w-fit items-center gap-1.5 rounded-md border border-[color:var(--lace-hairline)] bg-[#fbf6ea] px-2.5 py-1 leading-none text-[#6f6658]">
-      <Icon className="h-3 w-3 text-[#9d7a35]" />
+    <span className="metadata inline-flex w-fit items-center gap-1.5 rounded-md border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-2.5 py-1 leading-none text-[color:var(--ink-soft)]">
+      <Icon className="h-3 w-3 text-[color:var(--ink-soft)]" />
       {label}
     </span>
   );

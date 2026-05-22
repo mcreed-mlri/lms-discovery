@@ -35,7 +35,7 @@ export default function LoginPage() {
             <p className="mt-2 text-sm font-medium text-[color:var(--ink-muted)]">Continue into the curated legal learning library.</p>
           </div>
 
-          <div className="rounded-[var(--radius-control)] border border-[color:var(--border-subtle)] bg-[#fffdf7] p-4 shadow-[0_8px_24px_rgba(40,32,20,0.04)]">
+          <div className="rounded-[var(--radius-control)] border border-[color:var(--border-subtle)] bg-[color:var(--surface-raised)] p-4 shadow-[var(--shadow-sm)]">
             <div className="flex items-center gap-4">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#171713] text-lg font-bold text-[#fffaf0]">
                 {demoUser.initials}

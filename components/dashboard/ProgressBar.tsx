@@ -14,7 +14,7 @@ export function ProgressBar({ value, label, className = "" }: ProgressBarProps) 
         <span className="stat-label text-[#9d7a35]">{clamped}%</span>
       </div>
       <div
-        className="h-2 overflow-hidden rounded-full bg-[#e6dccb] shadow-[inset_0_1px_2px_rgba(40,32,20,0.08)]"
+        className="h-2 overflow-hidden rounded-full bg-[color:var(--surface-sunken)] shadow-[inset_0_1px_2px_rgba(28,26,24,0.06)]"
         role="progressbar"
         aria-label={label}
         aria-valuemin={0}

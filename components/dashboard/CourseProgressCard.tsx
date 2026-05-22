@@ -4,7 +4,7 @@ import type { LearnerCourse } from "@/types/dashboard";
 import { ProgressBar } from "./ProgressBar";
 
 const statusStyles: Record<LearnerCourse["status"], string> = {
-  not_started: "border-[color:var(--lace-hairline)] bg-[#fffdf7] text-[#706a5f]",
+  not_started: "border-[color:var(--lace-hairline)] bg-[color:var(--surface-raised)] text-[color:var(--ink-soft)]",
   in_progress: "border-[#d4b87a] bg-[#f5edd8] text-[#7a5f1f]",
   completed: "border-[#a8c4b0] bg-[#e8f0ea] text-[#3d5c47]",
 };
@@ -16,7 +16,7 @@ export function CourseProgressCard({ course }: { course: LearnerCourse }) {
         <div className="min-w-0 flex-1">
           <h3 className="card-title text-lg">{course.title}</h3>
           {course.trainingArea ? (
-            <span className="metadata mt-2 inline-block rounded-full border border-[color:var(--lace-hairline)] bg-[#fffdf7] px-2.5 py-0.5 text-[#706a5f]">
+            <span className="metadata mt-2 inline-block rounded-full border border-[color:var(--lace-hairline)] bg-[color:var(--surface-raised)] px-2.5 py-0.5 text-[color:var(--ink-soft)]">
               {course.trainingArea}
             </span>
           ) : null}

@@ -18,16 +18,35 @@ export interface LearnerCourse {
   dueDate?: string;
 }
 
+export interface LearnerCertificate {
+  id: string;
+  title: string;
+  earnedOn: string;
+  credits: string;
+}
+
 export interface LearnerDashboardPayload {
   user: DashboardUser;
   summary: {
     enrolledCount: number;
     inProgressCount: number;
     completedCount: number;
+    /** Optional consistency + CLE signals — surfaced as KPI tiles. */
+    streakDays?: number;
+    longestStreakNote?: string;
+    cleEarned?: number;
+    cleRequired?: number;
+    cleDueLabel?: string;
+    weeklyHoursAvg?: number;
   };
   courses: LearnerCourse[];
   recentActivity?: { label: string; at: string }[];
   notices?: { id: string; title: string; body: string; severity: "info" | "warning" }[];
+  /** 84 cells (12 weeks x 7 days), intensity 0-4, for the streak heatmap. */
+  activityHeatmap?: number[];
+  /** Recent weekly learning volume, for the trend sparkline. */
+  weeklySparkline?: number[];
+  certificates?: LearnerCertificate[];
 }
 
 export interface ManagerTeamMember {

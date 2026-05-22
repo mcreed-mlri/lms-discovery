@@ -39,6 +39,12 @@ export const learnerDashboardMock: LearnerDashboardPayload = {
     enrolledCount: 6,
     inProgressCount: 3,
     completedCount: 2,
+    streakDays: 12,
+    longestStreakNote: "Longest streak in the Housing area",
+    cleEarned: 8.5,
+    cleRequired: 12,
+    cleDueLabel: "Due Jun 30",
+    weeklyHoursAvg: 4.2,
   },
   courses: [
     {
@@ -102,6 +108,8 @@ export const learnerDashboardMock: LearnerDashboardPayload = {
   recentActivity: [
     { label: "Completed module: Reasonable Accommodation Requests", at: daysAgo(1) },
     { label: "Started Self Check: UPL scenarios", at: daysAgo(4) },
+    { label: "Bookmarked: Working with court interpreters", at: daysAgo(4) },
+    { label: "Earned 2.0 CLE: UPL Boundaries for Advocates", at: daysAgo(5) },
   ],
   notices: [
     {
@@ -110,6 +118,18 @@ export const learnerDashboardMock: LearnerDashboardPayload = {
       body: "All advocates must complete UPL Boundaries recertification by June 30. Your prior completion counts toward partial credit.",
       severity: "info",
     },
+  ],
+  // 84 cells = 12 weeks x 7 days, intensity 0-4. Demo data; production reads
+  // this from Brightspace engagement snapshots.
+  activityHeatmap: [
+    0, 2, 1, 0, 3, 1, 2, 0, 1, 2, 3, 0, 1, 4, 2, 3, 1, 0, 2, 3, 1, 2, 0, 3, 1, 2, 3, 1,
+    4, 2, 1, 2, 3, 1, 2, 0, 1, 3, 2, 1, 2, 3, 4, 2, 3, 1, 0, 2, 1, 3, 2, 4, 1, 2, 3, 2,
+    1, 3, 2, 4, 1, 2, 3, 4, 2, 3, 2, 1, 2, 3, 2, 4, 1, 3, 2, 4, 3, 2, 1, 3, 2, 3, 4, 2,
+  ],
+  weeklySparkline: [2, 4, 3, 6, 4, 7, 5, 8],
+  certificates: [
+    { id: "cert-upl", title: "UPL Boundaries for Advocates", earnedOn: "May 20, 2026", credits: "2.0 CLE" },
+    { id: "cert-dv", title: "Domestic Violence Safety Planning", earnedOn: "May 9, 2026", credits: "3.0 CLE" },
   ],
 };
 

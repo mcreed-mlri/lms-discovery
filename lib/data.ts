@@ -316,6 +316,165 @@ export const continueLearning: ContinueLearningItem[] = [
 
 export const popularTopics = ["Interactive Elements", "Brightspace Wrappers", "Ethics & Confidentiality", "Client Interviews", "Courtroom Etiquette", "Trauma-Informed Practice"];
 
+// Quick searches surfaced under the command bar — the things a busy advocate
+// reaches for most. Short, scannable, thumb-friendly on mobile.
+export const quickSearches = [
+  "first appearance",
+  "client intake",
+  "confidentiality",
+  "trauma-informed",
+  "courtroom etiquette",
+  "safety screening",
+];
+
+// ── Microlearning metadata ────────────────────────────────────────────────
+// Estimated minutes + the legal skill each module practices. Keyed by module
+// id so the catalog above stays declarative and easy to scan.
+const moduleMeta: Record<string, { minutes: number; skillId: SkillId }> = {
+  "wrapper-static-layouts": { minutes: 9, skillId: "research" },
+  "wrapper-self-checks": { minutes: 11, skillId: "research" },
+  "wrapper-insert-media": { minutes: 7, skillId: "research" },
+  "ethics-and-confidentiality": { minutes: 14, skillId: "ethics" },
+  "legal-aid-environment": { minutes: 10, skillId: "triage" },
+  "case-notes-and-compliance": { minutes: 12, skillId: "drafting" },
+  "first-client-interview": { minutes: 13, skillId: "interviewing" },
+  "trauma-informed-communication": { minutes: 11, skillId: "counseling" },
+  "safety-screening": { minutes: 9, skillId: "triage" },
+  "courtroom-roles-etiquette": { minutes: 8, skillId: "courtroom" },
+  "preparing-client-for-court": { minutes: 12, skillId: "counseling" },
+  "first-appearance-checklist": { minutes: 10, skillId: "courtroom" },
+};
+
+export function getModuleMinutes(moduleId: string): number {
+  return moduleMeta[moduleId]?.minutes ?? 10;
+}
+
+export function getModuleSkillId(moduleId: string): SkillId {
+  return moduleMeta[moduleId]?.skillId ?? "research";
+}
+
+// ── Skills — the primary lens ─────────────────────────────────────────────
+// Legal practice as verbs: what an advocate actually does. Substantive
+// courses are the secondary lens (see practiceAreaChips below).
+export type SkillId =
+  | "interviewing"
+  | "drafting"
+  | "counseling"
+  | "triage"
+  | "negotiation"
+  | "courtroom"
+  | "ethics"
+  | "research";
+
+export type SkillGlyphKind =
+  | "interview"
+  | "draft"
+  | "counsel"
+  | "triage"
+  | "negotiate"
+  | "court"
+  | "ethics"
+  | "research";
+
+export type Skill = {
+  id: SkillId;
+  name: string;
+  glyph: SkillGlyphKind;
+  blurb: string;
+};
+
+export const skills: Skill[] = [
+  { id: "interviewing", name: "Client interviewing", glyph: "interview", blurb: "Open the call, build trust fast, gather the facts that matter." },
+  { id: "drafting", name: "Drafting & writing", glyph: "draft", blurb: "Case notes, letters, motions — clear, accurate, and fast." },
+  { id: "counseling", name: "Client counseling", glyph: "counsel", blurb: "Explain options, hold space, prepare clients for what's next." },
+  { id: "triage", name: "Case triage", glyph: "triage", blurb: "Spot the issue, name the deadline, know what comes first." },
+  { id: "negotiation", name: "Negotiation", glyph: "negotiate", blurb: "Sit across the table from agencies and opposing counsel." },
+  { id: "courtroom", name: "Courtroom skills", glyph: "court", blurb: "Hearings, etiquette, and walking in fully prepared." },
+  { id: "ethics", name: "Ethical judgment", glyph: "ethics", blurb: "Confidentiality, conflicts, and the daily judgment calls." },
+  { id: "research", name: "Legal research", glyph: "research", blurb: "Find the rule, the form, and the analogous case quickly." },
+];
+
+export function getSkill(skillId: string): Skill | undefined {
+  return skills.find((skill) => skill.id === skillId);
+}
+
+export function getSkillModuleCount(skillId: SkillId): number {
+  return modules.filter((module) => getModuleSkillId(module.id) === skillId).length;
+}
+
+// ── Practice-area chips — the secondary lens ──────────────────────────────
+// Substantive courses, demoted to a quick filter strip beneath the skills.
+export type PracticeAreaChip = {
+  courseId: string;
+  name: string;
+  moduleCount: number;
+};
+
+const courseChipLabels: Record<string, string> = {
+  "brightspace-wrapper-demo": "Wrapper Demo",
+  "professional-foundations": "Foundations",
+  "client-centered-practice": "Client Communication",
+  "first-steps-in-court": "Court Skills",
+};
+
+export const practiceAreaChips: PracticeAreaChip[] = courses.map((course) => ({
+  courseId: course.id,
+  name: courseChipLabels[course.id] ?? course.title,
+  moduleCount: modules.filter((module) => module.courseId === course.id).length,
+}));
+
+// ── Content updates — "the law moved" ─────────────────────────────────────
+// Why this exists: legal aid attorneys are often reviewing something an hour
+// before court. Surfacing what changed — and when — is the homepage's job.
+export type ContentUpdate = {
+  id: string;
+  title: string;
+  summary: string;
+  courseId: string;
+  moduleId: string;
+  when: string;
+  severity: "high" | "standard";
+  tag: string;
+};
+
+export const contentUpdates: ContentUpdate[] = [
+  {
+    id: "u-first-appearance",
+    title: "First Appearance Checklist rebuilt around the 2026 housing-court call sequence",
+    summary:
+      "The order the clerk calls cases changed this term. The checklist module now walks the new sequence and what to have ready before your case is called.",
+    courseId: "first-steps-in-court",
+    moduleId: "first-appearance-checklist",
+    when: "2 days ago",
+    severity: "high",
+    tag: "Process changed",
+  },
+  {
+    id: "u-safety-screening",
+    title: "New module — Safety Screening and Crisis Recognition",
+    summary:
+      "A short framework for spotting domestic violence, housing instability, and other safety risks during a routine intake call.",
+    courseId: "client-centered-practice",
+    moduleId: "safety-screening",
+    when: "Yesterday",
+    severity: "standard",
+    tag: "New",
+  },
+  {
+    id: "u-first-interview",
+    title: "Conducting Your First Client Interview refreshed",
+    summary:
+      "Updated intake language and a tighter, trauma-aware opening for the first five minutes of the call.",
+    courseId: "client-centered-practice",
+    moduleId: "first-client-interview",
+    when: "4 days ago",
+    severity: "standard",
+    tag: "Updated",
+  },
+];
+
+export const modulesUpdatedThisWeek = modules.filter((module) => module.contentStatus).length;
+
 export function getLearningItems(): LearningItem[] {
   return [
     ...paths.map((path) => ({ ...path, type: "PATH" as const })),

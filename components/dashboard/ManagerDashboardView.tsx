@@ -28,7 +28,7 @@ export function ManagerDashboardView() {
   if (loading || !data) {
     return (
       <div className="animate-pulse space-y-4" aria-busy>
-        <div className="h-8 w-48 rounded bg-[#e6dccb]" />
+        <div className="h-8 w-48 rounded bg-[color:var(--surface-sunken)]" />
         <div className="grid gap-4 sm:grid-cols-3">
           {Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="editorial-panel h-28 rounded-[var(--radius-card)]" />
