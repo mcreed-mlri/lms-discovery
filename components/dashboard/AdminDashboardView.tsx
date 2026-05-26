@@ -2,10 +2,42 @@
 
 import { useEffect, useState } from "react";
 import { DashboardPageHeader } from "@/components/dashboard/DashboardPageHeader";
-import { PreviewBadge } from "@/components/dashboard/PreviewBadge";
-import { formatRelativeDate } from "@/lib/dashboard-utils";
-import { dashboardService } from "@/lib/services/dashboardService";
-import type { AdminDashboardPayload, ServiceHealth } from "@/types/dashboard";
+import type { ServiceHealth } from "@/types/dashboard";
+
+type SupabaseHealthItem = {
+  id: string;
+  title: string;
+  item_type: string;
+  provider: string;
+};
+
+type SupabaseHealthPayload =
+  | {
+      ok: true;
+      items: SupabaseHealthItem[];
+    }
+  | {
+      ok: false;
+      error: string;
+    };
+
+type BrightspaceHealthPayload = {
+  ok: boolean;
+  mode: "id-key" | "oauth" | "unconfigured";
+  configured: {
+    baseUrl: boolean;
+    redirectUri: boolean;
+    appId: boolean;
+    appKey: boolean;
+    userId: boolean;
+    userKey: boolean;
+    clientId: boolean;
+    clientSecret: boolean;
+    accessToken: boolean;
+  };
+  message: string;
+  nextStep: string;
+};
 
 const healthBorder: Record<ServiceHealth, string> = {
   healthy: "border-t-[#6f927b]",
@@ -20,53 +52,189 @@ const healthDot: Record<ServiceHealth, string> = {
 };
 
 export function AdminDashboardView() {
-  const [data, setData] = useState<AdminDashboardPayload | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [supabaseHealth, setSupabaseHealth] = useState<SupabaseHealthPayload | null>(null);
+  const [supabaseLoading, setSupabaseLoading] = useState(true);
+  const [brightspaceHealth, setBrightspaceHealth] = useState<BrightspaceHealthPayload | null>(null);
+  const [brightspaceLoading, setBrightspaceLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
-    dashboardService.getAdminDashboard().then((payload) => {
-      if (!cancelled) {
-        setData(payload);
-        setLoading(false);
-      }
-    });
+
+    fetch("/api/health/supabase/", { cache: "no-store" })
+      .then(async (response) => {
+        const payload = (await response.json()) as SupabaseHealthPayload;
+        if (!response.ok && payload.ok) {
+          throw new Error("Supabase health check failed.");
+        }
+        return payload;
+      })
+      .catch((error) => ({
+        ok: false as const,
+        error: error instanceof Error ? error.message : "Supabase health check failed.",
+      }))
+      .then((payload) => {
+        if (!cancelled) {
+          setSupabaseHealth(payload);
+          setSupabaseLoading(false);
+        }
+      });
+
     return () => {
       cancelled = true;
     };
   }, []);
 
-  if (loading || !data) {
-    return <div className="animate-pulse grid gap-4 sm:grid-cols-3" aria-busy />;
-  }
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/health/brightspace/", { cache: "no-store" })
+      .then(async (response) => {
+        const payload = (await response.json()) as BrightspaceHealthPayload;
+        if (!response.ok) {
+          throw new Error(payload.message || "Brightspace health check failed.");
+        }
+        return payload;
+      })
+      .catch((error) => ({
+        ok: false,
+        mode: "unconfigured" as const,
+        configured: {
+          baseUrl: false,
+          redirectUri: false,
+          appId: false,
+          appKey: false,
+          userId: false,
+          userKey: false,
+          clientId: false,
+          clientSecret: false,
+          accessToken: false,
+        },
+        message: error instanceof Error ? error.message : "Brightspace health check failed.",
+        nextStep: "Check the Brightspace health route.",
+      }))
+      .then((payload) => {
+        if (!cancelled) {
+          setBrightspaceHealth(payload);
+          setBrightspaceLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const supabaseStatus: ServiceHealth = supabaseLoading
+    ? "degraded"
+    : supabaseHealth?.ok
+      ? "healthy"
+      : "down";
+  const supabaseItems = supabaseHealth?.ok ? supabaseHealth.items : [];
+  const brightspaceStatus: ServiceHealth = brightspaceLoading
+    ? "degraded"
+    : brightspaceHealth?.ok
+      ? "healthy"
+      : "degraded";
 
   return (
     <>
       <DashboardPageHeader
         eyebrow="Admin"
         title="Integration status"
-        subtitle={`Last sync ${formatRelativeDate(data.lastSyncAt)} · ${data.note}`}
-        badge={<PreviewBadge />}
+        subtitle="Live backend checks for the Learning Hub spike."
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {data.services.map((service) => (
-          <article
-            key={service.id}
-            className={`editorial-card border-t-4 p-5 ${healthBorder[service.status]}`}
-          >
+      <section className="grid gap-4 lg:grid-cols-2">
+        <article className={`editorial-card border-t-4 p-5 ${healthBorder[supabaseStatus]}`}>
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <span className={`h-2 w-2 rounded-full ${healthDot[service.status]}`} aria-hidden />
-              <h2 className="card-title text-lg">{service.name}</h2>
+              <span className={`h-2 w-2 rounded-full ${healthDot[supabaseStatus]}`} aria-hidden />
+              <h2 className="card-title text-lg">Supabase live connection</h2>
             </div>
-            <p className="stat-label mt-2 text-[#7d7467]">{service.status}</p>
-            <p className="mt-3 text-sm font-medium text-[color:var(--ink-muted)]">{service.message}</p>
-          </article>
-        ))}
-      </div>
+            <p className="stat-label text-[#7d7467]">
+              {supabaseLoading ? "checking" : supabaseHealth?.ok ? "healthy" : "down"}
+            </p>
+          </div>
+
+          {supabaseLoading ? (
+            <p className="mt-3 text-sm font-medium text-[color:var(--ink-muted)]">
+              Checking the Learning Hub server route.
+            </p>
+          ) : supabaseHealth?.ok ? (
+            <div className="mt-4 grid gap-3">
+              {supabaseItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="rounded-md border border-[color:var(--line)] bg-white/70 p-4"
+                >
+                  <p className="text-sm font-semibold text-[color:var(--ink)]">{item.title}</p>
+                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-[#7d7467]">
+                    {item.provider} / {item.item_type}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-3 text-sm font-medium text-[color:var(--ink-muted)]">
+              {supabaseHealth?.error ?? "Supabase health check failed."}
+            </p>
+          )}
+        </article>
+
+        <article className={`editorial-card border-t-4 p-5 ${healthBorder[brightspaceStatus]}`}>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <span className={`h-2 w-2 rounded-full ${healthDot[brightspaceStatus]}`} aria-hidden />
+              <h2 className="card-title text-lg">Brightspace connection</h2>
+            </div>
+            <p className="stat-label text-[#7d7467]">
+              {brightspaceLoading
+                ? "checking"
+                : brightspaceHealth?.ok
+                  ? "healthy"
+                  : "needs auth"}
+            </p>
+          </div>
+
+          {brightspaceLoading ? (
+            <p className="mt-3 text-sm font-medium text-[color:var(--ink-muted)]">
+              Checking Brightspace configuration.
+            </p>
+          ) : brightspaceHealth ? (
+            <div className="mt-4 grid gap-4">
+              <p className="text-sm font-medium text-[color:var(--ink-muted)]">
+                {brightspaceHealth.message}
+              </p>
+              <div className="grid gap-2 text-sm font-medium text-[color:var(--ink)]">
+                <p>Mode: {brightspaceHealth.mode}</p>
+                <p>Base URL: {brightspaceHealth.configured.baseUrl ? "configured" : "missing"}</p>
+                <p>Redirect URI: {brightspaceHealth.configured.redirectUri ? "configured" : "using default"}</p>
+                {brightspaceHealth.mode === "id-key" ? (
+                  <>
+                    <p>Application ID/Key: {brightspaceHealth.configured.appId && brightspaceHealth.configured.appKey ? "configured" : "missing"}</p>
+                    <p>User ID/Key: {brightspaceHealth.configured.userId && brightspaceHealth.configured.userKey ? "configured" : "missing"}</p>
+                  </>
+                ) : (
+                  <>
+                    <p>OAuth client: {brightspaceHealth.configured.clientId && brightspaceHealth.configured.clientSecret ? "configured" : "missing"}</p>
+                    <p>Access token: {brightspaceHealth.configured.accessToken ? "configured" : "missing"}</p>
+                  </>
+                )}
+              </div>
+              <p className="rounded-md border border-[color:var(--line)] bg-white/70 p-4 text-sm font-medium text-[color:var(--ink-muted)]">
+                {brightspaceHealth.nextStep}
+              </p>
+            </div>
+          ) : (
+            <p className="mt-3 text-sm font-medium text-[color:var(--ink-muted)]">
+              Brightspace health check failed.
+            </p>
+          )}
+        </article>
+      </section>
 
       <p className="mt-8 text-sm font-medium text-[color:var(--ink-muted)]">
-        Brightspace and Supabase credentials are never exposed in the browser. Production sync runs server-side only.
+        Supabase credentials stay server-side. This page reads through the Learning Hub API route only.
       </p>
     </>
   );

@@ -4,6 +4,7 @@ out/
 dist/
 
 .npm-cache/
+certificates/
 tools/
 .agents/
 .claude/
