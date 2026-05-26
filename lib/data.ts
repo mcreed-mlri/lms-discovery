@@ -81,6 +81,17 @@ export const courses: Course[] = [
     duration: "1 hr 55 min",
     brightspaceUrl: "https://brightspace.example.edu/d2l/home/first-steps-in-court",
   },
+  {
+    id: "eviction-defense-48h",
+    title: "Eviction Defense: The First 48 Hours",
+    description:
+      "Five short topics for the first moments after a notice to quit arrives, from reading deadlines to walking into Housing Court with a clear ask.",
+    level: "Foundations",
+    practiceArea: "Housing",
+    duration: "12 min",
+    brightspaceUrl:
+      "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3",
+  },
 ];
 
 export const modules: Module[] = [
@@ -256,6 +267,82 @@ export const modules: Module[] = [
     brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/first-steps-in-court",
     brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/first-steps-in-court/viewContent/3003/View",
   },
+  {
+    id: "clock-starts",
+    title: "When the Clock Starts",
+    description:
+      "Read the notice dates that drive the first response, and identify what must happen before the case moves further.",
+    courseId: "eviction-defense-48h",
+    parentCourseTitle: "Eviction Defense: The First 48 Hours",
+    practiceArea: "Housing",
+    level: "Foundations",
+    tags: ["housing", "eviction defense", "notice to quit", "deadlines"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6703-course.outline/clock-starts.html?ou=6703&d2l_body_type=3",
+  },
+  {
+    id: "notice-types",
+    title: "The Four Notice Types",
+    description:
+      "Compare 14-day, 30-day, no-fault, and cause notices so you can name what the landlord must prove next.",
+    courseId: "eviction-defense-48h",
+    parentCourseTitle: "Eviction Defense: The First 48 Hours",
+    practiceArea: "Housing",
+    level: "Foundations",
+    tags: ["housing", "eviction defense", "notice types", "notice to quit"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6703-course.outline/notice-types.html?ou=6703&d2l_body_type=3",
+  },
+  {
+    id: "service-of-process",
+    title: "Service of Process Checklist",
+    description:
+      "Check how the notice got there, because service defects can matter as much as the words on the page.",
+    courseId: "eviction-defense-48h",
+    parentCourseTitle: "Eviction Defense: The First 48 Hours",
+    practiceArea: "Housing",
+    level: "Foundations",
+    tags: ["housing", "eviction defense", "service of process", "checklist"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6703-course.outline/topic-template.html?ou=6703&d2l_body_type=3",
+  },
+  {
+    id: "drafting-answer",
+    title: "Drafting the Answer",
+    description:
+      "Draft the first response with the right defenses, procedural asks, and motion language for an eviction case.",
+    contentStatus: "New",
+    courseId: "eviction-defense-48h",
+    parentCourseTitle: "Eviction Defense: The First 48 Hours",
+    practiceArea: "Housing",
+    level: "Foundations",
+    tags: ["housing", "eviction defense", "drafting", "answer", "motions"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6703-course.outline/drafting-answer.html?ou=6703&d2l_body_type=3",
+  },
+  {
+    id: "walking-into-housing-court",
+    title: "Walking into Housing Court",
+    description:
+      "Prepare the next ask, the strongest defect, and the client goal before the case is called.",
+    courseId: "eviction-defense-48h",
+    parentCourseTitle: "Eviction Defense: The First 48 Hours",
+    practiceArea: "Housing",
+    level: "Foundations",
+    tags: ["housing", "eviction defense", "housing court", "client goals"],
+    brightspaceCourseUrl:
+      "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3",
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6703-course.outline/housing-court.html?ou=6703&d2l_body_type=3",
+  },
 ];
 
 export const paths: Path[] = [
@@ -343,6 +430,11 @@ const moduleMeta: Record<string, { minutes: number; skillId: SkillId }> = {
   "courtroom-roles-etiquette": { minutes: 8, skillId: "courtroom" },
   "preparing-client-for-court": { minutes: 12, skillId: "counseling" },
   "first-appearance-checklist": { minutes: 10, skillId: "courtroom" },
+  "clock-starts": { minutes: 2, skillId: "triage" },
+  "notice-types": { minutes: 3, skillId: "research" },
+  "service-of-process": { minutes: 3, skillId: "triage" },
+  "drafting-answer": { minutes: 3, skillId: "drafting" },
+  "walking-into-housing-court": { minutes: 1, skillId: "courtroom" },
 };
 
 export function getModuleMinutes(moduleId: string): number {
@@ -415,6 +507,7 @@ const courseChipLabels: Record<string, string> = {
   "professional-foundations": "Foundations",
   "client-centered-practice": "Client Communication",
   "first-steps-in-court": "Court Skills",
+  "eviction-defense-48h": "Housing Court",
 };
 
 export const practiceAreaChips: PracticeAreaChip[] = courses.map((course) => ({

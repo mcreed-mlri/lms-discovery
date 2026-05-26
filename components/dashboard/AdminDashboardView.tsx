@@ -39,6 +39,24 @@ type BrightspaceHealthPayload = {
   nextStep: string;
 };
 
+type BrightspaceSyncPayload =
+  | {
+      ok: true;
+      item: {
+        id: string;
+        title: string;
+        item_type: string;
+        provider: string;
+        provider_course_id: string;
+        synced_at: string;
+      };
+    }
+  | {
+      ok: false;
+      error: string;
+      nextStep?: string;
+    };
+
 const healthBorder: Record<ServiceHealth, string> = {
   healthy: "border-t-[#6f927b]",
   degraded: "border-t-[#b88a2d]",
@@ -56,6 +74,8 @@ export function AdminDashboardView() {
   const [supabaseLoading, setSupabaseLoading] = useState(true);
   const [brightspaceHealth, setBrightspaceHealth] = useState<BrightspaceHealthPayload | null>(null);
   const [brightspaceLoading, setBrightspaceLoading] = useState(true);
+  const [brightspaceSync, setBrightspaceSync] = useState<BrightspaceSyncPayload | null>(null);
+  const [brightspaceSyncing, setBrightspaceSyncing] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -135,6 +155,27 @@ export function AdminDashboardView() {
     : brightspaceHealth?.ok
       ? "healthy"
       : "degraded";
+
+  async function syncBrightspaceTestCourse() {
+    setBrightspaceSyncing(true);
+    setBrightspaceSync(null);
+
+    try {
+      const response = await fetch("/api/admin/sync/brightspace-test-course", {
+        method: "POST",
+        cache: "no-store",
+      });
+      const payload = (await response.json()) as BrightspaceSyncPayload;
+      setBrightspaceSync(payload);
+    } catch (error) {
+      setBrightspaceSync({
+        ok: false,
+        error: error instanceof Error ? error.message : "Brightspace sync failed.",
+      });
+    } finally {
+      setBrightspaceSyncing(false);
+    }
+  }
 
   return (
     <>
@@ -224,6 +265,21 @@ export function AdminDashboardView() {
               <p className="rounded-md border border-[color:var(--line)] bg-white/70 p-4 text-sm font-medium text-[color:var(--ink-muted)]">
                 {brightspaceHealth.nextStep}
               </p>
+              <button
+                type="button"
+                onClick={syncBrightspaceTestCourse}
+                disabled={brightspaceSyncing || !brightspaceHealth.configured.accessToken}
+                className="inline-flex h-11 items-center justify-center rounded-[var(--radius-control)] bg-[#171713] px-5 text-sm font-bold text-[#fffaf0] transition hover:bg-[#2b2821] disabled:cursor-not-allowed disabled:bg-[#cfc7b8] disabled:text-[#7d7467]"
+              >
+                {brightspaceSyncing ? "Syncing..." : "Sync test course"}
+              </button>
+              {brightspaceSync ? (
+                <p className="text-sm font-medium text-[color:var(--ink-muted)]">
+                  {brightspaceSync.ok
+                    ? `Synced ${brightspaceSync.item.title} (${brightspaceSync.item.provider_course_id})`
+                    : brightspaceSync.nextStep || brightspaceSync.error}
+                </p>
+              ) : null}
             </div>
           ) : (
             <p className="mt-3 text-sm font-medium text-[color:var(--ink-muted)]">

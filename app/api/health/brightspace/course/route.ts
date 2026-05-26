@@ -21,10 +21,23 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const response = await brightspaceApiFetch(
-    request,
-    `/d2l/api/lp/${version}/courses/${encodeURIComponent(orgUnitId)}`,
-  );
+  let response: Response;
+
+  try {
+    response = await brightspaceApiFetch(
+      request,
+      `/d2l/api/lp/${version}/courses/${encodeURIComponent(orgUnitId)}`,
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: error instanceof Error ? error.message : "Brightspace course metadata request failed.",
+        nextStep: "Complete the Brightspace OAuth flow from /api/auth/brightspace/start, then retry this course metadata route in the same browser session.",
+      },
+      { status: 500 },
+    );
+  }
 
   const contentType = response.headers.get("content-type") || "";
   const payload = contentType.includes("application/json")

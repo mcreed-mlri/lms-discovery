@@ -13,6 +13,10 @@ export function getBrightspaceLpVersion() {
   return process.env.BRIGHTSPACE_LP_VERSION || "1.49";
 }
 
+export function getBrightspaceLeVersion() {
+  return process.env.BRIGHTSPACE_LE_VERSION || "1.82";
+}
+
 export async function brightspaceApiFetch(
   request: NextRequest,
   path: string,

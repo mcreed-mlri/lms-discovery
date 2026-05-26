@@ -16,6 +16,10 @@ create table if not exists public.learning_items (
   updated_at timestamptz not null default now()
 );
 
+alter table public.learning_items
+  add constraint learning_items_provider_course_id_key
+  unique (provider_course_id);
+
 alter table public.learning_items enable row level security;
 
 grant usage on schema public to service_role;

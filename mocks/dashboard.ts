@@ -9,6 +9,8 @@ import type {
 
 const DEMO_RESUME_URL =
   "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Sequencing.html?ou=6698&d2l_body_type=3&ou=6698";
+const HOUSING_COURSE_URL =
+  "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3";
 
 const baseUser: DashboardUser = {
   id: "user-sarah-chen",
@@ -77,13 +79,13 @@ export const learnerDashboardMock: LearnerDashboardPayload = {
       dueDate: daysAhead(21),
     },
     {
-      offeringId: "6921",
-      title: "Eviction Defense Workshop",
+      offeringId: "6703",
+      title: "Eviction Defense: The First 48 Hours",
       trainingArea: "Housing",
       completionPct: 0,
       status: "not_started",
       lastAccessedAt: daysAgo(45),
-      resumeUrl: "#course-6921",
+      resumeUrl: HOUSING_COURSE_URL,
       dueDate: daysAhead(30),
     },
     {

@@ -163,6 +163,7 @@ const courseTopic: Record<string, TopicFamily> = {
   "professional-foundations": "foundations",
   "client-centered-practice": "client",
   "first-steps-in-court": "court",
+  "eviction-defense-48h": "court",
 };
 
 // Which topic family colours each skill's icon in "What do you need to do?".
@@ -209,6 +210,7 @@ export function getCourseLabel(course: Course) {
     "professional-foundations": "Foundations",
     "client-centered-practice": "Client Communication",
     "first-steps-in-court": "Court Skills",
+    "eviction-defense-48h": "Housing Court",
   };
 
   return labels[course.id] ?? course.title;

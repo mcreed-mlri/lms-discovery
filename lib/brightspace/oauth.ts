@@ -1,6 +1,6 @@
 import { randomBytes } from "node:crypto";
 
-const DEFAULT_SCOPE = "core:*:*";
+const DEFAULT_SCOPE = "core:*:* content:toc:read";
 const STATE_COOKIE = "brightspace_oauth_state";
 const ACCESS_TOKEN_COOKIE = "brightspace_access_token";
 const REFRESH_TOKEN_COOKIE = "brightspace_refresh_token";
