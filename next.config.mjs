@@ -6,6 +6,7 @@ const basePath = shouldUseBasePath ? `/${repo}` : "";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: isGitHubActions ? "export" : undefined,
   images: {
     unoptimized: true,
   },
