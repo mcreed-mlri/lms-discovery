@@ -36,10 +36,6 @@ function daysUntil(iso: string): number {
   return Math.ceil((due - Date.now()) / (1000 * 60 * 60 * 24));
 }
 
-function isExternal(url: string) {
-  return url.startsWith("http");
-}
-
 // ── Small visual atoms ─────────────────────────────────────────────────────
 function Sparkline({ values, color }: { values: number[]; color: string }) {
   if (values.length < 2) return null;
@@ -205,8 +201,6 @@ function ContinueHeroRow({ course }: { course: LearnerCourse }) {
       </div>
       <a
         href={course.resumeUrl}
-        target={isExternal(course.resumeUrl) ? "_blank" : undefined}
-        rel={isExternal(course.resumeUrl) ? "noreferrer" : undefined}
         className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-[#171713] px-5 text-sm font-bold text-[#fffaf0] shadow-[0_10px_22px_rgba(23,23,19,0.16)] transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-[#1f1d19]/15"
         aria-label={`Continue ${course.title}`}
       >
@@ -231,8 +225,6 @@ function ContinueRow({ course }: { course: LearnerCourse }) {
       <p className="metadata text-[#81786a]">{formatRelativeDate(course.lastAccessedAt)}</p>
       <a
         href={course.resumeUrl}
-        target={isExternal(course.resumeUrl) ? "_blank" : undefined}
-        rel={isExternal(course.resumeUrl) ? "noreferrer" : undefined}
         className="inline-flex h-8 items-center rounded-[10px] border border-[color:var(--lace-hairline)] bg-[color:var(--surface-raised)] px-3.5 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--border-strong)] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15"
       >
         Resume
@@ -472,8 +464,6 @@ export function LearnerDashboardView() {
                       </div>
                       <a
                         href={course.resumeUrl}
-                        target={isExternal(course.resumeUrl) ? "_blank" : undefined}
-                        rel={isExternal(course.resumeUrl) ? "noreferrer" : undefined}
                         className="inline-flex h-8 items-center rounded-[10px] bg-[#171713] px-3.5 text-xs font-bold text-[#fffaf0] transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-[#1f1d19]/15"
                       >
                         {course.completionPct > 0 ? "Resume" : "Start"}
@@ -501,8 +491,6 @@ export function LearnerDashboardView() {
                       <h3 className="hero-title text-[1.05rem] text-[#1f1d19]">{course.title}</h3>
                       <a
                         href={course.resumeUrl}
-                        target={isExternal(course.resumeUrl) ? "_blank" : undefined}
-                        rel={isExternal(course.resumeUrl) ? "noreferrer" : undefined}
                         className="mt-1 inline-flex h-9 w-fit items-center gap-2 rounded-[10px] border border-[color:var(--lace-hairline)] bg-[color:var(--surface-raised)] px-3.5 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--border-strong)] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15"
                       >
                         <PlayIcon className="h-3.5 w-3.5" /> Start course

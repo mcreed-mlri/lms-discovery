@@ -116,8 +116,6 @@ export function DetailModal({
               <a
                 className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15"
                 href={getBrightspaceUrl(item)}
-                target="_blank"
-                rel="noreferrer"
                 onClick={() => onLaunch?.(item)}
               >
                 <BookIcon className="h-4 w-4" />

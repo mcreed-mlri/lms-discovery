@@ -48,8 +48,6 @@ export function CourseProgressCard({ course }: { course: LearnerCourse }) {
       <a
         href={course.resumeUrl}
         className="mt-5 inline-flex h-10 w-full items-center justify-center gap-2 rounded-[var(--radius-control)] bg-[#171713] px-4 text-sm font-bold text-[#fffaf0] shadow-[0_10px_22px_rgba(23,23,19,0.16)] transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-[#1f1d19]/15 sm:w-auto"
-        target={course.resumeUrl.startsWith("http") ? "_blank" : undefined}
-        rel={course.resumeUrl.startsWith("http") ? "noreferrer" : undefined}
         aria-label={`Continue learning ${course.title}`}
       >
         Continue learning <ArrowIcon className="h-4 w-4" />

@@ -563,8 +563,6 @@ export default function Home() {
               <a
                 className="mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] text-sm font-bold text-[color:var(--surface-raised)] shadow-[var(--shadow-sm)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15"
                 href={resumeBrightspaceUrl}
-                target="_blank"
-                rel="noreferrer"
               >
                 Resume learning <ArrowIcon className="h-4 w-4" />
               </a>
