@@ -384,6 +384,8 @@ export type ContinueLearningItem =
       title: string;
       detail: string;
       progress: number;
+      progressLabel?: string;
+      resumeUrl?: string;
     }
   | {
       id: string;
@@ -394,7 +396,16 @@ export type ContinueLearningItem =
     };
 
 export const continueLearning: ContinueLearningItem[] = [
-  { id: "brightspace-wrapper-demo", type: "COURSE", title: "Brightspace Wrapper Demo", detail: "2 of 3 modules complete", progress: 67 },
+  {
+    id: "eviction-defense-48h",
+    type: "COURSE",
+    title: "Eviction Defense: The First 48 Hours",
+    detail: "The Four Notice Types",
+    progress: 40,
+    progressLabel: "2/5",
+    resumeUrl:
+      "https://mlri.brightspace.com/content/enforced/6703-course.outline/notice-types.html?ou=6703&d2l_body_type=3",
+  },
   { id: "wrapper-self-checks", type: "MODULE", title: "Self Checks", detail: "Brightspace Wrapper Demo", status: "In progress" },
   { id: "professional-foundations", type: "COURSE", title: "Professional Foundations for Legal Aid", detail: "Module 2 of 3", progress: 45 },
   { id: "first-client-interview", type: "MODULE", title: "Conducting Your First Client Interview", detail: "Client-Centered Communication", status: "In progress" },

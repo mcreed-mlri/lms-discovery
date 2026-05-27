@@ -14,28 +14,32 @@
    ========================================================================= */
 :root {
   color-scheme: light;
-  --font-sans: var(--font-lato, "Lato"), "Lato", "Geist", "Inter", "Aptos", "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-lato, "Lato"), "Lato", "Geist", "Inter", "Aptos", "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  /* UI / body: lead with crisp small-size faces. Lato kept far back as a
+     fallback — at sizes below ~24px Lato renders fuzzy on Windows ClearType. */
+  --font-sans: "Segoe UI Variable", "Segoe UI", "Inter", "Aptos", system-ui, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  /* Display: Lato for the editorial feel, used only by .hero-display / .hero-title / .modal-title at large sizes. */
+  --font-serif: var(--font-lato, "Lato"), "Lato", "Segoe UI Variable", "Segoe UI", "Inter", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", "SFMono-Regular", "Cascadia Mono", Consolas, ui-monospace, monospace;
 
   /* ── Neutral base — clean ivory/stone canvas; warmth lives in accents,
         not in full-page parchment wash. Mirrors course-style.css. ───────── */
-  --paper: #f7f6f3;            /* warm stone — page canvas, not parchment */
-  --paper-deep: #f0efec;        /* subtle section foot — use sparingly */
-  --surface: #fefefe;           /* bright off-white — default card */
-  --surface-raised: #ffffff;    /* clean white — modals, inputs, raised chips */
+  --paper: #f7f6f3;             /* warm stone — page canvas, matches course --bg */
+  --paper-deep: #efece6;        /* deeper section accent — use sparingly */
+  --panel: #f0ede6;             /* section frame — slightly deeper than paper so white cards still read as lifted */
+  --surface: #fcfbfa;           /* soft off-white — default card */
+  --surface-raised: #fcfbfa;    /* match surface — less glare vs paper */
   --surface-sunken: #eceae6;    /* neutral sunken — tracks, segmented controls */
-  --hover-tint: #f2f1ed;       /* whisper hover — warm, not tan */
-  --ink: #211f1b;              /* charcoal — primary text */
-  --ink-muted: #504a44;        /* muted — body copy, descriptions */
+  --hover-tint: #f2f1ed;        /* whisper hover — warm, not tan */
+  --ink: #16130f;              /* near-black — primary text, max headline contrast */
+  --ink-muted: #3f3a34;        /* muted — body copy, descriptions */
   --ink-soft: #6e6860;         /* soft — metadata, captions, eyebrows */
-  --line: rgba(32, 30, 28, 0.10);        /* neutral stone hairline */
-  --line-strong: rgba(32, 30, 28, 0.16);
-  --shadow-xs: 0 1px 2px rgba(28, 26, 24, 0.04);
-  --shadow-card: 0 1px 2px rgba(28, 26, 24, 0.04), 0 2px 8px rgba(28, 26, 24, 0.05);
-  --shadow-sm: 0 1px 3px rgba(28, 26, 24, 0.05), 0 4px 14px rgba(28, 26, 24, 0.07);
-  --shadow-md: 0 12px 32px rgba(28, 26, 24, 0.09), 0 22px 48px rgba(28, 26, 24, 0.08);
-  --shadow-lg: 0 20px 48px rgba(28, 26, 24, 0.11);
+  --line: rgba(32, 30, 28, 0.14);        /* neutral stone hairline */
+  --line-strong: rgba(32, 30, 28, 0.22);
+  --shadow-xs: 0 1px 2px rgba(28, 26, 24, 0.03);
+  --shadow-card: none;
+  --shadow-sm: 0 1px 2px rgba(28, 26, 24, 0.04);
+  --shadow-md: 0 4px 16px rgba(28, 26, 24, 0.06);
+  --shadow-lg: 0 12px 32px rgba(28, 26, 24, 0.08);
 
   /* ── Brand — the LACE editorial gold. Used sparingly, never as wallpaper ─ */
   --brand: #9a7a34;
@@ -67,7 +71,7 @@
   /* ── Legacy aliases — kept so existing utility classes keep resolving ─── */
   --bg-main: var(--paper);
   --bg-surface: var(--surface);
-  --bg-surface-soft: #fcfbf9;
+  --bg-surface-soft: #f2f1ed;
   --border-subtle: var(--line);
   --border-strong: var(--line-strong);
   --accent-gold: var(--brand);
@@ -97,13 +101,23 @@ html {
   scroll-behavior: smooth;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .skip-link {
+    transition: none;
+  }
+}
+
 body {
   margin: 0;
   min-height: 100vh;
   font-family: var(--font-sans);
   font-weight: 400;
   font-size: 15px;
-  line-height: 1.5;
+  line-height: 1.6;
   /* A flat, calm stone field — no coloured radials, no gold wallpaper,
      no gradient. Stable and durable over long sessions. */
   background: var(--paper);
@@ -154,11 +168,7 @@ input::placeholder {
 }
 
 .hub-shell {
-  /* A faint structural grid — neutral, not decorative. */
-  background-image:
-    linear-gradient(rgba(32, 30, 28, 0.012) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(32, 30, 28, 0.012) 1px, transparent 1px);
-  background-size: 56px 56px;
+  background: var(--paper);
 }
 
 .dashboard-command {
@@ -167,38 +177,47 @@ input::placeholder {
 
 .sticky-filter {
   position: sticky;
-  top: 5rem;
+  top: 3.25rem;
   z-index: 35;
+}
+
+@media (min-width: 640px) {
+  .sticky-filter {
+    top: 5rem;
+  }
 }
 
 /* ── Surfaces ───────────────────────────────────────────────────────────── */
 .editorial-panel {
   border: 1px solid var(--line);
   background: var(--surface-raised);
-  box-shadow: var(--shadow-sm);
 }
 
-/* The default card: a clean, flat white surface with a subtle hairline.
-   Topic colour is layered on top as a thin accent, never as a fill. */
+/* The default card: flat surface, hairline only — no lift animation. */
 .editorial-card {
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
   background: var(--surface-raised);
-  box-shadow: var(--shadow-card);
 }
 
-/* Featured surfaces — Continue card, lead update, popular topics panel. */
+.editorial-card:hover {
+  border-color: var(--line-strong);
+  background: var(--hover-tint);
+}
+
 .surface-featured {
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-card);
   background: var(--surface-raised);
-  box-shadow: var(--shadow-featured);
+}
+
+/* Section rhythm — spacing and a divider, not a nested box. */
+.section-panel {
+  border-top: 1px solid var(--line);
 }
 
 .hero-continue {
-  border: 1px solid var(--line-strong);
-  border-left: 3px solid var(--brand);
-  box-shadow: var(--shadow-featured);
+  border: 1px solid var(--line);
 }
 
 /* Shared nav active state — warm tint without a full beige block. */
@@ -224,20 +243,49 @@ input::placeholder {
 
 .chip-label {
   color: var(--ink-soft);
-  font-weight: 700;
+  font-weight: 600;
+}
+
+.chip {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-raised);
+  color: var(--ink-muted);
+}
+
+.chip:hover {
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+.interactive-tile {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface-raised);
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+.interactive-tile:hover {
+  border-color: var(--line-strong);
+  background: var(--hover-tint);
 }
 
 /* ── Text atoms ─────────────────────────────────────────────────────────── */
 .editorial-eyebrow {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   color: var(--ink-soft);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
 }
 
 .section-kicker {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
   color: var(--ink-soft);
 }
 
@@ -252,34 +300,64 @@ input::placeholder {
 
 .hero-title,
 .modal-title {
-  font-family: var(--font-serif);
-  font-weight: 300;
-  letter-spacing: -0.035em;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .hero-title {
-  line-height: 0.98;
+  line-height: 1.15;
+}
+
+.hero-display {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 .modal-title {
-  line-height: 1.02;
+  line-height: 1.15;
 }
 
 .section-title {
   font-family: var(--font-sans);
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
 }
 
-.metadata,
-.nav-label,
-.stat-label,
-.section-kicker {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.metadata {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+.stat-label {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+/* Header nav — sans at readable size; mono reserved for metadata eyebrows. */
+.nav-link {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.nav-utility {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: none;
 }
 
 .card-title {

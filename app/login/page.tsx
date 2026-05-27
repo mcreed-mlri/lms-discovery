@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowIcon } from "@/components/icons";
+import { SiteFooter } from "@/components/site-footer";
 import { demoUser, useAuth } from "@/lib/auth";
 
 export default function LoginPage() {
@@ -19,14 +20,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="hub-shell relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-12">
-      <div className="relative w-full max-w-md">
-        <a href="#" className="mb-9 flex items-center justify-center rounded-md text-[#171713] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15">
-          <span className="text-center leading-none">
-            <span className="block text-[2rem] font-normal tracking-[-0.055em]">LACE</span>
-            <span className="nav-label mt-1 block text-[#786f62]">Learning Hub</span>
-          </span>
-        </a>
+    <div className="hub-shell flex min-h-screen flex-col">
+      <div className="flex flex-1 items-center justify-center px-4 py-12">
+        <div className="relative w-full max-w-md">
+        <div className="mb-9 text-center leading-none text-[#171713]" aria-hidden="true">
+          <span className="block text-[2rem] font-normal tracking-[-0.055em]">LACE</span>
+          <span className="editorial-eyebrow mt-1 block text-[#786f62]">Learning Hub</span>
+        </div>
 
         <div className="editorial-panel rounded-[var(--radius-card)] bg-[color:var(--bg-surface)] px-8 pb-8 pt-7">
           <div className="mb-6 text-center">
@@ -63,6 +63,7 @@ export default function LoginPage() {
           </p>
         </div>
       </div>
+      <SiteFooter />
     </div>
   );
 }

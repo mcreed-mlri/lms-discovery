@@ -196,7 +196,7 @@ function ContinueHeroRow({ course }: { course: LearnerCourse }) {
           <span className="metadata rounded-full bg-[#171713] px-2 py-0.5 text-[#fffaf0]">Resume</span>
           <AreaPill area={course.trainingArea} />
         </div>
-        <h3 className="hero-title mt-1.5 text-[1.3rem] text-[#1f1d19]">{course.title}</h3>
+        <h3 className="section-title mt-1.5 text-[1.2rem] text-[#1f1d19]">{course.title}</h3>
         <p className="metadata mt-1 text-[#81786a]">Last visited {formatRelativeDate(course.lastAccessedAt)}</p>
       </div>
       <a
@@ -220,7 +220,7 @@ function ContinueRow({ course }: { course: LearnerCourse }) {
       </ProgressRing>
       <div className="min-w-[10rem] flex-1">
         <AreaPill area={course.trainingArea} />
-        <h3 className="hero-title mt-1 text-[1.05rem] text-[#1f1d19]">{course.title}</h3>
+        <h3 className="section-title mt-1 text-[1rem] text-[#1f1d19]">{course.title}</h3>
       </div>
       <p className="metadata text-[#81786a]">{formatRelativeDate(course.lastAccessedAt)}</p>
       <a
@@ -451,7 +451,7 @@ export function LearnerDashboardView() {
                     >
                       <span className="h-9 w-1.5 shrink-0 rounded-full" style={{ background: urgency }} />
                       <div className="min-w-[10rem] flex-1">
-                        <h3 className="hero-title text-[1.05rem] text-[#1f1d19]">{course.title}</h3>
+                        <h3 className="section-title text-[1rem] text-[#1f1d19]">{course.title}</h3>
                         <div className="mt-1.5">
                           <AreaPill area={course.trainingArea} />
                         </div>
@@ -488,7 +488,7 @@ export function LearnerDashboardView() {
                       style={{ borderTop: `3px solid ${tone.stripe}` }}
                     >
                       <AreaPill area={course.trainingArea} />
-                      <h3 className="hero-title text-[1.05rem] text-[#1f1d19]">{course.title}</h3>
+                      <h3 className="section-title text-[1rem] text-[#1f1d19]">{course.title}</h3>
                       <a
                         href={course.resumeUrl}
                         className="mt-1 inline-flex h-9 w-fit items-center gap-2 rounded-[10px] border border-[color:var(--lace-hairline)] bg-[color:var(--surface-raised)] px-3.5 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--border-strong)] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15"
@@ -537,7 +537,7 @@ export function LearnerDashboardView() {
                   >
                     <BookmarkFilledIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#b88a2d]" />
                     <div className="min-w-0">
-                      <h3 className="hero-title text-[0.98rem] leading-snug text-[#1f1d19]">{item.title}</h3>
+                      <h3 className="section-title text-[0.95rem] leading-snug text-[#1f1d19]">{item.title}</h3>
                       <p className="metadata mt-1 text-[#9b9283]">{item.type}</p>
                     </div>
                   </article>
@@ -577,7 +577,7 @@ export function LearnerDashboardView() {
                     </span>
                     <div className="min-w-0">
                       <p className="metadata text-[#9b9283]">{formatRelativeDate(entry.at)}</p>
-                      <p className="hero-title text-[1rem] leading-snug text-[#1f1d19]">{entry.label}</p>
+                      <p className="section-title text-[0.95rem] leading-snug text-[#1f1d19]">{entry.label}</p>
                     </div>
                   </div>
                 );
@@ -597,7 +597,7 @@ export function LearnerDashboardView() {
                 >
                   <span className="absolute -right-2 -top-2 h-16 w-16 rounded-full bg-[rgba(184,138,45,0.08)]" />
                   <CertificateIcon className="h-5 w-5 text-[#8e6a1f]" />
-                  <h3 className="hero-title mt-3 text-[1.05rem] text-[#1f1d19]">{certificate.title}</h3>
+                  <h3 className="section-title mt-3 text-[1rem] text-[#1f1d19]">{certificate.title}</h3>
                   <p className="metadata mt-1.5 text-[#9b9283]">
                     {certificate.earnedOn} · {certificate.credits}
                   </p>

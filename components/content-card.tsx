@@ -42,7 +42,7 @@ function ContentStatusChip({ status }: { status: "New" | "Updated" }) {
 function DetailsAffordance({ className = "" }: { className?: string }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] text-xs font-semibold text-[color:var(--ink-muted)] shadow-[var(--shadow-xs)] transition duration-200 ease-out group-hover:border-[color:var(--line-strong)] group-hover:text-[color:var(--ink)] ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] text-xs font-semibold text-[color:var(--ink-muted)] transition duration-200 ease-out group-hover:border-[color:var(--line-strong)] group-hover:text-[color:var(--ink)] ${className}`}
     >
       Details <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
     </span>
@@ -65,7 +65,7 @@ export function ContentCard({ item, onOpen }: { item: LearningItem; onOpen?: (it
       onClick={(event) => (onOpen ? handleOpen(event, item, onOpen) : preventPlaceholderNavigation(event))}
       title={comingSoonLabel}
       aria-label={`${item.title}. Open detail view.`}
-      className={`editorial-card group relative flex h-full cursor-pointer flex-col overflow-hidden transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
+      className={`editorial-card group relative flex h-full cursor-pointer flex-col overflow-hidden transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
         isModule ? "min-h-36 p-4 pt-4 before:h-0.5" : "min-h-48 p-5 pt-5 before:h-0.5"
       } ${
         courseTheme ? `${courseTheme.hoverBorder} ${courseTheme.rail}` : "before:bg-[color:var(--line-strong)]"
@@ -102,7 +102,7 @@ export function ContentListRow({ item, onOpen }: { item: LearningItem; onOpen?: 
       onClick={(event) => (onOpen ? handleOpen(event, item, onOpen) : preventPlaceholderNavigation(event))}
       title={comingSoonLabel}
       aria-label={`${item.title}. ${comingSoonLabel}.`}
-      className={`editorial-card group relative grid cursor-pointer gap-4 overflow-hidden p-5 pl-5 transition duration-200 ease-out before:absolute before:inset-y-0 before:left-0 before:w-0.5 hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 md:grid-cols-[minmax(0,1fr)_auto] md:items-center ${
+      className={`editorial-card group relative grid cursor-pointer gap-4 overflow-hidden p-5 pl-5 transition duration-200 ease-out before:absolute before:inset-y-0 before:left-0 before:w-0.5 focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 md:grid-cols-[minmax(0,1fr)_auto] md:items-center ${
         courseTheme ? `${courseTheme.hoverBorder} ${courseTheme.rail}` : "before:bg-[color:var(--line-strong)]"
       }`}
     >
@@ -137,7 +137,7 @@ export function PathCard({ item, onOpen }: { item: Extract<LearningItem, { type:
       onClick={(event) => (onOpen ? handleOpen(event, item, onOpen) : preventPlaceholderNavigation(event))}
       title={comingSoonLabel}
       aria-label={`${item.title}. ${comingSoonLabel}.`}
-      className={`editorial-card group relative block cursor-pointer overflow-hidden p-5 transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 before:h-0.5 hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
+      className={`editorial-card group relative block cursor-pointer overflow-hidden p-5 transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 before:h-0.5 focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
         pathTheme ? `${pathTheme.hoverBorder} ${pathTheme.rail}` : "before:bg-[color:var(--line-strong)]"
       }`}
     >

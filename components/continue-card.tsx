@@ -38,7 +38,7 @@ export function ContinueCard({ item, priority = "standard" }: { item: ContinueIt
       onClick={preventPlaceholderNavigation}
       title={comingSoonLabel}
       aria-label={`${item.title}. ${comingSoonLabel}.`}
-      className={`editorial-card group relative block cursor-pointer overflow-hidden transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${courseTheme.hoverBorder} ${courseTheme.rail} ${
+      className={`editorial-card group relative block cursor-pointer overflow-hidden transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${courseTheme.hoverBorder} ${courseTheme.rail} ${
         isPrimary ? "p-4 pt-5 before:h-1 md:col-span-2" : "p-4 pt-5 before:h-0.5"
       }`}
     >
@@ -46,7 +46,7 @@ export function ContinueCard({ item, priority = "standard" }: { item: ContinueIt
       <div className="flex items-center justify-between gap-3">
         <TypeBadge type={item.type} />
         <span
-          className={`flex items-center justify-center gap-1.5 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] text-xs font-semibold text-[color:var(--ink-muted)] shadow-[var(--shadow-xs)] transition duration-200 ease-out group-hover:border-[color:var(--line-strong)] group-hover:text-[color:var(--ink)] ${
+          className={`flex items-center justify-center gap-1.5 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] text-xs font-semibold text-[color:var(--ink-muted)] transition duration-200 ease-out group-hover:border-[color:var(--line-strong)] group-hover:text-[color:var(--ink)] ${
             isPrimary ? "h-9 px-3" : "h-8 w-8"
           }`}
         >

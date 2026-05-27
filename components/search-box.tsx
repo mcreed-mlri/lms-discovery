@@ -65,7 +65,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
       <label className="sr-only" htmlFor={inputId}>
         Search courses, modules, paths, or topics
       </label>
-      <SearchIcon className={`pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[color:var(--ink-soft)] transition group-focus-within:text-[color:var(--brand)] ${prominent ? "left-5 h-5 w-5" : "left-3.5 h-4 w-4"}`} />
+      <SearchIcon className={`pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[color:var(--ink-soft)] transition group-focus-within:text-[color:var(--brand)] ${prominent ? "left-3.5 h-4 w-4 sm:left-5 sm:h-5 sm:w-5" : "left-3.5 h-4 w-4"}`} />
       <input
         aria-activedescendant={showSuggestions && suggestions[activeIndex] ? `${listboxId}-${activeIndex}` : undefined}
         aria-autocomplete="list"
@@ -81,7 +81,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
         onKeyDown={handleKeyDown}
         className={`w-full border border-[color:var(--line)] bg-[color:var(--surface-raised)] font-semibold text-[color:var(--ink)] outline-none transition placeholder:text-[color:var(--ink-soft)] hover:border-[color:var(--line-strong)] focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[#b88a2d]/15 ${
           prominent
-            ? "h-14 rounded-[var(--radius-control)] pl-14 pr-5 text-[1.02rem] shadow-[var(--shadow-sm)]"
+            ? "h-11 rounded-[var(--radius-control)] pl-11 pr-4 text-base shadow-[var(--shadow-sm)] sm:h-14 sm:pl-14 sm:pr-5 sm:text-[1.02rem]"
             : `rounded-[var(--radius-control)] pl-10 pr-4 text-base shadow-[var(--shadow-xs)] ${compact ? "h-9 text-sm" : "h-12"}`
         }`}
         id={inputId}
