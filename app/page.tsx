@@ -7,6 +7,7 @@ import {
   FilterIcon,
   GridIcon,
   ListIcon,
+  SearchIcon,
 } from "@/components/icons";
 import { ContentCard, ContentListRow, PathCard } from "@/components/content-card";
 import { DetailModal } from "@/components/detail-modal";
