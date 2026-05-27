@@ -209,7 +209,6 @@ export default function Home() {
   const advancedFilterCount = [practiceAreaFilter, levelFilter, audienceFilter, statusFilter, durationFilter].filter(
     (value) => value !== "All",
   ).length;
-  const lensActive = Boolean(skillFilter);
 
   const resumeItem = continueLearning[0] as Extract<(typeof continueLearning)[number], { progress: number }>;
   const resumeTheme = getCourseTheme(resumeItem.id);
@@ -471,7 +470,7 @@ export default function Home() {
               ))}
               </div>
             </div>
-            {lensActive && (
+            {skillFilter && (
               <button
                 type="button"
                 onClick={resetAllFilters}
