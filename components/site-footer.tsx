@@ -10,8 +10,8 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="site-footer mt-auto border-t border-[color:var(--line)] bg-[color:var(--paper)]">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <footer className="site-footer mt-12 border-t border-[color:var(--line)] bg-[color:var(--paper)]">
+      <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-md">
             <p className="section-kicker secondary">LACE Learning Hub</p>
@@ -25,7 +25,7 @@ export function SiteFooter() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="nav-link rounded-md transition hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15"
+                className="nav-link rounded-md text-[color:var(--ink-muted)] transition hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15"
               >
                 {link.label}
               </Link>

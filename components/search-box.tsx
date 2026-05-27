@@ -81,7 +81,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
         onKeyDown={handleKeyDown}
         className={`w-full border border-[color:var(--line)] bg-[color:var(--surface-raised)] font-semibold text-[color:var(--ink)] outline-none transition placeholder:text-[color:var(--ink-soft)] hover:border-[color:var(--line-strong)] focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[#b88a2d]/15 ${
           prominent
-            ? "h-11 rounded-[var(--radius-control)] pl-11 pr-4 text-base shadow-[var(--shadow-sm)] sm:h-14 sm:pl-14 sm:pr-5 sm:text-[1.02rem]"
+            ? "h-11 rounded-[var(--radius-control)] pl-11 pr-4 text-[0.95rem] shadow-[var(--shadow-sm)] sm:h-12 sm:pl-12 sm:pr-5 sm:text-base"
             : `rounded-[var(--radius-control)] pl-10 pr-4 text-base shadow-[var(--shadow-xs)] ${compact ? "h-9 text-sm" : "h-12"}`
         }`}
         id={inputId}

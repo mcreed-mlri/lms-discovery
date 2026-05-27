@@ -23,23 +23,25 @@
 
   /* ── Neutral base — clean ivory/stone canvas; warmth lives in accents,
         not in full-page parchment wash. Mirrors course-style.css. ───────── */
-  --paper: #f7f6f3;             /* warm stone — page canvas, matches course --bg */
-  --paper-deep: #efece6;        /* deeper section accent — use sparingly */
-  --panel: #f0ede6;             /* section frame — slightly deeper than paper so white cards still read as lifted */
-  --surface: #fcfbfa;           /* soft off-white — default card */
-  --surface-raised: #fcfbfa;    /* match surface — less glare vs paper */
-  --surface-sunken: #eceae6;    /* neutral sunken — tracks, segmented controls */
-  --hover-tint: #f2f1ed;        /* whisper hover — warm, not tan */
+  --paper: #f8f7f3;             /* warm stone page canvas */
+  --paper-deep: #efede6;        /* deeper section accent, use sparingly */
+  --panel: #f3f1eb;             /* section frame, warmer than the canvas */
+  --surface: #fffdf9;           /* soft off-white card */
+  --surface-raised: #fffdf9;    /* raised surfaces, still gentle */
+  --surface-sunken: #eeece5;    /* neutral sunken tracks and controls */
+  --hover-tint: #f5f3ed;        /* whisper hover, warm but restrained */
+  --hero-wash: #f3f0e8;
+  --hero-wash-soft: #fbfaf6;
   --ink: #16130f;              /* near-black — primary text, max headline contrast */
   --ink-muted: #3f3a34;        /* muted — body copy, descriptions */
   --ink-soft: #6e6860;         /* soft — metadata, captions, eyebrows */
-  --line: rgba(32, 30, 28, 0.14);        /* neutral stone hairline */
-  --line-strong: rgba(32, 30, 28, 0.22);
-  --shadow-xs: 0 1px 2px rgba(28, 26, 24, 0.03);
-  --shadow-card: none;
-  --shadow-sm: 0 1px 2px rgba(28, 26, 24, 0.04);
-  --shadow-md: 0 4px 16px rgba(28, 26, 24, 0.06);
-  --shadow-lg: 0 12px 32px rgba(28, 26, 24, 0.08);
+  --line: rgba(43, 38, 31, 0.13);
+  --line-strong: rgba(43, 38, 31, 0.22);
+  --shadow-xs: 0 1px 2px rgba(36, 31, 24, 0.04);
+  --shadow-card: 0 8px 22px rgba(45, 38, 28, 0.055);
+  --shadow-sm: 0 2px 8px rgba(36, 31, 24, 0.045);
+  --shadow-md: 0 10px 28px rgba(36, 31, 24, 0.07);
+  --shadow-lg: 0 18px 42px rgba(36, 31, 24, 0.09);
 
   /* ── Brand — the LACE editorial gold. Used sparingly, never as wallpaper ─ */
   --brand: #9a7a34;
@@ -120,7 +122,8 @@ body {
   line-height: 1.6;
   /* A flat, calm stone field — no coloured radials, no gold wallpaper,
      no gradient. Stable and durable over long sessions. */
-  background: var(--paper);
+  background:
+    linear-gradient(180deg, #fbfaf6 0%, var(--paper) 18rem, #f7f5f0 100%);
   color: var(--ink);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -168,7 +171,8 @@ input::placeholder {
 }
 
 .hub-shell {
-  background: var(--paper);
+  background:
+    linear-gradient(180deg, #fbfaf6 0%, var(--paper) 20rem, #f7f5f0 100%);
 }
 
 .dashboard-command {
@@ -191,6 +195,7 @@ input::placeholder {
 .editorial-panel {
   border: 1px solid var(--line);
   background: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
 }
 
 /* The default card: flat surface, hairline only — no lift animation. */
@@ -198,11 +203,13 @@ input::placeholder {
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
   background: var(--surface-raised);
+  box-shadow: var(--shadow-xs);
 }
 
 .editorial-card:hover {
   border-color: var(--line-strong);
   background: var(--hover-tint);
+  box-shadow: var(--shadow-card);
 }
 
 .surface-featured {
@@ -217,14 +224,62 @@ input::placeholder {
 }
 
 .hero-continue {
-  border: 1px solid var(--line);
+  border: 1px solid rgba(43, 38, 31, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(250, 247, 240, 0.98));
+  box-shadow: 0 14px 34px rgba(45, 38, 28, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.home-hero {
+  background:
+    linear-gradient(135deg, var(--hero-wash-soft) 0%, var(--hero-wash) 58%, #f8f6f0 100%);
+}
+
+.home-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(154, 122, 52, 0.08), transparent 38%),
+    radial-gradient(circle at 80% 18%, rgba(154, 122, 52, 0.08), transparent 32%);
+  opacity: 0.75;
+}
+
+.search-band {
+  background:
+    linear-gradient(180deg, rgba(248, 247, 243, 0.96), rgba(244, 242, 236, 0.96));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.action-section {
+  position: relative;
+}
+
+.action-section::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 4.25rem;
+  height: 2px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--brand) 58%, var(--line-strong));
 }
 
 /* Shared nav active state — warm tint without a full beige block. */
 .nav-link-active {
-  background: color-mix(in srgb, var(--brand) 14%, var(--surface-raised));
+  background: color-mix(in srgb, var(--brand) 10%, var(--surface-raised));
   color: var(--ink);
-  box-shadow: inset 0 0 0 1px var(--line);
+  box-shadow: inset 0 0 0 1px rgba(43, 38, 31, 0.1), 0 1px 2px rgba(36, 31, 24, 0.035);
+}
+
+.nav-link-active::before {
+  content: "";
+  width: 3px;
+  height: 1.25rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--brand) 72%, var(--ink));
+  box-shadow: 0 0 0 2px rgba(154, 122, 52, 0.08);
 }
 
 /* Catalog / control active states — clear but not heavy. */
@@ -262,12 +317,15 @@ input::placeholder {
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
   background: var(--surface-raised);
-  transition: border-color 140ms ease, background-color 140ms ease;
+  box-shadow: var(--shadow-xs);
+  transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
 
 .interactive-tile:hover {
   border-color: var(--line-strong);
   background: var(--hover-tint);
+  box-shadow: var(--shadow-card);
+  transform: translateY(-1px);
 }
 
 /* ── Text atoms ─────────────────────────────────────────────────────────── */
@@ -322,7 +380,7 @@ input::placeholder {
 
 .section-title {
   font-family: var(--font-sans);
-  font-weight: 700;
+  font-weight: 750;
   letter-spacing: -0.015em;
   line-height: 1.2;
 }
@@ -362,7 +420,7 @@ input::placeholder {
 
 .card-title {
   color: var(--ink);
-  font-weight: 700;
+  font-weight: 750;
   letter-spacing: -0.012em;
   line-height: 1.2;
 }

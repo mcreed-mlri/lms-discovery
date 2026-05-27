@@ -139,15 +139,15 @@ function SkillTile({ skill, onSelect }: { skill: Skill; onSelect: (id: SkillId) 
     <button
       type="button"
       onClick={() => onSelect(skill.id)}
-      className="interactive-tile group flex min-h-[8rem] flex-col gap-2 p-3.5 text-left focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 sm:p-4"
+      className="interactive-tile group flex min-h-[8.25rem] flex-col gap-2.5 p-3.5 text-left focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 sm:p-4"
     >
       <div className="flex items-start justify-between gap-3">
-        <span className={`flex h-9 w-9 items-center justify-center rounded-xl transition ${topic.iconWrap}`}>
+        <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition group-hover:scale-[1.02] ${topic.iconWrap}`}>
           <SkillGlyph kind={skill.glyph} className="h-5 w-5" />
         </span>
-        <span className="rounded-full border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-2 py-0.5 text-[0.72rem] font-bold text-[color:var(--ink-soft)]">{count} modules</span>
+        <span className="rounded-full border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-2 py-0.5 text-[0.72rem] font-bold leading-5 text-[color:var(--ink-soft)]">{count} modules</span>
       </div>
-      <h3 className="section-title mt-1 text-base leading-snug text-[color:var(--ink)]">{skill.name}</h3>
+      <h3 className="section-title mt-1 text-[1.02rem] leading-snug text-[color:var(--ink)]">{skill.name}</h3>
       <p className="line-clamp-2 text-sm leading-snug text-[color:var(--ink-muted)]">{skill.blurb}</p>
     </button>
   );
@@ -325,8 +325,8 @@ export default function Home() {
     >
         <div className="flex flex-col">
         {/* SEARCH — first on mobile so advocates get to content fast */}
-        <section className="sticky-filter order-1 border-b border-[color:var(--line)] bg-[color:var(--bg-surface-soft)] lg:order-2" aria-label="Search the library">
-          <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-5 lg:px-8">
+        <section className="sticky-filter search-band order-1 border-b border-[color:var(--line)] lg:order-2" aria-label="Search the library">
+          <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
             <div className="flex items-start gap-2 sm:gap-3">
               <div className="min-w-0 flex-1">
                 <SearchBox value={query} onChange={setQuery} suggestions={searchSuggestions} onSelect={openSearchResult} prominent />
@@ -335,7 +335,7 @@ export default function Home() {
                 type="button"
                 onClick={() => setShowRefine((value) => !value)}
                 aria-expanded={showRefine}
-                className={`inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-[var(--radius-control)] border px-3 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 sm:h-14 sm:px-4 ${
+                className={`inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-[var(--radius-control)] border px-3 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 sm:h-12 sm:px-4 ${
                   showRefine || advancedFilterCount > 0
                     ? "border-[color:var(--line-strong)] bg-[color:var(--surface-raised)] text-[color:var(--ink)]"
                     : "border-[color:var(--line)] bg-[color:var(--surface-raised)] text-[color:var(--ink-muted)] hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)]"
@@ -376,22 +376,22 @@ export default function Home() {
         </section>
 
         {/* HERO — compact on mobile; greeting + continue below search */}
-        <section className="order-2 border-b border-[color:var(--line)] bg-[color:var(--paper)] lg:order-1">
-          <div className="relative mx-auto grid max-w-7xl gap-3 px-4 py-4 sm:gap-6 sm:px-6 sm:py-7 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.4fr)] lg:items-start lg:gap-8 lg:px-8 lg:py-8">
-            <div className="max-w-2xl">
+        <section className="home-hero relative order-2 overflow-hidden border-b border-[color:var(--line)] lg:order-1">
+          <div className="relative mx-auto grid max-w-7xl gap-4 px-4 py-5 sm:gap-6 sm:px-6 sm:py-8 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.42fr)] lg:items-center lg:gap-10 lg:px-8 lg:py-10">
+            <div className="max-w-2xl py-1">
               <p className="metadata hidden text-[color:var(--ink-soft)] sm:block">{dateLabel}</p>
-              <h1 className="hero-display text-xl text-[color:var(--ink)] sm:mt-2 sm:text-[2rem] lg:text-[2.35rem]">
+              <h1 className="hero-display text-2xl text-[color:var(--ink)] sm:mt-2 sm:text-[2.1rem] lg:text-[2.45rem]">
                 Welcome back, {user.firstName}.
               </h1>
               <p className="metadata mt-2 hidden text-[color:var(--ink-soft)] sm:mt-3 sm:block">{roleSummary}</p>
             </div>
 
             <aside
-              className="hero-continue editorial-panel rounded-[var(--radius-card)] p-3 sm:p-5"
+              className="hero-continue editorial-panel rounded-[calc(var(--radius-card)+2px)] p-3.5 sm:p-[1.125rem]"
               aria-label="Continue learning"
             >
               <p className="section-kicker primary hidden sm:block">Continue learning</p>
-              <div className="flex items-center gap-3 sm:mt-2.5 sm:items-start sm:gap-3.5">
+              <div className="flex items-center gap-3 sm:mt-3 sm:items-start sm:gap-4">
                 <div className="sm:hidden">
                   <ProgressRing value={resumeItem.progress} size={40} stroke={4} color={resumeTheme.ring} trackColor="var(--surface-sunken)" label={`${resumeItem.progressLabel ?? resumeItem.progress} complete`}>
                     <span className="text-[0.62rem] font-semibold tabular-nums text-[color:var(--ink)]">
@@ -407,7 +407,7 @@ export default function Home() {
                   </ProgressRing>
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h2 className="card-title line-clamp-2 text-sm leading-snug text-[color:var(--ink)] sm:text-base">{resumeItem.title}</h2>
+                  <h2 className="card-title line-clamp-2 text-sm leading-snug text-[color:var(--ink)] sm:text-[1.05rem]">{resumeItem.title}</h2>
                   <p className="metadata mt-0.5 text-[color:var(--ink-soft)] sm:mt-1">Next · {resumeItem.detail}</p>
                 </div>
                 <a
@@ -419,7 +419,7 @@ export default function Home() {
                 </a>
               </div>
               <a
-                className="mt-4 hidden h-10 w-full items-center justify-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] text-sm font-bold text-[color:var(--surface-raised)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 sm:inline-flex"
+                className="mt-5 hidden h-11 w-full items-center justify-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] text-sm font-bold text-[color:var(--surface-raised)] shadow-[var(--shadow-xs)] transition hover:bg-[#2a251f] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 sm:inline-flex"
                 href={resumeUrl}
               >
                 Resume learning <ArrowIcon className="h-4 w-4" />
@@ -430,12 +430,15 @@ export default function Home() {
         </div>
 
         {/* SKILLS — the primary lens: legal practice as verbs */}
-        <section className="mx-auto mt-6 max-w-7xl px-4 sm:mt-10 sm:px-6 lg:px-8" aria-label="Browse by skill">
-          <div className="section-panel pt-5 sm:pt-8">
-          <div className="flex items-end justify-between gap-4 border-b border-[color:var(--line)] pb-3">
+        <section className="mx-auto mt-8 max-w-7xl px-4 sm:mt-12 sm:px-6 lg:px-8" aria-label="Browse by skill">
+          <div className="action-section section-panel pt-6 sm:pt-8">
+          <div className="flex items-end justify-between gap-4 border-b border-[color:var(--line)] pb-4">
             <div>
               <p className="section-kicker secondary">Browse by action</p>
-              <h2 className="section-title mt-1 text-xl text-[color:var(--ink)] sm:text-2xl">What do you need to do?</h2>
+              <h2 className="section-title mt-1 text-[1.55rem] text-[color:var(--ink)] sm:text-[1.9rem]">What do you need to do?</h2>
+              <p className="mt-2.5 max-w-2xl text-sm font-medium leading-6 text-[color:var(--ink-muted)] sm:text-[0.95rem]">
+                Start with the task in front of you. We’ll point you to the right training.
+              </p>
             </div>
           </div>
           <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
@@ -447,13 +450,13 @@ export default function Home() {
         </section>
 
         {/* BROWSE — the full catalog, with filter pills + the active lens */}
-        <section id="browse" className="mx-auto mt-6 max-w-7xl px-4 sm:mt-10 sm:px-6 lg:px-8" tabIndex={-1} aria-label="Learning content">
-          <div className="section-panel pt-5 sm:pt-8">
-          <div className="mb-4 border-b border-[color:var(--line)] pb-3">
+        <section id="browse" className="mx-auto mt-7 max-w-7xl px-4 sm:mt-10 sm:px-6 lg:px-8" tabIndex={-1} aria-label="Learning content">
+          <div className="section-panel pt-5 sm:pt-7">
+          <div className="mb-5 border-b border-[color:var(--line)] pb-3.5">
             <p className="section-kicker secondary">Catalog</p>
-            <h2 className="section-title mt-1 text-xl text-[color:var(--ink)] sm:text-2xl">Find the right next step</h2>
+            <h2 className="section-title mt-1 text-[1.35rem] text-[color:var(--ink)] sm:text-[1.65rem]">Find the right next step</h2>
           </div>
-          <div className="mb-6 flex flex-wrap items-center gap-3">
+          <div className="mb-5 flex flex-wrap items-center gap-3">
             <div className="-mx-4 flex max-w-full shrink-0 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
               <div className="inline-flex shrink-0 rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface-sunken)] p-1">
               {filters.map((entry) => (

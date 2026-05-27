@@ -11,7 +11,7 @@ import { useAuth } from "@/lib/auth";
 const learnerStreak = 12;
 
 function sidebarLinkClass(active: boolean) {
-  return `group relative flex h-11 items-center gap-3 rounded-lg px-3 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 ${
+  return `group relative flex h-11 items-center gap-3 rounded-[12px] px-3 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 ${
     active
       ? "nav-link-active"
       : "text-[color:var(--ink-muted)] hover:bg-[color:var(--surface)] hover:text-[color:var(--ink)]"
@@ -36,7 +36,7 @@ export function LibraryShell({
         Skip to main content
       </a>
 
-      <header className="sticky top-0 z-40 border-b border-[color:var(--line)] bg-[color:var(--bg-surface-soft)] text-[color:var(--ink)] pt-[env(safe-area-inset-top)]">
+      <header className="sticky top-0 z-40 border-b border-[color:var(--line)] bg-[color:var(--bg-surface-soft)] text-[color:var(--ink)] shadow-[0_1px_0_rgba(255,255,255,0.45)] pt-[env(safe-area-inset-top)]">
         <div className="mx-auto flex min-h-[3.25rem] max-w-7xl items-center gap-4 px-4 py-2 sm:min-h-[4.75rem] sm:px-6 sm:py-3 lg:px-8">
           <Link
             href="/"

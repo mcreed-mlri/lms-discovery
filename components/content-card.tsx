@@ -42,7 +42,7 @@ function ContentStatusChip({ status }: { status: "New" | "Updated" }) {
 function DetailsAffordance({ className = "" }: { className?: string }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] text-xs font-semibold text-[color:var(--ink-muted)] transition duration-200 ease-out group-hover:border-[color:var(--line-strong)] group-hover:text-[color:var(--ink)] ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] text-xs font-semibold text-[color:var(--ink-muted)] shadow-[var(--shadow-xs)] transition duration-200 ease-out group-hover:border-[color:var(--line-strong)] group-hover:bg-[color:var(--surface-raised)] group-hover:text-[color:var(--ink)] ${className}`}
     >
       Details <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
     </span>
@@ -65,18 +65,18 @@ export function ContentCard({ item, onOpen }: { item: LearningItem; onOpen?: (it
       onClick={(event) => (onOpen ? handleOpen(event, item, onOpen) : preventPlaceholderNavigation(event))}
       title={comingSoonLabel}
       aria-label={`${item.title}. Open detail view.`}
-      className={`editorial-card group relative flex h-full cursor-pointer flex-col overflow-hidden transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
-        isModule ? "min-h-36 p-4 pt-4 before:h-0.5" : "min-h-48 p-5 pt-5 before:h-0.5"
+      className={`editorial-card group relative flex h-full cursor-pointer flex-col overflow-hidden transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 before:opacity-85 focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
+        isModule ? "min-h-[11.25rem] p-4 pt-4 before:h-1" : "min-h-[15.75rem] p-[1.125rem] pt-5 before:h-1"
       } ${
         courseTheme ? `${courseTheme.hoverBorder} ${courseTheme.rail}` : "before:bg-[color:var(--line-strong)]"
       }`}
     >
       <ComingSoonTooltip />
-      <div className={`${isModule ? "mb-3" : "mb-3.5"} flex flex-wrap items-start gap-2`}>
+      <div className={`${isModule ? "mb-3" : "mb-3.5"} flex min-h-8 flex-wrap items-start gap-2`}>
         <TypeBadge type={item.type} />
         {isModule && item.contentStatus && <ContentStatusChip status={item.contentStatus} />}
       </div>
-      <h3 className={`card-title ${isModule ? "text-[1.04rem]" : "text-[1.1rem]"} leading-snug`}>{item.title}</h3>
+      <h3 className={`card-title ${isModule ? "text-[1.04rem]" : "text-[1.13rem]"} leading-snug`}>{item.title}</h3>
       {isModule && (
         <p className={`mt-2 inline-flex w-fit items-center gap-1.5 rounded-md border px-2 py-1 text-xs font-semibold leading-5 ${courseTheme?.chip}`}>
           <span className={`h-1.5 w-1.5 rounded-full ${courseTheme?.dot}`} aria-hidden="true" />
@@ -84,8 +84,8 @@ export function ContentCard({ item, onOpen }: { item: LearningItem; onOpen?: (it
         </p>
       )}
       <p className={`card-description mt-2.5 ${isModule ? "line-clamp-2 text-[0.88rem] leading-relaxed" : "line-clamp-3"}`}>{item.description}</p>
-      <div className={`${isModule ? "pt-4" : "pt-5"} mt-auto flex items-end justify-between gap-3`}>
-        <span className="text-sm font-semibold text-[color:var(--ink-soft)]">{getMeta(item)}</span>
+      <div className={`${isModule ? "pt-3.5" : "pt-4"} mt-auto flex items-end justify-between gap-3`}>
+        <span className="text-sm font-semibold leading-5 text-[color:var(--ink-soft)]">{getMeta(item)}</span>
         <DetailsAffordance className={`h-8 ${isCourse ? "px-3" : "px-2.5"}`} />
       </div>
     </a>
@@ -137,7 +137,7 @@ export function PathCard({ item, onOpen }: { item: Extract<LearningItem, { type:
       onClick={(event) => (onOpen ? handleOpen(event, item, onOpen) : preventPlaceholderNavigation(event))}
       title={comingSoonLabel}
       aria-label={`${item.title}. ${comingSoonLabel}.`}
-      className={`editorial-card group relative block cursor-pointer overflow-hidden p-5 transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 before:h-0.5 focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
+      className={`editorial-card group relative block cursor-pointer overflow-hidden p-[1.125rem] pt-5 transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 before:h-1 before:opacity-85 focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
         pathTheme ? `${pathTheme.hoverBorder} ${pathTheme.rail}` : "before:bg-[color:var(--line-strong)]"
       }`}
     >
@@ -147,9 +147,9 @@ export function PathCard({ item, onOpen }: { item: Extract<LearningItem, { type:
       <div className="flex items-start">
         <TypeBadge type="PATH" />
       </div>
-      <h3 className="card-title mt-4 text-xl leading-tight">{item.title}</h3>
-      <p className="card-description mt-3 line-clamp-3">{item.description}</p>
-      <div className="mt-5 flex flex-wrap gap-1.5">
+      <h3 className="card-title mt-3.5 text-[1.14rem] leading-tight">{item.title}</h3>
+      <p className="card-description mt-2.5 line-clamp-3">{item.description}</p>
+      <div className="mt-4 flex flex-wrap gap-1.5">
         {relatedCourses.slice(0, 3).map((course) => (
           <span key={course.id} className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${getCourseTheme(course.id).chip}`}>
             <span className={`h-1.5 w-1.5 rounded-full ${getCourseTheme(course.id).dot}`} aria-hidden="true" />
@@ -157,8 +157,8 @@ export function PathCard({ item, onOpen }: { item: Extract<LearningItem, { type:
           </span>
         ))}
       </div>
-      <div className="mt-6 flex items-center justify-between border-t border-[color:var(--line)] pt-4">
-        <span className="text-sm font-medium text-[color:var(--ink-muted)]">
+      <div className="mt-5 flex items-center justify-between border-t border-[color:var(--line)] pt-3.5">
+        <span className="text-sm font-semibold leading-5 text-[color:var(--ink-soft)]">
           {item.courseIds.length} courses - {item.totalDuration}
         </span>
         <DetailsAffordance className="px-3 py-1.5" />
