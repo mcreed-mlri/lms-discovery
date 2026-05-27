@@ -62,6 +62,7 @@ export default function LoginPage() {
             No real credentials required. This is a demonstration environment.
           </p>
         </div>
+        </div>
       </div>
       <SiteFooter />
     </div>
