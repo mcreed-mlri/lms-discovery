@@ -2,6 +2,18 @@
 
 Use these questions to confirm whether the MLRI Learning Hub can sit in front of Brightspace as a lightweight discovery layer.
 
+## Current Vendor Response Status - 2026-05-31
+
+D2L is working to bring in an implementation specialist for the API-specific items below. The following pieces are confirmed enough to act on:
+
+- The Brightspace test site has not launched yet.
+- D2L recommends launching the test site now for API testing before syncing from the live catalog.
+- For the vanity URL, MLRI must send D2L the desired URL; D2L will submit an internal request and provide DNS records.
+- SSL Option 1: D2L manages the SSL certificate and renewal for the non-Brightspace subdomain through AWS Certificate Manager. MLRI IT adds a D2L-provided validation DNS record.
+- SSL Option 2: MLRI can provide an existing valid wildcard certificate and private key to D2L, but MLRI owns renewal cost, timing, and replacement.
+
+Recommended reply: ask D2L to launch the Brightspace test instance, provide the desired vanity URL once selected, and prefer D2L-managed SSL unless MLRI IT requires the wildcard-certificate path.
+
 ## Discovery And Architecture
 
 - We are not trying to replace Brightspace. We want Brightspace to remain the LMS system of record while a custom Learning Hub improves discovery, search, pathways, and navigation. Is this architecture compatible with D2L's recommended integration patterns?
@@ -28,6 +40,15 @@ Use these questions to confirm whether the MLRI Learning Hub can sit in front of
 - Can we retrieve progress or completion data for courses, modules, or topics?
 - What OAuth scopes and role permissions would be required for these API calls?
 - Are there API rate limits, paging constraints, or performance concerns we should design around?
+
+## API Specialist Follow-Up
+
+- What custom Brightspace role should a Service User use for read-only course/catalog metadata and content structure?
+- Does the Service User need enrollment in every Course Offering it syncs, or can it inherit access from Department, Training Area, or top-level Org assignment?
+- If Client Credentials/server-to-server OAuth is recommended, what are the exact HTTPS JWKS URL and JWT client assertion requirements for MLRI's instance?
+- Are the spike versions LP `1.49` and LE `1.82` appropriate for Org Unit metadata and Content ToC calls in MLRI's instance?
+- Which scopes should production use for read-only catalog and content-structure sync? Should `core:*:*` remain temporary testing-only while production uses narrower resource-group scopes?
+- Do other D2L clients use APIs for external catalogs, frontend companion apps, or custom discovery layers, and are there general lessons learned for support boundaries?
 
 ## Authentication And User Experience
 
