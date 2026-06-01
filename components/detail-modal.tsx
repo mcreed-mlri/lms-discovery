@@ -96,7 +96,7 @@ export function DetailModal({
         {/* Pull handle for mobile drawer */}
         <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-[color:var(--line-strong)] sm:hidden" />
         <button
-          className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] text-xl leading-none text-[color:var(--ink-muted)] transition hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 max-sm:top-3"
+          className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] text-xl leading-none text-[color:var(--ink-muted)] transition hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15 max-sm:top-3"
           type="button"
           onClick={onClose}
           aria-label="Close detail view"
@@ -114,7 +114,7 @@ export function DetailModal({
             <p className="readable-copy mt-5 max-w-2xl text-[1.02rem] leading-7">{getSummary(item)}</p>
             <div className="mt-7 flex flex-wrap gap-3">
               <a
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15"
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
                 href={getBrightspaceUrl(item)}
                 onClick={() => onLaunch?.(item)}
               >
@@ -122,7 +122,7 @@ export function DetailModal({
                 Open in Brightspace
               </a>
               <button
-                className={`inline-flex h-11 items-center justify-center rounded-full border px-5 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15 ${
+                className={`inline-flex h-11 items-center justify-center rounded-full border px-5 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15 ${
                   isSaved
                     ? "border-[color:var(--line-strong)] bg-[color:var(--surface-sunken)] text-[color:var(--ink)]"
                     : "border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)] hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)]"

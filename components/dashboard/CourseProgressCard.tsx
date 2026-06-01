@@ -11,7 +11,7 @@ const statusStyles: Record<LearnerCourse["status"], string> = {
 
 export function CourseProgressCard({ course }: { course: LearnerCourse }) {
   return (
-    <article className="editorial-card flex flex-col border-l-4 border-l-[#b88a2d] p-5">
+    <article className="editorial-card flex flex-col border-l-4 border-l-[#2a5bff] p-5">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
           <h3 className="card-title text-lg">{course.title}</h3>
@@ -33,12 +33,12 @@ export function CourseProgressCard({ course }: { course: LearnerCourse }) {
       </div>
 
       <p className="mt-4 text-sm font-medium text-[color:var(--ink-muted)]">
-        Last visited <span className="text-[#25221d]">{formatRelativeDate(course.lastAccessedAt)}</span>
+        Last visited <span className="text-[color:var(--ink-muted)]">{formatRelativeDate(course.lastAccessedAt)}</span>
         {course.dueDate ? (
           <>
             {" "}
             · Due{" "}
-            <span className="text-[#25221d]">
+            <span className="text-[color:var(--ink-muted)]">
               {new Date(course.dueDate).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
             </span>
           </>
@@ -47,7 +47,7 @@ export function CourseProgressCard({ course }: { course: LearnerCourse }) {
 
       <a
         href={course.resumeUrl}
-        className="mt-5 inline-flex h-10 w-full items-center justify-center gap-2 rounded-[var(--radius-control)] bg-[#171713] px-4 text-sm font-bold text-[#fffaf0] shadow-[0_10px_22px_rgba(23,23,19,0.16)] transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-[#1f1d19]/15 sm:w-auto"
+        className="mt-5 inline-flex h-10 w-full items-center justify-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-4 text-sm font-bold text-[color:var(--surface)] shadow-[0_10px_22px_rgba(23,23,19,0.16)] transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15 sm:w-auto"
         aria-label={`Continue learning ${course.title}`}
       >
         Continue learning <ArrowIcon className="h-4 w-4" />

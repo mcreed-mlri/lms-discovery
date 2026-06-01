@@ -21,9 +21,9 @@ export function UpdatesView() {
     <>
       <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
         <header className="border-b border-[color:var(--line)] pb-4">
-          <p className="section-kicker secondary">Recent changes</p>
+          <p className="section-kicker secondary">Keep current</p>
           <h1 className="section-title mt-1 text-2xl text-[color:var(--ink)]">Updates</h1>
-          <p className="mt-2 text-[color:var(--ink-muted)]">Modules and materials that changed recently.</p>
+          <p className="mt-2 text-[color:var(--ink-muted)]">Recent changes to modules, checklists, and practice guidance.</p>
         </header>
 
         <div className="mt-6 flex flex-col gap-4">

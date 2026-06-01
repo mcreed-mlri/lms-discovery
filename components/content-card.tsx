@@ -20,9 +20,9 @@ function ComingSoonTooltip() {
 }
 
 function getMeta(item: LearningItem) {
-  if (item.type === "PATH") return `${item.courseIds.length} courses - ${item.totalDuration}`;
+  if (item.type === "PATH") return `${item.courseIds.length} courses, ${item.totalDuration}`;
   if (item.type === "MODULE") return `${getModuleMinutes(item.id)} min`;
-  return `${item.practiceArea} - ${item.duration}`;
+  return `${item.practiceArea}, ${item.duration}`;
 }
 
 // Lifecycle badge — a status signal, kept visually separate from topic colour.
@@ -76,16 +76,16 @@ export function ContentCard({ item, onOpen }: { item: LearningItem; onOpen?: (it
         <TypeBadge type={item.type} />
         {isModule && item.contentStatus && <ContentStatusChip status={item.contentStatus} />}
       </div>
-      <h3 className={`card-title ${isModule ? "text-[1.04rem]" : "text-[1.13rem]"} leading-snug`}>{item.title}</h3>
+      <h3 className={`card-title ${isModule ? "text-[1.08rem]" : "text-[1.18rem]"} leading-snug`}>{item.title}</h3>
       {isModule && (
         <p className={`mt-2 inline-flex w-fit items-center gap-1.5 rounded-md border px-2 py-1 text-xs font-semibold leading-5 ${courseTheme?.chip}`}>
           <span className={`h-1.5 w-1.5 rounded-full ${courseTheme?.dot}`} aria-hidden="true" />
           {item.parentCourseTitle}
         </p>
       )}
-      <p className={`card-description mt-2.5 ${isModule ? "line-clamp-2 text-[0.88rem] leading-relaxed" : "line-clamp-3"}`}>{item.description}</p>
-      <div className={`${isModule ? "pt-3.5" : "pt-4"} mt-auto flex items-end justify-between gap-3`}>
-        <span className="text-sm font-semibold leading-5 text-[color:var(--ink-soft)]">{getMeta(item)}</span>
+      <p className={`card-description mt-2.5 text-[0.9rem] leading-relaxed ${isModule ? "line-clamp-2" : "line-clamp-3"}`}>{item.description}</p>
+      <div className={`${isModule ? "pt-3.5" : "pt-4"} mt-auto flex items-center justify-between gap-3 border-t border-[color:var(--line-soft)]`}>
+        <span className="text-[0.82rem] font-semibold leading-5 tabular-nums text-[color:var(--ink-soft)]">{getMeta(item)}</span>
         <DetailsAffordance className={`h-8 ${isCourse ? "px-3" : "px-2.5"}`} />
       </div>
     </a>
@@ -111,7 +111,7 @@ export function ContentListRow({ item, onOpen }: { item: LearningItem; onOpen?: 
         <div className="mb-2.5 flex flex-wrap items-center gap-2">
           <TypeBadge type={item.type} />
           {isModule && item.contentStatus && <ContentStatusChip status={item.contentStatus} />}
-          <span className="text-sm font-semibold text-[color:var(--ink-soft)]">{getMeta(item)}</span>
+          <span className="text-[0.82rem] font-semibold tabular-nums text-[color:var(--ink-soft)]">{getMeta(item)}</span>
         </div>
         <h3 className="card-title text-lg leading-snug">{item.title}</h3>
         {isModule && (
@@ -147,8 +147,8 @@ export function PathCard({ item, onOpen }: { item: Extract<LearningItem, { type:
       <div className="flex items-start">
         <TypeBadge type="PATH" />
       </div>
-      <h3 className="card-title mt-3.5 text-[1.14rem] leading-tight">{item.title}</h3>
-      <p className="card-description mt-2.5 line-clamp-3">{item.description}</p>
+      <h3 className="card-title mt-3.5 text-[1.18rem] leading-tight">{item.title}</h3>
+      <p className="card-description mt-2.5 line-clamp-3 text-[0.9rem] leading-relaxed">{item.description}</p>
       <div className="mt-4 flex flex-wrap gap-1.5">
         {relatedCourses.slice(0, 3).map((course) => (
           <span key={course.id} className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${getCourseTheme(course.id).chip}`}>
@@ -157,9 +157,9 @@ export function PathCard({ item, onOpen }: { item: Extract<LearningItem, { type:
           </span>
         ))}
       </div>
-      <div className="mt-5 flex items-center justify-between border-t border-[color:var(--line)] pt-3.5">
-        <span className="text-sm font-semibold leading-5 text-[color:var(--ink-soft)]">
-          {item.courseIds.length} courses - {item.totalDuration}
+      <div className="mt-5 flex items-center justify-between border-t border-[color:var(--line-soft)] pt-3.5">
+        <span className="text-[0.82rem] font-semibold leading-5 tabular-nums text-[color:var(--ink-soft)]">
+          {item.courseIds.length} courses, {item.totalDuration}
         </span>
         <DetailsAffordance className="px-3 py-1.5" />
       </div>

@@ -111,7 +111,7 @@ export const learnerDashboardMock: LearnerDashboardPayload = {
     { label: "Completed module: Reasonable Accommodation Requests", at: daysAgo(1) },
     { label: "Started Self Check: UPL scenarios", at: daysAgo(4) },
     { label: "Bookmarked: Working with court interpreters", at: daysAgo(4) },
-    { label: "Earned 2.0 CLE: UPL Boundaries for Advocates", at: daysAgo(5) },
+    { label: "Earned 2.0 training hrs: UPL Boundaries for Advocates", at: daysAgo(5) },
   ],
   notices: [
     {
@@ -130,8 +130,8 @@ export const learnerDashboardMock: LearnerDashboardPayload = {
   ],
   weeklySparkline: [2, 4, 3, 6, 4, 7, 5, 8],
   certificates: [
-    { id: "cert-upl", title: "UPL Boundaries for Advocates", earnedOn: "May 20, 2026", credits: "2.0 CLE" },
-    { id: "cert-dv", title: "Domestic Violence Safety Planning", earnedOn: "May 9, 2026", credits: "3.0 CLE" },
+    { id: "cert-upl", title: "UPL Boundaries for Advocates", earnedOn: "May 20, 2026", credits: "2.0 hrs" },
+    { id: "cert-dv", title: "Domestic Violence Safety Planning", earnedOn: "May 9, 2026", credits: "3.0 hrs" },
   ],
 };
 

@@ -1,11 +1,8 @@
 import type { ReactNode } from "react";
-import { HubShell } from "@/components/hub-shell";
-import { LaceDevRoleProvider } from "@/lib/lace-dev-role";
+import { StudioShell } from "@/components/studio-shell";
 
+// LaceDevRoleProvider is now supplied app-wide in app/providers.tsx, so the
+// layout only needs to wrap My Learning pages in the Studio rail shell.
 export default function MyLearningLayout({ children }: { children: ReactNode }) {
-  return (
-    <LaceDevRoleProvider>
-      <HubShell>{children}</HubShell>
-    </LaceDevRoleProvider>
-  );
+  return <StudioShell>{children}</StudioShell>;
 }

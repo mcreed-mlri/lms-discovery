@@ -65,7 +65,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
       <label className="sr-only" htmlFor={inputId}>
         Search courses, modules, paths, or topics
       </label>
-      <SearchIcon className={`pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[color:var(--ink-soft)] transition group-focus-within:text-[color:var(--brand)] ${prominent ? "left-3.5 h-4 w-4 sm:left-5 sm:h-5 sm:w-5" : "left-3.5 h-4 w-4"}`} />
+      <SearchIcon className={`pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[color:var(--ink-soft)] transition group-focus-within:text-[color:var(--brand)] ${prominent ? "left-3 h-4 w-4 sm:left-5 sm:h-5 sm:w-5" : "left-3.5 h-4 w-4"}`} />
       <input
         aria-activedescendant={showSuggestions && suggestions[activeIndex] ? `${listboxId}-${activeIndex}` : undefined}
         aria-autocomplete="list"
@@ -79,13 +79,13 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
         }}
         onFocus={() => setIsOpen(true)}
         onKeyDown={handleKeyDown}
-        className={`w-full border border-[color:var(--line)] bg-[color:var(--surface-raised)] font-semibold text-[color:var(--ink)] outline-none transition placeholder:text-[color:var(--ink-soft)] hover:border-[color:var(--line-strong)] focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[#b88a2d]/15 ${
+        className={`w-full border border-[color:var(--line)] bg-[color:var(--surface-raised)] font-semibold text-[color:var(--ink)] outline-none transition placeholder:text-[color:var(--ink-soft)] hover:border-[color:var(--line-strong)] focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[#2a5bff]/15 ${
           prominent
-            ? "h-11 rounded-[var(--radius-control)] pl-11 pr-4 text-[0.95rem] shadow-[var(--shadow-sm)] sm:h-12 sm:pl-12 sm:pr-5 sm:text-base"
+            ? "h-10 rounded-[var(--radius-control)] pl-10 pr-3 text-[0.875rem] shadow-[var(--shadow-sm)] sm:h-12 sm:pl-12 sm:pr-5 sm:text-base"
             : `rounded-[var(--radius-control)] pl-10 pr-4 text-base shadow-[var(--shadow-xs)] ${compact ? "h-9 text-sm" : "h-12"}`
         }`}
         id={inputId}
-        placeholder="Search the library - ethics, intake, first appearance..."
+        placeholder="Search the library…"
         role="combobox"
         type="search"
       />

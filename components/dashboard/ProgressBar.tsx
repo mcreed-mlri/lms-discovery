@@ -10,8 +10,8 @@ export function ProgressBar({ value, label, className = "" }: ProgressBarProps) 
   return (
     <div className={className}>
       <div className="mb-1.5 flex items-center justify-between gap-2">
-        <span className="stat-label text-[#7d7467]">Progress</span>
-        <span className="stat-label text-[#9d7a35]">{clamped}%</span>
+        <span className="stat-label text-[#8b909d]">Progress</span>
+        <span className="stat-label text-[color:var(--brand)]">{clamped}%</span>
       </div>
       <div
         className="h-2 overflow-hidden rounded-full bg-[color:var(--surface-sunken)] shadow-[inset_0_1px_2px_rgba(28,26,24,0.06)]"

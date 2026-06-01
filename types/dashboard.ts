@@ -31,7 +31,7 @@ export interface LearnerDashboardPayload {
     enrolledCount: number;
     inProgressCount: number;
     completedCount: number;
-    /** Optional consistency + CLE signals — surfaced as KPI tiles. */
+    /** Optional consistency + training-hour signals — surfaced as KPI tiles. */
     streakDays?: number;
     longestStreakNote?: string;
     cleEarned?: number;

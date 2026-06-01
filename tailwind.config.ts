@@ -36,10 +36,13 @@ const config: Config = {
         line: {
           DEFAULT: "var(--line)",
           strong: "var(--line-strong)",
+          soft: "var(--line-soft)",
         },
         brand: {
           DEFAULT: "var(--brand)",
           ink: "var(--brand-ink)",
+          fill: "var(--brand-fill)",
+          tint: "var(--brand-tint)",
         },
         // Topic families — orientation signal
         topic: {
@@ -70,6 +73,7 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
         serif: ["var(--font-serif)", "Georgia", "serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
     },
   },

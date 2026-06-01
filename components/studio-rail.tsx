@@ -1,0 +1,247 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  BellIcon,
+  BookIcon,
+  ChevronLeftIcon,
+  GridIcon,
+  HomeIcon,
+  SearchIcon,
+} from "@/components/icons";
+import { useAuth } from "@/lib/auth";
+import { useLaceDevRole } from "@/lib/lace-dev-role";
+import { practiceAreas } from "@/lib/data";
+import { getHue } from "@/lib/skill-hue";
+import type { ComponentType } from "react";
+import type { LaceRole } from "@/types/dashboard";
+
+type NavItem = {
+  label: string;
+  href: string;
+  icon: ComponentType<{ className?: string }>;
+  badge?: boolean;
+  /** Active when the pathname matches/starts with this. Defaults to exact href. */
+  match?: (pathname: string) => boolean;
+  roles?: LaceRole[];
+};
+
+const primaryNav: NavItem[] = [
+  { label: "Home", href: "/", icon: HomeIcon, match: (p) => p === "/" },
+  { label: "Browse", href: "/#browse", icon: GridIcon, match: () => false },
+  { label: "My Learning", href: "/my-learning", icon: BookIcon, match: (p) => p.startsWith("/my-learning") },
+  { label: "Updates", href: "/updates", icon: BellIcon, badge: true, match: (p) => p.startsWith("/updates") },
+];
+
+const roleNav: NavItem[] = [
+  { label: "Team", href: "/my-learning/team", icon: GridIcon, roles: ["manager", "super_admin"], match: (p) => p === "/my-learning/team" },
+  { label: "Program", href: "/my-learning/program", icon: GridIcon, roles: ["program", "super_admin"], match: (p) => p === "/my-learning/program" },
+  { label: "Admin", href: "/my-learning/admin", icon: GridIcon, roles: ["super_admin"], match: (p) => p === "/my-learning/admin" },
+];
+
+function RailItem({
+  item,
+  active,
+  collapsed,
+  onNavigate,
+}: {
+  item: NavItem;
+  active: boolean;
+  collapsed: boolean;
+  onNavigate?: () => void;
+}) {
+  const Icon = item.icon;
+  return (
+    <Link
+      href={item.href}
+      onClick={onNavigate}
+      title={collapsed ? item.label : undefined}
+      aria-current={active ? "page" : undefined}
+      className={`group relative flex items-center gap-3 overflow-hidden whitespace-nowrap rounded-[9px] text-sm transition focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
+        collapsed ? "justify-center px-0 py-2.5" : "px-[11px] py-[9px]"
+      } ${
+        active
+          ? "bg-[color:var(--surface-sunken)] font-[650] text-[color:var(--ink)]"
+          : "font-medium text-[color:var(--ink-muted)] hover:bg-[color:var(--surface-sunken)]"
+      }`}
+    >
+      <span className="relative flex shrink-0">
+        <Icon
+          className={`h-[19px] w-[19px] ${active ? "text-[color:var(--brand)]" : "text-[color:var(--ink-soft)]"}`}
+        />
+        {item.badge && (
+          <span className="absolute -right-[3px] -top-[2px] h-[7px] w-[7px] rounded-full border-2 border-[color:var(--surface)] bg-[#c8493b]" />
+        )}
+      </span>
+      {!collapsed && <span className="flex-1">{item.label}</span>}
+    </Link>
+  );
+}
+
+export function StudioRail({
+  collapsed,
+  onToggle,
+  onSearch,
+  onNavigate,
+}: {
+  collapsed: boolean;
+  onToggle: () => void;
+  onSearch?: () => void;
+  /** Fires when any link is clicked — used to close the mobile drawer. */
+  onNavigate?: () => void;
+}) {
+  const pathname = usePathname();
+  const { user } = useAuth();
+  const { role } = useLaceDevRole();
+
+  const visibleRoleNav = roleNav.filter((item) => item.roles?.includes(role));
+
+  return (
+    <div
+      className={`flex min-h-full flex-col border-r border-[color:var(--line)] bg-[color:var(--surface)] transition-[width,padding] duration-200 ease-[cubic-bezier(.4,0,.2,1)] ${
+        collapsed ? "w-[68px] px-3 py-5" : "w-[248px] px-4 py-5"
+      }`}
+    >
+      {/* Brand — the mark doubles as the expand/collapse toggle */}
+      <div
+        className={`mb-1 flex items-center gap-[9px] pb-[18px] ${
+          collapsed ? "justify-center px-0" : "px-1.5"
+        }`}
+      >
+        <button
+          type="button"
+          onClick={onToggle}
+          title={collapsed ? "Expand navigation" : "Collapse navigation"}
+          aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
+          aria-expanded={!collapsed}
+          className="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[8px] bg-[color:var(--ink)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+        >
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M12 3v18" />
+            <path d="M7 8h10" />
+            <path d="M7 8 4 15a3 3 0 0 0 6 0z" />
+            <path d="M17 8l-3 7a3 3 0 0 0 6 0z" />
+          </svg>
+        </button>
+        {!collapsed && (
+          <span className="text-[20px] font-bold tracking-[-0.02em] text-[color:var(--ink)]">LACE</span>
+        )}
+      </div>
+
+      {/* Search */}
+      {collapsed ? (
+        <button
+          type="button"
+          onClick={onSearch}
+          title="Search · ⌘K"
+          className="mx-auto mb-4 flex h-10 w-11 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--paper)] text-[color:var(--ink-soft)] transition hover:border-[color:var(--line-strong)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15"
+        >
+          <SearchIcon className="h-[18px] w-[18px]" />
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={onSearch}
+          className="mb-4 flex items-center gap-[9px] rounded-[9px] border border-[color:var(--line)] bg-[color:var(--paper)] px-3 py-[9px] text-left transition hover:border-[color:var(--line-strong)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15"
+        >
+          <SearchIcon className="h-4 w-4 text-[color:var(--ink-soft)]" />
+          <span className="flex-1 text-[13.5px] text-[color:var(--ink-soft)]">Search…</span>
+          <span className="rounded-[7px] bg-[color:var(--surface-sunken)] px-[7px] py-1 font-mono text-[11px] font-semibold text-[color:var(--ink-soft)]">
+            ⌘K
+          </span>
+        </button>
+      )}
+
+      {/* Primary nav */}
+      <nav className="flex flex-col gap-[3px]" aria-label="Primary">
+        {primaryNav.map((item) => (
+          <RailItem
+            key={item.label}
+            item={item}
+            active={item.match ? item.match(pathname) : pathname === item.href}
+            collapsed={collapsed}
+            onNavigate={onNavigate}
+          />
+        ))}
+        {visibleRoleNav.map((item) => (
+          <RailItem
+            key={item.label}
+            item={item}
+            active={item.match ? item.match(pathname) : pathname === item.href}
+            collapsed={collapsed}
+            onNavigate={onNavigate}
+          />
+        ))}
+      </nav>
+
+      {/* Practice areas — the reason the rail exists */}
+      <div className="mt-[26px]">
+        {collapsed ? (
+          <div className="mx-1.5 mb-[14px] mt-1 h-px bg-[color:var(--line-soft)]" />
+        ) : (
+          <div className="mb-3 px-[11px] font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-[color:var(--ink-soft)]">
+            Practice areas
+          </div>
+        )}
+        <div className={`flex flex-col ${collapsed ? "gap-1.5" : "gap-0.5"}`}>
+          {practiceAreas.map((area) => {
+            const hue = getHue(area.hueIndex);
+            return (
+              <Link
+                key={area.id}
+                href={`/?q=${encodeURIComponent(area.query)}#browse`}
+                onClick={onNavigate}
+                title={collapsed ? `${area.name} · ${area.count}` : undefined}
+                className={`flex items-center gap-[11px] overflow-hidden whitespace-nowrap rounded-[8px] text-[13.5px] text-[color:var(--ink-muted)] transition hover:bg-[color:var(--surface-sunken)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
+                  collapsed ? "justify-center px-0 py-[7px]" : "px-[11px] py-[7px]"
+                }`}
+              >
+                <span
+                  className="h-[9px] w-[9px] shrink-0 rounded-[3px]"
+                  style={{ background: hue.solid }}
+                />
+                {!collapsed && (
+                  <>
+                    <span className="flex-1">{area.name}</span>
+                    <span className="text-[12px] text-[color:var(--ink-soft)]">{area.count}</span>
+                  </>
+                )}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Footer: collapse toggle + user */}
+      <div className="mt-auto border-t border-[color:var(--line-soft)] pt-4">
+        <button
+          type="button"
+          onClick={onToggle}
+          title={collapsed ? "Expand" : "Collapse"}
+          className={`mb-1.5 flex w-full items-center gap-[11px] rounded-[8px] text-[13.5px] font-medium text-[color:var(--ink-soft)] transition hover:bg-[color:var(--surface-sunken)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
+            collapsed ? "justify-center px-0 py-[9px]" : "px-[11px] py-[9px]"
+          }`}
+        >
+          <ChevronLeftIcon
+            className={`h-[18px] w-[18px] shrink-0 transition-transform duration-200 ${collapsed ? "rotate-180" : ""}`}
+          />
+          {!collapsed && <span>Collapse</span>}
+        </button>
+        <div
+          className={`flex items-center gap-2.5 ${collapsed ? "justify-center px-0 py-1" : "px-[7px] py-1"}`}
+        >
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color:var(--brand)] text-[12.5px] font-[650] text-white">
+            {user?.initials ?? "—"}
+          </span>
+          {!collapsed && user && (
+            <div className="min-w-0 leading-tight">
+              <div className="truncate text-[13px] font-semibold text-[color:var(--ink)]">{user.name}</div>
+              <div className="truncate text-[11.5px] text-[color:var(--ink-soft)]">{user.title}</div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

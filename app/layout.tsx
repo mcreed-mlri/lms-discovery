@@ -1,17 +1,25 @@
 import type { Metadata, Viewport } from "next";
-import { Lato } from "next/font/google";
+import { Geist, IBM_Plex_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import { Providers } from "./providers";
 import "./globals.css";
 
-const lato = Lato({
+// Geist — the Studio sans, used app-wide. IBM Plex Mono — eyebrows, chips,
+// counts, percentages. Both exposed as CSS vars consumed in globals.css.
+const geist = Geist({
   subsets: ["latin"],
-  weight: ["300", "400", "700", "900"],
-  variable: "--font-lato",
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-geist",
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-plex-mono",
 });
 
 export const metadata: Metadata = {
-  title: "MLRI Learning Hub",
+  title: "LACE Learning Hub",
   description: "A discovery and navigation layer for Brightspace learning content.",
   manifest: "/manifest.json",
   icons: {
@@ -25,7 +33,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#171713",
+  themeColor: "#14161b",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -39,7 +47,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={lato.variable}>
+      <body className={`${geist.variable} ${plexMono.variable}`}>
         <Providers>{children}</Providers>
       </body>
     </html>

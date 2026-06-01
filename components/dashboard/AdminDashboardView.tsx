@@ -59,14 +59,14 @@ type BrightspaceSyncPayload =
 
 const healthBorder: Record<ServiceHealth, string> = {
   healthy: "border-t-[#6f927b]",
-  degraded: "border-t-[#b88a2d]",
-  down: "border-t-[#b76545]",
+  degraded: "border-t-[#2a5bff]",
+  down: "border-t-[#c8493b]",
 };
 
 const healthDot: Record<ServiceHealth, string> = {
   healthy: "bg-[#6f927b]",
-  degraded: "bg-[#b88a2d]",
-  down: "bg-[#b76545]",
+  degraded: "bg-[#2a5bff]",
+  down: "bg-[#c8493b]",
 };
 
 export function AdminDashboardView() {
@@ -192,7 +192,7 @@ export function AdminDashboardView() {
               <span className={`h-2 w-2 rounded-full ${healthDot[supabaseStatus]}`} aria-hidden />
               <h2 className="card-title text-lg">Supabase live connection</h2>
             </div>
-            <p className="stat-label text-[#7d7467]">
+            <p className="stat-label text-[#8b909d]">
               {supabaseLoading ? "checking" : supabaseHealth?.ok ? "healthy" : "down"}
             </p>
           </div>
@@ -209,7 +209,7 @@ export function AdminDashboardView() {
                   className="rounded-md border border-[color:var(--line)] bg-white/70 p-4"
                 >
                   <p className="text-sm font-semibold text-[color:var(--ink)]">{item.title}</p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-[#7d7467]">
+                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-[#8b909d]">
                     {item.provider} / {item.item_type}
                   </p>
                 </div>
@@ -228,7 +228,7 @@ export function AdminDashboardView() {
               <span className={`h-2 w-2 rounded-full ${healthDot[brightspaceStatus]}`} aria-hidden />
               <h2 className="card-title text-lg">Brightspace connection</h2>
             </div>
-            <p className="stat-label text-[#7d7467]">
+            <p className="stat-label text-[#8b909d]">
               {brightspaceLoading
                 ? "checking"
                 : brightspaceHealth?.ok
@@ -269,7 +269,7 @@ export function AdminDashboardView() {
                 type="button"
                 onClick={syncBrightspaceTestCourse}
                 disabled={brightspaceSyncing || !brightspaceHealth.configured.accessToken}
-                className="inline-flex h-11 items-center justify-center rounded-[var(--radius-control)] bg-[#171713] px-5 text-sm font-bold text-[#fffaf0] transition hover:bg-[#2b2821] disabled:cursor-not-allowed disabled:bg-[#cfc7b8] disabled:text-[#7d7467]"
+                className="inline-flex h-11 items-center justify-center rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] transition hover:bg-[#0f1115] disabled:cursor-not-allowed disabled:bg-[#d3d8e0] disabled:text-[#8b909d]"
               >
                 {brightspaceSyncing ? "Syncing..." : "Sync test course"}
               </button>

@@ -58,9 +58,9 @@ export function ProgramDashboardView() {
           <tbody>
             {data.byArea.map((row) => (
               <tr key={row.trainingArea} className="border-b border-[color:var(--lace-hairline)] last:border-0">
-                <td className="px-4 py-3 font-bold text-[#25221d]">{row.trainingArea}</td>
+                <td className="px-4 py-3 font-bold text-[color:var(--ink-muted)]">{row.trainingArea}</td>
                 <td className="px-4 py-3 font-medium text-[color:var(--ink-muted)]">{row.enrolled}</td>
-                <td className="px-4 py-3 font-bold text-[#9d7a35]">{row.completionRate}%</td>
+                <td className="px-4 py-3 font-bold text-[color:var(--brand)]">{row.completionRate}%</td>
               </tr>
             ))}
           </tbody>

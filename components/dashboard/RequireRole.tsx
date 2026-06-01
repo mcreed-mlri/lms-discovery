@@ -17,14 +17,14 @@ export function RequireRole({
   if (!allow.includes(role)) {
     return (
       <div className="editorial-panel rounded-[var(--radius-card)] p-8 text-center">
-        <h2 className="section-title text-lg text-[#171713]">View not available for this role</h2>
+        <h2 className="section-title text-lg text-[color:var(--ink)]">View not available for this role</h2>
         <p className="mt-2 text-sm font-medium text-[color:var(--ink-muted)]">
-          You are previewing as <strong className="text-[#9d7a35]">{roleLabel(role)}</strong>. Use the dev role
+          You are previewing as <strong className="text-[color:var(--brand)]">{roleLabel(role)}</strong>. Use the dev role
           switcher (bottom left) or open a view your role can access.
         </p>
         <Link
           href="/my-learning"
-          className="mt-6 inline-flex h-11 items-center rounded-[var(--radius-control)] bg-[#171713] px-5 text-sm font-bold text-[#fffaf0] focus:outline-none focus:ring-4 focus:ring-[#1f1d19]/15"
+          className="mt-6 inline-flex h-11 items-center rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
         >
           Back to My Learning
         </Link>

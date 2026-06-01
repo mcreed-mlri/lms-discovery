@@ -14,66 +14,82 @@
    ========================================================================= */
 :root {
   color-scheme: light;
-  /* UI / body: lead with crisp small-size faces. Lato kept far back as a
-     fallback — at sizes below ~24px Lato renders fuzzy on Windows ClearType. */
-  --font-sans: "Segoe UI Variable", "Segoe UI", "Inter", "Aptos", system-ui, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-  /* Display: Lato for the editorial feel, used only by .hero-display / .hero-title / .modal-title at large sizes. */
-  --font-serif: var(--font-lato, "Lato"), "Lato", "Segoe UI Variable", "Segoe UI", "Inter", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", "SFMono-Regular", "Cascadia Mono", Consolas, ui-monospace, monospace;
+  /* UI / body: Geist is the Studio typeface (loaded via next/font in layout.tsx).
+     System faces kept as fallbacks so text stays crisp before the font loads. */
+  --font-sans: var(--font-geist, "Geist"), "Segoe UI Variable", "Segoe UI", "Inter", system-ui, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  /* Display: same Geist family; large headings just lean on tighter tracking. */
+  --font-serif: var(--font-geist, "Geist"), "Segoe UI Variable", "Segoe UI", "Inter", system-ui, sans-serif;
+  /* Mono: IBM Plex Mono — eyebrows, chips, counts, percentages. */
+  --font-mono: var(--font-plex-mono, "IBM Plex Mono"), "SFMono-Regular", "Cascadia Mono", Consolas, ui-monospace, monospace;
 
-  /* ── Neutral base — clean ivory/stone canvas; warmth lives in accents,
-        not in full-page parchment wash. Mirrors course-style.css. ───────── */
-  --paper: #f8f7f3;             /* warm stone page canvas */
-  --paper-deep: #efede6;        /* deeper section accent, use sparingly */
-  --panel: #f3f1eb;             /* section frame, warmer than the canvas */
-  --surface: #fffdf9;           /* soft off-white card */
-  --surface-raised: #fffdf9;    /* raised surfaces, still gentle */
-  --surface-sunken: #eeece5;    /* neutral sunken tracks and controls */
-  --hover-tint: #f5f3ed;        /* whisper hover, warm but restrained */
-  --hero-wash: #f3f0e8;
-  --hero-wash-soft: #fbfaf6;
-  --ink: #16130f;              /* near-black — primary text, max headline contrast */
-  --ink-muted: #3f3a34;        /* muted — body copy, descriptions */
-  --ink-soft: #6e6860;         /* soft — metadata, captions, eyebrows */
-  --line: rgba(43, 38, 31, 0.13);
-  --line-strong: rgba(43, 38, 31, 0.22);
-  --shadow-xs: 0 1px 2px rgba(36, 31, 24, 0.04);
-  --shadow-card: 0 8px 22px rgba(45, 38, 28, 0.055);
-  --shadow-sm: 0 2px 8px rgba(36, 31, 24, 0.045);
-  --shadow-md: 0 10px 28px rgba(36, 31, 24, 0.07);
-  --shadow-lg: 0 18px 42px rgba(36, 31, 24, 0.09);
+  /* ── Neutral base — cool grey "Studio" canvas (Google-Skills-grade neutrals).
+        Colour is reserved as a signal; the page itself stays calm. ───────── */
+  --paper: #f5f6f8;             /* cool grey page canvas */
+  --paper-deep: #eef0f4;        /* deeper section accent, use sparingly */
+  --panel: #eef0f4;             /* section frame */
+  --surface: #ffffff;           /* clean white card */
+  --surface-raised: #ffffff;    /* raised surfaces */
+  --surface-sunken: #eef0f4;    /* sunken tracks, chips, active-nav bg */
+  --hover-tint: #f5f6f8;        /* whisper hover */
+  --hero-wash: #f5f6f8;
+  --hero-wash-soft: #ffffff;
+  --ink: #14161b;              /* near-black — primary text, brand mark */
+  --ink-muted: #565c69;        /* muted — body copy, descriptions */
+  --ink-soft: #8b909d;         /* soft — metadata, captions, icons-default */
+  --line: #e4e7ed;             /* hairline borders */
+  --line-strong: #d3d8e0;      /* stronger hairline */
+  --line-soft: #edeff3;        /* inner dividers, hover border */
+  --shadow-xs: 0 1px 2px rgba(20, 22, 27, 0.04);
+  --shadow-card: 0 1px 2px rgba(20, 22, 27, 0.04), 0 6px 18px rgba(20, 22, 27, 0.06);
+  --shadow-sm: 0 1px 2px rgba(20, 22, 27, 0.04), 0 6px 18px rgba(20, 22, 27, 0.06);
+  --shadow-md: 0 1px 2px rgba(20, 22, 27, 0.04), 0 6px 18px rgba(20, 22, 27, 0.06);
+  --shadow-lg: 0 8px 24px rgba(20, 22, 27, 0.1), 0 2px 6px rgba(20, 22, 27, 0.06);
 
-  /* ── Brand — the LACE editorial gold. Used sparingly, never as wallpaper ─ */
-  --brand: #9a7a34;
-  --brand-ink: #806014;        /* gold dark enough for text on light */
+  /* ── Brand — Studio blue. Deep for text/links, brighter for fills ─────── */
+  --brand: #1c3fb0;            /* links, active icons, avatar fill */
+  --brand-ink: #1c3fb0;        /* brand text on light */
+  --brand-fill: #2a5bff;       /* primary button / progress fill */
+  --brand-tint: #eaf0ff;       /* "Continue" chip bg */
 
-  /* ── Topic families — one accent per course family ────────────────────── */
-  /* line = borders / dots / icons · soft = pale tint · ink = text on tint   */
-  --topic-court: #b07458;          --topic-court-soft: #f0e5de;        --topic-court-ink: #8a4d31;
-  --topic-client: #5d8a6e;         --topic-client-soft: #e5ede6;       --topic-client-ink: #3d6048;
-  --topic-ethics: #5e7793;         --topic-ethics-soft: #e6e9f0;       --topic-ethics-ink: #41536d;
-  --topic-research: #4e827b;       --topic-research-soft: #e2ebe9;     --topic-research-ink: #345e58;
-  --topic-drafting: #9c7e3d;       --topic-drafting-soft: #efe8d3;     --topic-drafting-ink: #6f5418;
-  --topic-trauma: #a06f87;         --topic-trauma-soft: #eee2e8;       --topic-trauma-ink: #794a60;
-  --topic-foundations: #9a8a66;    --topic-foundations-soft: #ebe5d8;  --topic-foundations-ink: #6a5b3c;
-  --topic-neutral: #8c8579;        --topic-neutral-soft: #eeedea;      --topic-neutral-ink: #5d574d;
+  /* ── Skill-hue palette — 8 disciplined hues, used BY INDEX on skill tiles
+        and practice-area swatches. Identical S/L feel so it reads systematic.
+        Mirrors lib/skill-hue.ts (keep the two in sync). ──────────────────── */
+  --hue-1: #2a5bff;  --hue-1-tint: #e9f0ff;   /* blue */
+  --hue-2: #7a4fe0;  --hue-2-tint: #efeafd;   /* violet */
+  --hue-3: #d24d83;  --hue-3-tint: #fce9f1;   /* pink */
+  --hue-4: #c8791b;  --hue-4-tint: #fbf0dc;   /* amber */
+  --hue-5: #179a72;  --hue-5-tint: #e2f4ed;   /* green */
+  --hue-6: #3a8ec9;  --hue-6-tint: #e7f3fb;   /* sky */
+  --hue-7: #5563d6;  --hue-7-tint: #ebedfc;   /* indigo */
+  --hue-8: #bb573b;  --hue-8-tint: #fbe8e2;   /* rust */
+
+  /* ── Topic families — one accent per course family. Remapped to the cool
+        hue palette so existing cards/dashboard accents read "Studio". ────── */
+  --topic-court: #3a8ec9;          --topic-court-soft: #e7f3fb;        --topic-court-ink: #2b6c9b;
+  --topic-client: #179a72;         --topic-client-soft: #e2f4ed;       --topic-client-ink: #0f6e51;
+  --topic-ethics: #5563d6;         --topic-ethics-soft: #ebedfc;       --topic-ethics-ink: #3f4cb0;
+  --topic-research: #3a8ec9;       --topic-research-soft: #e7f3fb;     --topic-research-ink: #2b6c9b;
+  --topic-drafting: #7a4fe0;       --topic-drafting-soft: #efeafd;     --topic-drafting-ink: #5b39ab;
+  --topic-trauma: #d24d83;         --topic-trauma-soft: #fce9f1;       --topic-trauma-ink: #a83467;
+  --topic-foundations: #5563d6;    --topic-foundations-soft: #ebedfc;  --topic-foundations-ink: #3f4cb0;
+  --topic-neutral: #8b909d;        --topic-neutral-soft: #eef0f4;      --topic-neutral-ink: #565c69;
 
   /* ── Status — lifecycle / progress signal. Kept distinct from topics ──── */
-  --status-progress: #4d7c57;      --status-progress-soft: #e4efe5;    --status-progress-ink: #305a3c;
-  --status-next: #506f9c;          --status-next-soft: #e7ebf3;        --status-next-ink: #3a5279;
-  --status-done: #5a6b60;          --status-done-soft: #e7eae6;        --status-done-ink: #3e4c43;
-  --status-new: #bf8f33;           --status-new-soft: #f6ecca;         --status-new-ink: #876219;
-  --status-updated: #5078a6;       --status-updated-soft: #e6edf3;     --status-updated-ink: #3b5d84;
-  --status-changed: #b0533a;       --status-changed-soft: #f3e1da;     --status-changed-ink: #893e28;
-  --status-later: #8a8278;         --status-later-soft: #eeedea;       --status-later-ink: #5e584f;
+  --status-progress: #179a72;      --status-progress-soft: #e2f4ed;    --status-progress-ink: #0f6e51;
+  --status-next: #2a5bff;          --status-next-soft: #eaf0ff;        --status-next-ink: #1c3fb0;
+  --status-done: #179a72;          --status-done-soft: #e2f4ed;        --status-done-ink: #0f6e51;
+  --status-new: #c8791b;           --status-new-soft: #fbf0dc;         --status-new-ink: #99610f;
+  --status-updated: #c8791b;       --status-updated-soft: #fbf0dc;     --status-updated-ink: #99610f;
+  --status-changed: #c8493b;       --status-changed-soft: #fbe9e6;     --status-changed-ink: #9c3528;
+  --status-later: #8b909d;         --status-later-soft: #eef0f4;       --status-later-ink: #565c69;
 
   --radius-card: 14px;
-  --radius-control: 10px;
+  --radius-control: 9px;
 
   /* ── Legacy aliases — kept so existing utility classes keep resolving ─── */
   --bg-main: var(--paper);
   --bg-surface: var(--surface);
-  --bg-surface-soft: #f2f1ed;
+  --bg-surface-soft: var(--surface);
   --border-subtle: var(--line);
   --border-strong: var(--line-strong);
   --accent-gold: var(--brand);
@@ -120,10 +136,9 @@ body {
   font-weight: 400;
   font-size: 15px;
   line-height: 1.6;
-  /* A flat, calm stone field — no coloured radials, no gold wallpaper,
-     no gradient. Stable and durable over long sessions. */
-  background:
-    linear-gradient(180deg, #fbfaf6 0%, var(--paper) 18rem, #f7f5f0 100%);
+  /* A flat, calm cool-grey field — no gradients, no wallpaper. Stable and
+     durable over long sessions. */
+  background: var(--paper);
   color: var(--ink);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -171,8 +186,7 @@ input::placeholder {
 }
 
 .hub-shell {
-  background:
-    linear-gradient(180deg, #fbfaf6 0%, var(--paper) 20rem, #f7f5f0 100%);
+  background: var(--paper);
 }
 
 .dashboard-command {
@@ -224,32 +238,21 @@ input::placeholder {
 }
 
 .hero-continue {
-  border: 1px solid rgba(43, 38, 31, 0.16);
-  background:
-    linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(250, 247, 240, 0.98));
-  box-shadow: 0 14px 34px rgba(45, 38, 28, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
 }
 
 .home-hero {
-  background:
-    linear-gradient(135deg, var(--hero-wash-soft) 0%, var(--hero-wash) 58%, #f8f6f0 100%);
+  background: var(--paper);
 }
 
 .home-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(154, 122, 52, 0.08), transparent 38%),
-    radial-gradient(circle at 80% 18%, rgba(154, 122, 52, 0.08), transparent 32%);
-  opacity: 0.75;
+  content: none;
 }
 
 .search-band {
-  background:
-    linear-gradient(180deg, rgba(248, 247, 243, 0.96), rgba(244, 242, 236, 0.96));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  background: var(--surface);
 }
 
 .action-section {
@@ -263,7 +266,7 @@ input::placeholder {
   width: 4.25rem;
   height: 2px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--brand) 58%, var(--line-strong));
+  background: var(--brand-fill);
 }
 
 /* Shared nav active state — warm tint without a full beige block. */
@@ -369,9 +372,9 @@ input::placeholder {
 
 .hero-display {
   font-family: var(--font-serif);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  font-weight: 720;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
 }
 
 .modal-title {
@@ -380,8 +383,8 @@ input::placeholder {
 
 .section-title {
   font-family: var(--font-sans);
-  font-weight: 750;
-  letter-spacing: -0.015em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   line-height: 1.2;
 }
 

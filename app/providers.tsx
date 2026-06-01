@@ -1,6 +1,7 @@
 "use client";
 
 import { AuthProvider } from "@/lib/auth";
+import { LaceDevRoleProvider } from "@/lib/lace-dev-role";
 import { useEffect, type ReactNode } from "react";
 
 export function Providers({ children }: { children: ReactNode }) {
@@ -15,6 +16,10 @@ export function Providers({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  return <AuthProvider>{children}</AuthProvider>;
+  return (
+    <AuthProvider>
+      <LaceDevRoleProvider>{children}</LaceDevRoleProvider>
+    </AuthProvider>
+  );
 }
 

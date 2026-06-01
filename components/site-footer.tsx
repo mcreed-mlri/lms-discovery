@@ -16,7 +16,7 @@ export function SiteFooter() {
           <div className="max-w-md">
             <p className="section-kicker secondary">LACE Learning Hub</p>
             <p className="mt-2 text-sm leading-relaxed text-[color:var(--ink-muted)]">
-              Practical legal aid training from the Massachusetts Law Reform Institute.
+              Focused training for Massachusetts legal aid advocates.
             </p>
           </div>
 
@@ -25,7 +25,7 @@ export function SiteFooter() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="nav-link rounded-md text-[color:var(--ink-muted)] transition hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#b88a2d]/15"
+                className="nav-link rounded-md text-[color:var(--ink-muted)] transition hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
               >
                 {link.label}
               </Link>
@@ -35,9 +35,9 @@ export function SiteFooter() {
 
         <div className="mt-6 flex flex-col gap-2 border-t border-[color:var(--line)] pt-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="metadata text-[color:var(--ink-soft)]">
-            © {year} Massachusetts Law Reform Institute
+            &copy; {year} Massachusetts Law Reform Institute
           </p>
-          <p className="metadata text-[color:var(--ink-soft)]">Demo environment · For training purposes only</p>
+          <p className="metadata text-[color:var(--ink-soft)]">Demo environment - for training purposes only</p>
         </div>
       </div>
     </footer>
