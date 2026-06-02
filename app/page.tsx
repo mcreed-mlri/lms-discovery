@@ -304,6 +304,7 @@ export default function Home() {
 
   function openSearchResult(result: SearchResult) {
     setQuery(result.item.title);
+    setSelectedItem(result.item);
     recordSearchAnalytics({
       type: "search_result_selected",
       query,
@@ -327,10 +328,26 @@ export default function Home() {
   // search from that param on mount so the lens works from any page. (⌘K focus
   // is handled once, app-wide, by StudioShell.)
   useEffect(() => {
+    const openById = (id: string | null) => {
+      if (!id) return;
+      const match = allItems.find((item) => `${item.type}-${item.id}` === id);
+      if (match) setSelectedItem(match);
+    };
+
     const params = new URLSearchParams(window.location.search);
     const seeded = params.get("q");
     if (seeded) setQuery(seeded);
-  }, []);
+    openById(params.get("open"));
+
+    function handleOpenLearningItem(event: Event) {
+      const detail = (event as CustomEvent<{ id?: string; query?: string }>).detail;
+      if (detail?.query) setQuery(detail.query);
+      openById(detail?.id ?? null);
+    }
+
+    window.addEventListener("lace-open-learning-item", handleOpenLearningItem);
+    return () => window.removeEventListener("lace-open-learning-item", handleOpenLearningItem);
+  }, [allItems]);
 
   useEffect(() => {
     const handle = window.setTimeout(() => {

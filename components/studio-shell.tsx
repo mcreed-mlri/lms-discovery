@@ -2,26 +2,19 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { BellIcon, BookIcon, HomeIcon, SearchIcon } from "@/components/icons";
 import { RoleSwitcher } from "@/components/dashboard/RoleSwitcher";
+import { SearchBox } from "@/components/search-box";
 import { SiteFooter } from "@/components/site-footer";
 import { StudioContentBar } from "@/components/studio-content-bar";
 import { StudioRail } from "@/components/studio-rail";
 import { useAuth } from "@/lib/auth";
+import { getLearningItems } from "@/lib/data";
+import { searchLearningItems, type SearchResult } from "@/lib/search";
+import { recordSearchAnalytics } from "@/lib/search-analytics";
 
 const COLLAPSE_KEY = "lace-rail-collapsed";
-
-function focusSearch() {
-  const input = document.querySelector<HTMLInputElement>('input[type="search"]');
-  if (input) {
-    input.focus();
-    input.scrollIntoView({ behavior: "smooth", block: "center" });
-  } else if (typeof window !== "undefined") {
-    // No search on this page — send the user to the catalog.
-    window.location.href = "/#browse";
-  }
-}
 
 export function StudioShell({
   children,
@@ -34,12 +27,50 @@ export function StudioShell({
   padded?: boolean;
   showRoleSwitcher?: boolean;
 }) {
-  const { user, ready, logout } = useAuth();
+  const { user, ready } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [globalQuery, setGlobalQuery] = useState("");
+
+  const allItems = useMemo(() => getLearningItems(), []);
+  const globalResults = useMemo(() => searchLearningItems(allItems, globalQuery).slice(0, 6), [allItems, globalQuery]);
+
+  const openGlobalSearch = useCallback(() => {
+    setMobileOpen(false);
+    setSearchOpen(true);
+  }, []);
+
+  const closeGlobalSearch = useCallback(() => {
+    setSearchOpen(false);
+  }, []);
+
+  const openGlobalSearchResult = useCallback(
+    (result: SearchResult) => {
+      recordSearchAnalytics({
+        type: "search_result_selected",
+        query: globalQuery,
+        resultId: `${result.item.type}-${result.item.id}`,
+        resultType: result.item.type,
+        resultTitle: result.item.title,
+      });
+      window.dispatchEvent(
+        new CustomEvent("lace-open-learning-item", {
+          detail: {
+            id: `${result.item.type}-${result.item.id}`,
+            query: result.item.title,
+          },
+        }),
+      );
+      setSearchOpen(false);
+      setGlobalQuery("");
+      router.push(`/?q=${encodeURIComponent(result.item.title)}&open=${encodeURIComponent(`${result.item.type}-${result.item.id}`)}#browse`);
+    },
+    [globalQuery, router],
+  );
 
   // Restore the per-user rail preference.
   useEffect(() => {
@@ -66,17 +97,21 @@ export function StudioShell({
     if (ready && !user) router.replace("/login");
   }, [ready, user, router]);
 
-  // ⌘K / Ctrl-K focuses the command bar.
+  // Ctrl/Cmd-K opens the global search dialog.
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
-        focusSearch();
+        openGlobalSearch();
+        return;
+      }
+      if (event.key === "Escape") {
+        closeGlobalSearch();
       }
     }
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [closeGlobalSearch, openGlobalSearch]);
 
   // Close the mobile drawer on route change.
   useEffect(() => {
@@ -102,7 +137,7 @@ export function StudioShell({
 
       {/* Desktop rail */}
       <div className="sticky top-0 hidden h-screen shrink-0 lg:flex">
-        <StudioRail collapsed={collapsed} onToggle={toggleCollapsed} onSearch={focusSearch} />
+        <StudioRail collapsed={collapsed} onToggle={toggleCollapsed} onSearch={openGlobalSearch} />
       </div>
 
       {/* Mobile rail drawer */}
@@ -118,10 +153,7 @@ export function StudioShell({
             <StudioRail
               collapsed={false}
               onToggle={() => setMobileOpen(false)}
-              onSearch={() => {
-                setMobileOpen(false);
-                focusSearch();
-              }}
+              onSearch={openGlobalSearch}
               onNavigate={() => setMobileOpen(false)}
             />
           </div>
@@ -162,6 +194,64 @@ export function StudioShell({
       </nav>
 
       {showRoleSwitcher ? <RoleSwitcher /> : null}
+
+      {searchOpen ? (
+        <GlobalSearchDialog
+          query={globalQuery}
+          results={globalResults}
+          onChange={setGlobalQuery}
+          onClose={closeGlobalSearch}
+          onSelect={openGlobalSearchResult}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+function GlobalSearchDialog({
+  query,
+  results,
+  onChange,
+  onClose,
+  onSelect,
+}: {
+  query: string;
+  results: SearchResult[];
+  onChange: (value: string) => void;
+  onClose: () => void;
+  onSelect: (result: SearchResult) => void;
+}) {
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      document.querySelector<HTMLInputElement>('[data-global-search="true"] input[type="search"]')?.focus();
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  return (
+    <div
+      className="fixed inset-0 z-[80] flex items-start justify-center bg-[rgba(20,22,27,0.34)] px-4 pt-20 backdrop-blur-sm sm:pt-28"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Search learning library"
+    >
+      <button type="button" className="absolute inset-0" aria-label="Close search" onClick={onClose} />
+      <div
+        className="relative w-full max-w-2xl rounded-[16px] border border-[color:var(--line)] bg-[color:var(--surface)] p-3 shadow-[var(--shadow-lg)]"
+        data-global-search="true"
+      >
+        <SearchBox value={query} onChange={onChange} suggestions={results} onSelect={onSelect} prominent />
+        <div className="mt-3 flex items-center justify-between px-1 text-xs font-semibold text-[color:var(--ink-soft)]">
+          <span>Search courses, modules, paths, and topics</span>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-md px-2 py-1 transition hover:bg-[color:var(--surface-sunken)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+          >
+            Close
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

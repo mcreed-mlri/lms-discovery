@@ -134,7 +134,7 @@ export function StudioRail({
         <button
           type="button"
           onClick={onSearch}
-          title="Search · ⌘K"
+          title="Search - Ctrl K"
           className="mx-auto mb-4 flex h-10 w-11 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--paper)] text-[color:var(--ink-soft)] transition hover:border-[color:var(--line-strong)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15"
         >
           <SearchIcon className="h-[18px] w-[18px]" />
@@ -146,9 +146,9 @@ export function StudioRail({
           className="mb-4 flex items-center gap-[9px] rounded-[9px] border border-[color:var(--line)] bg-[color:var(--paper)] px-3 py-[9px] text-left transition hover:border-[color:var(--line-strong)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15"
         >
           <SearchIcon className="h-4 w-4 text-[color:var(--ink-soft)]" />
-          <span className="flex-1 text-[13.5px] text-[color:var(--ink-soft)]">Search…</span>
+          <span className="flex-1 text-[13.5px] text-[color:var(--ink-soft)]">Search</span>
           <span className="rounded-[7px] bg-[color:var(--surface-sunken)] px-[7px] py-1 font-mono text-[11px] font-semibold text-[color:var(--ink-soft)]">
-            ⌘K
+            Ctrl K
           </span>
         </button>
       )}

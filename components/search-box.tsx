@@ -127,7 +127,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
                   <span className="block truncate text-sm font-bold text-[color:var(--ink)]">{result.item.title}</span>
                 </span>
                 <span className="metadata self-center rounded-full border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-2.5 py-1 text-[color:var(--ink-soft)]">
-                  Preview
+                  Open
                 </span>
               </button>
             ))
