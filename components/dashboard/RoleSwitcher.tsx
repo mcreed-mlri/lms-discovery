@@ -10,9 +10,9 @@ export function RoleSwitcher() {
   const { role, setRole } = useLaceDevRole();
   const [dismissed, setDismissed] = useState(false);
 
-  // Developer-only affordance: never show it in a production build, and let it
-  // be dismissed for the rest of the session during local dev.
-  if (process.env.NODE_ENV === "production" || dismissed) return null;
+  // Preview affordance: keep it available across environments, but let it be
+  // dismissed for the rest of the current session.
+  if (dismissed) return null;
 
   return (
     <div
@@ -30,7 +30,7 @@ export function RoleSwitcher() {
           aria-label="Hide dev role switcher"
           className="-mr-1 -mt-1 flex h-6 w-6 items-center justify-center rounded-full text-[color:var(--ink-soft)] transition hover:bg-[color:var(--surface-sunken)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
         >
-          ✕
+          x
         </button>
       </div>
       <select
@@ -45,7 +45,7 @@ export function RoleSwitcher() {
           </option>
         ))}
       </select>
-      <p className="text-xs font-medium text-[color:var(--ink-muted)]">Persists in localStorage · toggles nav</p>
+      <p className="text-xs font-medium text-[color:var(--ink-muted)]">Persists in localStorage - toggles nav</p>
     </div>
   );
 }

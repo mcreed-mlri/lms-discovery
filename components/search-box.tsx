@@ -65,7 +65,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
       <label className="sr-only" htmlFor={inputId}>
         Search courses, modules, paths, or topics
       </label>
-      <SearchIcon className={`pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[color:var(--ink-soft)] transition group-focus-within:text-[color:var(--brand)] ${prominent ? "left-3 h-4 w-4 sm:left-5 sm:h-5 sm:w-5" : "left-3.5 h-4 w-4"}`} />
+      <SearchIcon className={`pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[color:var(--ink-soft)] transition group-focus-within:text-[color:var(--brand)] ${prominent ? "left-3.5 h-[18px] w-[18px] sm:left-[18px] sm:h-[22px] sm:w-[22px]" : "left-3.5 h-4 w-4"}`} />
       <input
         aria-activedescendant={showSuggestions && suggestions[activeIndex] ? `${listboxId}-${activeIndex}` : undefined}
         aria-autocomplete="list"
@@ -79,16 +79,24 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
         }}
         onFocus={() => setIsOpen(true)}
         onKeyDown={handleKeyDown}
-        className={`w-full border border-[color:var(--line)] bg-[color:var(--surface-raised)] font-semibold text-[color:var(--ink)] outline-none transition placeholder:text-[color:var(--ink-soft)] hover:border-[color:var(--line-strong)] focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[#2a5bff]/15 ${
+        className={`w-full border border-[color:var(--line)] bg-[color:var(--surface-raised)] font-semibold text-[color:var(--ink)] outline-none transition placeholder:font-normal placeholder:text-[color:var(--ink-soft)] hover:border-[color:var(--line-strong)] focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[#2a5bff]/15 ${
           prominent
-            ? "h-10 rounded-[var(--radius-control)] pl-10 pr-3 text-[0.875rem] shadow-[var(--shadow-sm)] sm:h-12 sm:pl-12 sm:pr-5 sm:text-base"
+            ? "h-10 rounded-[12px] pl-10 pr-[4.5rem] text-[0.875rem] shadow-[var(--shadow-card)] sm:h-[52px] sm:pl-[3.25rem] sm:pr-16 sm:text-[17px]"
             : `rounded-[var(--radius-control)] pl-10 pr-4 text-base shadow-[var(--shadow-xs)] ${compact ? "h-9 text-sm" : "h-12"}`
         }`}
         id={inputId}
-        placeholder="Search the library…"
+        placeholder="Search the library - ethics, intake, first appearance..."
         role="combobox"
         type="search"
       />
+      {prominent ? (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 rounded-[7px] border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-1.5 py-0.5 font-mono text-[11px] font-medium text-[color:var(--ink-soft)] sm:right-[18px] sm:px-2 sm:py-1 sm:text-[12px]"
+        >
+          Ctrl K
+        </span>
+      ) : null}
       {showSuggestions && (
         <div
           className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-[color:var(--line)] bg-[color:var(--surface-raised)] text-[color:var(--ink)] shadow-[var(--shadow-lg)]"

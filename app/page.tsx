@@ -15,7 +15,6 @@ import {
 import { ContentCard, ContentListRow, PathCard } from "@/components/content-card";
 import { DetailModal } from "@/components/detail-modal";
 import { StudioShell } from "@/components/studio-shell";
-import { ProgressLine } from "@/components/progress-line";
 import { ProgressRing } from "@/components/progress-ring";
 import { SearchBox } from "@/components/search-box";
 import { SkillGlyph } from "@/components/skill-glyph";
@@ -50,13 +49,18 @@ const filters: Filter[] = ["All", "Paths", "Courses", "Modules"];
 
 // Suggested searches under the command bar — a short, scannable set of the
 // things a busy advocate reaches for most. Presented as suggestions, not filters.
-const popularSearches = ["first appearance", "client intake", "confidentiality", "safety screening"];
+const popularSearches = ["notice to quit", "confidentiality", "SNAP appeal", "709 motion", "RAFT application"];
 
 function filterToSearchTypes(filter: Filter): SearchFacetFilters["types"] | undefined {
   if (filter === "Paths") return ["PATH"];
   if (filter === "Courses") return ["COURSE"];
   if (filter === "Modules") return ["MODULE"];
   return undefined;
+}
+
+function resumeMinutesLeftLabel(duration?: string) {
+  if (!duration) return null;
+  return `${duration.replace(/\s*min\s*$/i, "").trim()} min left`.toUpperCase();
 }
 
 function sectionTitle(type: LearningItem["type"]) {
@@ -286,9 +290,10 @@ export default function Home() {
     resumeItem.resumeUrl ??
     "https://mlri.brightspace.com/content/enforced/6703-course.outline/notice-types.html?ou=6703&d2l_body_type=3";
   const resumeCourse = courses.find((course) => course.id === resumeItem.id);
-  const resumeEyebrow = ["Resume", resumeCourse?.practiceArea, resumeCourse?.duration ? `${resumeCourse.duration} left` : null]
+  const resumeMeta = ["Resume", resumeCourse?.practiceArea, resumeMinutesLeftLabel(resumeCourse?.duration)]
     .filter(Boolean)
-    .join(" · ");
+    .join(" - ")
+    .toUpperCase();
   const clePct = Math.round((learnerProgress.cleEarned / learnerProgress.cleRequired) * 100);
 
   function selectSkill(id: SkillId) {
@@ -385,12 +390,12 @@ export default function Home() {
 
   return (
     <StudioShell padded={false}>
-      {/* HERO — headline + training hours / streak, search + popular pills, dark Resume card */}
+      {/* HERO - compact personalized greeting, search, and resume card */}
       <section className="border-b border-[color:var(--line)]">
-        <div className="mx-auto max-w-[1120px] px-4 py-4 sm:px-6 sm:py-8 lg:px-10 lg:py-10">
+        <div className="mx-auto max-w-[1120px] px-4 py-4 sm:px-6 sm:py-5 lg:px-10 lg:py-6">
           {/* Top row: headline + training hours / this-week streak */}
-          <div className="flex items-start justify-between gap-3 sm:gap-6">
-            <h1 className="hero-display min-w-0 text-[1.35rem] leading-[1.1] text-[color:var(--ink)] sm:text-[2.4rem] sm:leading-[1.06] lg:text-[2.6rem]">
+          <div className="flex items-center justify-between gap-3 sm:gap-6">
+            <h1 className="hero-display min-w-0 text-[1.45rem] leading-[1.1] text-[color:var(--ink)] sm:text-[2rem] sm:leading-[1.06] lg:text-[2.15rem]">
               Welcome back, {user.firstName}.
             </h1>
 
@@ -414,13 +419,11 @@ export default function Home() {
                 >
                   <span className="text-[10px] font-bold tabular-nums text-[color:var(--ink)]">{clePct}%</span>
                 </ProgressRing>
-                <p className="text-[13px] leading-tight">
-                  <span className="block font-mono text-[10px] font-semibold uppercase tracking-[0.04em] text-[color:var(--ink-soft)]">
-                    Training hours
-                  </span>
+                <p className="text-[13px] leading-tight text-[color:var(--ink-soft)]">
                   <span className="font-semibold text-[color:var(--ink)]">
                     {learnerProgress.cleEarned}/{learnerProgress.cleRequired} hrs
-                  </span>
+                  </span>{" "}
+                  to goal
                 </p>
               </div>
               <div className="hidden items-center gap-2.5 border-l border-[color:var(--line)] pl-4 md:flex">
@@ -443,54 +446,11 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Main row: search → resume → popular (mobile); search + popular | resume (desktop) */}
-          <div className="mt-3 grid gap-3 sm:mt-7 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_27rem] lg:grid-rows-[auto_auto] lg:items-start lg:gap-8">
-            <div className="lg:col-start-1 lg:row-start-1">
+          {/* Main row: search (+ popular on sm+) | resume card */}
+          <div className="mt-4 grid gap-3 sm:mt-5 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_29rem] lg:items-start lg:gap-8">
+            <div>
               <SearchBox value={query} onChange={setQuery} suggestions={searchSuggestions} onSelect={openSearchResult} prominent />
-            </div>
-
-            <aside
-              className="rounded-[12px] bg-[color:var(--ink)] p-3.5 shadow-[var(--shadow-card)] sm:rounded-[14px] sm:p-5 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-start"
-              aria-label="Resume learning"
-            >
-              <div className="flex items-center gap-3">
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="truncate font-mono text-[10px] font-semibold uppercase tracking-[0.04em] text-white/55 sm:text-[11px]">
-                      <span className="sm:hidden">Resume · {resumeCourse?.practiceArea ?? "Learning"}</span>
-                      <span className="hidden sm:inline">{resumeEyebrow}</span>
-                    </p>
-                    <span className="shrink-0 font-mono text-[11px] tabular-nums text-white/55 sm:text-[12px]">{resumeItem.progress}%</span>
-                  </div>
-                  <h2 className="mt-1 text-[15px] font-bold leading-snug tracking-[-0.01em] text-white sm:mt-2 sm:text-[17px]">{resumeItem.title}</h2>
-                  <p className="mt-0.5 line-clamp-1 text-[12px] text-white/60 sm:mt-1 sm:text-[13px]">Up next: {resumeItem.detail}</p>
-                  <ProgressLine
-                    value={resumeItem.progress}
-                    color="var(--brand-fill)"
-                    trackColor="rgba(255,255,255,0.16)"
-                    height={4}
-                    label={`${resumeItem.title} — ${resumeItem.progress}% complete`}
-                    className="mt-2 sm:mt-3.5"
-                  />
-                </div>
-                <a
-                  href={resumeUrl}
-                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[9px] bg-[color:var(--brand-fill)] text-white shadow-[0_1px_2px_rgba(42,91,255,0.25)] transition hover:opacity-95 focus:outline-none focus:ring-4 focus:ring-white/25 sm:hidden"
-                  aria-label={`Resume ${resumeItem.title}`}
-                >
-                  <PlayIcon className="h-[15px] w-[15px]" />
-                </a>
-              </div>
-              <a
-                href={resumeUrl}
-                className="mt-3 hidden h-11 w-full items-center justify-center gap-1.5 rounded-[9px] bg-[color:var(--brand-fill)] px-5 text-sm font-semibold text-white shadow-[0_1px_2px_rgba(42,91,255,0.25)] transition hover:opacity-95 focus:outline-none focus:ring-4 focus:ring-white/25 sm:inline-flex sm:mt-4 sm:w-auto"
-              >
-                <PlayIcon className="h-[15px] w-[15px]" /> Resume
-              </a>
-            </aside>
-
-            <div className="hidden lg:col-start-1 lg:row-start-2 sm:block">
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="mt-2.5 hidden flex-wrap items-center gap-2 sm:flex">
                 <span className="text-[13px] font-medium text-[color:var(--ink-soft)]">Popular:</span>
                 {popularSearches.map((q) => (
                   <button
@@ -507,6 +467,35 @@ export default function Home() {
                 ))}
               </div>
             </div>
+
+            <aside
+              className="rounded-[14px] bg-[color:var(--ink)] p-4 shadow-[var(--shadow-card)] sm:px-5 sm:py-4 lg:self-start"
+              aria-label="Resume learning"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.04em] text-white/55 sm:text-[11px]">{resumeMeta}</p>
+                  <h2 className="mt-1 text-[17px] font-bold leading-[1.08] tracking-[-0.01em] text-white sm:text-[19px]">{resumeItem.title}</h2>
+                  <p className="mt-1 line-clamp-1 text-[12px] text-white/62 sm:text-[13px]">Up next: {resumeItem.detail}</p>
+                </div>
+                <a
+                  href={resumeUrl}
+                  className="inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-[9px] bg-white px-3.5 text-sm font-bold text-[color:var(--ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:bg-white/90 focus:outline-none focus:ring-4 focus:ring-white/25 sm:px-5"
+                >
+                  <PlayIcon className="h-[15px] w-[15px]" />
+                  <span className="hidden sm:inline">Resume</span>
+                  <span className="sr-only sm:hidden">Resume {resumeItem.title}</span>
+                </a>
+              </div>
+              <div className="mt-3 flex items-center gap-3">
+                <div className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-white/14">
+                  <div className="h-full rounded-full bg-[color:var(--brand-fill)]" style={{ width: `${resumeItem.progress}%` }} />
+                </div>
+                <span className="shrink-0 font-mono text-[11px] font-semibold tabular-nums text-white/65">
+                  {resumeItem.progressLabel ? `Lesson ${resumeItem.progressLabel}` : `${resumeItem.progress}%`}
+                </span>
+              </div>
+            </aside>
           </div>
         </div>
       </section>

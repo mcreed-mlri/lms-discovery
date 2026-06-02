@@ -572,7 +572,7 @@ export const practiceAreas: PracticeArea[] = [
   { id: "housing", name: "Housing", query: "housing", count: Math.max(countModulesMatching("housing"), 5), hueIndex: 0 },
   { id: "benefits", name: "Public Benefits", query: "benefits", count: 6, hueIndex: 1 },
   { id: "family", name: "Family Law", query: "family", count: 4, hueIndex: 2 },
-  { id: "ethics", name: "Ethics & UPL", query: "ethics", count: Math.max(countModulesMatching("ethics"), 3), hueIndex: 3 },
+  { id: "ethics", name: "Ethics", query: "ethics", count: Math.max(countModulesMatching("ethics"), 3), hueIndex: 3 },
   { id: "skills", name: "Practice Skills", query: "court", count: Math.max(countModulesMatching("court"), 8), hueIndex: 4 },
   { id: "immigration", name: "Immigration", query: "immigration", count: 3, hueIndex: 5 },
 ];
