@@ -43,7 +43,7 @@ export default function LoginPage() {
               <div className="min-w-0">
                 <p className="font-bold text-[color:var(--ink-muted)]">{demoUser.name}</p>
                 <p className="text-sm font-medium text-[color:var(--ink-muted)]">
-                  {demoUser.title} - {demoUser.unit}
+                  {demoUser.organization} · {demoUser.unit}
                 </p>
                 <p className="truncate text-sm text-[#8a8173]">{demoUser.email}</p>
               </div>

@@ -117,6 +117,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -132,6 +133,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  overflow-x: clip;
   font-family: var(--font-sans);
   font-weight: 400;
   font-size: 15px;
@@ -153,7 +155,7 @@ a {
 .skip-link {
   position: fixed;
   left: 1rem;
-  top: 1rem;
+  top: calc(1rem + env(safe-area-inset-top, 0px));
   z-index: 100;
   transform: translateY(-150%);
   border-radius: 0.75rem;

@@ -149,7 +149,7 @@ export function StudioShell({
             className="absolute inset-0 bg-[rgba(20,22,27,0.4)]"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="absolute inset-y-0 left-0 flex max-h-screen overflow-y-auto shadow-[var(--shadow-lg)]">
+          <div className="absolute inset-y-0 left-0 flex max-h-screen overflow-y-auto pt-[env(safe-area-inset-top,0px)] shadow-[var(--shadow-lg)]">
             <StudioRail
               collapsed={false}
               onToggle={() => setMobileOpen(false)}
@@ -161,9 +161,9 @@ export function StudioShell({
       )}
 
       {/* Content column */}
-      <div className="flex min-w-0 flex-1 flex-col pb-20 lg:pb-0">
-        <StudioContentBar onMenu={() => setMobileOpen(true)} />
-        <main id="main-content" className="flex-1">
+      <div className="flex min-w-0 flex-1 flex-col overflow-x-clip pb-20 lg:pb-0">
+        <StudioContentBar onMenu={() => setMobileOpen(true)} onSearch={openGlobalSearch} />
+        <main id="main-content" className="min-w-0 flex-1 overflow-x-clip">
           {padded ? (
             <div className="mx-auto max-w-[1120px] px-4 py-8 sm:px-6 lg:px-10">{children}</div>
           ) : (
@@ -177,7 +177,7 @@ export function StudioShell({
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--line)] bg-[color:var(--surface)] px-5 pb-[calc(0.5rem+env(safe-area-inset-bottom))] pt-2 lg:hidden">
         <div className="mx-auto grid max-w-md grid-cols-4">
           <BottomNavLink href="/" label="Home" active={pathname === "/"} icon={<HomeIcon className="h-5 w-5" />} />
-          <BottomNavLink href="/#browse" label="Browse" active={false} icon={<SearchIcon className="h-5 w-5" />} />
+          <BottomNavButton label="Search" icon={<SearchIcon className="h-5 w-5" />} onClick={openGlobalSearch} />
           <BottomNavLink
             href="/my-learning"
             label="Learning"
@@ -230,7 +230,7 @@ function GlobalSearchDialog({
 
   return (
     <div
-      className="fixed inset-0 z-[80] flex items-start justify-center bg-[rgba(20,22,27,0.34)] px-4 pt-20 backdrop-blur-sm sm:pt-28"
+      className="fixed inset-0 z-[80] flex items-start justify-center bg-[rgba(20,22,27,0.34)] px-4 pt-[calc(5rem+env(safe-area-inset-top,0px))] backdrop-blur-sm sm:pt-[calc(7rem+env(safe-area-inset-top,0px))]"
       role="dialog"
       aria-modal="true"
       aria-label="Search learning library"
@@ -278,5 +278,26 @@ function BottomNavLink({
       {icon}
       {label}
     </Link>
+  );
+}
+
+function BottomNavButton({
+  label,
+  icon,
+  onClick,
+}: {
+  label: string;
+  icon: ReactNode;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex flex-col items-center gap-1 rounded-xl py-2 text-xs font-bold text-[color:var(--ink-soft)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15"
+    >
+      {icon}
+      {label}
+    </button>
   );
 }

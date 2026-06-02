@@ -20,7 +20,6 @@ import { SearchBox } from "@/components/search-box";
 import { SkillGlyph } from "@/components/skill-glyph";
 import { getHue } from "@/lib/skill-hue";
 import {
-  contentUpdates,
   continueLearning,
   courses,
   getLearningItems,
@@ -124,8 +123,13 @@ function ResultSection({
           {items.length} item{items.length === 1 ? "" : "s"}
         </p>
       </div>
+      <div className="flex flex-col gap-2 sm:hidden">
+        {items.map((item) => (
+          <ContentListRow key={`${item.type}-${item.id}`} item={item} onOpen={onOpen} />
+        ))}
+      </div>
       {viewMode === "grid" ? (
-        <div className={`grid gap-4 ${gridColumns}`}>
+        <div className={`hidden gap-4 sm:grid ${gridColumns}`}>
           {items.map((item) =>
             item.type === "PATH" ? (
               <PathCard key={`${item.type}-${item.id}`} item={item} onOpen={onOpen} />
@@ -135,7 +139,7 @@ function ResultSection({
           )}
         </div>
       ) : (
-        <div className="grid gap-4">
+        <div className="hidden gap-4 sm:grid">
           {items.map((item) => (
             <ContentListRow key={`${item.type}-${item.id}`} item={item} onOpen={onOpen} />
           ))}
@@ -172,55 +176,24 @@ function SkillTile({ skill, index, onSelect }: { skill: Skill; index: number; on
   );
 }
 
-// "Changed this week" row — a law/content update inside the updates card.
-function UpdateRow({ update, index }: { update: (typeof contentUpdates)[number]; index: number }) {
-  const high = update.severity === "high";
-  const sevColor = high ? "#c8493b" : "#c8791b";
-  const sevBg = high ? "#fbe9e6" : "#fbf0dc";
-  return (
-    <Link
-      href="/updates"
-      className={`group flex items-start gap-4 py-[18px] focus:outline-none ${index === 0 ? "" : "border-t border-[color:var(--line-soft)]"}`}
-    >
-      <span className="mt-1.5 h-[9px] w-[9px] shrink-0 rounded-full" style={{ background: sevColor }} />
-      <div className="min-w-0 flex-1">
-        <div className="mb-1.5 flex flex-wrap items-center gap-2.5">
-          <span
-            className="rounded-[7px] px-[9px] py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.03em]"
-            style={{ background: sevBg, color: sevColor }}
-          >
-            {update.tag}
-          </span>
-          <span className="text-[12.5px] text-[color:var(--ink-soft)]">{update.when}</span>
-        </div>
-        <h3 className="text-[15px] font-[650] leading-snug tracking-[-0.01em] text-[color:var(--ink)] group-hover:text-[color:var(--brand)] group-focus-visible:text-[color:var(--brand)]">{update.title}</h3>
-        <p className="mt-1 line-clamp-2 text-[13.5px] leading-relaxed text-[color:var(--ink-muted)]">{update.summary}</p>
-      </div>
-      <span className="mt-0.5 hidden shrink-0 whitespace-nowrap text-[13.5px] font-semibold text-[color:var(--brand)] sm:inline">
-        Review →
-      </span>
-    </Link>
-  );
-}
-
 // Guided-path card with a hue top-accent bar.
 function StudioPathCard({ path, index }: { path: (typeof paths)[number]; index: number }) {
   const hue = getHue(index + 2);
   return (
-    <div className="overflow-hidden rounded-[14px] border border-[color:var(--line)] bg-[color:var(--surface)] shadow-[var(--shadow-xs)] transition hover:shadow-[var(--shadow-card)]">
-      <div className="h-1.5" style={{ background: hue.solid }} />
-      <div className="p-5">
-        <div className="mb-3 flex items-center gap-1.5">
+    <div className="overflow-hidden rounded-[12px] border border-[color:var(--line)] bg-[color:var(--surface)] shadow-[var(--shadow-xs)] transition hover:shadow-[var(--shadow-card)] sm:rounded-[14px]">
+      <div className="h-1 sm:h-1.5" style={{ background: hue.solid }} />
+      <div className="p-3.5 sm:p-5">
+        <div className="mb-2 flex items-center gap-1.5 sm:mb-3">
           <span style={{ color: hue.solid }}>
-            <PathIcon className="h-4 w-4" />
+            <PathIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           </span>
-          <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.04em] text-[color:var(--ink-soft)]">Guided path</span>
+          <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.04em] text-[color:var(--ink-soft)] sm:text-[11px]">Guided path</span>
         </div>
-        <h3 className="mb-3.5 text-[17px] font-bold leading-snug tracking-[-0.01em] text-[color:var(--ink)]">{path.title}</h3>
-        <div className="flex flex-wrap gap-x-4 gap-y-1 text-[13px] text-[color:var(--ink-muted)]">
+        <h3 className="text-[15px] font-bold leading-snug tracking-[-0.01em] text-[color:var(--ink)] sm:mb-3.5 sm:text-[17px]">{path.title}</h3>
+        <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[12px] text-[color:var(--ink-muted)] sm:gap-x-4 sm:text-[13px]">
           <span>{path.courseIds.length} course{path.courseIds.length === 1 ? "" : "s"}</span>
           <span>{path.totalDuration.replace(" total", "")}</span>
-          <span>{path.level}</span>
+          <span className="hidden sm:inline">{path.level}</span>
         </div>
       </div>
     </div>
@@ -290,10 +263,13 @@ export default function Home() {
     resumeItem.resumeUrl ??
     "https://mlri.brightspace.com/content/enforced/6703-course.outline/notice-types.html?ou=6703&d2l_body_type=3";
   const resumeCourse = courses.find((course) => course.id === resumeItem.id);
-  const resumeMeta = ["Resume", resumeCourse?.practiceArea, resumeMinutesLeftLabel(resumeCourse?.duration)]
+  const resumeEyebrow = [resumeCourse?.practiceArea, resumeMinutesLeftLabel(resumeCourse?.duration)]
     .filter(Boolean)
-    .join(" - ")
+    .join(" · ")
     .toUpperCase();
+  const resumeProgressLabel = resumeItem.progressLabel
+    ? `Lesson ${resumeItem.progressLabel}`
+    : `${resumeItem.progress}%`;
   const clePct = Math.round((learnerProgress.cleEarned / learnerProgress.cleRequired) * 100);
 
   function selectSkill(id: SkillId) {
@@ -408,13 +384,22 @@ export default function Home() {
   return (
     <StudioShell padded={false}>
       {/* HERO - compact personalized greeting, search, and resume card */}
-      <section className="border-b border-[color:var(--line)]">
-        <div className="mx-auto max-w-[1120px] px-4 py-4 sm:px-6 sm:py-5 lg:px-10 lg:py-6">
+      <section className="overflow-x-clip border-b border-[color:var(--line)]">
+        <div className="mx-auto min-w-0 max-w-[1120px] px-4 py-4 sm:px-6 sm:py-5 lg:px-10 lg:py-6">
           {/* Top row: headline + training hours / this-week streak */}
-          <div className="flex items-center justify-between gap-3 sm:gap-6">
-            <h1 className="hero-display min-w-0 text-[1.45rem] leading-[1.1] text-[color:var(--ink)] sm:text-[2rem] sm:leading-[1.06] lg:text-[2.15rem]">
-              Welcome back, {user.firstName}.
-            </h1>
+          <div className="flex min-w-0 items-center justify-between gap-3 sm:gap-6">
+            <div className="min-w-0">
+              <h1 className="hero-display min-w-0 text-[1.45rem] leading-[1.1] text-[color:var(--ink)] sm:text-[2rem] sm:leading-[1.06] lg:text-[2.15rem]">
+                Welcome back, {user.firstName}.
+              </h1>
+              <p className="mt-1 flex flex-wrap items-center gap-x-1.5 text-[13px] text-[color:var(--ink-muted)] sm:mt-1.5 sm:text-[14px]">
+                <span className="font-semibold tracking-[-0.01em] text-[color:var(--ink-soft)]">{user.organization ?? "MLRI"}</span>
+                <span className="text-[color:var(--ink-soft)]/45" aria-hidden="true">
+                  ·
+                </span>
+                <span>{user.unit}</span>
+              </p>
+            </div>
 
             {/* Mobile: text-only training hours — no ring */}
             <p className="shrink-0 pt-0.5 text-right font-mono text-[11px] leading-tight tabular-nums sm:hidden">
@@ -463,10 +448,55 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Main row: search (+ popular on sm+) | resume card */}
-          <div className="mt-4 grid gap-3 sm:mt-5 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_29rem] lg:items-start lg:gap-8">
-            <div>
+          {/* Main row: resume first on mobile, then search */}
+          <div className="mt-3 grid min-w-0 gap-3 sm:mt-5 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-8">
+            <aside
+              className="order-1 min-w-0 rounded-[12px] bg-[color:var(--ink)] px-3 py-2.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-3 lg:order-2 lg:self-start"
+              aria-label="Resume learning"
+            >
+              <div className="flex items-start gap-2.5 sm:items-center sm:gap-3">
+                <div className="min-w-0 flex-1">
+                  {resumeEyebrow ? (
+                    <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.04em] text-white/50 sm:text-[10px]">{resumeEyebrow}</p>
+                  ) : null}
+                  <h2 className="mt-0.5 line-clamp-2 text-[14px] font-bold leading-snug tracking-[-0.01em] text-white sm:line-clamp-none sm:truncate sm:text-[15px] sm:leading-tight">
+                    {resumeItem.title}
+                  </h2>
+                </div>
+                <a
+                  href={resumeUrl}
+                  aria-label={`Resume ${resumeItem.title}. Up next: ${resumeItem.detail}. ${resumeProgressLabel}.`}
+                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] bg-white text-[color:var(--ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:bg-white/90 focus:outline-none focus:ring-4 focus:ring-white/25 sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
+                >
+                  <PlayIcon className="h-[14px] w-[14px]" />
+                  <span className="hidden sm:inline">Resume</span>
+                </a>
+              </div>
+              <div className="mt-1.5 flex items-center gap-2 sm:mt-2 sm:gap-2.5">
+                <div className="h-1 min-w-0 flex-1 overflow-hidden rounded-full bg-white/14">
+                  <div className="h-full rounded-full bg-[color:var(--brand-fill)]" style={{ width: `${resumeItem.progress}%` }} />
+                </div>
+                <span className="shrink-0 font-mono text-[9px] font-semibold tabular-nums text-white/55 sm:text-[10px]">{resumeProgressLabel}</span>
+              </div>
+            </aside>
+
+            <div className="order-2 min-w-0 lg:order-1">
               <SearchBox value={query} onChange={setQuery} suggestions={searchSuggestions} onSelect={openSearchResult} prominent />
+              <div className="-mx-4 mt-2 flex min-w-0 gap-2 overflow-x-auto px-4 pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:mt-2.5 sm:hidden sm:px-0 [&::-webkit-scrollbar]:hidden">
+                {popularSearches.map((q) => (
+                  <button
+                    key={q}
+                    type="button"
+                    onClick={() => {
+                      setQuery(q);
+                      scrollToBrowse();
+                    }}
+                    className="shrink-0 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-[12px] font-medium text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
               <div className="mt-2.5 hidden flex-wrap items-center gap-2 sm:flex">
                 <span className="text-[13px] font-medium text-[color:var(--ink-soft)]">Popular:</span>
                 {popularSearches.map((q) => (
@@ -483,42 +513,22 @@ export default function Home() {
                   </button>
                 ))}
               </div>
-            </div>
-
-            <aside
-              className="rounded-[14px] bg-[color:var(--ink)] p-4 shadow-[var(--shadow-card)] sm:px-5 sm:py-4 lg:self-start"
-              aria-label="Resume learning"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="min-w-0 flex-1">
-                  <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.04em] text-white/55 sm:text-[11px]">{resumeMeta}</p>
-                  <h2 className="mt-1 text-[17px] font-bold leading-[1.08] tracking-[-0.01em] text-white sm:text-[19px]">{resumeItem.title}</h2>
-                  <p className="mt-1 line-clamp-1 text-[12px] text-white/62 sm:text-[13px]">Up next: {resumeItem.detail}</p>
-                </div>
-                <a
-                  href={resumeUrl}
-                  className="inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-[9px] bg-white px-3.5 text-sm font-bold text-[color:var(--ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:bg-white/90 focus:outline-none focus:ring-4 focus:ring-white/25 sm:px-5"
-                >
-                  <PlayIcon className="h-[15px] w-[15px]" />
-                  <span className="hidden sm:inline">Resume</span>
-                  <span className="sr-only sm:hidden">Resume {resumeItem.title}</span>
+              <nav className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] sm:hidden" aria-label="Jump to section">
+                <span className="font-medium text-[color:var(--ink-soft)]">Jump to</span>
+                <a href="#skills" className="font-semibold text-[color:var(--brand)]">
+                  Skills
                 </a>
-              </div>
-              <div className="mt-3 flex items-center gap-3">
-                <div className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-white/14">
-                  <div className="h-full rounded-full bg-[color:var(--brand-fill)]" style={{ width: `${resumeItem.progress}%` }} />
-                </div>
-                <span className="shrink-0 font-mono text-[11px] font-semibold tabular-nums text-white/65">
-                  {resumeItem.progressLabel ? `Lesson ${resumeItem.progressLabel}` : `${resumeItem.progress}%`}
-                </span>
-              </div>
-            </aside>
+                <a href="#browse" className="font-semibold text-[color:var(--brand)]">
+                  Library
+                </a>
+              </nav>
+            </div>
           </div>
         </div>
       </section>
 
       {/* BROWSE BY SKILL — the primary lens: legal practice as verbs */}
-      <section className="mx-auto max-w-[1120px] px-4 py-5 sm:px-6 sm:py-9 lg:px-10" aria-label="Browse by skill">
+      <section id="skills" className="mx-auto max-w-[1120px] scroll-mt-[calc(5rem+env(safe-area-inset-top,0px))] px-4 py-4 sm:px-6 sm:py-9 lg:px-10" aria-label="Browse by skill">
         <SectionHead kicker="Practical skills" title="What do you need to do?" />
         <div className="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
           {skills.map((skill, i) => (
@@ -527,28 +537,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CHANGED THIS WEEK + GUIDED PATHS */}
-      <section className="mx-auto grid max-w-[1120px] gap-8 px-4 pb-2 sm:px-6 lg:grid-cols-[1.4fr_1fr] lg:gap-10 lg:px-10">
-        <div>
-          <SectionHead kicker="Keep current" title="What changed recently" actionHref="/updates" actionLabel="All updates" />
-          <div className="rounded-[14px] border border-[color:var(--line)] bg-[color:var(--surface)] px-4 pb-3 pt-1 shadow-[var(--shadow-card)] sm:px-[22px]">
-            {contentUpdates.map((u, i) => (
-              <UpdateRow key={u.id} update={u} index={i} />
-            ))}
-          </div>
-        </div>
-        <div>
-          <SectionHead kicker="Guided learning" title="Follow a clear path" />
-          <div className="flex flex-col gap-4">
-            {paths.map((p, i) => (
-              <StudioPathCard key={p.id} path={p} index={i} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CATALOG — the full library, with filter pills + the active lens */}
-      <section id="browse" className="mx-auto max-w-[1120px] px-4 py-7 sm:px-6 sm:py-9 lg:px-10" tabIndex={-1} aria-label="Learning content">
+      {/* Library before guided paths on mobile for faster content access */}
+      <div className="flex flex-col">
+        {/* CATALOG — the full library, with filter pills + the active lens */}
+        <section id="browse" className="order-2 mx-auto max-w-[1120px] scroll-mt-[calc(5rem+env(safe-area-inset-top,0px))] px-4 py-5 sm:px-6 sm:py-9 lg:order-3 lg:px-10" tabIndex={-1} aria-label="Learning content">
           <div className="mb-5 border-b border-[color:var(--line)] pb-3.5">
             <p className="section-kicker secondary">Library</p>
             <h2 className="section-title mt-1 text-[1.35rem] text-[color:var(--ink)] sm:text-[1.65rem]">All learning options</h2>
@@ -632,15 +624,21 @@ export default function Home() {
             </div>
           )}
 
+          <div className="flex flex-col gap-2 sm:hidden">
+            {(filter === "Paths" ? pathItems : catalogItems).map((item) => (
+              <ContentListRow key={`${item.type}-${item.id}`} item={item} onOpen={setSelectedItem} />
+            ))}
+          </div>
+
           {viewMode === "grid" ? (
             filter === "Paths" ? (
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="hidden gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {pathItems.map((item) => (
                   <PathCard key={`${item.type}-${item.id}`} item={item} onOpen={setSelectedItem} />
                 ))}
               </div>
             ) : (
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="hidden gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {catalogItems.map((item) =>
                   item.type === "PATH" ? (
                     <PathCard key={`${item.type}-${item.id}`} item={item} onOpen={setSelectedItem} />
@@ -651,7 +649,7 @@ export default function Home() {
               </div>
             )
           ) : (
-            <div className="grid gap-4">
+            <div className="hidden gap-4 sm:grid">
               {catalogItems.map((item) => (
                 <ContentListRow key={`${item.type}-${item.id}`} item={item} onOpen={setSelectedItem} />
               ))}
@@ -681,6 +679,17 @@ export default function Home() {
             </div>
           )}
         </section>
+
+        {/* GUIDED PATHS — deprioritized on mobile so the library sits higher */}
+        <section className="order-3 mx-auto max-w-[1120px] px-4 pb-4 pt-2 sm:px-6 sm:pb-2 lg:order-2 lg:px-10">
+          <SectionHead kicker="Guided learning" title="Follow a clear path" />
+          <div className="grid gap-2.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+            {paths.map((p, i) => (
+              <StudioPathCard key={p.id} path={p} index={i} />
+            ))}
+          </div>
+        </section>
+      </div>
 
       <DetailModal
         item={selectedItem}

@@ -8,6 +8,32 @@ Brightspace remains the system of record for courses, users, enrollment, and pro
 
 ## Run locally
 
+### Windows (no global Node/npm)
+
+This repo keeps a local Node copy in `tools/` (gitignored). Use it when `npm` is not on your PATH or is blocked by policy.
+
+**First time only** — if `tools/node-v24.15.0-win-x64/` is missing, download the [Node.js v24.15.0 Windows x64 zip](https://nodejs.org/dist/v24.15.0/node-v24.15.0-win-x64.zip), extract it to `tools/node-v24.15.0-win-x64/`, then install dependencies:
+
+```powershell
+.\tools\node-v24.15.0-win-x64\npm.cmd install
+```
+
+Start the dev server:
+
+```powershell
+.\tools\node-v24.15.0-win-x64\npm.cmd run dev:win
+```
+
+Or call Next directly (same as the `dev:win` script):
+
+```powershell
+.\tools\node-v24.15.0-win-x64\node.exe ./node_modules/next/dist/bin/next dev -p 3000 --webpack
+```
+
+Then open `http://localhost:3000`.
+
+### macOS / Linux (or when Node/npm is already installed)
+
 ```bash
 npm install
 npm run dev

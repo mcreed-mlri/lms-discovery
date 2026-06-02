@@ -61,7 +61,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
   }
 
   return (
-    <div className={`group relative ${compact || prominent ? "w-full" : "w-full max-w-2xl"}`}>
+    <div className={`group relative min-w-0 ${compact || prominent ? "w-full" : "w-full max-w-2xl"}`}>
       <label className="sr-only" htmlFor={inputId}>
         Search courses, modules, paths, or topics
       </label>
@@ -81,7 +81,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
         onKeyDown={handleKeyDown}
         className={`w-full border border-[color:var(--line)] bg-[color:var(--surface-raised)] font-semibold text-[color:var(--ink)] outline-none transition placeholder:font-normal placeholder:text-[color:var(--ink-soft)] hover:border-[color:var(--line-strong)] focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[#2a5bff]/15 ${
           prominent
-            ? "h-10 rounded-[12px] pl-10 pr-[4.5rem] text-[0.875rem] shadow-[var(--shadow-card)] sm:h-[52px] sm:pl-[3.25rem] sm:pr-16 sm:text-[17px]"
+            ? "h-10 rounded-[12px] pl-10 pr-4 text-[0.875rem] shadow-[var(--shadow-card)] sm:h-[52px] sm:pl-[3.25rem] sm:pr-16 sm:text-[17px]"
             : `rounded-[var(--radius-control)] pl-10 pr-4 text-base shadow-[var(--shadow-xs)] ${compact ? "h-9 text-sm" : "h-12"}`
         }`}
         id={inputId}
@@ -92,7 +92,7 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
       {prominent ? (
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 rounded-[7px] border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-1.5 py-0.5 font-mono text-[11px] font-medium text-[color:var(--ink-soft)] sm:right-[18px] sm:px-2 sm:py-1 sm:text-[12px]"
+          className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-[7px] border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-2 py-1 font-mono text-[12px] font-medium text-[color:var(--ink-soft)] sm:inline sm:right-[18px]"
         >
           Ctrl K
         </span>

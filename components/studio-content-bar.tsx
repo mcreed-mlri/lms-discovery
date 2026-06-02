@@ -1,13 +1,14 @@
 "use client";
 
-import { BellIcon, MenuIcon } from "@/components/icons";
+import Link from "next/link";
+import { BellIcon, MenuIcon, SearchIcon } from "@/components/icons";
 
 /* Slim sticky header inside the content column. On desktop it carries the
    "what is this product" eyebrow + a notifications bell; on mobile it also
-   holds the hamburger that opens the rail drawer and the LACE wordmark. */
-export function StudioContentBar({ onMenu }: { onMenu?: () => void }) {
+   holds the hamburger that opens the rail drawer, search, and the LACE wordmark. */
+export function StudioContentBar({ onMenu, onSearch }: { onMenu?: () => void; onSearch?: () => void }) {
   return (
-    <div className="sticky top-0 z-20 flex items-center gap-3 border-b border-[color:var(--line)] bg-[rgba(255,255,255,0.85)] px-4 py-2.5 backdrop-blur-[10px] sm:px-6 sm:py-3 lg:px-10 lg:py-4">
+    <div className="sticky top-0 z-20 flex min-w-0 max-w-full items-center gap-3 border-b border-[color:var(--line)] bg-[rgba(255,255,255,0.85)] px-4 pb-2.5 pt-[calc(0.625rem+env(safe-area-inset-top,0px))] backdrop-blur-[10px] sm:px-6 sm:pb-3 sm:pt-[calc(0.75rem+env(safe-area-inset-top,0px))] lg:px-10 lg:py-4">
       {/* Mobile: menu + wordmark */}
       <button
         type="button"
@@ -28,14 +29,25 @@ export function StudioContentBar({ onMenu }: { onMenu?: () => void }) {
 
       <div className="flex-1" />
 
-      <button
-        type="button"
+      {onSearch ? (
+        <button
+          type="button"
+          onClick={onSearch}
+          className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 lg:hidden"
+          aria-label="Search learning library"
+        >
+          <SearchIcon className="h-[18px] w-[18px]" />
+        </button>
+      ) : null}
+
+      <Link
+        href="/updates"
         className="relative flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15"
-        aria-label="Notifications"
+        aria-label="Updates and notifications"
       >
         <BellIcon className="h-[18px] w-[18px]" />
         <span className="absolute right-[9px] top-[8px] h-[7px] w-[7px] rounded-full border-2 border-[color:var(--surface)] bg-[#c8493b]" />
-      </button>
+      </Link>
     </div>
   );
 }

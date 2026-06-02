@@ -8,6 +8,7 @@ export type User = {
   firstName: string;
   email: string;
   title: string;
+  organization: string;
   unit: string;
   initials: string;
 };
@@ -18,6 +19,7 @@ export const demoUser: User = {
   firstName: "Sarah",
   email: "s.chen@mlri.org",
   title: "Staff Attorney",
+  organization: "MLRI",
   unit: "Housing Unit",
   initials: "SC",
 };
