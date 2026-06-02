@@ -162,24 +162,6 @@ function TileSkeleton() {
   );
 }
 
-function NoticeBanner({ notices }: { notices: NonNullable<LearnerDashboardPayload["notices"]> }) {
-  if (notices.length === 0) return null;
-  const notice = notices[0];
-  const isWarning = notice.severity === "warning";
-  return (
-    <aside
-      className={`editorial-panel mb-6 rounded-[var(--radius-card)] border-l-4 p-4 ${
-        isWarning ? "border-l-[#c8493b]" : "border-l-[#2a5bff]"
-      }`}
-      role="status"
-    >
-      <p className="section-kicker primary">{isWarning ? "Notice" : "Update"}</p>
-      <h2 className="card-title mt-1 text-lg">{notice.title}</h2>
-      <p className="mt-1 text-sm font-medium text-[color:var(--ink-muted)]">{notice.body}</p>
-    </aside>
-  );
-}
-
 // ── Continue-learning rows ─────────────────────────────────────────────────
 function ContinueHeroRow({ course }: { course: LearnerCourse }) {
   const tone = toneForArea(course.trainingArea);
@@ -310,12 +292,11 @@ export function LearnerDashboardView() {
 
   if (!data) return null;
 
-  const { user, summary, courses, notices, recentActivity, certificates } = data;
+  const { user, summary, courses, recentActivity, certificates } = data;
 
   if (courses.length === 0) {
     return (
       <>
-        <NoticeBanner notices={notices ?? []} />
         <DashboardPageHeader eyebrow="My learning" title={greetingForHour(user.displayName)} />
         <div className="editorial-panel rounded-[var(--radius-card)] p-10 text-center">
           <h2 className="section-title text-lg text-[color:var(--ink)]">No courses yet</h2>
@@ -357,8 +338,6 @@ export function LearnerDashboardView() {
 
   return (
     <>
-      <NoticeBanner notices={notices ?? []} />
-
       <DashboardPageHeader
         eyebrow="My learning"
         title={greetingForHour(user.displayName)}
