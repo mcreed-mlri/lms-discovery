@@ -18,7 +18,7 @@ import { StudioShell } from "@/components/studio-shell";
 import { ProgressRing } from "@/components/progress-ring";
 import { SearchBox } from "@/components/search-box";
 import { SkillGlyph } from "@/components/skill-glyph";
-import { getAccessLabel, getEligibleLearningItems } from "@/lib/access";
+import { getAccessLabel, getEffectiveDashboardRole, getEligibleLearningItems } from "@/lib/access";
 import { getHue } from "@/lib/skill-hue";
 import {
   continueLearning,
@@ -203,6 +203,7 @@ function StudioPathCard({ path, index }: { path: Extract<LearningItem, { type: "
 export default function Home() {
   const { user, ready, login } = useAuth();
   const router = useRouter();
+  const isAdmin = getEffectiveDashboardRole(user) === "super_admin";
 
   useEffect(() => {
     if (ready && !user) router.replace("/login");
@@ -253,6 +254,15 @@ export default function Home() {
   const pathItems = visibleItems.filter((item): item is Extract<LearningItem, { type: "PATH" }> => item.type === "PATH");
   const eligiblePathItems = allItems.filter((item): item is Extract<LearningItem, { type: "PATH" }> => item.type === "PATH");
   const visibleModuleItems = allItems.filter((item): item is Extract<LearningItem, { type: "MODULE" }> => item.type === "MODULE");
+  // Only show skill lenses the signed-in user actually has content for. For a
+  // non-lawyer advocate this drops courtroom/negotiation/litigation tiles —
+  // skills outside their role (and the UPL boundary) — rather than dead "0 modules" cards.
+  const skillTiles = skills
+    .map((skill) => ({
+      skill,
+      count: visibleModuleItems.filter((module) => getModuleSkillId(module.id) === skill.id).length,
+    }))
+    .filter((entry) => entry.count > 0);
   const curatedItems = useMemo(() => getCuratedCatalogItems(visibleItems), [visibleItems]);
   const catalogItems = filter === "All" ? curatedItems : visibleItems;
 
@@ -422,14 +432,18 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Mobile: text-only training hours — no ring */}
-            <p className="shrink-0 pt-0.5 text-right font-mono text-[11px] leading-tight tabular-nums sm:hidden">
-              <span className="block font-semibold uppercase tracking-[0.04em] text-[color:var(--ink-soft)]">Training</span>
-              <span className="font-semibold text-[color:var(--ink)]">
-                {learnerProgress.cleEarned}/{learnerProgress.cleRequired} hrs
-              </span>
-            </p>
+            {/* Mobile: text-only training hours — no ring. Hidden for the
+                headless admin account, which tracks no personal progress. */}
+            {!isAdmin && (
+              <p className="shrink-0 pt-0.5 text-right font-mono text-[11px] leading-tight tabular-nums sm:hidden">
+                <span className="block font-semibold uppercase tracking-[0.04em] text-[color:var(--ink-soft)]">Training</span>
+                <span className="font-semibold text-[color:var(--ink)]">
+                  {learnerProgress.cleEarned}/{learnerProgress.cleRequired} hrs
+                </span>
+              </p>
+            )}
 
+            {!isAdmin && (
             <div className="hidden items-center gap-4 sm:flex sm:pt-1.5">
               <div className="flex items-center gap-2.5">
                 <ProgressRing
@@ -467,10 +481,39 @@ export default function Home() {
                 </div>
               </div>
             </div>
+            )}
           </div>
 
           {/* Main row: resume first on mobile, then search */}
           <div className="mt-3 grid min-w-0 gap-3 sm:mt-5 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-8">
+            {isAdmin ? (
+              <aside
+                className="order-1 min-w-0 rounded-[12px] bg-[color:var(--ink)] px-3 py-2.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-3 lg:order-2 lg:self-start"
+                aria-label="Admin console"
+              >
+                <div className="flex items-start gap-2.5 sm:items-center sm:gap-3">
+                  <div className="min-w-0 flex-1">
+                    <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.04em] text-white/50 sm:text-[10px]">
+                      Service account
+                    </p>
+                    <h2 className="mt-0.5 truncate text-[14px] font-bold leading-snug tracking-[-0.01em] text-white sm:text-[15px] sm:leading-tight">
+                      Integrations &amp; health
+                    </h2>
+                  </div>
+                  <Link
+                    href="/my-learning/admin"
+                    aria-label="Open the admin console"
+                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] bg-white text-[color:var(--ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:bg-white/90 focus:outline-none focus:ring-4 focus:ring-white/25 sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
+                  >
+                    <ArrowIcon className="h-[14px] w-[14px]" />
+                    <span className="hidden sm:inline">Console</span>
+                  </Link>
+                </div>
+                <p className="mt-1.5 text-[11px] leading-snug text-white/55 sm:mt-2">
+                  Headless data admin — API checks, Brightspace &amp; Supabase status.
+                </p>
+              </aside>
+            ) : (
             <aside
               className="order-1 min-w-0 rounded-[12px] bg-[color:var(--ink)] px-3 py-2.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-3 lg:order-2 lg:self-start"
               aria-label="Resume learning"
@@ -500,6 +543,7 @@ export default function Home() {
                 <span className="shrink-0 font-mono text-[9px] font-semibold tabular-nums text-white/55 sm:text-[10px]">{resumeProgressLabel}</span>
               </div>
             </aside>
+            )}
 
             <div className="order-2 min-w-0 lg:order-1">
               <SearchBox value={query} onChange={setQuery} suggestions={searchSuggestions} onSelect={openSearchResult} prominent />
@@ -552,14 +596,8 @@ export default function Home() {
       <section id="skills" className="mx-auto max-w-[1120px] scroll-mt-[calc(5rem+env(safe-area-inset-top,0px))] px-4 py-4 sm:px-6 sm:py-9 lg:px-10" aria-label="Browse by skill">
         <SectionHead kicker="Practical skills" title="What do you need to do?" />
         <div className="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {skills.map((skill, i) => (
-            <SkillTile
-              key={skill.id}
-              skill={skill}
-              index={i}
-              count={visibleModuleItems.filter((module) => getModuleSkillId(module.id) === skill.id).length}
-              onSelect={selectSkill}
-            />
+          {skillTiles.map(({ skill, count }, i) => (
+            <SkillTile key={skill.id} skill={skill} index={i} count={count} onSelect={selectSkill} />
           ))}
         </div>
       </section>

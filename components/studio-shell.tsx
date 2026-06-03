@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { BellIcon, BookIcon, HomeIcon, SearchIcon } from "@/components/icons";
+import { BellIcon, BookIcon, GridIcon, HomeIcon, SearchIcon } from "@/components/icons";
 import { SearchBox } from "@/components/search-box";
 import { SiteFooter } from "@/components/site-footer";
 import { StudioContentBar } from "@/components/studio-content-bar";
 import { StudioRail } from "@/components/studio-rail";
-import { getEligibleLearningItems } from "@/lib/access";
+import { getEffectiveDashboardRole, getEligibleLearningItems } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
 import { getLearningItems } from "@/lib/data";
 import { searchLearningItems, type SearchResult } from "@/lib/search";
@@ -28,6 +28,7 @@ export function StudioShell({
   const { user, ready } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const isAdmin = getEffectiveDashboardRole(user) === "super_admin";
 
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -173,21 +174,32 @@ export function StudioShell({
 
       {/* Mobile bottom nav */}
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--line)] bg-[color:var(--surface)] px-5 pb-[calc(0.5rem+env(safe-area-inset-bottom))] pt-2 lg:hidden">
-        <div className="mx-auto grid max-w-md grid-cols-4">
+        <div className={`mx-auto grid max-w-md ${isAdmin ? "grid-cols-3" : "grid-cols-4"}`}>
           <BottomNavLink href="/" label="Home" active={pathname === "/"} icon={<HomeIcon className="h-5 w-5" />} />
           <BottomNavButton label="Search" icon={<SearchIcon className="h-5 w-5" />} onClick={openGlobalSearch} />
-          <BottomNavLink
-            href="/my-learning"
-            label="Learning"
-            active={pathname.startsWith("/my-learning")}
-            icon={<BookIcon className="h-5 w-5" />}
-          />
-          <BottomNavLink
-            href="/updates"
-            label="Updates"
-            active={pathname.startsWith("/updates")}
-            icon={<BellIcon className="h-5 w-5" />}
-          />
+          {isAdmin ? (
+            <BottomNavLink
+              href="/my-learning/admin"
+              label="Console"
+              active={pathname.startsWith("/my-learning/admin")}
+              icon={<GridIcon className="h-5 w-5" />}
+            />
+          ) : (
+            <>
+              <BottomNavLink
+                href="/my-learning"
+                label="Learning"
+                active={pathname.startsWith("/my-learning")}
+                icon={<BookIcon className="h-5 w-5" />}
+              />
+              <BottomNavLink
+                href="/updates"
+                label="Updates"
+                active={pathname.startsWith("/updates")}
+                icon={<BellIcon className="h-5 w-5" />}
+              />
+            </>
+          )}
         </div>
       </nav>
 

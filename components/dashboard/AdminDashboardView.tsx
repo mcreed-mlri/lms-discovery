@@ -2,7 +2,25 @@
 
 import { useEffect, useState } from "react";
 import { DashboardPageHeader } from "@/components/dashboard/DashboardPageHeader";
+import { getAccessLabel } from "@/lib/access";
+import { demoUsers } from "@/lib/auth";
 import type { ServiceHealth } from "@/types/dashboard";
+
+// The live API surface this account exists to operate and monitor.
+const API_ENDPOINTS: {
+  method: "GET" | "POST";
+  path: string;
+  label: string;
+  description: string;
+}[] = [
+  { method: "GET", path: "/api/health/supabase", label: "Supabase health", description: "Live connection + sample catalog rows" },
+  { method: "GET", path: "/api/health/brightspace", label: "Brightspace health", description: "Auth mode + credential configuration" },
+  { method: "GET", path: "/api/health/brightspace/whoami", label: "Brightspace whoami", description: "Confirms the authenticated LMS identity" },
+  { method: "GET", path: "/api/health/brightspace/course", label: "Brightspace course", description: "Reads a course offering by id" },
+  { method: "GET", path: "/api/health/brightspace/content", label: "Brightspace content", description: "Reads course content topics" },
+  { method: "POST", path: "/api/admin/sync/brightspace-test-course", label: "Sync test course", description: "Upserts a Brightspace course into Supabase" },
+  { method: "GET", path: "/api/auth/brightspace/start", label: "Brightspace OAuth start", description: "Begins the LMS authorization flow" },
+];
 
 type SupabaseHealthItem = {
   id: string;
@@ -76,6 +94,9 @@ export function AdminDashboardView() {
   const [brightspaceLoading, setBrightspaceLoading] = useState(true);
   const [brightspaceSync, setBrightspaceSync] = useState<BrightspaceSyncPayload | null>(null);
   const [brightspaceSyncing, setBrightspaceSyncing] = useState(false);
+
+  const adminAccount = demoUsers.find((account) => account.userType === "admin");
+  const learnerAccounts = demoUsers.filter((account) => account.userType !== "admin");
 
   useEffect(() => {
     let cancelled = false;
@@ -180,12 +201,38 @@ export function AdminDashboardView() {
   return (
     <>
       <DashboardPageHeader
-        eyebrow="Admin"
-        title="Integration status"
-        subtitle="Live backend checks for the Learning Hub spike."
+        eyebrow="Admin console"
+        title="Headless data admin"
+        subtitle="The service account behind the Learning Hub APIs, health checks, and sync."
       />
 
-      <section className="grid gap-4 lg:grid-cols-2">
+      {/* Account identity — what this login is and is not. */}
+      <section className="editorial-card border-t-4 border-t-[color:var(--ink)] p-5" aria-label="Account identity">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[12px] bg-[color:var(--ink)] text-base font-bold text-[color:var(--surface)]">
+              {adminAccount?.initials ?? "MA"}
+            </span>
+            <div className="min-w-0">
+              <h2 className="card-title text-lg">{adminAccount?.name ?? "MLRI Admin"}</h2>
+              <p className="mt-0.5 text-sm font-medium text-[color:var(--ink-muted)]">
+                {adminAccount?.title ?? "Platform Administrator"} · {adminAccount?.email ?? "admin@mlri.example"}
+              </p>
+            </div>
+          </div>
+          <span className="rounded-full bg-[#e7efe7] px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-[#3d5c47]">
+            Service account
+          </span>
+        </div>
+        <p className="mt-4 max-w-2xl text-sm font-medium leading-6 text-[color:var(--ink-muted)]">
+          This is a headless operations login — not a learner. It carries no enrollments, progress, or
+          personal dashboard. Use it to monitor integrations, exercise the API routes below, and manage
+          access for the learner accounts.
+        </p>
+      </section>
+
+      <h2 className="section-title mt-9 text-lg text-[color:var(--ink)]">Live integration status</h2>
+      <section className="mt-4 grid gap-4 lg:grid-cols-2">
         <article className={`editorial-card border-t-4 p-5 ${healthBorder[supabaseStatus]}`}>
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
@@ -289,9 +336,89 @@ export function AdminDashboardView() {
         </article>
       </section>
 
-      <p className="mt-8 text-sm font-medium text-[color:var(--ink-muted)]">
-        Supabase credentials stay server-side. This page reads through the Learning Hub API route only.
+      {/* API endpoint directory — the surface this account operates. */}
+      <h2 className="section-title mt-10 text-lg text-[color:var(--ink)]">API endpoints</h2>
+      <p className="mt-1 text-sm font-medium text-[color:var(--ink-muted)]">
+        Server-side routes for health, identity, and sync. Credentials stay on the server — these read through
+        the Learning Hub API only.
       </p>
+      <section className="mt-4 overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--line)]" aria-label="API endpoints">
+        {API_ENDPOINTS.map((endpoint, index) => (
+          <div
+            key={endpoint.path}
+            className={`flex flex-wrap items-center gap-3 bg-[color:var(--surface)] px-4 py-3 ${
+              index > 0 ? "border-t border-[color:var(--line)]" : ""
+            }`}
+          >
+            <span
+              className={`inline-flex w-14 shrink-0 items-center justify-center rounded-[7px] px-2 py-1 font-mono text-[11px] font-bold ${
+                endpoint.method === "POST"
+                  ? "bg-[#f4e3da] text-[#8d472e]"
+                  : "bg-[color:var(--surface-sunken)] text-[color:var(--ink-muted)]"
+              }`}
+            >
+              {endpoint.method}
+            </span>
+            <div className="min-w-[12rem] flex-1">
+              <p className="font-mono text-[13px] font-semibold text-[color:var(--ink)]">{endpoint.path}</p>
+              <p className="mt-0.5 text-xs font-medium text-[color:var(--ink-soft)]">{endpoint.description}</p>
+            </div>
+            {endpoint.method === "GET" ? (
+              <a
+                href={endpoint.path}
+                target="_blank"
+                rel="noreferrer"
+                className="shrink-0 rounded-[8px] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3 py-1.5 text-xs font-bold text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+              >
+                Open
+              </a>
+            ) : (
+              <span className="shrink-0 rounded-[8px] border border-dashed border-[color:var(--line)] px-3 py-1.5 text-xs font-semibold text-[color:var(--ink-soft)]">
+                POST only
+              </span>
+            )}
+          </div>
+        ))}
+      </section>
+
+      {/* Demo accounts — who this admin manages access for. */}
+      <h2 className="section-title mt-10 text-lg text-[color:var(--ink)]">Demo accounts</h2>
+      <p className="mt-1 text-sm font-medium text-[color:var(--ink-muted)]">
+        The learner logins this environment ships with, and the access each one resolves to.
+      </p>
+      <section className="mt-4 grid gap-3 sm:grid-cols-2" aria-label="Demo accounts">
+        {learnerAccounts.map((account) => (
+          <article key={account.id} className="editorial-card p-4">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[color:var(--brand)] text-sm font-bold text-white">
+                {account.initials}
+              </span>
+              <div className="min-w-0">
+                <p className="font-bold text-[color:var(--ink)]">{account.name}</p>
+                <p className="truncate text-xs font-medium text-[color:var(--ink-soft)]">{account.title} · {account.organization}</p>
+              </div>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              <span className="rounded-full bg-[color:var(--surface-sunken)] px-2 py-0.5 text-[11px] font-semibold text-[color:var(--ink-muted)]">
+                {getAccessLabel(account.userType)}
+              </span>
+              <span className="rounded-full bg-[color:var(--surface-sunken)] px-2 py-0.5 text-[11px] font-semibold text-[color:var(--ink-muted)]">
+                Access: {account.accessStatus}
+              </span>
+              {account.jurisdiction.map((region) => (
+                <span key={region} className="rounded-full bg-[color:var(--surface-sunken)] px-2 py-0.5 text-[11px] font-semibold text-[color:var(--ink-muted)]">
+                  {region}
+                </span>
+              ))}
+              {account.uplAcknowledgedDate ? (
+                <span className="rounded-full bg-[#e7efe7] px-2 py-0.5 text-[11px] font-semibold text-[#3d5c47]">
+                  UPL acknowledged
+                </span>
+              ) : null}
+            </div>
+          </article>
+        ))}
+      </section>
     </>
   );
 }

@@ -24,17 +24,19 @@ type NavItem = {
   /** Active when the pathname matches/starts with this. Defaults to exact href. */
   match?: (pathname: string) => boolean;
   adminOnly?: boolean;
+  /** Hidden for the headless admin account — these are learner-only surfaces. */
+  learnerOnly?: boolean;
 };
 
 const primaryNav: NavItem[] = [
   { label: "Home", href: "/", icon: HomeIcon, match: (p) => p === "/" },
   { label: "Browse", href: "/#browse", icon: GridIcon, match: () => false },
-  { label: "My Learning", href: "/my-learning", icon: BookIcon, match: (p) => p.startsWith("/my-learning") },
-  { label: "Updates", href: "/updates", icon: BellIcon, badge: true, match: (p) => p.startsWith("/updates") },
+  { label: "My Learning", href: "/my-learning", icon: BookIcon, learnerOnly: true, match: (p) => p === "/my-learning" || (p.startsWith("/my-learning/") && p !== "/my-learning/admin") },
+  { label: "Updates", href: "/updates", icon: BellIcon, badge: true, learnerOnly: true, match: (p) => p.startsWith("/updates") },
 ];
 
 const roleNav: NavItem[] = [
-  { label: "Admin", href: "/my-learning/admin", icon: GridIcon, adminOnly: true, match: (p) => p === "/my-learning/admin" },
+  { label: "Admin console", href: "/my-learning/admin", icon: GridIcon, adminOnly: true, match: (p) => p === "/my-learning/admin" },
 ];
 
 function RailItem({
@@ -92,8 +94,11 @@ export function StudioRail({
   const router = useRouter();
   const { user, logout } = useAuth();
   const effectiveRole = getEffectiveDashboardRole(user);
+  const isAdmin = effectiveRole === "super_admin";
 
-  const visibleRoleNav = roleNav.filter((item) => !item.adminOnly || effectiveRole === "super_admin");
+  // The headless admin account is an ops/data login — hide learner surfaces.
+  const visiblePrimaryNav = primaryNav.filter((item) => !item.learnerOnly || !isAdmin);
+  const visibleRoleNav = roleNav.filter((item) => !item.adminOnly || isAdmin);
 
   function handleLogout() {
     logout();
@@ -159,7 +164,7 @@ export function StudioRail({
 
       {/* Primary nav */}
       <nav className="flex flex-col gap-[3px]" aria-label="Primary">
-        {primaryNav.map((item) => (
+        {visiblePrimaryNav.map((item) => (
           <RailItem
             key={item.label}
             item={item}
