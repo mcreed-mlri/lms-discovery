@@ -30,6 +30,16 @@ export const defaultSearchMetadata: SearchMetadata = {
 };
 
 export const searchMetadataById: Record<string, SearchMetadata> = {
+  "welcome-to-lace": {
+    audience: ["All staff"],
+    status: "New",
+    editorialBoost: 10,
+    synonyms: ["onboarding", "welcome", "getting started", "lace"],
+    reviewedAt: "2026-06-03",
+    access: {
+      allowedUserTypes: ["attorney", "non_lawyer_advocate", "paralegal", "admin"],
+    },
+  },
   "brightspace-wrapper-demo": {
     audience: ["Program staff"],
     status: "Updated",
