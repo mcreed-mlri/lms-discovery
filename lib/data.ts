@@ -94,9 +94,9 @@ export const courses: Course[] = [
   },
   {
     id: "upl-boundaries-advocates",
-    title: "UPL Boundaries for Advocates",
+    title: "Legal Boundaries for Advocates",
     description:
-      "A practical guide to recognizing legal-advice boundaries, documenting next steps, and escalating to attorney supervision.",
+      "A practical guide to recognizing when to give approved information, document next steps, and bring in attorney supervision.",
     level: "Foundations",
     practiceArea: "Ethics",
     duration: "35 min",
@@ -355,11 +355,11 @@ export const modules: Module[] = [
   },
   {
     id: "upl-scenarios",
-    title: "UPL Scenarios for Frontline Advocates",
+    title: "Legal Boundaries Scenarios for Advocates",
     description:
       "Work through common intake and follow-up moments where an advocate should document facts, share approved information, or escalate.",
     courseId: "upl-boundaries-advocates",
-    parentCourseTitle: "UPL Boundaries for Advocates",
+    parentCourseTitle: "Legal Boundaries for Advocates",
     practiceArea: "Ethics",
     level: "Foundations",
     tags: ["upl", "advocate boundaries", "supervision", "ethics"],
@@ -372,7 +372,7 @@ export const modules: Module[] = [
     description:
       "Use a simple decision framework for moving from advocate support to attorney review without delaying urgent client needs.",
     courseId: "upl-boundaries-advocates",
-    parentCourseTitle: "UPL Boundaries for Advocates",
+    parentCourseTitle: "Legal Boundaries for Advocates",
     practiceArea: "Ethics",
     level: "Foundations",
     tags: ["upl", "attorney review", "supervision", "client support"],
@@ -411,7 +411,7 @@ export const paths: Path[] = [
   },
   {
     id: "advocate-upl-onboarding",
-    title: "Advocate UPL Onboarding",
+    title: "Advocate Boundaries Onboarding",
     description:
       "A short, safe starting path for non-lawyer advocates: professional boundaries, escalation, and client-centered support.",
     courseIds: ["upl-boundaries-advocates", "client-centered-practice"],
@@ -577,7 +577,7 @@ const courseChipLabels: Record<string, string> = {
   "client-centered-practice": "Client Communication",
   "first-steps-in-court": "Court Skills",
   "eviction-defense-48h": "Housing Court",
-  "upl-boundaries-advocates": "UPL",
+  "upl-boundaries-advocates": "Boundaries",
 };
 
 export const practiceAreaChips: PracticeAreaChip[] = courses.map((course) => ({

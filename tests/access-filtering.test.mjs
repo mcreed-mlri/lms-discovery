@@ -92,9 +92,9 @@ test("Kevin cannot see attorney-only discovery items", () => {
 
 test("Kevin can see approved advocate-safe courses", () => {
   const titles = titlesFor(kevin);
-  assert.ok(titles.includes("UPL Boundaries for Advocates"));
+  assert.ok(titles.includes("Legal Boundaries for Advocates"));
   assert.ok(titles.includes("Client-Centered Communication"));
-  assert.ok(titles.includes("Advocate UPL Onboarding"));
+  assert.ok(titles.includes("Advocate Boundaries Onboarding"));
 });
 
 test("Kevin search results do not leak hidden titles", () => {
