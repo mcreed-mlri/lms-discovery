@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   BellIcon,
   BookIcon,
@@ -10,12 +10,11 @@ import {
   HomeIcon,
   SearchIcon,
 } from "@/components/icons";
+import { getEffectiveDashboardRole } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
-import { useLaceDevRole } from "@/lib/lace-dev-role";
 import { practiceAreas } from "@/lib/data";
 import { getHue } from "@/lib/skill-hue";
 import type { ComponentType } from "react";
-import type { LaceRole } from "@/types/dashboard";
 
 type NavItem = {
   label: string;
@@ -24,7 +23,7 @@ type NavItem = {
   badge?: boolean;
   /** Active when the pathname matches/starts with this. Defaults to exact href. */
   match?: (pathname: string) => boolean;
-  roles?: LaceRole[];
+  adminOnly?: boolean;
 };
 
 const primaryNav: NavItem[] = [
@@ -35,9 +34,7 @@ const primaryNav: NavItem[] = [
 ];
 
 const roleNav: NavItem[] = [
-  { label: "Team", href: "/my-learning/team", icon: GridIcon, roles: ["manager", "super_admin"], match: (p) => p === "/my-learning/team" },
-  { label: "Program", href: "/my-learning/program", icon: GridIcon, roles: ["program", "super_admin"], match: (p) => p === "/my-learning/program" },
-  { label: "Admin", href: "/my-learning/admin", icon: GridIcon, roles: ["super_admin"], match: (p) => p === "/my-learning/admin" },
+  { label: "Admin", href: "/my-learning/admin", icon: GridIcon, adminOnly: true, match: (p) => p === "/my-learning/admin" },
 ];
 
 function RailItem({
@@ -92,10 +89,17 @@ export function StudioRail({
   onNavigate?: () => void;
 }) {
   const pathname = usePathname();
-  const { user } = useAuth();
-  const { role } = useLaceDevRole();
+  const router = useRouter();
+  const { user, logout } = useAuth();
+  const effectiveRole = getEffectiveDashboardRole(user);
 
-  const visibleRoleNav = roleNav.filter((item) => item.roles?.includes(role));
+  const visibleRoleNav = roleNav.filter((item) => !item.adminOnly || effectiveRole === "super_admin");
+
+  function handleLogout() {
+    logout();
+    onNavigate?.();
+    router.push("/login");
+  }
 
   return (
     <div
@@ -241,6 +245,18 @@ export function StudioRail({
             </div>
           )}
         </div>
+        {user && (
+          <button
+            type="button"
+            onClick={handleLogout}
+            title={collapsed ? "Log out / switch user" : undefined}
+            className={`mt-2 flex w-full items-center rounded-[8px] text-[13px] font-semibold text-[color:var(--ink-soft)] transition hover:bg-[color:var(--surface-sunken)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
+              collapsed ? "justify-center px-0 py-2" : "px-[11px] py-2"
+            }`}
+          >
+            {collapsed ? "Out" : "Log out / switch user"}
+          </button>
+        )}
       </div>
     </div>
   );

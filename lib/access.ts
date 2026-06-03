@@ -21,6 +21,7 @@ function hasUplAccess(user: AccessProfile, requiresUplAck?: boolean) {
 
 export function canAccessLearningItem(user: AccessProfile | null | undefined, item: LearningItem): boolean {
   if (!user || user.accessStatus !== "approved") return false;
+  if (user.userType === "admin") return true;
 
   const metadata = getSearchMetadata(item);
   const access = metadata.access;
@@ -46,4 +47,9 @@ export function getAccessLabel(userType: AccessUserType) {
   if (userType === "attorney") return "Attorney";
   if (userType === "paralegal") return "Paralegal";
   return "Admin";
+}
+
+export function getEffectiveDashboardRole(user: AccessProfile | null | undefined): "learner" | "super_admin" {
+  if (user?.accessStatus === "approved" && user.userType === "admin") return "super_admin";
+  return "learner";
 }

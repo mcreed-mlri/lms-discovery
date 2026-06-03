@@ -57,6 +57,12 @@ const suspendedKevin = {
   accessStatus: "suspended",
 };
 
+const admin = {
+  userType: "admin",
+  accessStatus: "approved",
+  jurisdiction: ["MA"],
+};
+
 function titlesFor(user) {
   return access.getEligibleLearningItems(data.getLearningItems(), user).map((item) => item.title);
 }
@@ -100,4 +106,14 @@ test("Kevin search results do not leak hidden titles", () => {
 test("Suspended or inactive users receive no discovery items", () => {
   assert.equal(access.getEligibleLearningItems(data.getLearningItems(), suspendedKevin).length, 0);
   assert.equal(access.getEligibleLearningItems(data.getLearningItems(), { ...kevin, accessStatus: "inactive" }).length, 0);
+});
+
+test("MLRI Admin can see the full discovery catalog", () => {
+  assert.equal(access.getEligibleLearningItems(data.getLearningItems(), admin).length, data.getLearningItems().length);
+});
+
+test("Only admin receives the effective super-admin dashboard role", () => {
+  assert.equal(access.getEffectiveDashboardRole(admin), "super_admin");
+  assert.equal(access.getEffectiveDashboardRole(sarah), "learner");
+  assert.equal(access.getEffectiveDashboardRole(kevin), "learner");
 });

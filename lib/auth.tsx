@@ -53,7 +53,22 @@ export const kevinSmithUser: User = {
   uplAcknowledgedDate: "2026-06-01",
 };
 
-export const demoUsers = [demoUser, kevinSmithUser];
+export const mlriAdminUser: User = {
+  id: "mlri-admin",
+  name: "MLRI Admin",
+  firstName: "MLRI",
+  email: "admin@mlri.example",
+  title: "Platform Administrator",
+  organization: "MLRI",
+  unit: "Learning Platform",
+  initials: "MA",
+  userType: "admin",
+  accessStatus: "approved",
+  jurisdiction: ["MA"],
+  practiceArea: ["all"],
+};
+
+export const demoUsers = [demoUser, kevinSmithUser, mlriAdminUser];
 
 type AuthState = {
   user: User | null;

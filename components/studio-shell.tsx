@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { BellIcon, BookIcon, HomeIcon, SearchIcon } from "@/components/icons";
-import { RoleSwitcher } from "@/components/dashboard/RoleSwitcher";
 import { SearchBox } from "@/components/search-box";
 import { SiteFooter } from "@/components/site-footer";
 import { StudioContentBar } from "@/components/studio-content-bar";
@@ -20,13 +19,11 @@ const COLLAPSE_KEY = "lace-rail-collapsed";
 export function StudioShell({
   children,
   padded = true,
-  showRoleSwitcher = true,
 }: {
   children: ReactNode;
   /** Wrap children in the centered 1120px content column. Home opts out to run
    *  full-bleed hero sections. */
   padded?: boolean;
-  showRoleSwitcher?: boolean;
 }) {
   const { user, ready } = useAuth();
   const router = useRouter();
@@ -193,8 +190,6 @@ export function StudioShell({
           />
         </div>
       </nav>
-
-      {showRoleSwitcher ? <RoleSwitcher /> : null}
 
       {searchOpen ? (
         <GlobalSearchDialog
