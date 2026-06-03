@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "node ./node_modules/next/dist/bin/next dev -p 3000 --webpack",
     "build": "node ./node_modules/next/dist/bin/next build --webpack",
-    "test:search": "node tests/search-ranking.test.mjs",
+    "test": ".\\tools\\node-v24.15.0-win-x64\\node.exe tests/search-ranking.test.mjs && .\\tools\\node-v24.15.0-win-x64\\node.exe tests/access-filtering.test.mjs",
+    "test:search": ".\\tools\\node-v24.15.0-win-x64\\node.exe tests/search-ranking.test.mjs",
+    "test:access": ".\\tools\\node-v24.15.0-win-x64\\node.exe tests/access-filtering.test.mjs",
     "start": "node ./node_modules/next/dist/bin/next start -p 3000",
     "lint": "node ./node_modules/next/dist/bin/next lint",
     "dev:win": ".\\tools\\node-v24.15.0-win-x64\\node.exe ./node_modules/next/dist/bin/next dev -p 3000 --webpack",

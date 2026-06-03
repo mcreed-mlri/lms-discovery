@@ -9,6 +9,7 @@ import { SearchBox } from "@/components/search-box";
 import { SiteFooter } from "@/components/site-footer";
 import { StudioContentBar } from "@/components/studio-content-bar";
 import { StudioRail } from "@/components/studio-rail";
+import { getEligibleLearningItems } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
 import { getLearningItems } from "@/lib/data";
 import { searchLearningItems, type SearchResult } from "@/lib/search";
@@ -36,7 +37,7 @@ export function StudioShell({
   const [searchOpen, setSearchOpen] = useState(false);
   const [globalQuery, setGlobalQuery] = useState("");
 
-  const allItems = useMemo(() => getLearningItems(), []);
+  const allItems = useMemo(() => getEligibleLearningItems(getLearningItems(), user), [user]);
   const globalResults = useMemo(() => searchLearningItems(allItems, globalQuery).slice(0, 6), [allItems, globalQuery]);
 
   const openGlobalSearch = useCallback(() => {

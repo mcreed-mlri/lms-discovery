@@ -141,6 +141,7 @@ function editDistanceWithinOne(a: string, b: string) {
 function fieldIncludesToken(field: string, token: string) {
   const fieldTokens = tokenize(field);
   return tokenVariants(token).some((variant) => {
+    if (variant.length <= 2) return fieldTokens.includes(variant);
     if (field.includes(variant)) return true;
     return fieldTokens.some((fieldToken) => editDistanceWithinOne(fieldToken, variant));
   });

@@ -11,6 +11,13 @@ export type User = {
   organization: string;
   unit: string;
   initials: string;
+  userType: "attorney" | "non_lawyer_advocate" | "paralegal" | "admin";
+  accessStatus: "approved" | "pending" | "suspended" | "inactive";
+  jurisdiction: string[];
+  practiceArea: string[];
+  uplAcknowledgedDate?: string;
+  barNumber?: string;
+  barJurisdiction?: string[];
 };
 
 export const demoUser: User = {
@@ -22,12 +29,36 @@ export const demoUser: User = {
   organization: "MLRI",
   unit: "Housing Unit",
   initials: "SC",
+  userType: "attorney",
+  accessStatus: "approved",
+  jurisdiction: ["MA"],
+  practiceArea: ["housing", "client-services", "ethics"],
+  barNumber: "BBO-123456",
+  barJurisdiction: ["MA"],
 };
+
+export const kevinSmithUser: User = {
+  id: "kevin-smith",
+  name: "Kevin Smith",
+  firstName: "Kevin",
+  email: "k.smith@partnerlegalaid.example",
+  title: "Non-Practicing Advocate",
+  organization: "Demo Legal Aid Partner",
+  unit: "Client Services",
+  initials: "KS",
+  userType: "non_lawyer_advocate",
+  accessStatus: "approved",
+  jurisdiction: ["MA"],
+  practiceArea: ["client-services", "ethics", "practice-skills"],
+  uplAcknowledgedDate: "2026-06-01",
+};
+
+export const demoUsers = [demoUser, kevinSmithUser];
 
 type AuthState = {
   user: User | null;
   ready: boolean;
-  login: () => void;
+  login: (userId?: string) => void;
   logout: () => void;
 };
 
@@ -36,25 +67,26 @@ const AuthCtx = createContext<AuthState | null>(null);
 const STORAGE_KEY = "mlri-demo-user";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(demoUser);
-  const [ready, setReady] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         setUser(JSON.parse(stored));
-      } else {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(demoUser));
       }
     } catch {
       // ignore malformed storage
+    } finally {
+      setReady(true);
     }
   }, []);
 
-  function login() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(demoUser));
-    setUser(demoUser);
+  function login(userId = demoUser.id) {
+    const nextUser = demoUsers.find((candidate) => candidate.id === userId) ?? demoUser;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
+    setUser(nextUser);
   }
 
   function logout() {

@@ -92,6 +92,16 @@ export const courses: Course[] = [
     brightspaceUrl:
       "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3",
   },
+  {
+    id: "upl-boundaries-advocates",
+    title: "UPL Boundaries for Advocates",
+    description:
+      "A practical guide to recognizing legal-advice boundaries, documenting next steps, and escalating to attorney supervision.",
+    level: "Foundations",
+    practiceArea: "Ethics",
+    duration: "35 min",
+    brightspaceUrl: "https://brightspace.example.edu/d2l/home/upl-boundaries-advocates",
+  },
 ];
 
 export const modules: Module[] = [
@@ -343,6 +353,32 @@ export const modules: Module[] = [
     brightspaceModuleUrl:
       "https://mlri.brightspace.com/content/enforced/6703-course.outline/housing-court.html?ou=6703&d2l_body_type=3",
   },
+  {
+    id: "upl-scenarios",
+    title: "UPL Scenarios for Frontline Advocates",
+    description:
+      "Work through common intake and follow-up moments where an advocate should document facts, share approved information, or escalate.",
+    courseId: "upl-boundaries-advocates",
+    parentCourseTitle: "UPL Boundaries for Advocates",
+    practiceArea: "Ethics",
+    level: "Foundations",
+    tags: ["upl", "advocate boundaries", "supervision", "ethics"],
+    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/upl-boundaries-advocates",
+    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/upl-boundaries-advocates/viewContent/5001/View",
+  },
+  {
+    id: "when-to-escalate-attorney",
+    title: "When to Escalate to an Attorney",
+    description:
+      "Use a simple decision framework for moving from advocate support to attorney review without delaying urgent client needs.",
+    courseId: "upl-boundaries-advocates",
+    parentCourseTitle: "UPL Boundaries for Advocates",
+    practiceArea: "Ethics",
+    level: "Foundations",
+    tags: ["upl", "attorney review", "supervision", "client support"],
+    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/upl-boundaries-advocates",
+    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/upl-boundaries-advocates/viewContent/5002/View",
+  },
 ];
 
 export const paths: Path[] = [
@@ -371,6 +407,15 @@ export const paths: Path[] = [
       "A short path for understanding court procedure, preparing clients, and showing up ready.",
     courseIds: ["first-steps-in-court"],
     totalDuration: "1 hr 55 min total",
+    level: "Foundations",
+  },
+  {
+    id: "advocate-upl-onboarding",
+    title: "Advocate UPL Onboarding",
+    description:
+      "A short, safe starting path for non-lawyer advocates: professional boundaries, escalation, and client-centered support.",
+    courseIds: ["upl-boundaries-advocates", "client-centered-practice"],
+    totalDuration: "2 hr 25 min total",
     level: "Foundations",
   },
 ];
@@ -457,6 +502,8 @@ const moduleMeta: Record<string, { minutes: number; skillId: SkillId }> = {
   "service-of-process": { minutes: 3, skillId: "triage" },
   "drafting-answer": { minutes: 3, skillId: "drafting" },
   "walking-into-housing-court": { minutes: 1, skillId: "courtroom" },
+  "upl-scenarios": { minutes: 18, skillId: "ethics" },
+  "when-to-escalate-attorney": { minutes: 17, skillId: "ethics" },
 };
 
 export function getModuleMinutes(moduleId: string): number {
@@ -530,6 +577,7 @@ const courseChipLabels: Record<string, string> = {
   "client-centered-practice": "Client Communication",
   "first-steps-in-court": "Court Skills",
   "eviction-defense-48h": "Housing Court",
+  "upl-boundaries-advocates": "UPL",
 };
 
 export const practiceAreaChips: PracticeAreaChip[] = courses.map((course) => ({

@@ -18,6 +18,7 @@ import { StudioShell } from "@/components/studio-shell";
 import { ProgressRing } from "@/components/progress-ring";
 import { SearchBox } from "@/components/search-box";
 import { SkillGlyph } from "@/components/skill-glyph";
+import { getAccessLabel, getEligibleLearningItems } from "@/lib/access";
 import { getHue } from "@/lib/skill-hue";
 import {
   continueLearning,
@@ -25,9 +26,7 @@ import {
   getLearningItems,
   getModuleSkillId,
   getSkill,
-  getSkillModuleCount,
   learnerProgress,
-  paths,
   skills,
   type LearningItem,
   type Level,
@@ -76,6 +75,8 @@ function sectionEyebrow(type: LearningItem["type"]) {
 
 function getCuratedCatalogItems(items: LearningItem[]) {
   const preferredIds = [
+    "advocate-upl-onboarding",
+    "upl-boundaries-advocates",
     "new-attorney-foundations",
     "client-centered-communication-path",
     "client-centered-practice",
@@ -152,8 +153,7 @@ function ResultSection({
 // "Browse by skill" tile — the primary lens of the homepage. Each tile takes
 // the next hue from the 8-hue palette BY INDEX, so the grid reads as one
 // systematic family of orientation cues.
-function SkillTile({ skill, index, onSelect }: { skill: Skill; index: number; onSelect: (id: SkillId) => void }) {
-  const count = getSkillModuleCount(skill.id);
+function SkillTile({ skill, index, count, onSelect }: { skill: Skill; index: number; count: number; onSelect: (id: SkillId) => void }) {
   const hue = getHue(index);
   return (
     <button
@@ -177,7 +177,7 @@ function SkillTile({ skill, index, onSelect }: { skill: Skill; index: number; on
 }
 
 // Guided-path card with a hue top-accent bar.
-function StudioPathCard({ path, index }: { path: (typeof paths)[number]; index: number }) {
+function StudioPathCard({ path, index }: { path: Extract<LearningItem, { type: "PATH" }>; index: number }) {
   const hue = getHue(index + 2);
   return (
     <div className="overflow-hidden rounded-[12px] border border-[color:var(--line)] bg-[color:var(--surface)] shadow-[var(--shadow-xs)] transition hover:shadow-[var(--shadow-card)] sm:rounded-[14px]">
@@ -221,7 +221,7 @@ export default function Home() {
   const [durationFilter, setDurationFilter] = useState<SelectValue<DurationFacet>>("All");
 
   const savedLearning = useSavedLearning();
-  const allItems = useMemo(() => getLearningItems(), []);
+  const allItems = useMemo(() => getEligibleLearningItems(getLearningItems(), user), [user]);
   const facetOptions = useMemo(() => getSearchFacetOptions(allItems), [allItems]);
   const activeSearchFilters = useMemo<SearchFacetFilters>(
     () => ({
@@ -251,6 +251,8 @@ export default function Home() {
   }, [searchResults, skillFilter]);
 
   const pathItems = visibleItems.filter((item): item is Extract<LearningItem, { type: "PATH" }> => item.type === "PATH");
+  const eligiblePathItems = allItems.filter((item): item is Extract<LearningItem, { type: "PATH" }> => item.type === "PATH");
+  const visibleModuleItems = allItems.filter((item): item is Extract<LearningItem, { type: "MODULE" }> => item.type === "MODULE");
   const curatedItems = useMemo(() => getCuratedCatalogItems(visibleItems), [visibleItems]);
   const catalogItems = filter === "All" ? curatedItems : visibleItems;
 
@@ -258,10 +260,23 @@ export default function Home() {
     (value) => value !== "All",
   ).length;
 
-  const resumeItem = continueLearning[0] as Extract<(typeof continueLearning)[number], { progress: number }>;
+  const eligibleItemIds = useMemo(() => new Set(allItems.map((item) => item.id)), [allItems]);
+  const resumeItem =
+    (continueLearning.find((item) => "progress" in item && eligibleItemIds.has(item.id)) as Extract<(typeof continueLearning)[number], { progress: number }> | undefined) ??
+    ({
+      id: "client-centered-practice",
+      type: "COURSE",
+      title: "Client-Centered Communication",
+      detail: "Start with client-centered intake skills",
+      progress: 0,
+      progressLabel: "0%",
+    } satisfies Extract<(typeof continueLearning)[number], { progress: number }>);
+  const resumeLearningItem = allItems.find((item) => item.id === resumeItem.id);
   const resumeUrl =
     resumeItem.resumeUrl ??
-    "https://mlri.brightspace.com/content/enforced/6703-course.outline/notice-types.html?ou=6703&d2l_body_type=3";
+    (resumeLearningItem?.type === "COURSE" ? resumeLearningItem.brightspaceUrl : undefined) ??
+    (resumeLearningItem?.type === "MODULE" ? resumeLearningItem.brightspaceModuleUrl ?? resumeLearningItem.brightspaceCourseUrl : undefined) ??
+    "https://brightspace.example.edu/d2l/home";
   const resumeCourse = courses.find((course) => course.id === resumeItem.id);
   const resumeEyebrow = [resumeCourse?.practiceArea, resumeMinutesLeftLabel(resumeCourse?.duration)]
     .filter(Boolean)
@@ -369,7 +384,7 @@ export default function Home() {
           <button
             className="mt-7 inline-flex h-11 items-center justify-center rounded-full bg-[color:var(--ink)] px-6 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
             type="button"
-            onClick={login}
+            onClick={() => login()}
           >
             Continue as {demoUser.firstName}
           </button>
@@ -398,6 +413,12 @@ export default function Home() {
                   ·
                 </span>
                 <span>{user.unit}</span>
+                <span className="text-[color:var(--ink-soft)]/45" aria-hidden="true">
+                  ·
+                </span>
+                <span className="font-semibold text-[color:var(--ink)]">
+                  {getAccessLabel(user.userType)} access: {user.accessStatus}
+                </span>
               </p>
             </div>
 
@@ -532,7 +553,13 @@ export default function Home() {
         <SectionHead kicker="Practical skills" title="What do you need to do?" />
         <div className="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
           {skills.map((skill, i) => (
-            <SkillTile key={skill.id} skill={skill} index={i} onSelect={selectSkill} />
+            <SkillTile
+              key={skill.id}
+              skill={skill}
+              index={i}
+              count={visibleModuleItems.filter((module) => getModuleSkillId(module.id) === skill.id).length}
+              onSelect={selectSkill}
+            />
           ))}
         </div>
       </section>
@@ -684,7 +711,7 @@ export default function Home() {
         <section className="order-3 mx-auto max-w-[1120px] px-4 pb-4 pt-2 sm:px-6 sm:pb-2 lg:order-2 lg:px-10">
           <SectionHead kicker="Guided learning" title="Follow a clear path" />
           <div className="grid gap-2.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
-            {paths.map((p, i) => (
+            {eligiblePathItems.map((p, i) => (
               <StudioPathCard key={p.id} path={p} index={i} />
             ))}
           </div>
