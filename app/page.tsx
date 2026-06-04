@@ -12,6 +12,7 @@ import {
   PlayIcon,
   SearchIcon,
 } from "@/components/icons";
+import { BrightspaceLaunchLink } from "@/components/brightspace-launch-link";
 import { ContentCard, ContentListRow, PathCard } from "@/components/content-card";
 import { DetailModal } from "@/components/detail-modal";
 import { StudioShell } from "@/components/studio-shell";
@@ -527,14 +528,15 @@ export default function Home() {
                     {resumeItem.title}
                   </h2>
                 </div>
-                <a
+                <BrightspaceLaunchLink
                   href={resumeUrl}
+                  launchTitle={resumeItem.title}
                   aria-label={`Resume ${resumeItem.title}. Up next: ${resumeItem.detail}. ${resumeProgressLabel}.`}
                   className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] bg-white text-[color:var(--ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:bg-white/90 focus:outline-none focus:ring-4 focus:ring-white/25 sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
                 >
                   <PlayIcon className="h-[14px] w-[14px]" />
                   <span className="hidden sm:inline">Resume</span>
-                </a>
+                </BrightspaceLaunchLink>
               </div>
               <div className="mt-1.5 flex items-center gap-2 sm:mt-2 sm:gap-2.5">
                 <div className="h-1 min-w-0 flex-1 overflow-hidden rounded-full bg-white/14">

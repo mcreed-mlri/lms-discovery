@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, type ComponentType } from "react";
 import Link from "next/link";
+import { BrightspaceLaunchLink } from "@/components/brightspace-launch-link";
 import { DashboardPageHeader } from "@/components/dashboard/DashboardPageHeader";
 import { ProgressRing } from "@/components/progress-ring";
 import {
@@ -181,13 +182,14 @@ function ContinueHeroRow({ course }: { course: LearnerCourse }) {
         <h3 className="section-title mt-1.5 text-[1.2rem] text-[color:var(--ink)]">{course.title}</h3>
         <p className="metadata mt-1 text-[color:var(--ink-soft)]">Last visited {formatRelativeDate(course.lastAccessedAt)}</p>
       </div>
-      <a
+      <BrightspaceLaunchLink
         href={course.resumeUrl}
+        launchTitle={course.title}
         className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[0_10px_22px_rgba(23,23,19,0.16)] transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
         aria-label={`Continue ${course.title}`}
       >
         <PlayIcon className="h-3.5 w-3.5" /> Continue
-      </a>
+      </BrightspaceLaunchLink>
     </div>
   );
 }
@@ -205,12 +207,13 @@ function ContinueRow({ course }: { course: LearnerCourse }) {
         <h3 className="section-title mt-1 text-[1rem] text-[color:var(--ink)]">{course.title}</h3>
       </div>
       <p className="metadata text-[color:var(--ink-soft)]">{formatRelativeDate(course.lastAccessedAt)}</p>
-      <a
+      <BrightspaceLaunchLink
         href={course.resumeUrl}
+        launchTitle={course.title}
         className="inline-flex h-8 items-center rounded-[10px] border border-[color:var(--lace-hairline)] bg-[color:var(--surface-raised)] px-3.5 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--border-strong)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
       >
         Resume
-      </a>
+      </BrightspaceLaunchLink>
     </div>
   );
 }
@@ -438,12 +441,13 @@ export function LearnerDashboardView() {
                         </p>
                         <p className="metadata text-[#9b9283]">{days} days</p>
                       </div>
-                      <a
+                      <BrightspaceLaunchLink
                         href={course.resumeUrl}
+                        launchTitle={course.title}
                         className="inline-flex h-8 items-center rounded-[10px] bg-[color:var(--ink)] px-3.5 text-xs font-bold text-[color:var(--surface)] transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
                       >
                         {course.completionPct > 0 ? "Resume" : "Start"}
-                      </a>
+                      </BrightspaceLaunchLink>
                     </div>
                   );
                 })}
@@ -465,12 +469,13 @@ export function LearnerDashboardView() {
                     >
                       <AreaPill area={course.trainingArea} />
                       <h3 className="section-title text-[1rem] text-[color:var(--ink)]">{course.title}</h3>
-                      <a
+                      <BrightspaceLaunchLink
                         href={course.resumeUrl}
+                        launchTitle={course.title}
                         className="mt-1 inline-flex h-9 w-fit items-center gap-2 rounded-[10px] border border-[color:var(--lace-hairline)] bg-[color:var(--surface-raised)] px-3.5 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--border-strong)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
                       >
                         <PlayIcon className="h-3.5 w-3.5" /> Start course
-                      </a>
+                      </BrightspaceLaunchLink>
                     </article>
                   );
                 })}

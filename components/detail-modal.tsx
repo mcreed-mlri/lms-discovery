@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { ArrowIcon, BookIcon } from "@/components/icons";
+import { BrightspaceLaunchLink } from "@/components/brightspace-launch-link";
 import { TypeBadge } from "@/components/type-badge";
 import { getCourseLabel, getCourseTheme } from "@/lib/course-theme";
 import { courses, getLearningItemUrl, getModuleBrightspaceUrl, getPathBrightspaceUrl, modules, type LearningItem } from "@/lib/data";
@@ -113,14 +114,15 @@ export function DetailModal({
             </h2>
             <p className="readable-copy mt-5 max-w-2xl text-[1.02rem] leading-7">{getSummary(item)}</p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <a
+              <BrightspaceLaunchLink
                 className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
                 href={getBrightspaceUrl(item)}
+                launchTitle={item.title}
                 onClick={() => onLaunch?.(item)}
               >
                 <BookIcon className="h-4 w-4" />
                 Open in Brightspace
-              </a>
+              </BrightspaceLaunchLink>
               <button
                 className={`inline-flex h-11 items-center justify-center rounded-full border px-5 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15 ${
                   isSaved
