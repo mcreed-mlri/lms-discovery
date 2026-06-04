@@ -42,12 +42,12 @@ export type LearningItem =
 export const courses: Course[] = [
   {
     id: "welcome-to-lace",
-    title: "Welcome to LACE",
+    title: "Welcome to the Learning Hub",
     description:
-      "A simple onboarding course introducing new staff to LACE—what it is, how it works, and where to start.",
+      "A simple onboarding course that helps new learners find assigned courses, choose Read or Practice mode, understand completion, and get help.",
     level: "Foundations",
     practiceArea: "All Practice Areas",
-    duration: "~15 min",
+    duration: "10 min",
     brightspaceUrl:
       "https://mlri.brightspace.com/content/enforced/6706-demo.onboarding_mc/Home.html?ou=6706&d2l_body_type=3",
   },
