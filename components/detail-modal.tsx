@@ -2,10 +2,9 @@
 
 import { useEffect } from "react";
 import { ArrowIcon, BookIcon } from "@/components/icons";
-import { BrightspaceLaunchLink } from "@/components/brightspace-launch-link";
 import { TypeBadge } from "@/components/type-badge";
 import { getCourseLabel, getCourseTheme } from "@/lib/course-theme";
-import { courses, getLearningItemUrl, getModuleBrightspaceUrl, getPathBrightspaceUrl, modules, type LearningItem } from "@/lib/data";
+import { courses, getLearningItemUrl, modules, type LearningItem } from "@/lib/data";
 
 function getSummary(item: LearningItem) {
   if (item.type === "PATH") return item.description;
@@ -18,12 +17,6 @@ function getDuration(item: LearningItem) {
   return item.duration;
 }
 
-function getBrightspaceUrl(item: LearningItem) {
-  if (item.type === "PATH") return getPathBrightspaceUrl(item);
-  if (item.type === "MODULE") return getModuleBrightspaceUrl(item);
-  return item.brightspaceUrl;
-}
-
 function getSyllabus(item: LearningItem) {
   if (item.type === "PATH") {
     return courses.filter((course) => item.courseIds.includes(course.id)).map((course) => ({
@@ -33,6 +26,7 @@ function getSyllabus(item: LearningItem) {
       description: course.description,
       duration: course.duration,
       themeId: course.id,
+      href: getLearningItemUrl({ ...course, type: "COURSE" as const }),
     }));
   }
 
@@ -44,6 +38,7 @@ function getSyllabus(item: LearningItem) {
       description: module.description,
       duration: "25 min",
       themeId: module.courseId,
+      href: getLearningItemUrl({ ...module, type: "MODULE" as const }),
     }));
   }
 
@@ -55,6 +50,7 @@ function getSyllabus(item: LearningItem) {
       description: item.description,
       duration: "25 min",
       themeId: item.courseId,
+      href: getLearningItemUrl(item),
     },
   ];
 }
@@ -64,13 +60,11 @@ export function DetailModal({
   onClose,
   isSaved = false,
   onToggleSaved,
-  onLaunch,
 }: {
   item: LearningItem | null;
   onClose: () => void;
   isSaved?: boolean;
   onToggleSaved?: (item: LearningItem) => void;
-  onLaunch?: (item: LearningItem) => void;
 }) {
   useEffect(() => {
     if (!item) return;
@@ -114,15 +108,13 @@ export function DetailModal({
             </h2>
             <p className="readable-copy mt-5 max-w-2xl text-[1.02rem] leading-7">{getSummary(item)}</p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <BrightspaceLaunchLink
+              <a
                 className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
-                href={getBrightspaceUrl(item)}
-                launchTitle={item.title}
-                onClick={() => onLaunch?.(item)}
+                href={getLearningItemUrl(item)}
               >
                 <BookIcon className="h-4 w-4" />
-                Open in Brightspace
-              </BrightspaceLaunchLink>
+                Open in Learning Hub
+              </a>
               <button
                 className={`inline-flex h-11 items-center justify-center rounded-full border px-5 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15 ${
                   isSaved
@@ -171,8 +163,7 @@ export function DetailModal({
                 <a
                   key={entry.id}
                   className={`group relative grid gap-3 py-4 pl-4 pr-2 transition hover:bg-[color:var(--surface-sunken)] md:grid-cols-[7rem_minmax(0,1fr)_auto] md:items-start ${entryTheme.rail} before:absolute before:bottom-4 before:left-0 before:top-4 before:w-0.5`}
-                  href={getLearningItemUrl(item)}
-                  onClick={(event) => event.preventDefault()}
+                  href={entry.href}
                 >
                   <span className={`metadata max-w-[8rem] break-words pt-1 leading-4 md:max-w-[6.5rem] ${entryTheme.eyebrow}`}>
                     {entry.label}

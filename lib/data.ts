@@ -700,6 +700,10 @@ export function getLearningItems(): LearningItem[] {
   ];
 }
 
+export function getLearningItemById(id: string): LearningItem | undefined {
+  return getLearningItems().find((item) => item.id === id);
+}
+
 export function getPathBrightspaceUrl(path: Path) {
   const firstCourse = courses.find((course) => course.id === path.courseIds[0]);
   return firstCourse?.brightspaceUrl ?? "https://brightspace.example.edu/d2l/home";
@@ -710,5 +714,31 @@ export function getModuleBrightspaceUrl(module: Module) {
 }
 
 export function getLearningItemUrl(item: LearningItem) {
-  return "#content-coming-soon";
+  if (item.type === "COURSE" && (item.id === "welcome-to-lace" || item.id === "eviction-defense-48h")) {
+    return item.brightspaceUrl;
+  }
+
+  if (item.type === "MODULE" && item.courseId === "eviction-defense-48h") {
+    return getModuleBrightspaceUrl(item);
+  }
+
+  return `/learn/${item.id}`;
+}
+
+const dashboardCourseLearningItemIds: Record<string, string> = {
+  "6698": "wrapper-self-checks",
+  "6703": "eviction-defense-48h",
+  "7102": "upl-boundaries-advocates",
+  "6844": "first-client-interview",
+};
+
+export function getLearningUrlForDashboardCourse(course: { offeringId?: string; title: string; resumeUrl?: string }) {
+  const mappedId = course.offeringId ? dashboardCourseLearningItemIds[course.offeringId] : undefined;
+  const mappedItem = mappedId ? getLearningItemById(mappedId) : undefined;
+  if (mappedItem) return getLearningItemUrl(mappedItem);
+
+  const titleMatch = getLearningItems().find((item) => item.title === course.title);
+  if (titleMatch) return getLearningItemUrl(titleMatch);
+
+  return course.resumeUrl ?? "/";
 }

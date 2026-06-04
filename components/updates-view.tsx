@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import { DetailModal } from "@/components/detail-modal";
 import { UpdateCard } from "@/components/update-card";
 import { contentUpdates, getLearningItems, type LearningItem } from "@/lib/data";
-import { recordSearchAnalytics } from "@/lib/search-analytics";
 import { useSavedLearning } from "@/lib/saved-learning";
 
 export function UpdatesView() {
@@ -38,14 +37,6 @@ export function UpdatesView() {
         onClose={() => setSelectedItem(null)}
         isSaved={selectedItem ? savedLearning.isSaved(selectedItem) : false}
         onToggleSaved={savedLearning.toggleSaved}
-        onLaunch={(item) =>
-          recordSearchAnalytics({
-            type: "brightspace_launched",
-            resultId: `${item.type}-${item.id}`,
-            resultType: item.type,
-            resultTitle: item.title,
-          })
-        }
       />
     </>
   );

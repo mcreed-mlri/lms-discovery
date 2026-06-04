@@ -12,7 +12,6 @@ import {
   PlayIcon,
   SearchIcon,
 } from "@/components/icons";
-import { BrightspaceLaunchLink } from "@/components/brightspace-launch-link";
 import { ContentCard, ContentListRow, PathCard } from "@/components/content-card";
 import { DetailModal } from "@/components/detail-modal";
 import { StudioShell } from "@/components/studio-shell";
@@ -25,6 +24,7 @@ import {
   continueLearning,
   courses,
   getLearningItems,
+  getLearningItemUrl,
   getModuleSkillId,
   getSkill,
   learnerProgress,
@@ -284,10 +284,7 @@ export default function Home() {
     } satisfies Extract<(typeof continueLearning)[number], { progress: number }>);
   const resumeLearningItem = allItems.find((item) => item.id === resumeItem.id);
   const resumeUrl =
-    resumeItem.resumeUrl ??
-    (resumeLearningItem?.type === "COURSE" ? resumeLearningItem.brightspaceUrl : undefined) ??
-    (resumeLearningItem?.type === "MODULE" ? resumeLearningItem.brightspaceModuleUrl ?? resumeLearningItem.brightspaceCourseUrl : undefined) ??
-    "https://brightspace.example.edu/d2l/home";
+    resumeLearningItem ? getLearningItemUrl(resumeLearningItem) : (resumeItem.resumeUrl ?? "/");
   const resumeCourse = courses.find((course) => course.id === resumeItem.id);
   const resumeEyebrow = [resumeCourse?.practiceArea, resumeMinutesLeftLabel(resumeCourse?.duration)]
     .filter(Boolean)
@@ -528,15 +525,14 @@ export default function Home() {
                     {resumeItem.title}
                   </h2>
                 </div>
-                <BrightspaceLaunchLink
+                <a
                   href={resumeUrl}
-                  launchTitle={resumeItem.title}
                   aria-label={`Resume ${resumeItem.title}. Up next: ${resumeItem.detail}. ${resumeProgressLabel}.`}
                   className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] bg-white text-[color:var(--ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:bg-white/90 focus:outline-none focus:ring-4 focus:ring-white/25 sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
                 >
                   <PlayIcon className="h-[14px] w-[14px]" />
                   <span className="hidden sm:inline">Resume</span>
-                </BrightspaceLaunchLink>
+                </a>
               </div>
               <div className="mt-1.5 flex items-center gap-2 sm:mt-2 sm:gap-2.5">
                 <div className="h-1 min-w-0 flex-1 overflow-hidden rounded-full bg-white/14">
@@ -763,14 +759,6 @@ export default function Home() {
         onClose={() => setSelectedItem(null)}
         isSaved={selectedItem ? savedLearning.isSaved(selectedItem) : false}
         onToggleSaved={savedLearning.toggleSaved}
-        onLaunch={(item) =>
-          recordSearchAnalytics({
-            type: "brightspace_launched",
-            resultId: `${item.type}-${item.id}`,
-            resultType: item.type,
-            resultTitle: item.title,
-          })
-        }
       />
     </StudioShell>
   );
