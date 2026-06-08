@@ -52,7 +52,7 @@ export default function LoginPage() {
                       <p className="text-sm font-medium text-[color:var(--ink-muted)]">
                         {candidate.title} · {candidate.unit}
                       </p>
-                      <p className="truncate text-sm text-[#8a8173]">{candidate.organization}</p>
+                      <p className="truncate text-sm text-[color:var(--ink-soft)]">{candidate.organization}</p>
                     </div>
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] text-[color:var(--ink-soft)] transition group-hover:border-[color:var(--ink)] group-hover:text-[color:var(--ink)]">
                       <ArrowIcon className="h-4 w-4" />
@@ -62,7 +62,7 @@ export default function LoginPage() {
               ))}
             </div>
 
-            <p className="mt-5 text-center text-xs font-medium leading-5 text-[#8a8173]">
+            <p className="mt-5 text-center text-xs font-medium leading-5 text-[color:var(--ink-soft)]">
               No real credentials required. This is a demonstration environment.
             </p>
           </div>

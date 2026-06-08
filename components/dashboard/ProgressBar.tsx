@@ -10,7 +10,7 @@ export function ProgressBar({ value, label, className = "" }: ProgressBarProps) 
   return (
     <div className={className}>
       <div className="mb-1.5 flex items-center justify-between gap-2">
-        <span className="stat-label text-[#8b909d]">Progress</span>
+        <span className="stat-label text-[color:var(--ink-soft)]">Progress</span>
         <span className="stat-label text-[color:var(--brand)]">{clamped}%</span>
       </div>
       <div
@@ -22,7 +22,7 @@ export function ProgressBar({ value, label, className = "" }: ProgressBarProps) 
         aria-valuenow={clamped}
       >
         <div
-          className="h-full rounded-full bg-[linear-gradient(90deg,#a97824,#c89a3f)] transition-[width] duration-500 ease-out"
+          className="h-full rounded-full bg-[color:var(--brand-fill)] transition-[width] duration-500 ease-out"
           style={{ width: `${clamped}%` }}
         />
       </div>

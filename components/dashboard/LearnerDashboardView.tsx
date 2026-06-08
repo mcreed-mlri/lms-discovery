@@ -22,13 +22,13 @@ import type { LearnerCourse, LearnerDashboardPayload } from "@/types/dashboard";
 // Per-area accent so courses keep the catalog's colour vocabulary.
 type Tone = { stripe: string; chipBg: string; chipFg: string };
 const AREA_TONES: Record<string, Tone> = {
-  Housing: { stripe: "#2a5bff", chipBg: "#f5ead0", chipFg: "#8a6218" },
-  Ethics: { stripe: "#a45f49", chipBg: "#f4e3da", chipFg: "#8d472e" },
-  "Practice skills": { stripe: "#6f927b", chipBg: "#e7efe7", chipFg: "#3d5c47" },
-  Benefits: { stripe: "#7a6a8f", chipBg: "#ece7f1", chipFg: "#564876" },
-  "Family law": { stripe: "#a87238", chipBg: "#f0e6d8", chipFg: "#7e5022" },
+  Housing: { stripe: "var(--topic-court)", chipBg: "var(--topic-court-soft)", chipFg: "var(--topic-court-ink)" },
+  Ethics: { stripe: "var(--topic-ethics)", chipBg: "var(--topic-ethics-soft)", chipFg: "var(--topic-ethics-ink)" },
+  "Practice skills": { stripe: "var(--topic-client)", chipBg: "var(--topic-client-soft)", chipFg: "var(--topic-client-ink)" },
+  Benefits: { stripe: "var(--topic-research)", chipBg: "var(--topic-research-soft)", chipFg: "var(--topic-research-ink)" },
+  "Family law": { stripe: "var(--topic-drafting)", chipBg: "var(--topic-drafting-soft)", chipFg: "var(--topic-drafting-ink)" },
 };
-const DEFAULT_TONE: Tone = { stripe: "#2a5bff", chipBg: "#f5ead0", chipFg: "#8a6218" };
+const DEFAULT_TONE: Tone = { stripe: "var(--brand-fill)", chipBg: "var(--brand-tint)", chipFg: "var(--brand-ink)" };
 const toneForArea = (area?: string): Tone => AREA_TONES[area ?? ""] ?? DEFAULT_TONE;
 
 function daysUntil(iso: string): number {
@@ -76,7 +76,7 @@ function StreakHeatmap({ data }: { data: number[] }) {
           <div
             key={index}
             className="rounded-[2px]"
-            style={{ background: value === 0 ? "var(--surface-sunken)" : "#2a5bff", opacity }}
+            style={{ background: value === 0 ? "var(--surface-sunken)" : "var(--brand-fill)", opacity }}
           />
         );
       })}
@@ -104,12 +104,12 @@ function KpiTile({
   return (
     <article className="editorial-panel rounded-[var(--radius-card)] p-4">
       <div className="flex items-center justify-between">
-        <p className="stat-label text-[#8b909d]">{label}</p>
+        <p className="stat-label text-[color:var(--ink-soft)]">{label}</p>
         <Icon className="h-4 w-4" />
       </div>
       <p className="mt-2.5 flex items-baseline gap-1">
         <span className="hero-title text-[2rem] text-[color:var(--ink)]">{value}</span>
-        {unit ? <span className="text-sm font-semibold text-[#8a8173]">{unit}</span> : null}
+        {unit ? <span className="text-sm font-semibold text-[color:var(--ink-soft)]">{unit}</span> : null}
       </p>
       <p className="mt-1.5 text-[0.82rem] font-medium leading-snug text-[color:var(--ink-muted)]">{detail}</p>
       {sparkline ? (
@@ -183,7 +183,7 @@ function ContinueHeroRow({ course }: { course: LearnerCourse }) {
       </div>
       <a
         href={getLearningUrlForDashboardCourse(course)}
-        className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[0_10px_22px_rgba(23,23,19,0.16)] transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+        className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[0_10px_22px_rgba(23,23,19,0.16)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
         aria-label={`Continue ${course.title}`}
       >
         <PlayIcon className="h-3.5 w-3.5" /> Continue
@@ -197,7 +197,7 @@ function ContinueRow({ course }: { course: LearnerCourse }) {
   return (
     <div className="flex flex-wrap items-center gap-4 border-t border-[color:var(--lace-hairline)] px-5 py-3.5">
       <span className="hidden h-9 w-1 shrink-0 rounded-full sm:block" style={{ background: tone.stripe }} />
-      <ProgressRing value={course.completionPct} size={38} stroke={4} color={tone.stripe} trackColor="#ece3d2">
+      <ProgressRing value={course.completionPct} size={38} stroke={4} color={tone.stripe} trackColor="var(--surface-sunken)">
         <span className="font-mono text-[0.62rem] font-bold text-[color:var(--ink)]">{course.completionPct}</span>
       </ProgressRing>
       <div className="min-w-[10rem] flex-1">
@@ -345,7 +345,7 @@ export function LearnerDashboardView() {
         badge={
           <Link
             href="/"
-            className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-4 text-sm font-bold text-[color:var(--surface)] shadow-[0_10px_22px_rgba(23,23,19,0.16)] transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+            className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-4 text-sm font-bold text-[color:var(--surface)] shadow-[0_10px_22px_rgba(23,23,19,0.16)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
           >
             <BookIcon className="h-4 w-4" /> Browse library
           </Link>
@@ -356,11 +356,11 @@ export function LearnerDashboardView() {
       <section aria-label="Learning snapshot" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
         {hasCle ? (
           <article className="editorial-panel flex items-center gap-4 rounded-[var(--radius-card)] p-4">
-            <ProgressRing value={clePct} size={74} stroke={7} color="#2a5bff" trackColor="var(--surface-sunken)">
+            <ProgressRing value={clePct} size={74} stroke={7} color="var(--brand-fill)" trackColor="var(--surface-sunken)">
               <span className="hero-title block text-[1.25rem] leading-none text-[color:var(--ink)]">{clePct}%</span>
             </ProgressRing>
             <div className="min-w-0">
-              <p className="stat-label text-[#8b909d]">Training hours</p>
+              <p className="stat-label text-[color:var(--ink-soft)]">Training hours</p>
               <p className="hero-title mt-1 text-[1.35rem] text-[color:var(--ink)]">
                 {summary.cleEarned} of {summary.cleRequired} hours
               </p>
@@ -375,21 +375,21 @@ export function LearnerDashboardView() {
           value={String(streakDays)}
           unit="days"
           detail={summary.longestStreakNote ?? "Keep it going"}
-          accent="#2a5bff"
+          accent="var(--brand-fill)"
           icon={FlameIcon}
         />
         <KpiTile
           label="In progress"
           value={String(summary.inProgressCount)}
           detail={`${summary.weeklyHoursAvg ?? 0} hrs/week average`}
-          accent="#2a5bff"
+          accent="var(--brand-fill)"
           icon={PlayIcon}
         />
         <KpiTile
           label="Completed"
           value={String(summary.completedCount)}
           detail="Courses finished this term"
-          accent="#6f927b"
+          accent="var(--status-progress)"
           icon={CheckIcon}
           sparkline={sparkline.length > 1 ? sparkline : undefined}
         />
@@ -417,7 +417,7 @@ export function LearnerDashboardView() {
               <div className="editorial-card overflow-hidden rounded-[var(--radius-card)] p-0">
                 {requiredCourses.map((course, index) => {
                   const days = daysUntil(course.dueDate as string);
-                  const urgency = days <= 20 ? "#c8493b" : days <= 40 ? "#2a5bff" : "#6f927b";
+                  const urgency = days <= 20 ? "var(--status-changed)" : days <= 40 ? "var(--status-next)" : "var(--status-progress)";
                   return (
                     <div
                       key={course.offeringId}
@@ -433,14 +433,14 @@ export function LearnerDashboardView() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-mono text-sm font-bold" style={{ color: days <= 20 ? "#c8493b" : "#1f1d19" }}>
+                        <p className="font-mono text-sm font-bold" style={{ color: days <= 20 ? "var(--status-changed)" : "var(--ink)" }}>
                           {new Date(course.dueDate as string).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
                         </p>
-                        <p className="metadata text-[#9b9283]">{days} days</p>
+                        <p className="metadata text-[color:var(--ink-soft)]">{days} days</p>
                       </div>
                       <a
                         href={getLearningUrlForDashboardCourse(course)}
-                        className="inline-flex h-8 items-center rounded-[10px] bg-[color:var(--ink)] px-3.5 text-xs font-bold text-[color:var(--surface)] transition hover:bg-black focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+                        className="inline-flex h-8 items-center rounded-[10px] bg-[color:var(--ink)] px-3.5 text-xs font-bold text-[color:var(--surface)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
                       >
                         {course.completionPct > 0 ? "Resume" : "Start"}
                       </a>
@@ -489,12 +489,12 @@ export function LearnerDashboardView() {
                   <FlameIcon className="h-5 w-5 text-[color:var(--brand)]" />
                   <div>
                     <p className="hero-title text-[1.3rem] leading-none text-[color:var(--ink)]">{streakDays} days</p>
-                    <p className="stat-label mt-1 text-[#9b9283]">{summary.weeklyHoursAvg ?? 0} hrs/week avg</p>
+                    <p className="stat-label mt-1 text-[color:var(--ink-soft)]">{summary.weeklyHoursAvg ?? 0} hrs/week avg</p>
                   </div>
                 </div>
                 {sparkline.length > 1 ? (
-                  <span className="text-[#2a5bff]">
-                    <Sparkline values={sparkline} color="#2a5bff" />
+                  <span className="text-[color:var(--brand-fill)]">
+                    <Sparkline values={sparkline} color="var(--brand-fill)" />
                   </span>
                 ) : null}
               </div>
@@ -511,10 +511,10 @@ export function LearnerDashboardView() {
                     key={`${item.type}:${item.id}`}
                     className="editorial-card flex items-start gap-3 rounded-[var(--radius-card)] p-3.5"
                   >
-                    <BookmarkFilledIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#2a5bff]" />
+                    <BookmarkFilledIcon className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--brand-fill)]" />
                     <div className="min-w-0">
                       <h3 className="section-title text-[0.95rem] leading-snug text-[color:var(--ink)]">{item.title}</h3>
-                      <p className="metadata mt-1 text-[#9b9283]">{item.type}</p>
+                      <p className="metadata mt-1 text-[color:var(--ink-soft)]">{item.type}</p>
                     </div>
                   </article>
                 ))}
@@ -552,7 +552,7 @@ export function LearnerDashboardView() {
                       <Icon className="h-3.5 w-3.5" />
                     </span>
                     <div className="min-w-0">
-                      <p className="metadata text-[#9b9283]">{formatRelativeDate(entry.at)}</p>
+                      <p className="metadata text-[color:var(--ink-soft)]">{formatRelativeDate(entry.at)}</p>
                       <p className="section-title text-[0.95rem] leading-snug text-[color:var(--ink)]">{entry.label}</p>
                     </div>
                   </div>
@@ -574,7 +574,7 @@ export function LearnerDashboardView() {
                   <span className="absolute -right-2 -top-2 h-16 w-16 rounded-full bg-[rgba(184,138,45,0.08)]" />
                   <CertificateIcon className="h-5 w-5 text-[color:var(--brand)]" />
                   <h3 className="section-title mt-3 text-[1rem] text-[color:var(--ink)]">{certificate.title}</h3>
-                  <p className="metadata mt-1.5 text-[#9b9283]">
+                  <p className="metadata mt-1.5 text-[color:var(--ink-soft)]">
                     {certificate.earnedOn} · {certificate.credits}
                   </p>
                 </article>

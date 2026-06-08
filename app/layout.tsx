@@ -49,8 +49,22 @@ export default function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const themeScript = `
+    (function () {
+      try {
+        var theme = localStorage.getItem("lace-learning-hub-theme");
+        document.documentElement.setAttribute("data-theme", theme === "dark" ? "dark" : "light");
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  `;
+
   return (
-    <html lang="en">
+    <html lang="en" data-theme="light" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className={`${geist.variable} ${plexMono.variable}`}>
         <Providers>{children}</Providers>
       </body>

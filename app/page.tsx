@@ -486,59 +486,59 @@ export default function Home() {
           <div className="mt-3 grid min-w-0 gap-3 sm:mt-5 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-8">
             {isAdmin ? (
               <aside
-                className="order-1 min-w-0 rounded-[12px] bg-[color:var(--ink)] px-3 py-2.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-3 lg:order-2 lg:self-start"
+                className="order-1 min-w-0 rounded-[12px] bg-[color:var(--feature-surface)] px-3 py-2.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-3 lg:order-2 lg:self-start"
                 aria-label="Admin console"
               >
                 <div className="flex items-start gap-2.5 sm:items-center sm:gap-3">
                   <div className="min-w-0 flex-1">
-                    <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.04em] text-white/50 sm:text-[10px]">
+                    <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.04em] text-[color:var(--feature-muted)] sm:text-[10px]">
                       Service account
                     </p>
-                    <h2 className="mt-0.5 truncate text-[14px] font-bold leading-snug tracking-[-0.01em] text-white sm:text-[15px] sm:leading-tight">
+                    <h2 className="mt-0.5 truncate text-[14px] font-bold leading-snug tracking-[-0.01em] text-[color:var(--feature-ink)] sm:text-[15px] sm:leading-tight">
                       Integrations &amp; health
                     </h2>
                   </div>
                   <Link
                     href="/my-learning/admin"
                     aria-label="Open the admin console"
-                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] bg-white text-[color:var(--ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:bg-white/90 focus:outline-none focus:ring-4 focus:ring-white/25 sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
+                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--feature-action-border)] bg-[color:var(--feature-action-bg)] text-[color:var(--feature-action-ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-white/25 sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
                   >
                     <ArrowIcon className="h-[14px] w-[14px]" />
                     <span className="hidden sm:inline">Console</span>
                   </Link>
                 </div>
-                <p className="mt-1.5 text-[11px] leading-snug text-white/55 sm:mt-2">
+                <p className="mt-1.5 text-[11px] leading-snug text-[color:var(--feature-muted)] sm:mt-2">
                   Headless data admin — API checks, Brightspace &amp; Supabase status.
                 </p>
               </aside>
             ) : (
             <aside
-              className="order-1 min-w-0 rounded-[12px] bg-[color:var(--ink)] px-3 py-2.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-3 lg:order-2 lg:self-start"
+              className="order-1 min-w-0 rounded-[12px] bg-[color:var(--feature-surface)] px-3 py-2.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-3 lg:order-2 lg:self-start"
               aria-label="Resume learning"
             >
               <div className="flex items-start gap-2.5 sm:items-center sm:gap-3">
                 <div className="min-w-0 flex-1">
                   {resumeEyebrow ? (
-                    <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.04em] text-white/50 sm:text-[10px]">{resumeEyebrow}</p>
+                    <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.04em] text-[color:var(--feature-muted)] sm:text-[10px]">{resumeEyebrow}</p>
                   ) : null}
-                  <h2 className="mt-0.5 line-clamp-2 text-[14px] font-bold leading-snug tracking-[-0.01em] text-white sm:line-clamp-none sm:truncate sm:text-[15px] sm:leading-tight">
+                  <h2 className="mt-0.5 line-clamp-2 text-[14px] font-bold leading-snug tracking-[-0.01em] text-[color:var(--feature-ink)] sm:line-clamp-none sm:truncate sm:text-[15px] sm:leading-tight">
                     {resumeItem.title}
                   </h2>
                 </div>
                 <a
                   href={resumeUrl}
                   aria-label={`Resume ${resumeItem.title}. Up next: ${resumeItem.detail}. ${resumeProgressLabel}.`}
-                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] bg-white text-[color:var(--ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:bg-white/90 focus:outline-none focus:ring-4 focus:ring-white/25 sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
+                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--feature-action-border)] bg-[color:var(--feature-action-bg)] text-[color:var(--feature-action-ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-white/25 sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
                 >
                   <PlayIcon className="h-[14px] w-[14px]" />
                   <span className="hidden sm:inline">Resume</span>
                 </a>
               </div>
               <div className="mt-1.5 flex items-center gap-2 sm:mt-2 sm:gap-2.5">
-                <div className="h-1 min-w-0 flex-1 overflow-hidden rounded-full bg-white/14">
+                <div className="h-1 min-w-0 flex-1 overflow-hidden rounded-full bg-[color:var(--feature-track)]">
                   <div className="h-full rounded-full bg-[color:var(--brand-fill)]" style={{ width: `${resumeItem.progress}%` }} />
                 </div>
-                <span className="shrink-0 font-mono text-[9px] font-semibold tabular-nums text-white/55 sm:text-[10px]">{resumeProgressLabel}</span>
+                <span className="shrink-0 font-mono text-[9px] font-semibold tabular-nums text-[color:var(--feature-muted)] sm:text-[10px]">{resumeProgressLabel}</span>
               </div>
             </aside>
             )}

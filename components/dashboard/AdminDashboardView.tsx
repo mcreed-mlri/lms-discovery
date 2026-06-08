@@ -76,15 +76,15 @@ type BrightspaceSyncPayload =
     };
 
 const healthBorder: Record<ServiceHealth, string> = {
-  healthy: "border-t-[#6f927b]",
-  degraded: "border-t-[#2a5bff]",
-  down: "border-t-[#c8493b]",
+  healthy: "border-t-[color:var(--status-progress)]",
+  degraded: "border-t-[color:var(--status-next)]",
+  down: "border-t-[color:var(--status-changed)]",
 };
 
 const healthDot: Record<ServiceHealth, string> = {
-  healthy: "bg-[#6f927b]",
-  degraded: "bg-[#2a5bff]",
-  down: "bg-[#c8493b]",
+  healthy: "bg-[color:var(--status-progress)]",
+  degraded: "bg-[color:var(--status-next)]",
+  down: "bg-[color:var(--status-changed)]",
 };
 
 export function AdminDashboardView() {
@@ -220,7 +220,7 @@ export function AdminDashboardView() {
               </p>
             </div>
           </div>
-          <span className="rounded-full bg-[#e7efe7] px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-[#3d5c47]">
+          <span className="rounded-full bg-[color:var(--status-progress-soft)] px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-[color:var(--status-progress-ink)]">
             Service account
           </span>
         </div>
@@ -239,7 +239,7 @@ export function AdminDashboardView() {
               <span className={`h-2 w-2 rounded-full ${healthDot[supabaseStatus]}`} aria-hidden />
               <h2 className="card-title text-lg">Supabase live connection</h2>
             </div>
-            <p className="stat-label text-[#8b909d]">
+            <p className="stat-label text-[color:var(--ink-soft)]">
               {supabaseLoading ? "checking" : supabaseHealth?.ok ? "healthy" : "down"}
             </p>
           </div>
@@ -253,10 +253,10 @@ export function AdminDashboardView() {
               {supabaseItems.map((item) => (
                 <div
                   key={item.id}
-                  className="rounded-md border border-[color:var(--line)] bg-white/70 p-4"
+                  className="rounded-md border border-[color:var(--line)] bg-[color:var(--surface-raised)] p-4"
                 >
                   <p className="text-sm font-semibold text-[color:var(--ink)]">{item.title}</p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-[#8b909d]">
+                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-[color:var(--ink-soft)]">
                     {item.provider} / {item.item_type}
                   </p>
                 </div>
@@ -275,7 +275,7 @@ export function AdminDashboardView() {
               <span className={`h-2 w-2 rounded-full ${healthDot[brightspaceStatus]}`} aria-hidden />
               <h2 className="card-title text-lg">Brightspace connection</h2>
             </div>
-            <p className="stat-label text-[#8b909d]">
+            <p className="stat-label text-[color:var(--ink-soft)]">
               {brightspaceLoading
                 ? "checking"
                 : brightspaceHealth?.ok
@@ -309,14 +309,14 @@ export function AdminDashboardView() {
                   </>
                 )}
               </div>
-              <p className="rounded-md border border-[color:var(--line)] bg-white/70 p-4 text-sm font-medium text-[color:var(--ink-muted)]">
+              <p className="rounded-md border border-[color:var(--line)] bg-[color:var(--surface-raised)] p-4 text-sm font-medium text-[color:var(--ink-muted)]">
                 {brightspaceHealth.nextStep}
               </p>
               <button
                 type="button"
                 onClick={syncBrightspaceTestCourse}
                 disabled={brightspaceSyncing || !brightspaceHealth.configured.accessToken}
-                className="inline-flex h-11 items-center justify-center rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] transition hover:bg-[#0f1115] disabled:cursor-not-allowed disabled:bg-[#d3d8e0] disabled:text-[#8b909d]"
+                className="inline-flex h-11 items-center justify-center rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] transition hover:opacity-90 disabled:cursor-not-allowed disabled:bg-[color:var(--surface-sunken)] disabled:text-[color:var(--ink-soft)]"
               >
                 {brightspaceSyncing ? "Syncing..." : "Sync test course"}
               </button>
@@ -353,7 +353,7 @@ export function AdminDashboardView() {
             <span
               className={`inline-flex w-14 shrink-0 items-center justify-center rounded-[7px] px-2 py-1 font-mono text-[11px] font-bold ${
                 endpoint.method === "POST"
-                  ? "bg-[#f4e3da] text-[#8d472e]"
+                  ? "bg-[color:var(--status-changed-soft)] text-[color:var(--status-changed-ink)]"
                   : "bg-[color:var(--surface-sunken)] text-[color:var(--ink-muted)]"
               }`}
             >
@@ -411,7 +411,7 @@ export function AdminDashboardView() {
                 </span>
               ))}
               {account.uplAcknowledgedDate ? (
-                <span className="rounded-full bg-[#e7efe7] px-2 py-0.5 text-[11px] font-semibold text-[#3d5c47]">
+                <span className="rounded-full bg-[color:var(--status-progress-soft)] px-2 py-0.5 text-[11px] font-semibold text-[color:var(--status-progress-ink)]">
                   UPL acknowledged
                 </span>
               ) : null}

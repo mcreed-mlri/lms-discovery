@@ -10,6 +10,7 @@ import {
   HomeIcon,
   SearchIcon,
 } from "@/components/icons";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { getEffectiveDashboardRole } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
 import { practiceAreas } from "@/lib/data";
@@ -224,6 +225,7 @@ export function StudioRail({
 
       {/* Footer: collapse toggle + user */}
       <div className="mt-auto border-t border-[color:var(--line-soft)] pt-4">
+        <ThemeToggle collapsed={collapsed} className={collapsed ? "mx-auto mb-1.5" : "mb-1.5"} />
         <button
           type="button"
           onClick={onToggle}

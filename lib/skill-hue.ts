@@ -18,14 +18,14 @@ export type SkillHue = {
 };
 
 export const SKILL_HUES: readonly SkillHue[] = [
-  { solid: "#2a5bff", tint: "#e9f0ff" }, // blue
-  { solid: "#7a4fe0", tint: "#efeafd" }, // violet
-  { solid: "#d24d83", tint: "#fce9f1" }, // pink
-  { solid: "#c8791b", tint: "#fbf0dc" }, // amber
-  { solid: "#179a72", tint: "#e2f4ed" }, // green
-  { solid: "#3a8ec9", tint: "#e7f3fb" }, // sky
-  { solid: "#5563d6", tint: "#ebedfc" }, // indigo
-  { solid: "#bb573b", tint: "#fbe8e2" }, // rust
+  { solid: "var(--hue-1)", tint: "var(--hue-1-tint)" }, // blue
+  { solid: "var(--hue-2)", tint: "var(--hue-2-tint)" }, // violet
+  { solid: "var(--hue-3)", tint: "var(--hue-3-tint)" }, // pink
+  { solid: "var(--hue-4)", tint: "var(--hue-4-tint)" }, // amber
+  { solid: "var(--hue-5)", tint: "var(--hue-5-tint)" }, // green
+  { solid: "var(--hue-6)", tint: "var(--hue-6-tint)" }, // sky
+  { solid: "var(--hue-7)", tint: "var(--hue-7-tint)" }, // indigo
+  { solid: "var(--hue-8)", tint: "var(--hue-8-tint)" }, // rust
 ];
 
 /** The hue at index `i`, wrapping after 8. */

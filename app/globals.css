@@ -31,6 +31,14 @@
   --surface-raised: #ffffff;    /* raised surfaces */
   --surface-sunken: #eef0f4;    /* sunken tracks, chips, active-nav bg */
   --hover-tint: #f5f6f8;        /* whisper hover */
+  --chrome-bg: rgba(255, 255, 255, 0.85);
+  --feature-surface: #14161b;
+  --feature-ink: #ffffff;
+  --feature-muted: rgba(255, 255, 255, 0.55);
+  --feature-track: rgba(255, 255, 255, 0.14);
+  --feature-action-bg: #ffffff;
+  --feature-action-ink: #14161b;
+  --feature-action-border: transparent;
   --hero-wash: #f5f6f8;
   --hero-wash-soft: #ffffff;
   --ink: #14161b;              /* near-black — primary text, brand mark */
@@ -87,6 +95,97 @@
   --radius-control: 9px;
 
   /* ── Legacy aliases — kept so existing utility classes keep resolving ─── */
+  --bg-main: var(--paper);
+  --bg-surface: var(--surface);
+  --bg-surface-soft: var(--surface);
+  --border-subtle: var(--line);
+  --border-strong: var(--line-strong);
+  --accent-gold: var(--brand);
+  --accent-sage: var(--status-progress);
+  --accent-rust: var(--status-changed);
+  --shadow-soft: var(--shadow-sm);
+  --shadow-featured: var(--shadow-md);
+  --lace-ivory: var(--paper);
+  --lace-paper: var(--surface);
+  --lace-panel: var(--surface);
+  --lace-ink: var(--ink);
+  --lace-muted: var(--ink-soft);
+  --lace-muted-strong: var(--ink-muted);
+  --lace-hairline: var(--line);
+  --lace-hairline-strong: var(--line-strong);
+  --lace-gold: var(--brand);
+  --lace-sage: var(--status-progress);
+  --lace-rust: var(--status-changed);
+  --lace-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Neutral base: the course wrapper's soft near-black, with the Hub's blue kept
+     as the active/primary color. */
+  --paper: #15171c;
+  --paper-deep: #101217;
+  --panel: #1a1d24;
+  --surface: #1c1f26;
+  --surface-raised: #22262e;
+  --surface-sunken: #262a33;
+  --hover-tint: #20242b;
+  --chrome-bg: rgba(28, 31, 38, 0.86);
+  --feature-surface: #202633;
+  --feature-ink: #f3f4f6;
+  --feature-muted: #9da6b5;
+  --feature-track: rgba(255, 255, 255, 0.13);
+  --feature-action-bg: #2c3442;
+  --feature-action-ink: #f3f4f6;
+  --feature-action-border: #3a4352;
+  --hero-wash: #15171c;
+  --hero-wash-soft: #1c1f26;
+  --ink: #f3f4f6;
+  --ink-muted: #a3a9b5;
+  --ink-soft: #767d8b;
+  --line: #2e333d;
+  --line-strong: #3a4049;
+  --line-soft: #282d36;
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.22), 0 10px 28px rgba(0, 0, 0, 0.22);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.22), 0 10px 28px rgba(0, 0, 0, 0.22);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.24), 0 16px 38px rgba(0, 0, 0, 0.26);
+  --shadow-lg: 0 16px 42px rgba(0, 0, 0, 0.38), 0 2px 8px rgba(0, 0, 0, 0.28);
+
+  /* Brand: preserve Learning Hub blue in dark mode. */
+  --brand: #86a5ff;
+  --brand-ink: #9bb4ff;
+  --brand-fill: #5f84ff;
+  --brand-tint: #18274f;
+
+  /* Skill hues: saturated strokes plus deep fills for icon wells/chips. */
+  --hue-1: #86a5ff;  --hue-1-tint: #18274f;
+  --hue-2: #b49af0;  --hue-2-tint: #251a40;
+  --hue-3: #ef9bbd;  --hue-3-tint: #3a1c2a;
+  --hue-4: #e0a552;  --hue-4-tint: #3a2c10;
+  --hue-5: #5fc9a8;  --hue-5-tint: #133029;
+  --hue-6: #7cc0ec;  --hue-6-tint: #14283a;
+  --hue-7: #9aa3ec;  --hue-7-tint: #1f2340;
+  --hue-8: #e8957a;  --hue-8-tint: #3a1f17;
+
+  --topic-court: #7cc0ec;          --topic-court-soft: #14283a;        --topic-court-ink: #7cc0ec;
+  --topic-client: #5fc9a8;         --topic-client-soft: #133029;       --topic-client-ink: #5fc9a8;
+  --topic-ethics: #9aa3ec;         --topic-ethics-soft: #1f2340;       --topic-ethics-ink: #9aa3ec;
+  --topic-research: #7cc0ec;       --topic-research-soft: #14283a;     --topic-research-ink: #7cc0ec;
+  --topic-drafting: #b49af0;       --topic-drafting-soft: #251a40;     --topic-drafting-ink: #b49af0;
+  --topic-trauma: #ef9bbd;         --topic-trauma-soft: #3a1c2a;       --topic-trauma-ink: #ef9bbd;
+  --topic-foundations: #9aa3ec;    --topic-foundations-soft: #1f2340;  --topic-foundations-ink: #9aa3ec;
+  --topic-neutral: #9aa0ad;        --topic-neutral-soft: #262a33;      --topic-neutral-ink: #c0c6d1;
+
+  --status-progress: #5fc9a8;      --status-progress-soft: #133029;    --status-progress-ink: #5fc9a8;
+  --status-next: #86a5ff;          --status-next-soft: #18274f;        --status-next-ink: #9bb4ff;
+  --status-done: #5fc9a8;          --status-done-soft: #133029;        --status-done-ink: #5fc9a8;
+  --status-new: #e0a552;           --status-new-soft: #3a2c10;         --status-new-ink: #e0a552;
+  --status-updated: #e0a552;       --status-updated-soft: #3a2c10;     --status-updated-ink: #e0a552;
+  --status-changed: #ec8275;       --status-changed-soft: #3a1c18;     --status-changed-ink: #ec8275;
+  --status-later: #9aa0ad;         --status-later-soft: #262a33;       --status-later-ink: #c0c6d1;
+
   --bg-main: var(--paper);
   --bg-surface: var(--surface);
   --bg-surface-soft: var(--surface);
