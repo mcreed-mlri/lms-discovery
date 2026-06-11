@@ -25,7 +25,6 @@ const popularSearches = [
   "confidentiality",
   "SNAP appeal",
   "709 motion",
-  "RAFT application",
 ];
 
 type ResumeEntry = Extract<(typeof continueLearning)[number], { progress: number }>;
