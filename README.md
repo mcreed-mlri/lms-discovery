@@ -87,13 +87,12 @@ lib/                         Local demo data and Brightspace URL helpers
 lib/services/                dashboardService (mock → API swap point)
 mocks/                       Dashboard mock payloads
 types/                       Dashboard TypeScript contracts
-archive/standalone-prototype Earlier static HTML/CSS/JS prototype
-archive/mlri-lms             Saved project exports, screenshots, and uploads
+tests/                       node:test suites (search ranking, access control)
+docs/planning/               Architecture and integration planning docs
 ```
 
-The active app is the Next.js project at the repository root. The `archive/`
-folder keeps earlier prototype artifacts available for reference without mixing
-them into the app source.
+Earlier prototypes (`archive/`, `design_handoff_studio_rail/`) were removed
+from tracking in June 2026; they remain available in git history.
 
 ## Deployment
 
