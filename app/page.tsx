@@ -62,18 +62,6 @@ function resumeMinutesLeftLabel(duration?: string) {
   return `${duration.replace(/\s*min\s*$/i, "").trim()} min left`.toUpperCase();
 }
 
-function sectionTitle(type: LearningItem["type"]) {
-  if (type === "PATH") return "Learning Paths";
-  if (type === "COURSE") return "Courses";
-  return "Modules";
-}
-
-function sectionEyebrow(type: LearningItem["type"]) {
-  if (type === "PATH") return "Guided Curriculum";
-  if (type === "COURSE") return "Brightspace Courses";
-  return "Modules Inside Courses";
-}
-
 function getCuratedCatalogItems(items: LearningItem[]) {
   const preferredIds = [
     "advocate-upl-onboarding",
@@ -95,60 +83,6 @@ function getCuratedCatalogItems(items: LearningItem[]) {
 
 function scrollToBrowse() {
   document.getElementById("browse")?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-function ResultSection({
-  title,
-  eyebrow,
-  items,
-  viewMode,
-  onOpen,
-}: {
-  title: string;
-  eyebrow: string;
-  items: LearningItem[];
-  viewMode: ViewMode;
-  onOpen: (item: LearningItem) => void;
-}) {
-  if (items.length === 0) return null;
-  const isPathSection = items[0]?.type === "PATH";
-  const gridColumns = isPathSection ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
-
-  return (
-    <div className="mb-12">
-      <div className="mb-4 flex items-end justify-between gap-4 border-b border-[color:var(--line)] pb-3">
-        <div>
-          <p className="section-kicker secondary">{eyebrow}</p>
-          <h2 className={`section-title ${isPathSection ? "text-2xl" : "text-xl"} mt-1 leading-tight text-[color:var(--ink)]`}>{title}</h2>
-        </div>
-        <p className="metadata hidden text-[color:var(--ink-soft)] sm:block">
-          {items.length} item{items.length === 1 ? "" : "s"}
-        </p>
-      </div>
-      <div className="flex flex-col gap-2 sm:hidden">
-        {items.map((item) => (
-          <ContentListRow key={`${item.type}-${item.id}`} item={item} onOpen={onOpen} />
-        ))}
-      </div>
-      {viewMode === "grid" ? (
-        <div className={`hidden gap-4 sm:grid ${gridColumns}`}>
-          {items.map((item) =>
-            item.type === "PATH" ? (
-              <PathCard key={`${item.type}-${item.id}`} item={item} onOpen={onOpen} />
-            ) : (
-              <ContentCard key={`${item.type}-${item.id}`} item={item} onOpen={onOpen} />
-            ),
-          )}
-        </div>
-      ) : (
-        <div className="hidden gap-4 sm:grid">
-          {items.map((item) => (
-            <ContentListRow key={`${item.type}-${item.id}`} item={item} onOpen={onOpen} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
 }
 
 // "Browse by skill" tile — the primary lens of the homepage. Each tile takes

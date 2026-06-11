@@ -1,0 +1,7 @@
+.next/
+out/
+tools/
+archive/
+design_handoff_studio_rail/
+package-lock.json
+next-env.d.ts

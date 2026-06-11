@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ArrowIcon, BookIcon, CheckIcon, ClockIcon, PathIcon } from "@/components/icons";
+import { ArrowIcon, BookIcon, CheckIcon, ClockIcon } from "@/components/icons";
 import { TypeBadge } from "@/components/type-badge";
 import {
   courses,
