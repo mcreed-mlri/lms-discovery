@@ -43,16 +43,16 @@ Courses, modules, users, enrollments, activities, completions, records
 
 ## Responsibilities
 
-| Need | Owner | Notes |
-| --- | --- | --- |
-| Course hosting | Brightspace | Brightspace remains the official LMS. |
-| Users, roles, and permissions | Brightspace | Avoid duplicating identity or access logic. |
-| Enrollments | Brightspace | Learning Hub can link to enrollment or launch flows. |
-| Progress and completions | Brightspace | Pull into the hub only where API access allows. |
-| Course and module discovery | Learning Hub | Search should include courses, modules, topics, and paths. |
-| Curated pathways | Learning Hub | Paths can group Brightspace content in a user-friendly way. |
-| Tags and practice areas | Learning Hub | MLRI-specific metadata likely belongs outside Brightspace. |
-| Recommendations | Learning Hub | Start simple with curated recommendations before personalization. |
+| Need                          | Owner        | Notes                                                             |
+| ----------------------------- | ------------ | ----------------------------------------------------------------- |
+| Course hosting                | Brightspace  | Brightspace remains the official LMS.                             |
+| Users, roles, and permissions | Brightspace  | Avoid duplicating identity or access logic.                       |
+| Enrollments                   | Brightspace  | Learning Hub can link to enrollment or launch flows.              |
+| Progress and completions      | Brightspace  | Pull into the hub only where API access allows.                   |
+| Course and module discovery   | Learning Hub | Search should include courses, modules, topics, and paths.        |
+| Curated pathways              | Learning Hub | Paths can group Brightspace content in a user-friendly way.       |
+| Tags and practice areas       | Learning Hub | MLRI-specific metadata likely belongs outside Brightspace.        |
+| Recommendations               | Learning Hub | Start simple with curated recommendations before personalization. |
 
 ## Role-Aware Dashboard Model
 
@@ -144,16 +144,16 @@ Evaluate whether the hub should be embedded inside Brightspace or remain a separ
 
 ## Risks And Mitigations
 
-| Risk | Mitigation |
-| --- | --- |
-| Custom layer becomes too complex | Keep the first version thin: discovery, metadata, and links only. |
-| Brightspace API permissions are limited | Validate API access early with a technical discovery session. |
-| Metadata gets stale | Define one owner and a simple update workflow. |
-| Attributes or groups are defined casually | Freeze the minimum User Attributes and Learning Groups before using them for automation or reports. |
-| Video completion is overstated | Treat page visits/time-on-page as weak signals; use H5P, check-in questions, quizzes, reflections, completion conditions, or a mark-complete step when completion must mean more than visited. |
-| D2L support will not cover custom behavior | Treat the hub as MLRI-owned and keep Brightspace responsibilities clear. |
-| Team capacity is limited | Start with a maintainable MVP before adding personalization. |
-| Users get confused between systems | Use clear language: the hub helps find content; Brightspace delivers it. |
+| Risk                                       | Mitigation                                                                                                                                                                                     |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Custom layer becomes too complex           | Keep the first version thin: discovery, metadata, and links only.                                                                                                                              |
+| Brightspace API permissions are limited    | Validate API access early with a technical discovery session.                                                                                                                                  |
+| Metadata gets stale                        | Define one owner and a simple update workflow.                                                                                                                                                 |
+| Attributes or groups are defined casually  | Freeze the minimum User Attributes and Learning Groups before using them for automation or reports.                                                                                            |
+| Video completion is overstated             | Treat page visits/time-on-page as weak signals; use H5P, check-in questions, quizzes, reflections, completion conditions, or a mark-complete step when completion must mean more than visited. |
+| D2L support will not cover custom behavior | Treat the hub as MLRI-owned and keep Brightspace responsibilities clear.                                                                                                                       |
+| Team capacity is limited                   | Start with a maintainable MVP before adding personalization.                                                                                                                                   |
+| Users get confused between systems         | Use clear language: the hub helps find content; Brightspace delivers it.                                                                                                                       |
 
 ## Questions For Brightspace / D2L
 

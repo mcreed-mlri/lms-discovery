@@ -5,9 +5,12 @@ import type { LearnerCourse } from "@/types/dashboard";
 import { ProgressBar } from "./ProgressBar";
 
 const statusStyles: Record<LearnerCourse["status"], string> = {
-  not_started: "border-[color:var(--lace-hairline)] bg-[color:var(--surface-raised)] text-[color:var(--ink-soft)]",
-  in_progress: "border-[color:var(--status-next)] bg-[color:var(--status-next-soft)] text-[color:var(--status-next-ink)]",
-  completed: "border-[color:var(--status-done)] bg-[color:var(--status-done-soft)] text-[color:var(--status-done-ink)]",
+  not_started:
+    "border-[color:var(--lace-hairline)] bg-[color:var(--surface-raised)] text-[color:var(--ink-soft)]",
+  in_progress:
+    "border-[color:var(--status-next)] bg-[color:var(--status-next-soft)] text-[color:var(--status-next-ink)]",
+  completed:
+    "border-[color:var(--status-done)] bg-[color:var(--status-done-soft)] text-[color:var(--status-done-ink)]",
 };
 
 export function CourseProgressCard({ course }: { course: LearnerCourse }) {
@@ -34,13 +37,19 @@ export function CourseProgressCard({ course }: { course: LearnerCourse }) {
       </div>
 
       <p className="mt-4 text-sm font-medium text-[color:var(--ink-muted)]">
-        Last visited <span className="text-[color:var(--ink-muted)]">{formatRelativeDate(course.lastAccessedAt)}</span>
+        Last visited{" "}
+        <span className="text-[color:var(--ink-muted)]">
+          {formatRelativeDate(course.lastAccessedAt)}
+        </span>
         {course.dueDate ? (
           <>
             {" "}
             · Due{" "}
             <span className="text-[color:var(--ink-muted)]">
-              {new Date(course.dueDate).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+              {new Date(course.dueDate).toLocaleDateString(undefined, {
+                month: "short",
+                day: "numeric",
+              })}
             </span>
           </>
         ) : null}

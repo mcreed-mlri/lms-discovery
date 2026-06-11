@@ -19,7 +19,10 @@ function hasUplAccess(user: AccessProfile, requiresUplAck?: boolean) {
   return Boolean(user.uplAcknowledgedDate);
 }
 
-export function canAccessLearningItem(user: AccessProfile | null | undefined, item: LearningItem): boolean {
+export function canAccessLearningItem(
+  user: AccessProfile | null | undefined,
+  item: LearningItem,
+): boolean {
   if (!user || user.accessStatus !== "approved") return false;
   if (user.userType === "admin") return true;
 
@@ -32,13 +35,18 @@ export function canAccessLearningItem(user: AccessProfile | null | undefined, it
 
   if (item.type === "PATH") {
     const relatedCourses = courses.filter((course) => item.courseIds.includes(course.id));
-    return relatedCourses.every((course) => canAccessLearningItem(user, { ...course, type: "COURSE" as const }));
+    return relatedCourses.every((course) =>
+      canAccessLearningItem(user, { ...course, type: "COURSE" as const }),
+    );
   }
 
   return true;
 }
 
-export function getEligibleLearningItems(items: LearningItem[], user: AccessProfile | null | undefined) {
+export function getEligibleLearningItems(
+  items: LearningItem[],
+  user: AccessProfile | null | undefined,
+) {
   return items.filter((item) => canAccessLearningItem(user, item));
 }
 
@@ -49,7 +57,9 @@ export function getAccessLabel(userType: AccessUserType) {
   return "Admin";
 }
 
-export function getEffectiveDashboardRole(user: AccessProfile | null | undefined): "learner" | "super_admin" {
+export function getEffectiveDashboardRole(
+  user: AccessProfile | null | undefined,
+): "learner" | "super_admin" {
   if (user?.accessStatus === "approved" && user.userType === "admin") return "super_admin";
   return "learner";
 }

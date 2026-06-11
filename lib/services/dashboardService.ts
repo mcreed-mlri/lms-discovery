@@ -30,10 +30,7 @@ function delay(ms: number) {
   return new Promise<void>((resolve) => setTimeout(resolve, ms));
 }
 
-async function withMockLatency<T>(
-  loader: () => T,
-  options?: DashboardFetchOptions,
-): Promise<T> {
+async function withMockLatency<T>(loader: () => T, options?: DashboardFetchOptions): Promise<T> {
   await delay(options?.delayMs ?? MOCK_DELAY_MS);
   if (options?.simulateError) {
     throw new Error("Dashboard unavailable. Try again in a moment.");

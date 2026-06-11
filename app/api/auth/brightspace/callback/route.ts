@@ -25,11 +25,14 @@ export async function GET(request: NextRequest) {
   const storedState = request.cookies.get(STATE_COOKIE)?.value;
 
   if (error) {
-    return NextResponse.json({
-      ok: false,
-      error,
-      errorDescription: url.searchParams.get("error_description"),
-    }, { status: 400 });
+    return NextResponse.json(
+      {
+        ok: false,
+        error,
+        errorDescription: url.searchParams.get("error_description"),
+      },
+      { status: 400 },
+    );
   }
 
   if (!code || !state || !storedState || state !== storedState) {
@@ -83,7 +86,8 @@ export async function GET(request: NextRequest) {
     scope: tokenPayload.scope,
     hasAccessToken: true,
     hasRefreshToken: Boolean(tokenPayload.refresh_token),
-    nextStep: "Return to /my-learning/admin/ to verify the Brightspace token status, then test whoami.",
+    nextStep:
+      "Return to /my-learning/admin/ to verify the Brightspace token status, then test whoami.",
   });
 
   response.cookies.set(ACCESS_TOKEN_COOKIE, tokenPayload.access_token, {

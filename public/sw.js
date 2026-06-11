@@ -5,32 +5,38 @@ const ASSETS_TO_CACHE = [
   "/manifest.json",
   "/icon.svg",
   "/icon-192.png",
-  "/icon-512.png"
+  "/icon-512.png",
 ];
 
 // Install Event
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log("[Service Worker] Pre-caching static core app shell");
-      return cache.addAll(ASSETS_TO_CACHE);
-    }).then(() => self.skipWaiting())
+    caches
+      .open(CACHE_NAME)
+      .then((cache) => {
+        console.log("[Service Worker] Pre-caching static core app shell");
+        return cache.addAll(ASSETS_TO_CACHE);
+      })
+      .then(() => self.skipWaiting()),
   );
 });
 
 // Activate Event
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            console.log("[Service Worker] Clearing old cache:", key);
-            return caches.delete(key);
-          }
-        })
-      );
-    }).then(() => self.clients.claim())
+    caches
+      .keys()
+      .then((keys) => {
+        return Promise.all(
+          keys.map((key) => {
+            if (key !== CACHE_NAME) {
+              console.log("[Service Worker] Clearing old cache:", key);
+              return caches.delete(key);
+            }
+          }),
+        );
+      })
+      .then(() => self.clients.claim()),
   );
 });
 
@@ -60,7 +66,10 @@ self.addEventListener("fetch", (event) => {
           return networkResponse;
         })
         .catch((err) => {
-          console.warn("[Service Worker] Network fetch failed, serving cached fallback if available.", err);
+          console.warn(
+            "[Service Worker] Network fetch failed, serving cached fallback if available.",
+            err,
+          );
           // If network fails and we are requesting an HTML page that is not cached, we could return a fallback:
           if (event.request.mode === "navigate") {
             return caches.match("/");
@@ -69,6 +78,6 @@ self.addEventListener("fetch", (event) => {
 
       // Return cached response instantly, fallback to network request if uncached
       return cachedResponse || fetchPromise;
-    })
+    }),
   );
 });

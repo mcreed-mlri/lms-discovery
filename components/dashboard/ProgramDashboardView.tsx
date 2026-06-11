@@ -25,7 +25,9 @@ export function ProgramDashboardView() {
   }, []);
 
   if (loading || !data) {
-    return <div className="animate-pulse editorial-panel h-64 rounded-[var(--radius-card)]" aria-busy />;
+    return (
+      <div className="animate-pulse editorial-panel h-64 rounded-[var(--radius-card)]" aria-busy />
+    );
   }
 
   return (
@@ -57,10 +59,19 @@ export function ProgramDashboardView() {
           </thead>
           <tbody>
             {data.byArea.map((row) => (
-              <tr key={row.trainingArea} className="border-b border-[color:var(--lace-hairline)] last:border-0">
-                <td className="px-4 py-3 font-bold text-[color:var(--ink-muted)]">{row.trainingArea}</td>
-                <td className="px-4 py-3 font-medium text-[color:var(--ink-muted)]">{row.enrolled}</td>
-                <td className="px-4 py-3 font-bold text-[color:var(--brand)]">{row.completionRate}%</td>
+              <tr
+                key={row.trainingArea}
+                className="border-b border-[color:var(--lace-hairline)] last:border-0"
+              >
+                <td className="px-4 py-3 font-bold text-[color:var(--ink-muted)]">
+                  {row.trainingArea}
+                </td>
+                <td className="px-4 py-3 font-medium text-[color:var(--ink-muted)]">
+                  {row.enrolled}
+                </td>
+                <td className="px-4 py-3 font-bold text-[color:var(--brand)]">
+                  {row.completionRate}%
+                </td>
               </tr>
             ))}
           </tbody>

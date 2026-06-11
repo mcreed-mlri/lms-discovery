@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import {
-  brightspaceApiFetch,
-  getBrightspaceLpVersion,
-} from "@/lib/brightspace/api";
+import { brightspaceApiFetch, getBrightspaceLpVersion } from "@/lib/brightspace/api";
 
 export async function GET(request: NextRequest) {
   const url = new URL(request.url);
@@ -32,8 +29,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         ok: false,
-        error: error instanceof Error ? error.message : "Brightspace course metadata request failed.",
-        nextStep: "Complete the Brightspace OAuth flow from /api/auth/brightspace/start, then retry this course metadata route in the same browser session.",
+        error:
+          error instanceof Error ? error.message : "Brightspace course metadata request failed.",
+        nextStep:
+          "Complete the Brightspace OAuth flow from /api/auth/brightspace/start, then retry this course metadata route in the same browser session.",
       },
       { status: 500 },
     );
@@ -51,7 +50,8 @@ export async function GET(request: NextRequest) {
         status: response.status,
         statusText: response.statusText,
         error: payload,
-        nextStep: "Confirm this is a course offering org unit ID and that the authorized user can see course offerings.",
+        nextStep:
+          "Confirm this is a course offering org unit ID and that the authorized user can see course offerings.",
       },
       { status: response.status },
     );

@@ -22,13 +22,37 @@ import type { LearnerCourse, LearnerDashboardPayload } from "@/types/dashboard";
 // Per-area accent so courses keep the catalog's colour vocabulary.
 type Tone = { stripe: string; chipBg: string; chipFg: string };
 const AREA_TONES: Record<string, Tone> = {
-  Housing: { stripe: "var(--topic-court)", chipBg: "var(--topic-court-soft)", chipFg: "var(--topic-court-ink)" },
-  Ethics: { stripe: "var(--topic-ethics)", chipBg: "var(--topic-ethics-soft)", chipFg: "var(--topic-ethics-ink)" },
-  "Practice skills": { stripe: "var(--topic-client)", chipBg: "var(--topic-client-soft)", chipFg: "var(--topic-client-ink)" },
-  Benefits: { stripe: "var(--topic-research)", chipBg: "var(--topic-research-soft)", chipFg: "var(--topic-research-ink)" },
-  "Family law": { stripe: "var(--topic-drafting)", chipBg: "var(--topic-drafting-soft)", chipFg: "var(--topic-drafting-ink)" },
+  Housing: {
+    stripe: "var(--topic-court)",
+    chipBg: "var(--topic-court-soft)",
+    chipFg: "var(--topic-court-ink)",
+  },
+  Ethics: {
+    stripe: "var(--topic-ethics)",
+    chipBg: "var(--topic-ethics-soft)",
+    chipFg: "var(--topic-ethics-ink)",
+  },
+  "Practice skills": {
+    stripe: "var(--topic-client)",
+    chipBg: "var(--topic-client-soft)",
+    chipFg: "var(--topic-client-ink)",
+  },
+  Benefits: {
+    stripe: "var(--topic-research)",
+    chipBg: "var(--topic-research-soft)",
+    chipFg: "var(--topic-research-ink)",
+  },
+  "Family law": {
+    stripe: "var(--topic-drafting)",
+    chipBg: "var(--topic-drafting-soft)",
+    chipFg: "var(--topic-drafting-ink)",
+  },
 };
-const DEFAULT_TONE: Tone = { stripe: "var(--brand-fill)", chipBg: "var(--brand-tint)", chipFg: "var(--brand-ink)" };
+const DEFAULT_TONE: Tone = {
+  stripe: "var(--brand-fill)",
+  chipBg: "var(--brand-tint)",
+  chipFg: "var(--brand-ink)",
+};
 const toneForArea = (area?: string): Tone => AREA_TONES[area ?? ""] ?? DEFAULT_TONE;
 
 function daysUntil(iso: string): number {
@@ -52,7 +76,14 @@ function Sparkline({ values, color }: { values: number[]; color: string }) {
     .join(" ");
   return (
     <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} aria-hidden="true">
-      <polyline points={points} fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <polyline
+        points={points}
+        fill="none"
+        stroke={color}
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -71,12 +102,16 @@ function StreakHeatmap({ data }: { data: number[] }) {
       aria-hidden="true"
     >
       {cells.map((value, index) => {
-        const opacity = value === 0 ? 1 : value === 1 ? 0.35 : value === 2 ? 0.6 : value === 3 ? 0.85 : 1;
+        const opacity =
+          value === 0 ? 1 : value === 1 ? 0.35 : value === 2 ? 0.6 : value === 3 ? 0.85 : 1;
         return (
           <div
             key={index}
             className="rounded-[2px]"
-            style={{ background: value === 0 ? "var(--surface-sunken)" : "var(--brand-fill)", opacity }}
+            style={{
+              background: value === 0 ? "var(--surface-sunken)" : "var(--brand-fill)",
+              opacity,
+            }}
           />
         );
       })}
@@ -109,9 +144,13 @@ function KpiTile({
       </div>
       <p className="mt-2.5 flex items-baseline gap-1">
         <span className="hero-title text-[2rem] text-[color:var(--ink)]">{value}</span>
-        {unit ? <span className="text-sm font-semibold text-[color:var(--ink-soft)]">{unit}</span> : null}
+        {unit ? (
+          <span className="text-sm font-semibold text-[color:var(--ink-soft)]">{unit}</span>
+        ) : null}
       </p>
-      <p className="mt-1.5 text-[0.82rem] font-medium leading-snug text-[color:var(--ink-muted)]">{detail}</p>
+      <p className="mt-1.5 text-[0.82rem] font-medium leading-snug text-[color:var(--ink-muted)]">
+        {detail}
+      </p>
       {sparkline ? (
         <div className="mt-2" style={{ color: accent }}>
           <Sparkline values={sparkline} color={accent} />
@@ -134,7 +173,15 @@ function AreaPill({ area }: { area?: string }) {
   );
 }
 
-function SectionHeading({ eyebrow, title, action }: { eyebrow: string; title: string; action?: { label: string; href: string } }) {
+function SectionHeading({
+  eyebrow,
+  title,
+  action,
+}: {
+  eyebrow: string;
+  title: string;
+  action?: { label: string; href: string };
+}) {
   return (
     <div className="mb-4 flex items-end justify-between gap-4 border-b border-[color:var(--lace-hairline)] pb-3">
       <div>
@@ -142,7 +189,10 @@ function SectionHeading({ eyebrow, title, action }: { eyebrow: string; title: st
         <h2 className="hero-title mt-1 text-[1.5rem] text-[color:var(--ink)]">{title}</h2>
       </div>
       {action ? (
-        <Link href={action.href} className="metadata inline-flex items-center gap-1.5 text-[color:var(--brand)] transition hover:text-[color:var(--ink)]">
+        <Link
+          href={action.href}
+          className="metadata inline-flex items-center gap-1.5 text-[color:var(--brand)] transition hover:text-[color:var(--ink)]"
+        >
           {action.label}
           <ArrowIcon className="h-3.5 w-3.5" />
         </Link>
@@ -170,16 +220,30 @@ function ContinueHeroRow({ course }: { course: LearnerCourse }) {
       className="flex flex-wrap items-center gap-4 rounded-[var(--radius-card)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] p-5 shadow-[var(--shadow-xs)]"
       style={{ borderTop: `3px solid ${tone.stripe}` }}
     >
-      <ProgressRing value={course.completionPct} size={52} stroke={5} color={tone.stripe} trackColor="var(--surface-sunken)">
-        <span className="font-mono text-[0.72rem] font-bold text-[color:var(--ink)]">{course.completionPct}%</span>
+      <ProgressRing
+        value={course.completionPct}
+        size={52}
+        stroke={5}
+        color={tone.stripe}
+        trackColor="var(--surface-sunken)"
+      >
+        <span className="font-mono text-[0.72rem] font-bold text-[color:var(--ink)]">
+          {course.completionPct}%
+        </span>
       </ProgressRing>
       <div className="min-w-[12rem] flex-1">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="metadata rounded-full bg-[color:var(--ink)] px-2 py-0.5 text-[color:var(--surface)]">Resume</span>
+          <span className="metadata rounded-full bg-[color:var(--ink)] px-2 py-0.5 text-[color:var(--surface)]">
+            Resume
+          </span>
           <AreaPill area={course.trainingArea} />
         </div>
-        <h3 className="section-title mt-1.5 text-[1.2rem] text-[color:var(--ink)]">{course.title}</h3>
-        <p className="metadata mt-1 text-[color:var(--ink-soft)]">Last visited {formatRelativeDate(course.lastAccessedAt)}</p>
+        <h3 className="section-title mt-1.5 text-[1.2rem] text-[color:var(--ink)]">
+          {course.title}
+        </h3>
+        <p className="metadata mt-1 text-[color:var(--ink-soft)]">
+          Last visited {formatRelativeDate(course.lastAccessedAt)}
+        </p>
       </div>
       <a
         href={getLearningUrlForDashboardCourse(course)}
@@ -196,15 +260,28 @@ function ContinueRow({ course }: { course: LearnerCourse }) {
   const tone = toneForArea(course.trainingArea);
   return (
     <div className="flex flex-wrap items-center gap-4 border-t border-[color:var(--lace-hairline)] px-5 py-3.5">
-      <span className="hidden h-9 w-1 shrink-0 rounded-full sm:block" style={{ background: tone.stripe }} />
-      <ProgressRing value={course.completionPct} size={38} stroke={4} color={tone.stripe} trackColor="var(--surface-sunken)">
-        <span className="font-mono text-[0.62rem] font-bold text-[color:var(--ink)]">{course.completionPct}</span>
+      <span
+        className="hidden h-9 w-1 shrink-0 rounded-full sm:block"
+        style={{ background: tone.stripe }}
+      />
+      <ProgressRing
+        value={course.completionPct}
+        size={38}
+        stroke={4}
+        color={tone.stripe}
+        trackColor="var(--surface-sunken)"
+      >
+        <span className="font-mono text-[0.62rem] font-bold text-[color:var(--ink)]">
+          {course.completionPct}
+        </span>
       </ProgressRing>
       <div className="min-w-[10rem] flex-1">
         <AreaPill area={course.trainingArea} />
         <h3 className="section-title mt-1 text-[1rem] text-[color:var(--ink)]">{course.title}</h3>
       </div>
-      <p className="metadata text-[color:var(--ink-soft)]">{formatRelativeDate(course.lastAccessedAt)}</p>
+      <p className="metadata text-[color:var(--ink-soft)]">
+        {formatRelativeDate(course.lastAccessedAt)}
+      </p>
       <a
         href={getLearningUrlForDashboardCourse(course)}
         className="inline-flex h-8 items-center rounded-[10px] border border-[color:var(--lace-hairline)] bg-[color:var(--surface-raised)] px-3.5 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--border-strong)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
@@ -264,7 +341,10 @@ export function LearnerDashboardView() {
   if (loading) {
     return (
       <>
-        <DashboardPageHeader title="Loading your learning…" subtitle="Fetching enrollments and progress." />
+        <DashboardPageHeader
+          title="Loading your learning…"
+          subtitle="Fetching enrollments and progress."
+        />
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, index) => (
             <TileSkeleton key={index} />
@@ -277,7 +357,9 @@ export function LearnerDashboardView() {
   if (error) {
     return (
       <div className="editorial-panel rounded-[var(--radius-card)] p-8 text-center" role="alert">
-        <h2 className="section-title text-lg text-[color:var(--ink)]">Could not load your dashboard</h2>
+        <h2 className="section-title text-lg text-[color:var(--ink)]">
+          Could not load your dashboard
+        </h2>
         <p className="mt-2 text-sm font-medium text-[color:var(--ink-muted)]">{error}</p>
         <button
           type="button"
@@ -301,7 +383,8 @@ export function LearnerDashboardView() {
         <div className="editorial-panel rounded-[var(--radius-card)] p-10 text-center">
           <h2 className="section-title text-lg text-[color:var(--ink)]">No courses yet</h2>
           <p className="mx-auto mt-2 max-w-md text-sm font-medium text-[color:var(--ink-muted)]">
-            When you are enrolled in Brightspace trainings, they will appear here with progress and a link to continue.
+            When you are enrolled in Brightspace trainings, they will appear here with progress and
+            a link to continue.
           </p>
           <Link
             href="/"
@@ -321,12 +404,16 @@ export function LearnerDashboardView() {
   const secondaryCourses = inProgress.slice(1);
   const requiredCourses = [...courses]
     .filter((course) => course.dueDate)
-    .sort((a, b) => new Date(a.dueDate as string).getTime() - new Date(b.dueDate as string).getTime());
+    .sort(
+      (a, b) => new Date(a.dueDate as string).getTime() - new Date(b.dueDate as string).getTime(),
+    );
   const notStarted = courses.filter((course) => course.status === "not_started");
 
   const streakDays = summary.streakDays ?? 0;
   const hasCle = summary.cleEarned != null && summary.cleRequired != null;
-  const clePct = hasCle ? Math.round(((summary.cleEarned as number) / (summary.cleRequired as number)) * 100) : 0;
+  const clePct = hasCle
+    ? Math.round(((summary.cleEarned as number) / (summary.cleRequired as number)) * 100)
+    : 0;
   const heatmap = data.activityHeatmap ?? [];
   const sparkline = data.weeklySparkline ?? [];
 
@@ -353,11 +440,22 @@ export function LearnerDashboardView() {
       />
 
       {/* KPI tiles — consistency + training hours at a glance */}
-      <section aria-label="Learning snapshot" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
+      <section
+        aria-label="Learning snapshot"
+        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]"
+      >
         {hasCle ? (
           <article className="editorial-panel flex items-center gap-4 rounded-[var(--radius-card)] p-4">
-            <ProgressRing value={clePct} size={74} stroke={7} color="var(--brand-fill)" trackColor="var(--surface-sunken)">
-              <span className="hero-title block text-[1.25rem] leading-none text-[color:var(--ink)]">{clePct}%</span>
+            <ProgressRing
+              value={clePct}
+              size={74}
+              stroke={7}
+              color="var(--brand-fill)"
+              trackColor="var(--surface-sunken)"
+            >
+              <span className="hero-title block text-[1.25rem] leading-none text-[color:var(--ink)]">
+                {clePct}%
+              </span>
             </ProgressRing>
             <div className="min-w-0">
               <p className="stat-label text-[color:var(--ink-soft)]">Training hours</p>
@@ -417,7 +515,12 @@ export function LearnerDashboardView() {
               <div className="editorial-card overflow-hidden rounded-[var(--radius-card)] p-0">
                 {requiredCourses.map((course, index) => {
                   const days = daysUntil(course.dueDate as string);
-                  const urgency = days <= 20 ? "var(--status-changed)" : days <= 40 ? "var(--status-next)" : "var(--status-progress)";
+                  const urgency =
+                    days <= 20
+                      ? "var(--status-changed)"
+                      : days <= 40
+                        ? "var(--status-next)"
+                        : "var(--status-progress)";
                   return (
                     <div
                       key={course.offeringId}
@@ -425,16 +528,27 @@ export function LearnerDashboardView() {
                         index > 0 ? "border-t border-[color:var(--lace-hairline)]" : ""
                       }`}
                     >
-                      <span className="h-9 w-1.5 shrink-0 rounded-full" style={{ background: urgency }} />
+                      <span
+                        className="h-9 w-1.5 shrink-0 rounded-full"
+                        style={{ background: urgency }}
+                      />
                       <div className="min-w-[10rem] flex-1">
-                        <h3 className="section-title text-[1rem] text-[color:var(--ink)]">{course.title}</h3>
+                        <h3 className="section-title text-[1rem] text-[color:var(--ink)]">
+                          {course.title}
+                        </h3>
                         <div className="mt-1.5">
                           <AreaPill area={course.trainingArea} />
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-mono text-sm font-bold" style={{ color: days <= 20 ? "var(--status-changed)" : "var(--ink)" }}>
-                          {new Date(course.dueDate as string).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                        <p
+                          className="font-mono text-sm font-bold"
+                          style={{ color: days <= 20 ? "var(--status-changed)" : "var(--ink)" }}
+                        >
+                          {new Date(course.dueDate as string).toLocaleDateString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                          })}
                         </p>
                         <p className="metadata text-[color:var(--ink-soft)]">{days} days</p>
                       </div>
@@ -453,7 +567,11 @@ export function LearnerDashboardView() {
 
           {notStarted.length > 0 ? (
             <section aria-label="Not started" className="mt-9">
-              <SectionHeading eyebrow="Up next" title="Not started yet" action={{ label: "Browse library", href: "/" }} />
+              <SectionHeading
+                eyebrow="Up next"
+                title="Not started yet"
+                action={{ label: "Browse library", href: "/" }}
+              />
               <div className="grid gap-3 sm:grid-cols-2">
                 {notStarted.map((course) => {
                   const tone = toneForArea(course.trainingArea);
@@ -464,7 +582,9 @@ export function LearnerDashboardView() {
                       style={{ borderTop: `3px solid ${tone.stripe}` }}
                     >
                       <AreaPill area={course.trainingArea} />
-                      <h3 className="section-title text-[1rem] text-[color:var(--ink)]">{course.title}</h3>
+                      <h3 className="section-title text-[1rem] text-[color:var(--ink)]">
+                        {course.title}
+                      </h3>
                       <a
                         href={getLearningUrlForDashboardCourse(course)}
                         className="mt-1 inline-flex h-9 w-fit items-center gap-2 rounded-[10px] border border-[color:var(--lace-hairline)] bg-[color:var(--surface-raised)] px-3.5 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--border-strong)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
@@ -488,8 +608,12 @@ export function LearnerDashboardView() {
                 <div className="flex items-center gap-3">
                   <FlameIcon className="h-5 w-5 text-[color:var(--brand)]" />
                   <div>
-                    <p className="hero-title text-[1.3rem] leading-none text-[color:var(--ink)]">{streakDays} days</p>
-                    <p className="stat-label mt-1 text-[color:var(--ink-soft)]">{summary.weeklyHoursAvg ?? 0} hrs/week avg</p>
+                    <p className="hero-title text-[1.3rem] leading-none text-[color:var(--ink)]">
+                      {streakDays} days
+                    </p>
+                    <p className="stat-label mt-1 text-[color:var(--ink-soft)]">
+                      {summary.weeklyHoursAvg ?? 0} hrs/week avg
+                    </p>
                   </div>
                 </div>
                 {sparkline.length > 1 ? (
@@ -513,7 +637,9 @@ export function LearnerDashboardView() {
                   >
                     <BookmarkFilledIcon className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--brand-fill)]" />
                     <div className="min-w-0">
-                      <h3 className="section-title text-[0.95rem] leading-snug text-[color:var(--ink)]">{item.title}</h3>
+                      <h3 className="section-title text-[0.95rem] leading-snug text-[color:var(--ink)]">
+                        {item.title}
+                      </h3>
                       <p className="metadata mt-1 text-[color:var(--ink-soft)]">{item.type}</p>
                     </div>
                   </article>
@@ -524,7 +650,10 @@ export function LearnerDashboardView() {
                 <p className="text-sm font-medium text-[color:var(--ink-muted)]">
                   Bookmark a course or module from the library and it will wait for you here.
                 </p>
-                <Link href="/" className="mt-3 inline-block metadata text-[color:var(--brand)] transition hover:text-[color:var(--ink)]">
+                <Link
+                  href="/"
+                  className="mt-3 inline-block metadata text-[color:var(--brand)] transition hover:text-[color:var(--ink)]"
+                >
                   Browse the library →
                 </Link>
               </div>
@@ -552,8 +681,12 @@ export function LearnerDashboardView() {
                       <Icon className="h-3.5 w-3.5" />
                     </span>
                     <div className="min-w-0">
-                      <p className="metadata text-[color:var(--ink-soft)]">{formatRelativeDate(entry.at)}</p>
-                      <p className="section-title text-[0.95rem] leading-snug text-[color:var(--ink)]">{entry.label}</p>
+                      <p className="metadata text-[color:var(--ink-soft)]">
+                        {formatRelativeDate(entry.at)}
+                      </p>
+                      <p className="section-title text-[0.95rem] leading-snug text-[color:var(--ink)]">
+                        {entry.label}
+                      </p>
                     </div>
                   </div>
                 );
@@ -573,7 +706,9 @@ export function LearnerDashboardView() {
                 >
                   <span className="absolute -right-2 -top-2 h-16 w-16 rounded-full bg-[rgba(184,138,45,0.08)]" />
                   <CertificateIcon className="h-5 w-5 text-[color:var(--brand)]" />
-                  <h3 className="section-title mt-3 text-[1rem] text-[color:var(--ink)]">{certificate.title}</h3>
+                  <h3 className="section-title mt-3 text-[1rem] text-[color:var(--ink)]">
+                    {certificate.title}
+                  </h3>
                   <p className="metadata mt-1.5 text-[color:var(--ink-soft)]">
                     {certificate.earnedOn} · {certificate.credits}
                   </p>

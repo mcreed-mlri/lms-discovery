@@ -32,7 +32,9 @@ export function useSavedLearning() {
 
   function toggleSaved(item: LearningItem) {
     const key = getSavedItemKey(item);
-    persist(savedKeys.includes(key) ? savedKeys.filter((entry) => entry !== key) : [...savedKeys, key]);
+    persist(
+      savedKeys.includes(key) ? savedKeys.filter((entry) => entry !== key) : [...savedKeys, key],
+    );
   }
 
   function isSaved(item: LearningItem) {

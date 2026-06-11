@@ -100,9 +100,12 @@ function tokenVariants(token: string) {
   const normalizedToken = normalize(token);
   const variants = new Set([normalizedToken, ...(tokenSynonyms[normalizedToken] ?? [])]);
 
-  if (normalizedToken.endsWith("ies") && normalizedToken.length > 4) variants.add(`${normalizedToken.slice(0, -3)}y`);
-  if (normalizedToken.endsWith("es") && normalizedToken.length > 3) variants.add(normalizedToken.slice(0, -2));
-  if (normalizedToken.endsWith("s") && normalizedToken.length > 3) variants.add(normalizedToken.slice(0, -1));
+  if (normalizedToken.endsWith("ies") && normalizedToken.length > 4)
+    variants.add(`${normalizedToken.slice(0, -3)}y`);
+  if (normalizedToken.endsWith("es") && normalizedToken.length > 3)
+    variants.add(normalizedToken.slice(0, -2));
+  if (normalizedToken.endsWith("s") && normalizedToken.length > 3)
+    variants.add(normalizedToken.slice(0, -1));
 
   return [...variants].filter(Boolean);
 }
@@ -152,7 +155,13 @@ function fieldIncludesPhrase(field: string, phrase: string) {
   return normalizedPhrase.length > 0 && field.includes(normalizedPhrase);
 }
 
-function scoreField(fieldName: string, field: string, query: string, tokens: string[], weight: number) {
+function scoreField(
+  fieldName: string,
+  field: string,
+  query: string,
+  tokens: string[],
+  weight: number,
+) {
   let score = 0;
   const matchedFields = new Set<string>();
 
@@ -180,7 +189,9 @@ function getItemContext(item: LearningItem) {
 function getItemPracticeArea(item: LearningItem) {
   if (item.type === "PATH") {
     const relatedCourses = courses.filter((course) => item.courseIds.includes(course.id));
-    const nonUniversalArea = relatedCourses.find((course) => course.practiceArea !== "All Practice Areas")?.practiceArea;
+    const nonUniversalArea = relatedCourses.find(
+      (course) => course.practiceArea !== "All Practice Areas",
+    )?.practiceArea;
     return nonUniversalArea ?? "All Practice Areas";
   }
 
@@ -199,7 +210,10 @@ function parseDurationMinutes(value: string) {
 function getDurationFacet(item: LearningItem): DurationFacet {
   if (item.type === "MODULE") return "Short";
 
-  const minutes = item.type === "PATH" ? parseDurationMinutes(item.totalDuration) : parseDurationMinutes(item.duration);
+  const minutes =
+    item.type === "PATH"
+      ? parseDurationMinutes(item.totalDuration)
+      : parseDurationMinutes(item.duration);
   if (minutes <= 45) return "Short";
   if (minutes <= 150) return "Medium";
   return "Long";
@@ -233,8 +247,14 @@ function expandQuery(rawQuery: string) {
 
 export function buildSearchDocument(item: LearningItem): SearchDocument {
   const metadata = getSearchMetadata(item);
-  const relatedCourses = item.type === "PATH" ? courses.filter((course: Course) => item.courseIds.includes(course.id)) : [];
-  const relatedModules = item.type === "PATH" ? modules.filter((module: Module) => item.courseIds.includes(module.courseId)) : [];
+  const relatedCourses =
+    item.type === "PATH"
+      ? courses.filter((course: Course) => item.courseIds.includes(course.id))
+      : [];
+  const relatedModules =
+    item.type === "PATH"
+      ? modules.filter((module: Module) => item.courseIds.includes(module.courseId))
+      : [];
   const practiceArea = getItemPracticeArea(item);
 
   const relationshipParts =
@@ -245,7 +265,12 @@ export function buildSearchDocument(item: LearningItem): SearchDocument {
             relatedCourses.map((course) => `${course.title} ${course.practiceArea}`).join(" "),
             relatedModules.map((module) => `${module.title} ${module.tags.join(" ")}`).join(" "),
           ]
-        : [modules.filter((module) => module.courseId === item.id).map((module) => `${module.title} ${module.tags.join(" ")}`).join(" ")];
+        : [
+            modules
+              .filter((module) => module.courseId === item.id)
+              .map((module) => `${module.title} ${module.tags.join(" ")}`)
+              .join(" "),
+          ];
 
   const tags = item.type === "MODULE" ? item.tags : [];
 
@@ -258,7 +283,9 @@ export function buildSearchDocument(item: LearningItem): SearchDocument {
     taxonomyText: normalize([item.type, item.level, practiceArea].join(" ")),
     relationshipText: normalize(relationshipParts.join(" ")),
     summaryText: normalize(item.description),
-    metadataText: normalize([metadata.audience.join(" "), metadata.status, metadata.reviewedAt].join(" ")),
+    metadataText: normalize(
+      [metadata.audience.join(" "), metadata.status, metadata.reviewedAt].join(" "),
+    ),
     context: getItemContext(item),
     href: getLearningItemUrl(item),
     facets: {
@@ -276,17 +303,27 @@ export function buildSearchDocument(item: LearningItem): SearchDocument {
 function matchesFacets(document: SearchDocument, filters?: SearchFacetFilters) {
   if (!filters) return true;
   if (filters.types?.length && !filters.types.includes(document.facets.type)) return false;
-  if (filters.practiceAreas?.length && !filters.practiceAreas.includes(document.facets.practiceArea)) return false;
+  if (
+    filters.practiceAreas?.length &&
+    !filters.practiceAreas.includes(document.facets.practiceArea)
+  )
+    return false;
   if (filters.levels?.length && !filters.levels.includes(document.facets.level)) return false;
   if (filters.statuses?.length && !filters.statuses.includes(document.facets.status)) return false;
-  if (filters.durations?.length && !filters.durations.includes(document.facets.duration)) return false;
-  if (filters.audiences?.length && !document.facets.audience.some((audience) => filters.audiences?.includes(audience))) return false;
+  if (filters.durations?.length && !filters.durations.includes(document.facets.duration))
+    return false;
+  if (
+    filters.audiences?.length &&
+    !document.facets.audience.some((audience) => filters.audiences?.includes(audience))
+  )
+    return false;
   return true;
 }
 
 function scoreDocument(document: SearchDocument, rawQuery: string) {
   const { query, tokens, expandedTokens, phraseBoosts } = expandQuery(rawQuery);
-  if (!query || tokens.length === 0) return { score: document.metadata.editorialBoost ?? 0, matchedFields: [] };
+  if (!query || tokens.length === 0)
+    return { score: document.metadata.editorialBoost ?? 0, matchedFields: [] };
 
   const searchableFields = [
     document.titleText,
@@ -296,7 +333,9 @@ function scoreDocument(document: SearchDocument, rawQuery: string) {
     document.summaryText,
     document.metadataText,
   ];
-  const everyTokenMatches = tokens.every((token) => searchableFields.some((field) => fieldIncludesToken(field, token)));
+  const everyTokenMatches = tokens.every((token) =>
+    searchableFields.some((field) => fieldIncludesToken(field, token)),
+  );
 
   if (!everyTokenMatches) return { score: 0, matchedFields: [] };
 
@@ -307,7 +346,11 @@ function scoreDocument(document: SearchDocument, rawQuery: string) {
   if (document.titleText.startsWith(query)) score += 900;
 
   for (const phrase of phraseBoosts) {
-    if ([document.titleText, document.tagsText, document.relationshipText, document.summaryText].some((field) => fieldIncludesPhrase(field, phrase))) {
+    if (
+      [document.titleText, document.tagsText, document.relationshipText, document.summaryText].some(
+        (field) => fieldIncludesPhrase(field, phrase),
+      )
+    ) {
       score += 180;
       matchedFields.add("synonyms");
     }
@@ -350,7 +393,13 @@ export function getSearchFacetOptions(items: LearningItem[]): SearchFacetOptions
 }
 
 export function getNoResultSuggestions(query: string) {
-  const fallbackTopics = ["client intake", "ethics", "domestic violence", "court appearance", "Brightspace wrappers"];
+  const fallbackTopics = [
+    "client intake",
+    "ethics",
+    "domestic violence",
+    "court appearance",
+    "Brightspace wrappers",
+  ];
   const queryTokens = tokenize(query);
   if (queryTokens.length === 0) return fallbackTopics;
 
@@ -358,7 +407,11 @@ export function getNoResultSuggestions(query: string) {
   queryTokens.forEach((token) => {
     tokenVariants(token).forEach((variant) => {
       Object.entries(phraseSynonyms).forEach(([phrase, synonyms]) => {
-        if (phrase.includes(variant) || synonyms.some((synonym) => normalize(synonym).includes(variant))) related.add(phrase);
+        if (
+          phrase.includes(variant) ||
+          synonyms.some((synonym) => normalize(synonym).includes(variant))
+        )
+          related.add(phrase);
       });
     });
   });
@@ -366,7 +419,11 @@ export function getNoResultSuggestions(query: string) {
   return [...related, ...fallbackTopics].slice(0, 5);
 }
 
-export function searchLearningItems(items: LearningItem[], query: string, filters?: SearchFacetFilters): SearchResult[] {
+export function searchLearningItems(
+  items: LearningItem[],
+  query: string,
+  filters?: SearchFacetFilters,
+): SearchResult[] {
   const normalizedQuery = normalize(query);
   const documents = buildSearchIndex(items).filter((document) => matchesFacets(document, filters));
 

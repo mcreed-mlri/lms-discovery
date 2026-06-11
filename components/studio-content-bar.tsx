@@ -7,7 +7,13 @@ import { ThemeToggle } from "@/components/theme-toggle";
 /* Slim sticky header inside the content column. On desktop it carries the
    "what is this product" eyebrow + a notifications bell; on mobile it also
    holds the hamburger that opens the rail drawer, search, and the LACE wordmark. */
-export function StudioContentBar({ onMenu, onSearch }: { onMenu?: () => void; onSearch?: () => void }) {
+export function StudioContentBar({
+  onMenu,
+  onSearch,
+}: {
+  onMenu?: () => void;
+  onSearch?: () => void;
+}) {
   return (
     <div className="sticky top-0 z-20 flex min-w-0 max-w-full items-center gap-3 border-b border-[color:var(--line)] bg-[color:var(--chrome-bg)] px-4 pb-2.5 pt-[calc(0.625rem+env(safe-area-inset-top,0px))] backdrop-blur-[10px] sm:px-6 sm:pb-3 sm:pt-[calc(0.75rem+env(safe-area-inset-top,0px))] lg:px-10 lg:py-4">
       {/* Mobile: menu + wordmark */}

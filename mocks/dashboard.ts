@@ -124,14 +124,24 @@ export const learnerDashboardMock: LearnerDashboardPayload = {
   // 84 cells = 12 weeks x 7 days, intensity 0-4. Demo data; production reads
   // this from Brightspace engagement snapshots.
   activityHeatmap: [
-    0, 2, 1, 0, 3, 1, 2, 0, 1, 2, 3, 0, 1, 4, 2, 3, 1, 0, 2, 3, 1, 2, 0, 3, 1, 2, 3, 1,
-    4, 2, 1, 2, 3, 1, 2, 0, 1, 3, 2, 1, 2, 3, 4, 2, 3, 1, 0, 2, 1, 3, 2, 4, 1, 2, 3, 2,
-    1, 3, 2, 4, 1, 2, 3, 4, 2, 3, 2, 1, 2, 3, 2, 4, 1, 3, 2, 4, 3, 2, 1, 3, 2, 3, 4, 2,
+    0, 2, 1, 0, 3, 1, 2, 0, 1, 2, 3, 0, 1, 4, 2, 3, 1, 0, 2, 3, 1, 2, 0, 3, 1, 2, 3, 1, 4, 2, 1, 2,
+    3, 1, 2, 0, 1, 3, 2, 1, 2, 3, 4, 2, 3, 1, 0, 2, 1, 3, 2, 4, 1, 2, 3, 2, 1, 3, 2, 4, 1, 2, 3, 4,
+    2, 3, 2, 1, 2, 3, 2, 4, 1, 3, 2, 4, 3, 2, 1, 3, 2, 3, 4, 2,
   ],
   weeklySparkline: [2, 4, 3, 6, 4, 7, 5, 8],
   certificates: [
-    { id: "cert-upl", title: "UPL Boundaries for Advocates", earnedOn: "May 20, 2026", credits: "2.0 hrs" },
-    { id: "cert-dv", title: "Domestic Violence Safety Planning", earnedOn: "May 9, 2026", credits: "3.0 hrs" },
+    {
+      id: "cert-upl",
+      title: "UPL Boundaries for Advocates",
+      earnedOn: "May 20, 2026",
+      credits: "2.0 hrs",
+    },
+    {
+      id: "cert-dv",
+      title: "Domestic Violence Safety Planning",
+      earnedOn: "May 9, 2026",
+      credits: "3.0 hrs",
+    },
   ],
 };
 
@@ -139,22 +149,81 @@ export const managerDashboardMock: ManagerDashboardPayload = {
   user: withRole("manager"),
   summary: { teamSize: 7, onTrackCount: 4, gapCount: 3 },
   members: [
-    { id: "m1", name: "Jordan Ellis", course: "Housing Law Fundamentals", completionPct: 62, lastActiveAt: daysAgo(1), hasGap: false },
-    { id: "m2", name: "Alex Rivera", course: "UPL Boundaries for Advocates", completionPct: 100, lastActiveAt: daysAgo(6), hasGap: false },
-    { id: "m3", name: "Morgan Lee", course: "Client Intake & Screening", completionPct: 12, lastActiveAt: daysAgo(18), hasGap: true },
-    { id: "m4", name: "Taylor Brooks", course: "Eviction Defense Workshop", completionPct: 0, lastActiveAt: daysAgo(40), hasGap: true },
-    { id: "m5", name: "Casey Nguyen", course: "Public Benefits Overview", completionPct: 45, lastActiveAt: daysAgo(4), hasGap: false },
-    { id: "m6", name: "Riley Patel", course: "Housing Law Fundamentals", completionPct: 8, lastActiveAt: daysAgo(22), hasGap: true },
-    { id: "m7", name: "Jamie Ortiz", course: "Domestic Violence Safety Planning", completionPct: 78, lastActiveAt: daysAgo(2), hasGap: false },
+    {
+      id: "m1",
+      name: "Jordan Ellis",
+      course: "Housing Law Fundamentals",
+      completionPct: 62,
+      lastActiveAt: daysAgo(1),
+      hasGap: false,
+    },
+    {
+      id: "m2",
+      name: "Alex Rivera",
+      course: "UPL Boundaries for Advocates",
+      completionPct: 100,
+      lastActiveAt: daysAgo(6),
+      hasGap: false,
+    },
+    {
+      id: "m3",
+      name: "Morgan Lee",
+      course: "Client Intake & Screening",
+      completionPct: 12,
+      lastActiveAt: daysAgo(18),
+      hasGap: true,
+    },
+    {
+      id: "m4",
+      name: "Taylor Brooks",
+      course: "Eviction Defense Workshop",
+      completionPct: 0,
+      lastActiveAt: daysAgo(40),
+      hasGap: true,
+    },
+    {
+      id: "m5",
+      name: "Casey Nguyen",
+      course: "Public Benefits Overview",
+      completionPct: 45,
+      lastActiveAt: daysAgo(4),
+      hasGap: false,
+    },
+    {
+      id: "m6",
+      name: "Riley Patel",
+      course: "Housing Law Fundamentals",
+      completionPct: 8,
+      lastActiveAt: daysAgo(22),
+      hasGap: true,
+    },
+    {
+      id: "m7",
+      name: "Jamie Ortiz",
+      course: "Domestic Violence Safety Planning",
+      completionPct: 78,
+      lastActiveAt: daysAgo(2),
+      hasGap: false,
+    },
   ],
 };
 
 export const programDashboardMock: ProgramDashboardPayload = {
   user: withRole("program"),
   stats: [
-    { id: "completion", label: "Org completion rate", value: "68%", detail: "Across all required trainings" },
+    {
+      id: "completion",
+      label: "Org completion rate",
+      value: "68%",
+      detail: "Across all required trainings",
+    },
     { id: "below-50", label: "Courses below 50%", value: "4", detail: "Need program follow-up" },
-    { id: "no-results", label: "Searches with no results", value: "127", detail: "Last 30 days — content gaps" },
+    {
+      id: "no-results",
+      label: "Searches with no results",
+      value: "127",
+      detail: "Last 30 days — content gaps",
+    },
   ],
   byArea: [
     { trainingArea: "Housing", enrolled: 84, completionRate: 71 },
@@ -167,9 +236,24 @@ export const programDashboardMock: ProgramDashboardPayload = {
 export const adminDashboardMock: AdminDashboardPayload = {
   user: withRole("super_admin"),
   services: [
-    { id: "bs-api", name: "Brightspace API", status: "healthy", message: "OAuth token valid · enrollments syncing" },
-    { id: "supabase", name: "Supabase sync", status: "degraded", message: "Engagement snapshots 12m behind schedule" },
-    { id: "search-index", name: "Search index", status: "healthy", message: "Last rebuild 2h ago · 1,842 items" },
+    {
+      id: "bs-api",
+      name: "Brightspace API",
+      status: "healthy",
+      message: "OAuth token valid · enrollments syncing",
+    },
+    {
+      id: "supabase",
+      name: "Supabase sync",
+      status: "degraded",
+      message: "Engagement snapshots 12m behind schedule",
+    },
+    {
+      id: "search-index",
+      name: "Search index",
+      status: "healthy",
+      message: "Last rebuild 2h ago · 1,842 items",
+    },
   ],
   lastSyncAt: daysAgo(0),
   note: "Server-side API only in production",

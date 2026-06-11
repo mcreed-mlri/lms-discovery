@@ -36,7 +36,10 @@ export function StudioShell({
   const [globalQuery, setGlobalQuery] = useState("");
 
   const allItems = useMemo(() => getEligibleLearningItems(getLearningItems(), user), [user]);
-  const globalResults = useMemo(() => searchLearningItems(allItems, globalQuery).slice(0, 6), [allItems, globalQuery]);
+  const globalResults = useMemo(
+    () => searchLearningItems(allItems, globalQuery).slice(0, 6),
+    [allItems, globalQuery],
+  );
 
   const openGlobalSearch = useCallback(() => {
     setMobileOpen(false);
@@ -66,7 +69,9 @@ export function StudioShell({
       );
       setSearchOpen(false);
       setGlobalQuery("");
-      router.push(`/?q=${encodeURIComponent(result.item.title)}&open=${encodeURIComponent(`${result.item.type}-${result.item.id}`)}#browse`);
+      router.push(
+        `/?q=${encodeURIComponent(result.item.title)}&open=${encodeURIComponent(`${result.item.type}-${result.item.id}`)}#browse`,
+      );
     },
     [globalQuery, router],
   );
@@ -175,8 +180,17 @@ export function StudioShell({
       {/* Mobile bottom nav */}
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--line)] bg-[color:var(--surface)] px-5 pb-[calc(0.5rem+env(safe-area-inset-bottom))] pt-2 lg:hidden">
         <div className={`mx-auto grid max-w-md ${isAdmin ? "grid-cols-3" : "grid-cols-4"}`}>
-          <BottomNavLink href="/" label="Home" active={pathname === "/"} icon={<HomeIcon className="h-5 w-5" />} />
-          <BottomNavButton label="Search" icon={<SearchIcon className="h-5 w-5" />} onClick={openGlobalSearch} />
+          <BottomNavLink
+            href="/"
+            label="Home"
+            active={pathname === "/"}
+            icon={<HomeIcon className="h-5 w-5" />}
+          />
+          <BottomNavButton
+            label="Search"
+            icon={<SearchIcon className="h-5 w-5" />}
+            onClick={openGlobalSearch}
+          />
           {isAdmin ? (
             <BottomNavLink
               href="/my-learning/admin"
@@ -231,7 +245,9 @@ function GlobalSearchDialog({
 }) {
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      document.querySelector<HTMLInputElement>('[data-global-search="true"] input[type="search"]')?.focus();
+      document
+        .querySelector<HTMLInputElement>('[data-global-search="true"] input[type="search"]')
+        ?.focus();
     }, 0);
     return () => window.clearTimeout(timer);
   }, []);
@@ -243,12 +259,23 @@ function GlobalSearchDialog({
       aria-modal="true"
       aria-label="Search learning library"
     >
-      <button type="button" className="absolute inset-0" aria-label="Close search" onClick={onClose} />
+      <button
+        type="button"
+        className="absolute inset-0"
+        aria-label="Close search"
+        onClick={onClose}
+      />
       <div
         className="relative w-full max-w-2xl rounded-[16px] border border-[color:var(--line)] bg-[color:var(--surface)] p-3 shadow-[var(--shadow-lg)]"
         data-global-search="true"
       >
-        <SearchBox value={query} onChange={onChange} suggestions={results} onSelect={onSelect} prominent />
+        <SearchBox
+          value={query}
+          onChange={onChange}
+          suggestions={results}
+          onSelect={onSelect}
+          prominent
+        />
         <div className="mt-3 flex items-center justify-between px-1 text-xs font-semibold text-[color:var(--ink-soft)]">
           <span>Search courses, modules, paths, and topics</span>
           <button

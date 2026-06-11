@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import {
-  getBrightspaceAuthMode,
-  getBrightspaceConfigHealth,
-} from "@/lib/brightspace/config";
+import { getBrightspaceAuthMode, getBrightspaceConfigHealth } from "@/lib/brightspace/config";
 import { ACCESS_TOKEN_COOKIE } from "@/lib/brightspace/oauth";
 
 export async function GET(request: NextRequest) {

@@ -14,8 +14,7 @@ export function formatRelativeDate(iso: string): string {
 
 export function greetingForHour(name: string): string {
   const hour = new Date().getHours();
-  const time =
-    hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  const time = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
   return `${time}, ${name}`;
 }
 

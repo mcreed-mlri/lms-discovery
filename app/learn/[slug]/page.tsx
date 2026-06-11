@@ -35,9 +35,17 @@ function getDuration(item: LearningItem) {
 }
 
 function getRelatedItems(item: LearningItem) {
-  if (item.type === "PATH") return courses.filter((course) => item.courseIds.includes(course.id)).map((course) => ({ ...course, type: "COURSE" as const }));
-  if (item.type === "COURSE") return modules.filter((module) => module.courseId === item.id).map((module) => ({ ...module, type: "MODULE" as const }));
-  return modules.filter((module) => module.courseId === item.courseId && module.id !== item.id).map((module) => ({ ...module, type: "MODULE" as const }));
+  if (item.type === "PATH")
+    return courses
+      .filter((course) => item.courseIds.includes(course.id))
+      .map((course) => ({ ...course, type: "COURSE" as const }));
+  if (item.type === "COURSE")
+    return modules
+      .filter((module) => module.courseId === item.id)
+      .map((module) => ({ ...module, type: "MODULE" as const }));
+  return modules
+    .filter((module) => module.courseId === item.courseId && module.id !== item.id)
+    .map((module) => ({ ...module, type: "MODULE" as const }));
 }
 
 function getLessonSections(item: LearningItem) {
@@ -105,17 +113,25 @@ export default async function LearnPage({ params }: LearnPageProps) {
 
   const relatedItems = getRelatedItems(item);
   const sourceUrl = getBrightspaceSourceUrl(item);
-  const theme = item.type === "PATH" ? getCourseTheme(relatedItems[0]?.id ?? "") : getCourseTheme(item.type === "MODULE" ? item.courseId : item.id);
+  const theme =
+    item.type === "PATH"
+      ? getCourseTheme(relatedItems[0]?.id ?? "")
+      : getCourseTheme(item.type === "MODULE" ? item.courseId : item.id);
   const sections = getLessonSections(item);
 
   return (
     <main className="hub-shell min-h-screen px-4 py-[calc(1.25rem+env(safe-area-inset-top,0px))] sm:px-6 sm:py-8 lg:px-10">
       <div className="mx-auto max-w-5xl">
-        <Link href="/" className="metadata inline-flex items-center gap-1.5 text-[color:var(--ink-soft)] transition hover:text-[color:var(--ink)]">
+        <Link
+          href="/"
+          className="metadata inline-flex items-center gap-1.5 text-[color:var(--ink-soft)] transition hover:text-[color:var(--ink)]"
+        >
           <span aria-hidden="true">←</span> Back to library
         </Link>
 
-        <section className={`mt-4 overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] shadow-[var(--shadow-xs)] ${theme.rail}`}>
+        <section
+          className={`mt-4 overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] shadow-[var(--shadow-xs)] ${theme.rail}`}
+        >
           <div className="h-1.5" />
           <div className="grid gap-7 p-5 sm:p-7 lg:grid-cols-[minmax(0,1fr)_16rem] lg:p-9">
             <div>
@@ -123,7 +139,9 @@ export default async function LearnPage({ params }: LearnPageProps) {
               <h1 className="hero-title mt-4 max-w-3xl text-3xl leading-tight text-[color:var(--ink)] sm:text-5xl">
                 {item.title}
               </h1>
-              <p className="readable-copy mt-4 max-w-3xl text-base leading-7 sm:text-lg">{item.description}</p>
+              <p className="readable-copy mt-4 max-w-3xl text-base leading-7 sm:text-lg">
+                {item.description}
+              </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 {relatedItems[0] ? (
                   <Link
@@ -169,12 +187,21 @@ export default async function LearnPage({ params }: LearnPageProps) {
             <p className="section-kicker primary">Learning Hub lesson</p>
             <div className="mt-5 grid gap-5">
               {sections.map((section, index) => (
-                <article key={section.title} className="border-t border-[color:var(--line)] pt-5 first:border-t-0 first:pt-0">
+                <article
+                  key={section.title}
+                  className="border-t border-[color:var(--line)] pt-5 first:border-t-0 first:pt-0"
+                >
                   <div className="flex items-center gap-3">
                     <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[color:var(--brand-tint)] text-[color:var(--brand)]">
-                      {index === sections.length - 1 ? <CheckIcon className="h-4 w-4" /> : <BookIcon className="h-4 w-4" />}
+                      {index === sections.length - 1 ? (
+                        <CheckIcon className="h-4 w-4" />
+                      ) : (
+                        <BookIcon className="h-4 w-4" />
+                      )}
                     </span>
-                    <h2 className="section-title text-xl text-[color:var(--ink)]">{section.title}</h2>
+                    <h2 className="section-title text-xl text-[color:var(--ink)]">
+                      {section.title}
+                    </h2>
                   </div>
                   <p className="readable-copy mt-3 leading-7">{section.body}</p>
                 </article>
@@ -183,11 +210,19 @@ export default async function LearnPage({ params }: LearnPageProps) {
           </section>
 
           <aside className="editorial-card p-5">
-            <p className="section-kicker secondary">{item.type === "PATH" ? "Courses" : item.type === "COURSE" ? "Modules" : "More in this course"}</p>
+            <p className="section-kicker secondary">
+              {item.type === "PATH"
+                ? "Courses"
+                : item.type === "COURSE"
+                  ? "Modules"
+                  : "More in this course"}
+            </p>
             <div className="mt-4 grid gap-2">
               {relatedItems.length > 0 ? (
                 relatedItems.map((related) => {
-                  const relatedTheme = getCourseTheme(related.type === "MODULE" ? related.courseId : related.id);
+                  const relatedTheme = getCourseTheme(
+                    related.type === "MODULE" ? related.courseId : related.id,
+                  );
                   return (
                     <Link
                       key={related.id}
@@ -195,14 +230,20 @@ export default async function LearnPage({ params }: LearnPageProps) {
                       className={`group relative block rounded-[10px] border border-[color:var(--line)] bg-[color:var(--surface)] p-3 transition hover:border-[color:var(--line-strong)] hover:bg-[color:var(--hover-tint)] ${relatedTheme.rail}`}
                     >
                       <span className="metadata text-[color:var(--ink-soft)]">
-                        {related.type === "COURSE" ? getCourseLabel(related) : `${getModuleMinutes(related.id)} min`}
+                        {related.type === "COURSE"
+                          ? getCourseLabel(related)
+                          : `${getModuleMinutes(related.id)} min`}
                       </span>
-                      <span className="card-title mt-1 block text-sm leading-snug">{related.title}</span>
+                      <span className="card-title mt-1 block text-sm leading-snug">
+                        {related.title}
+                      </span>
                     </Link>
                   );
                 })
               ) : (
-                <p className="text-sm font-medium text-[color:var(--ink-muted)]">No related items yet.</p>
+                <p className="text-sm font-medium text-[color:var(--ink-muted)]">
+                  No related items yet.
+                </p>
               )}
             </div>
           </aside>

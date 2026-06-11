@@ -217,14 +217,7 @@ export function getCourseLabel(course: Course) {
 }
 
 // ── Status colours ─────────────────────────────────────────────────────────
-export type StatusKey =
-  | "progress"
-  | "next"
-  | "done"
-  | "new"
-  | "updated"
-  | "changed"
-  | "later";
+export type StatusKey = "progress" | "next" | "done" | "new" | "updated" | "changed" | "later";
 
 export type StatusTheme = {
   key: StatusKey;

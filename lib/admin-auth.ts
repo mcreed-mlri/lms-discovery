@@ -18,7 +18,10 @@ export function requireAdminSecret(request: NextRequest): NextResponse | null {
   if (!expected) {
     // Fail closed: without a configured secret, admin routes stay locked.
     return NextResponse.json(
-      { ok: false, error: "Admin routes are disabled because ADMIN_SYNC_SECRET is not configured." },
+      {
+        ok: false,
+        error: "Admin routes are disabled because ADMIN_SYNC_SECRET is not configured.",
+      },
       { status: 503 },
     );
   }

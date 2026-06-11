@@ -25,14 +25,20 @@ export default function LoginPage() {
         <div className="relative w-full max-w-md">
           <div className="mb-9 text-center leading-none text-[color:var(--ink)]" aria-hidden="true">
             <span className="block text-[2rem] font-normal tracking-[-0.055em]">LACE</span>
-            <span className="editorial-eyebrow mt-1 block text-[color:var(--ink-soft)]">Learning Hub</span>
+            <span className="editorial-eyebrow mt-1 block text-[color:var(--ink-soft)]">
+              Learning Hub
+            </span>
           </div>
 
           <div className="editorial-panel rounded-[var(--radius-card)] bg-[color:var(--bg-surface)] px-8 pb-8 pt-7">
             <div className="mb-6 text-center">
               <p className="section-kicker primary">Demo environment</p>
-              <h1 className="mt-2 text-2xl font-bold tracking-[-0.01em] text-[color:var(--ink)]">Sign in</h1>
-              <p className="mt-2 text-sm font-medium text-[color:var(--ink-muted)]">Choose a demo user to preview access-controlled discovery.</p>
+              <h1 className="mt-2 text-2xl font-bold tracking-[-0.01em] text-[color:var(--ink)]">
+                Sign in
+              </h1>
+              <p className="mt-2 text-sm font-medium text-[color:var(--ink-muted)]">
+                Choose a demo user to preview access-controlled discovery.
+              </p>
             </div>
 
             <div className="grid gap-3">
@@ -52,7 +58,9 @@ export default function LoginPage() {
                       <p className="text-sm font-medium text-[color:var(--ink-muted)]">
                         {candidate.title} · {candidate.unit}
                       </p>
-                      <p className="truncate text-sm text-[color:var(--ink-soft)]">{candidate.organization}</p>
+                      <p className="truncate text-sm text-[color:var(--ink-soft)]">
+                        {candidate.organization}
+                      </p>
                     </div>
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] text-[color:var(--ink-soft)] transition group-hover:border-[color:var(--ink)] group-hover:text-[color:var(--ink)]">
                       <ArrowIcon className="h-4 w-4" />

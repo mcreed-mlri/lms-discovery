@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import {
-  brightspaceApiFetch,
-  getBrightspaceLeVersion,
-} from "@/lib/brightspace/api";
+import { brightspaceApiFetch, getBrightspaceLeVersion } from "@/lib/brightspace/api";
 import {
   summarizeBrightspaceToc,
   type BrightspaceTableOfContents,
@@ -27,7 +24,8 @@ export async function GET(request: NextRequest) {
       {
         ok: false,
         error: error instanceof Error ? error.message : "Brightspace content request failed.",
-        nextStep: "Complete the Brightspace OAuth flow from /api/auth/brightspace/start, then retry this content route in the same browser session.",
+        nextStep:
+          "Complete the Brightspace OAuth flow from /api/auth/brightspace/start, then retry this content route in the same browser session.",
       },
       { status: 500 },
     );
@@ -45,7 +43,8 @@ export async function GET(request: NextRequest) {
         status: response.status,
         statusText: response.statusText,
         error: payload,
-        nextStep: "Confirm the LE API version, content:toc:read scope, and that the authorized user can view course content.",
+        nextStep:
+          "Confirm the LE API version, content:toc:read scope, and that the authorized user can view course content.",
       },
       { status: response.status },
     );

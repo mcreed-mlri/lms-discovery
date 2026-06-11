@@ -14,7 +14,14 @@ type SearchBoxProps = {
   prominent?: boolean;
 };
 
-export function SearchBox({ value, onChange, suggestions = [], onSelect, compact = false, prominent = false }: SearchBoxProps) {
+export function SearchBox({
+  value,
+  onChange,
+  suggestions = [],
+  onSelect,
+  compact = false,
+  prominent = false,
+}: SearchBoxProps) {
   const inputId = useId();
   const listboxId = useId();
   const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +43,9 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
     if (event.key === "ArrowDown") {
       event.preventDefault();
       setIsOpen(true);
-      setActiveIndex((current) => (suggestions.length === 0 ? 0 : Math.min(current + 1, suggestions.length - 1)));
+      setActiveIndex((current) =>
+        suggestions.length === 0 ? 0 : Math.min(current + 1, suggestions.length - 1),
+      );
       return;
     }
 
@@ -61,13 +70,19 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
   }
 
   return (
-    <div className={`group relative min-w-0 ${compact || prominent ? "w-full" : "w-full max-w-2xl"}`}>
+    <div
+      className={`group relative min-w-0 ${compact || prominent ? "w-full" : "w-full max-w-2xl"}`}
+    >
       <label className="sr-only" htmlFor={inputId}>
         Search courses, modules, paths, or topics
       </label>
-      <SearchIcon className={`pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[color:var(--ink-soft)] transition group-focus-within:text-[color:var(--brand)] ${prominent ? "left-3.5 h-[18px] w-[18px] sm:left-[18px] sm:h-[22px] sm:w-[22px]" : "left-3.5 h-4 w-4"}`} />
+      <SearchIcon
+        className={`pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[color:var(--ink-soft)] transition group-focus-within:text-[color:var(--brand)] ${prominent ? "left-3.5 h-[18px] w-[18px] sm:left-[18px] sm:h-[22px] sm:w-[22px]" : "left-3.5 h-4 w-4"}`}
+      />
       <input
-        aria-activedescendant={showSuggestions && suggestions[activeIndex] ? `${listboxId}-${activeIndex}` : undefined}
+        aria-activedescendant={
+          showSuggestions && suggestions[activeIndex] ? `${listboxId}-${activeIndex}` : undefined
+        }
         aria-autocomplete="list"
         aria-controls={listboxId}
         aria-expanded={showSuggestions}
@@ -108,7 +123,9 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
               <button
                 aria-selected={activeIndex === index}
                 className={`grid w-full grid-cols-[1fr_auto] gap-3 px-3 py-2.5 text-left transition ${
-                  activeIndex === index ? "bg-[color:var(--surface-sunken)]" : "bg-[color:var(--surface-raised)] hover:bg-[color:var(--surface)]"
+                  activeIndex === index
+                    ? "bg-[color:var(--surface-sunken)]"
+                    : "bg-[color:var(--surface-raised)] hover:bg-[color:var(--surface)]"
                 }`}
                 id={`${listboxId}-${index}`}
                 key={`${result.item.type}-${result.item.id}`}
@@ -122,9 +139,13 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
                 <span className="min-w-0">
                   <span className="mb-2 flex flex-wrap items-center gap-2">
                     <TypeBadge type={result.item.type} />
-                    <span className="metadata truncate text-[color:var(--ink-soft)]">{result.context}</span>
+                    <span className="metadata truncate text-[color:var(--ink-soft)]">
+                      {result.context}
+                    </span>
                   </span>
-                  <span className="block truncate text-sm font-bold text-[color:var(--ink)]">{result.item.title}</span>
+                  <span className="block truncate text-sm font-bold text-[color:var(--ink)]">
+                    {result.item.title}
+                  </span>
                 </span>
                 <span className="metadata self-center rounded-full border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-2.5 py-1 text-[color:var(--ink-soft)]">
                   Open
@@ -132,7 +153,11 @@ export function SearchBox({ value, onChange, suggestions = [], onSelect, compact
               </button>
             ))
           ) : (
-            <div className="px-4 py-4 text-sm font-bold text-[color:var(--ink-muted)]" role="option" aria-selected="false">
+            <div
+              className="px-4 py-4 text-sm font-bold text-[color:var(--ink-muted)]"
+              role="option"
+              aria-selected="false"
+            >
               No matches. Try evictions, intake, motions, or courtroom procedures.
             </div>
           )}

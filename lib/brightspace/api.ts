@@ -17,10 +17,7 @@ export function getBrightspaceLeVersion() {
   return process.env.BRIGHTSPACE_LE_VERSION || "1.82";
 }
 
-export async function brightspaceApiFetch(
-  request: NextRequest,
-  path: string,
-) {
+export async function brightspaceApiFetch(request: NextRequest, path: string) {
   const baseUrl = getBrightspaceBaseUrl();
   const accessToken = getBrightspaceAccessToken(request);
 

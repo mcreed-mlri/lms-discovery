@@ -22,7 +22,9 @@ export function UpdatesView() {
         <header className="border-b border-[color:var(--line)] pb-4">
           <p className="section-kicker secondary">Keep current</p>
           <h1 className="section-title mt-1 text-2xl text-[color:var(--ink)]">Updates</h1>
-          <p className="mt-2 text-[color:var(--ink-muted)]">Recent changes to modules, checklists, and practice guidance.</p>
+          <p className="mt-2 text-[color:var(--ink-muted)]">
+            Recent changes to modules, checklists, and practice guidance.
+          </p>
         </header>
 
         <div className="mt-6 flex flex-col gap-4">

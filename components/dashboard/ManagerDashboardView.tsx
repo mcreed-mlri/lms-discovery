@@ -51,8 +51,16 @@ export function ManagerDashboardView() {
 
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
         <DashboardStat label="Team size" value={String(summary.teamSize)} />
-        <DashboardStat label="On track" value={String(summary.onTrackCount)} detail="Meeting required training pace" />
-        <DashboardStat label="Gaps" value={String(summary.gapCount)} detail="Incomplete required training" />
+        <DashboardStat
+          label="On track"
+          value={String(summary.onTrackCount)}
+          detail="Meeting required training pace"
+        />
+        <DashboardStat
+          label="Gaps"
+          value={String(summary.gapCount)}
+          detail="Incomplete required training"
+        />
       </div>
 
       <div className="editorial-panel overflow-hidden rounded-[var(--radius-card)]">
@@ -68,10 +76,17 @@ export function ManagerDashboardView() {
           </thead>
           <tbody>
             {members.map((member) => (
-              <tr key={member.id} className="border-b border-[color:var(--lace-hairline)] last:border-0">
+              <tr
+                key={member.id}
+                className="border-b border-[color:var(--lace-hairline)] last:border-0"
+              >
                 <td className="px-4 py-3 font-bold text-[color:var(--ink-muted)]">{member.name}</td>
-                <td className="px-4 py-3 font-medium text-[color:var(--ink-muted)]">{member.course}</td>
-                <td className="px-4 py-3 font-bold text-[color:var(--brand)]">{member.completionPct}%</td>
+                <td className="px-4 py-3 font-medium text-[color:var(--ink-muted)]">
+                  {member.course}
+                </td>
+                <td className="px-4 py-3 font-bold text-[color:var(--brand)]">
+                  {member.completionPct}%
+                </td>
                 <td className="px-4 py-3 font-medium text-[color:var(--ink-muted)]">
                   {formatRelativeDate(member.lastActiveAt)}
                 </td>

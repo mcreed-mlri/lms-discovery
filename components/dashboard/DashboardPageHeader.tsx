@@ -16,9 +16,13 @@ export function DashboardPageHeader({
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           {eyebrow ? <p className="section-kicker primary">{eyebrow}</p> : null}
-          <h1 className="hero-title mt-2 text-[2.1rem] text-[color:var(--ink)] sm:text-[2.65rem]">{title}</h1>
+          <h1 className="hero-title mt-2 text-[2.1rem] text-[color:var(--ink)] sm:text-[2.65rem]">
+            {title}
+          </h1>
           {subtitle ? (
-            <p className="mt-3 max-w-2xl text-base font-semibold text-[color:var(--lace-muted-strong)]">{subtitle}</p>
+            <p className="mt-3 max-w-2xl text-base font-semibold text-[color:var(--lace-muted-strong)]">
+              {subtitle}
+            </p>
           ) : null}
         </div>
         {badge}

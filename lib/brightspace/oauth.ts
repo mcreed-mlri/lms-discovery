@@ -7,8 +7,7 @@ const REFRESH_TOKEN_COOKIE = "brightspace_refresh_token";
 
 export function getBrightspaceRedirectUri() {
   return (
-    process.env.BRIGHTSPACE_REDIRECT_URI ||
-    "https://localhost:3000/api/auth/brightspace/callback"
+    process.env.BRIGHTSPACE_REDIRECT_URI || "https://localhost:3000/api/auth/brightspace/callback"
   );
 }
 

@@ -36,7 +36,14 @@ export function ProgressRing({
       aria-label={label ?? `${Math.round(clamped)} percent complete`}
     >
       <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }} aria-hidden="true">
-        <circle cx={size / 2} cy={size / 2} r={radius} style={{ stroke: trackColor }} strokeWidth={stroke} fill="none" />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          style={{ stroke: trackColor }}
+          strokeWidth={stroke}
+          fill="none"
+        />
         <circle
           cx={size / 2}
           cy={size / 2}

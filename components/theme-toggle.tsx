@@ -3,7 +3,13 @@
 import { useTheme } from "@/app/providers";
 import { MoonIcon, SunIcon } from "@/components/icons";
 
-export function ThemeToggle({ collapsed = false, className = "" }: { collapsed?: boolean; className?: string }) {
+export function ThemeToggle({
+  collapsed = false,
+  className = "",
+}: {
+  collapsed?: boolean;
+  className?: string;
+}) {
   const { isDark, toggleTheme } = useTheme();
   const label = isDark ? "Switch to light mode" : "Switch to dark mode";
   const Icon = isDark ? SunIcon : MoonIcon;

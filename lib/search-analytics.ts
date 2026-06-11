@@ -22,7 +22,10 @@ type SearchAnalyticsEvent =
 type SearchAnalyticsStore = {
   searches: Record<string, { count: number; lastResultCount: number; lastSearchedAt: string }>;
   zeroResultQueries: Record<string, { count: number; lastSearchedAt: string }>;
-  selections: Record<string, { count: number; title: string; type: string; lastSelectedAt: string }>;
+  selections: Record<
+    string,
+    { count: number; title: string; type: string; lastSelectedAt: string }
+  >;
   launches: Record<string, { count: number; title: string; type: string; lastLaunchedAt: string }>;
 };
 
@@ -75,7 +78,11 @@ export function recordSearchAnalytics(event: SearchAnalyticsEvent) {
     if (!query) return;
     const key = compactFilters(event.filters) ? `${query}|${compactFilters(event.filters)}` : query;
     const current = store.searches[key] ?? { count: 0, lastResultCount: 0, lastSearchedAt: now };
-    store.searches[key] = { count: current.count + 1, lastResultCount: event.resultCount, lastSearchedAt: now };
+    store.searches[key] = {
+      count: current.count + 1,
+      lastResultCount: event.resultCount,
+      lastSearchedAt: now,
+    };
 
     if (event.resultCount === 0) {
       const zeroResult = store.zeroResultQueries[query] ?? { count: 0, lastSearchedAt: now };
@@ -90,7 +97,11 @@ export function recordSearchAnalytics(event: SearchAnalyticsEvent) {
       type: event.resultType,
       lastSelectedAt: now,
     };
-    store.selections[event.resultId] = { ...current, count: current.count + 1, lastSelectedAt: now };
+    store.selections[event.resultId] = {
+      ...current,
+      count: current.count + 1,
+      lastSelectedAt: now,
+    };
   }
 
   if (event.type === "brightspace_launched") {

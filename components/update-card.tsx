@@ -23,16 +23,22 @@ export function UpdateCard({
       }`}
     >
       <div className="flex flex-wrap items-center gap-2">
-        <span className={`metadata inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 ${status.pill}`}>
+        <span
+          className={`metadata inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 ${status.pill}`}
+        >
           <span className={`h-1.5 w-1.5 rounded-full ${status.dot}`} aria-hidden="true" />
           {update.tag}
         </span>
         <span className="metadata text-[color:var(--ink-soft)]">{update.when}</span>
       </div>
-      <h3 className={`section-title mt-3 text-[color:var(--ink)] ${lead ? "text-xl leading-snug" : "text-base leading-snug"}`}>
+      <h3
+        className={`section-title mt-3 text-[color:var(--ink)] ${lead ? "text-xl leading-snug" : "text-base leading-snug"}`}
+      >
         {update.title}
       </h3>
-      <p className={`mt-2 leading-relaxed text-[color:var(--ink-muted)] ${lead ? "text-sm" : "text-sm"}`}>
+      <p
+        className={`mt-2 leading-relaxed text-[color:var(--ink-muted)] ${lead ? "text-sm" : "text-sm"}`}
+      >
         {update.summary}
       </p>
       <button

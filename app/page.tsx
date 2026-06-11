@@ -34,7 +34,14 @@ import {
   type Skill,
   type SkillId,
 } from "@/lib/data";
-import { getSearchFacetOptions, getNoResultSuggestions, searchLearningItems, type DurationFacet, type SearchFacetFilters, type SearchResult } from "@/lib/search";
+import {
+  getSearchFacetOptions,
+  getNoResultSuggestions,
+  searchLearningItems,
+  type DurationFacet,
+  type SearchFacetFilters,
+  type SearchResult,
+} from "@/lib/search";
 import { recordSearchAnalytics } from "@/lib/search-analytics";
 import type { ContentLifecycleStatus, SearchAudience } from "@/lib/search-metadata";
 import { demoUser, useAuth } from "@/lib/auth";
@@ -48,7 +55,13 @@ const filters: Filter[] = ["All", "Paths", "Courses", "Modules"];
 
 // Suggested searches under the command bar — a short, scannable set of the
 // things a busy advocate reaches for most. Presented as suggestions, not filters.
-const popularSearches = ["notice to quit", "confidentiality", "SNAP appeal", "709 motion", "RAFT application"];
+const popularSearches = [
+  "notice to quit",
+  "confidentiality",
+  "SNAP appeal",
+  "709 motion",
+  "RAFT application",
+];
 
 function filterToSearchTypes(filter: Filter): SearchFacetFilters["types"] | undefined {
   if (filter === "Paths") return ["PATH"];
@@ -76,7 +89,9 @@ function getCuratedCatalogItems(items: LearningItem[]) {
     "ethics-and-confidentiality",
   ];
   const byId = new Map(items.map((item) => [item.id, item]));
-  const preferredMatches = preferredIds.map((id) => byId.get(id)).filter((item): item is LearningItem => Boolean(item));
+  const preferredMatches = preferredIds
+    .map((id) => byId.get(id))
+    .filter((item): item is LearningItem => Boolean(item));
   const remainingMatches = items.filter((item) => !preferredIds.includes(item.id));
   return [...preferredMatches, ...remainingMatches].slice(0, 8);
 }
@@ -88,7 +103,17 @@ function scrollToBrowse() {
 // "Browse by skill" tile — the primary lens of the homepage. Each tile takes
 // the next hue from the 8-hue palette BY INDEX, so the grid reads as one
 // systematic family of orientation cues.
-function SkillTile({ skill, index, count, onSelect }: { skill: Skill; index: number; count: number; onSelect: (id: SkillId) => void }) {
+function SkillTile({
+  skill,
+  index,
+  count,
+  onSelect,
+}: {
+  skill: Skill;
+  index: number;
+  count: number;
+  onSelect: (id: SkillId) => void;
+}) {
   const hue = getHue(index);
   return (
     <button
@@ -103,16 +128,28 @@ function SkillTile({ skill, index, count, onSelect }: { skill: Skill; index: num
         >
           <SkillGlyph kind={skill.glyph} className="h-5 w-5 sm:h-6 sm:w-6" />
         </span>
-        <span className="rounded-full border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-1.5 py-0.5 font-mono text-[0.62rem] font-semibold uppercase leading-4 tracking-[0.03em] text-[color:var(--ink-soft)] sm:px-2 sm:text-[0.68rem] sm:leading-5">{count} modules</span>
+        <span className="rounded-full border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-1.5 py-0.5 font-mono text-[0.62rem] font-semibold uppercase leading-4 tracking-[0.03em] text-[color:var(--ink-soft)] sm:px-2 sm:text-[0.68rem] sm:leading-5">
+          {count} modules
+        </span>
       </div>
-      <h3 className="section-title text-[0.95rem] leading-snug text-[color:var(--ink)] sm:mt-1 sm:text-[1.05rem]">{skill.name}</h3>
-      <p className="hidden line-clamp-2 text-[0.9rem] leading-normal text-[color:var(--ink-muted)] sm:block">{skill.blurb}</p>
+      <h3 className="section-title text-[0.95rem] leading-snug text-[color:var(--ink)] sm:mt-1 sm:text-[1.05rem]">
+        {skill.name}
+      </h3>
+      <p className="hidden line-clamp-2 text-[0.9rem] leading-normal text-[color:var(--ink-muted)] sm:block">
+        {skill.blurb}
+      </p>
     </button>
   );
 }
 
 // Guided-path card with a hue top-accent bar.
-function StudioPathCard({ path, index }: { path: Extract<LearningItem, { type: "PATH" }>; index: number }) {
+function StudioPathCard({
+  path,
+  index,
+}: {
+  path: Extract<LearningItem, { type: "PATH" }>;
+  index: number;
+}) {
   const hue = getHue(index + 2);
   return (
     <div className="overflow-hidden rounded-[12px] border border-[color:var(--line)] bg-[color:var(--surface)] shadow-[var(--shadow-xs)] transition hover:shadow-[var(--shadow-card)] sm:rounded-[14px]">
@@ -122,11 +159,17 @@ function StudioPathCard({ path, index }: { path: Extract<LearningItem, { type: "
           <span style={{ color: hue.solid }}>
             <PathIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           </span>
-          <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.04em] text-[color:var(--ink-soft)] sm:text-[11px]">Guided path</span>
+          <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.04em] text-[color:var(--ink-soft)] sm:text-[11px]">
+            Guided path
+          </span>
         </div>
-        <h3 className="text-[15px] font-bold leading-snug tracking-[-0.01em] text-[color:var(--ink)] sm:mb-3.5 sm:text-[17px]">{path.title}</h3>
+        <h3 className="text-[15px] font-bold leading-snug tracking-[-0.01em] text-[color:var(--ink)] sm:mb-3.5 sm:text-[17px]">
+          {path.title}
+        </h3>
         <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[12px] text-[color:var(--ink-muted)] sm:gap-x-4 sm:text-[13px]">
-          <span>{path.courseIds.length} course{path.courseIds.length === 1 ? "" : "s"}</span>
+          <span>
+            {path.courseIds.length} course{path.courseIds.length === 1 ? "" : "s"}
+          </span>
           <span>{path.totalDuration.replace(" total", "")}</span>
           <span className="hidden sm:inline">{path.level}</span>
         </div>
@@ -181,14 +224,22 @@ export default function Home() {
   const visibleItems = useMemo(() => {
     let items = searchResults.map((result) => result.item);
     if (skillFilter) {
-      items = items.filter((item) => item.type === "MODULE" && getModuleSkillId(item.id) === skillFilter);
+      items = items.filter(
+        (item) => item.type === "MODULE" && getModuleSkillId(item.id) === skillFilter,
+      );
     }
     return items;
   }, [searchResults, skillFilter]);
 
-  const pathItems = visibleItems.filter((item): item is Extract<LearningItem, { type: "PATH" }> => item.type === "PATH");
-  const eligiblePathItems = allItems.filter((item): item is Extract<LearningItem, { type: "PATH" }> => item.type === "PATH");
-  const visibleModuleItems = allItems.filter((item): item is Extract<LearningItem, { type: "MODULE" }> => item.type === "MODULE");
+  const pathItems = visibleItems.filter(
+    (item): item is Extract<LearningItem, { type: "PATH" }> => item.type === "PATH",
+  );
+  const eligiblePathItems = allItems.filter(
+    (item): item is Extract<LearningItem, { type: "PATH" }> => item.type === "PATH",
+  );
+  const visibleModuleItems = allItems.filter(
+    (item): item is Extract<LearningItem, { type: "MODULE" }> => item.type === "MODULE",
+  );
   // Only show skill lenses the signed-in user actually has content for. For a
   // non-lawyer advocate this drops courtroom/negotiation/litigation tiles —
   // skills outside their role (and the UPL boundary) — rather than dead "0 modules" cards.
@@ -201,13 +252,19 @@ export default function Home() {
   const curatedItems = useMemo(() => getCuratedCatalogItems(visibleItems), [visibleItems]);
   const catalogItems = filter === "All" ? curatedItems : visibleItems;
 
-  const advancedFilterCount = [practiceAreaFilter, levelFilter, audienceFilter, statusFilter, durationFilter].filter(
-    (value) => value !== "All",
-  ).length;
+  const advancedFilterCount = [
+    practiceAreaFilter,
+    levelFilter,
+    audienceFilter,
+    statusFilter,
+    durationFilter,
+  ].filter((value) => value !== "All").length;
 
   const eligibleItemIds = useMemo(() => new Set(allItems.map((item) => item.id)), [allItems]);
   const resumeItem =
-    (continueLearning.find((item) => "progress" in item && eligibleItemIds.has(item.id)) as Extract<(typeof continueLearning)[number], { progress: number }> | undefined) ??
+    (continueLearning.find((item) => "progress" in item && eligibleItemIds.has(item.id)) as
+      | Extract<(typeof continueLearning)[number], { progress: number }>
+      | undefined) ??
     ({
       id: "client-centered-practice",
       type: "COURSE",
@@ -217,8 +274,9 @@ export default function Home() {
       progressLabel: "0%",
     } satisfies Extract<(typeof continueLearning)[number], { progress: number }>);
   const resumeLearningItem = allItems.find((item) => item.id === resumeItem.id);
-  const resumeUrl =
-    resumeLearningItem ? getLearningItemUrl(resumeLearningItem) : (resumeItem.resumeUrl ?? "/");
+  const resumeUrl = resumeLearningItem
+    ? getLearningItemUrl(resumeLearningItem)
+    : (resumeItem.resumeUrl ?? "/");
   const resumeCourse = courses.find((course) => course.id === resumeItem.id);
   const resumeEyebrow = [resumeCourse?.practiceArea, resumeMinutesLeftLabel(resumeCourse?.duration)]
     .filter(Boolean)
@@ -300,15 +358,28 @@ export default function Home() {
     }, 450);
 
     return () => window.clearTimeout(handle);
-  }, [audienceFilter, durationFilter, filter, levelFilter, practiceAreaFilter, query, statusFilter, visibleItems.length]);
+  }, [
+    audienceFilter,
+    durationFilter,
+    filter,
+    levelFilter,
+    practiceAreaFilter,
+    query,
+    statusFilter,
+    visibleItems.length,
+  ]);
 
   if (!ready) {
     return (
       <div className="hub-shell flex min-h-screen items-center justify-center px-4">
         <div className="editorial-panel w-full max-w-sm rounded-xl p-6 text-center">
           <p className="editorial-eyebrow">Learning Hub</p>
-          <h1 className="hero-title mt-3 text-3xl text-[color:var(--ink)]">Preparing your library</h1>
-          <p className="mt-2 text-sm font-semibold text-[color:var(--ink-muted)]">Loading your courses, modules, and reading list.</p>
+          <h1 className="hero-title mt-3 text-3xl text-[color:var(--ink)]">
+            Preparing your library
+          </h1>
+          <p className="mt-2 text-sm font-semibold text-[color:var(--ink-muted)]">
+            Loading your courses, modules, and reading list.
+          </p>
         </div>
       </div>
     );
@@ -319,7 +390,9 @@ export default function Home() {
       <div className="hub-shell flex min-h-screen items-center justify-center px-4 py-12">
         <div className="editorial-panel w-full max-w-md rounded-2xl p-7 text-center">
           <p className="editorial-eyebrow">LACE Learning Hub</p>
-          <h1 className="hero-title mt-4 text-4xl text-[color:var(--ink)]">Start where the case is.</h1>
+          <h1 className="hero-title mt-4 text-4xl text-[color:var(--ink)]">
+            Start where the case is.
+          </h1>
           <p className="mt-3 text-base leading-7 text-[color:var(--ink-muted)]">
             Continue into focused training for Massachusetts legal aid practice.
           </p>
@@ -330,7 +403,10 @@ export default function Home() {
           >
             Continue as {demoUser.firstName}
           </button>
-          <a className="mt-4 block text-sm font-bold text-[color:var(--ink-soft)] hover:text-[color:var(--ink)]" href="/login">
+          <a
+            className="mt-4 block text-sm font-bold text-[color:var(--ink-soft)] hover:text-[color:var(--ink)]"
+            href="/login"
+          >
             Use the full sign-in page
           </a>
         </div>
@@ -350,7 +426,9 @@ export default function Home() {
                 Welcome back, {user.firstName}.
               </h1>
               <p className="mt-1 flex flex-wrap items-center gap-x-1.5 text-[13px] text-[color:var(--ink-muted)] sm:mt-1.5 sm:text-[14px]">
-                <span className="font-semibold tracking-[-0.01em] text-[color:var(--ink-soft)]">{user.organization ?? "MLRI"}</span>
+                <span className="font-semibold tracking-[-0.01em] text-[color:var(--ink-soft)]">
+                  {user.organization ?? "MLRI"}
+                </span>
                 <span className="text-[color:var(--ink-soft)]/45" aria-hidden="true">
                   ·
                 </span>
@@ -368,7 +446,9 @@ export default function Home() {
                 headless admin account, which tracks no personal progress. */}
             {!isAdmin && (
               <p className="shrink-0 pt-0.5 text-right font-mono text-[11px] leading-tight tabular-nums sm:hidden">
-                <span className="block font-semibold uppercase tracking-[0.04em] text-[color:var(--ink-soft)]">Training</span>
+                <span className="block font-semibold uppercase tracking-[0.04em] text-[color:var(--ink-soft)]">
+                  Training
+                </span>
                 <span className="font-semibold text-[color:var(--ink)]">
                   {learnerProgress.cleEarned}/{learnerProgress.cleRequired} hrs
                 </span>
@@ -376,43 +456,45 @@ export default function Home() {
             )}
 
             {!isAdmin && (
-            <div className="hidden items-center gap-4 sm:flex sm:pt-1.5">
-              <div className="flex items-center gap-2.5">
-                <ProgressRing
-                  value={clePct}
-                  size={44}
-                  stroke={4}
-                  color="var(--brand-fill)"
-                  trackColor="var(--surface-sunken)"
-                  label={`${clePct}% of training hours goal`}
-                >
-                  <span className="text-[10px] font-bold tabular-nums text-[color:var(--ink)]">{clePct}%</span>
-                </ProgressRing>
-                <p className="text-[13px] leading-tight text-[color:var(--ink-soft)]">
-                  <span className="font-semibold text-[color:var(--ink)]">
-                    {learnerProgress.cleEarned}/{learnerProgress.cleRequired} hrs
-                  </span>{" "}
-                  to goal
-                </p>
-              </div>
-              <div className="hidden items-center gap-2.5 border-l border-[color:var(--line)] pl-4 md:flex">
-                <span className="text-[13px] text-[color:var(--ink-soft)]">This week</span>
-                <div className="flex gap-1" role="img" aria-label="This week's learning activity">
-                  {learnerProgress.weeklyActivity.map((day, i) => (
-                    <span
-                      key={i}
-                      className={`h-2.5 w-2.5 rounded-[3px] ${
-                        day === "done"
-                          ? "bg-[color:var(--brand-fill)]"
-                          : day === "today"
-                            ? "border-[1.5px] border-dashed border-[color:var(--brand-fill)]"
-                            : "bg-[color:var(--surface-sunken)]"
-                      }`}
-                    />
-                  ))}
+              <div className="hidden items-center gap-4 sm:flex sm:pt-1.5">
+                <div className="flex items-center gap-2.5">
+                  <ProgressRing
+                    value={clePct}
+                    size={44}
+                    stroke={4}
+                    color="var(--brand-fill)"
+                    trackColor="var(--surface-sunken)"
+                    label={`${clePct}% of training hours goal`}
+                  >
+                    <span className="text-[10px] font-bold tabular-nums text-[color:var(--ink)]">
+                      {clePct}%
+                    </span>
+                  </ProgressRing>
+                  <p className="text-[13px] leading-tight text-[color:var(--ink-soft)]">
+                    <span className="font-semibold text-[color:var(--ink)]">
+                      {learnerProgress.cleEarned}/{learnerProgress.cleRequired} hrs
+                    </span>{" "}
+                    to goal
+                  </p>
+                </div>
+                <div className="hidden items-center gap-2.5 border-l border-[color:var(--line)] pl-4 md:flex">
+                  <span className="text-[13px] text-[color:var(--ink-soft)]">This week</span>
+                  <div className="flex gap-1" role="img" aria-label="This week's learning activity">
+                    {learnerProgress.weeklyActivity.map((day, i) => (
+                      <span
+                        key={i}
+                        className={`h-2.5 w-2.5 rounded-[3px] ${
+                          day === "done"
+                            ? "bg-[color:var(--brand-fill)]"
+                            : day === "today"
+                              ? "border-[1.5px] border-dashed border-[color:var(--brand-fill)]"
+                              : "bg-[color:var(--surface-sunken)]"
+                        }`}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
             )}
           </div>
 
@@ -446,39 +528,52 @@ export default function Home() {
                 </p>
               </aside>
             ) : (
-            <aside
-              className="order-1 min-w-0 rounded-[12px] bg-[color:var(--feature-surface)] px-3 py-2.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-3 lg:order-2 lg:self-start"
-              aria-label="Resume learning"
-            >
-              <div className="flex items-start gap-2.5 sm:items-center sm:gap-3">
-                <div className="min-w-0 flex-1">
-                  {resumeEyebrow ? (
-                    <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.04em] text-[color:var(--feature-muted)] sm:text-[10px]">{resumeEyebrow}</p>
-                  ) : null}
-                  <h2 className="mt-0.5 line-clamp-2 text-[14px] font-bold leading-snug tracking-[-0.01em] text-[color:var(--feature-ink)] sm:line-clamp-none sm:truncate sm:text-[15px] sm:leading-tight">
-                    {resumeItem.title}
-                  </h2>
+              <aside
+                className="order-1 min-w-0 rounded-[12px] bg-[color:var(--feature-surface)] px-3 py-2.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-3 lg:order-2 lg:self-start"
+                aria-label="Resume learning"
+              >
+                <div className="flex items-start gap-2.5 sm:items-center sm:gap-3">
+                  <div className="min-w-0 flex-1">
+                    {resumeEyebrow ? (
+                      <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.04em] text-[color:var(--feature-muted)] sm:text-[10px]">
+                        {resumeEyebrow}
+                      </p>
+                    ) : null}
+                    <h2 className="mt-0.5 line-clamp-2 text-[14px] font-bold leading-snug tracking-[-0.01em] text-[color:var(--feature-ink)] sm:line-clamp-none sm:truncate sm:text-[15px] sm:leading-tight">
+                      {resumeItem.title}
+                    </h2>
+                  </div>
+                  <a
+                    href={resumeUrl}
+                    aria-label={`Resume ${resumeItem.title}. Up next: ${resumeItem.detail}. ${resumeProgressLabel}.`}
+                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--feature-action-border)] bg-[color:var(--feature-action-bg)] text-[color:var(--feature-action-ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-white/25 sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
+                  >
+                    <PlayIcon className="h-[14px] w-[14px]" />
+                    <span className="hidden sm:inline">Resume</span>
+                  </a>
                 </div>
-                <a
-                  href={resumeUrl}
-                  aria-label={`Resume ${resumeItem.title}. Up next: ${resumeItem.detail}. ${resumeProgressLabel}.`}
-                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--feature-action-border)] bg-[color:var(--feature-action-bg)] text-[color:var(--feature-action-ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-white/25 sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
-                >
-                  <PlayIcon className="h-[14px] w-[14px]" />
-                  <span className="hidden sm:inline">Resume</span>
-                </a>
-              </div>
-              <div className="mt-1.5 flex items-center gap-2 sm:mt-2 sm:gap-2.5">
-                <div className="h-1 min-w-0 flex-1 overflow-hidden rounded-full bg-[color:var(--feature-track)]">
-                  <div className="h-full rounded-full bg-[color:var(--brand-fill)]" style={{ width: `${resumeItem.progress}%` }} />
+                <div className="mt-1.5 flex items-center gap-2 sm:mt-2 sm:gap-2.5">
+                  <div className="h-1 min-w-0 flex-1 overflow-hidden rounded-full bg-[color:var(--feature-track)]">
+                    <div
+                      className="h-full rounded-full bg-[color:var(--brand-fill)]"
+                      style={{ width: `${resumeItem.progress}%` }}
+                    />
+                  </div>
+                  <span className="shrink-0 font-mono text-[9px] font-semibold tabular-nums text-[color:var(--feature-muted)] sm:text-[10px]">
+                    {resumeProgressLabel}
+                  </span>
                 </div>
-                <span className="shrink-0 font-mono text-[9px] font-semibold tabular-nums text-[color:var(--feature-muted)] sm:text-[10px]">{resumeProgressLabel}</span>
-              </div>
-            </aside>
+              </aside>
             )}
 
             <div className="order-2 min-w-0 lg:order-1">
-              <SearchBox value={query} onChange={setQuery} suggestions={searchSuggestions} onSelect={openSearchResult} prominent />
+              <SearchBox
+                value={query}
+                onChange={setQuery}
+                suggestions={searchSuggestions}
+                onSelect={openSearchResult}
+                prominent
+              />
               <div className="-mx-4 mt-2 flex min-w-0 gap-2 overflow-x-auto px-4 pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:mt-2.5 sm:hidden sm:px-0 [&::-webkit-scrollbar]:hidden">
                 {popularSearches.map((q) => (
                   <button
@@ -495,7 +590,9 @@ export default function Home() {
                 ))}
               </div>
               <div className="mt-2.5 hidden flex-wrap items-center gap-2 sm:flex">
-                <span className="text-[13px] font-medium text-[color:var(--ink-soft)]">Popular:</span>
+                <span className="text-[13px] font-medium text-[color:var(--ink-soft)]">
+                  Popular:
+                </span>
                 {popularSearches.map((q) => (
                   <button
                     key={q}
@@ -510,7 +607,10 @@ export default function Home() {
                   </button>
                 ))}
               </div>
-              <nav className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] sm:hidden" aria-label="Jump to section">
+              <nav
+                className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] sm:hidden"
+                aria-label="Jump to section"
+              >
                 <span className="font-medium text-[color:var(--ink-soft)]">Jump to</span>
                 <a href="#skills" className="font-semibold text-[color:var(--brand)]">
                   Skills
@@ -525,11 +625,21 @@ export default function Home() {
       </section>
 
       {/* BROWSE BY SKILL — the primary lens: legal practice as verbs */}
-      <section id="skills" className="mx-auto max-w-[1120px] scroll-mt-[calc(5rem+env(safe-area-inset-top,0px))] px-4 py-4 sm:px-6 sm:py-9 lg:px-10" aria-label="Browse by skill">
+      <section
+        id="skills"
+        className="mx-auto max-w-[1120px] scroll-mt-[calc(5rem+env(safe-area-inset-top,0px))] px-4 py-4 sm:px-6 sm:py-9 lg:px-10"
+        aria-label="Browse by skill"
+      >
         <SectionHead kicker="Practical skills" title="What do you need to do?" />
         <div className="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
           {skillTiles.map(({ skill, count }, i) => (
-            <SkillTile key={skill.id} skill={skill} index={i} count={count} onSelect={selectSkill} />
+            <SkillTile
+              key={skill.id}
+              skill={skill}
+              index={i}
+              count={count}
+              onSelect={selectSkill}
+            />
           ))}
         </div>
       </section>
@@ -537,10 +647,17 @@ export default function Home() {
       {/* Library before guided paths on mobile for faster content access */}
       <div className="flex flex-col">
         {/* CATALOG — the full library, with filter pills + the active lens */}
-        <section id="browse" className="order-2 mx-auto max-w-[1120px] scroll-mt-[calc(5rem+env(safe-area-inset-top,0px))] px-4 py-5 sm:px-6 sm:py-9 lg:order-3 lg:px-10" tabIndex={-1} aria-label="Learning content">
+        <section
+          id="browse"
+          className="order-2 mx-auto max-w-[1120px] scroll-mt-[calc(5rem+env(safe-area-inset-top,0px))] px-4 py-5 sm:px-6 sm:py-9 lg:order-3 lg:px-10"
+          tabIndex={-1}
+          aria-label="Learning content"
+        >
           <div className="mb-5 border-b border-[color:var(--line)] pb-3.5">
             <p className="section-kicker secondary">Library</p>
-            <h2 className="section-title mt-1 text-[1.35rem] text-[color:var(--ink)] sm:text-[1.65rem]">All learning options</h2>
+            <h2 className="section-title mt-1 text-[1.35rem] text-[color:var(--ink)] sm:text-[1.65rem]">
+              All learning options
+            </h2>
           </div>
           <div className="mb-5 flex flex-wrap items-center gap-3">
             <button
@@ -563,19 +680,21 @@ export default function Home() {
             </button>
             <div className="-mx-4 flex max-w-full shrink-0 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
               <div className="inline-flex shrink-0 rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface-sunken)] p-1">
-              {filters.map((entry) => (
-                <button
-                  key={entry}
-                  className={`h-9 rounded-[8px] px-4 text-xs font-bold transition duration-200 ease-out focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15 ${
-                    filter === entry ? "control-active" : "text-[color:var(--ink-muted)] hover:bg-[color:var(--surface-raised)] hover:text-[color:var(--ink)]"
-                  }`}
-                  type="button"
-                  onClick={() => setFilter(entry)}
-                  aria-pressed={filter === entry}
-                >
-                  {entry}
-                </button>
-              ))}
+                {filters.map((entry) => (
+                  <button
+                    key={entry}
+                    className={`h-9 rounded-[8px] px-4 text-xs font-bold transition duration-200 ease-out focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15 ${
+                      filter === entry
+                        ? "control-active"
+                        : "text-[color:var(--ink-muted)] hover:bg-[color:var(--surface-raised)] hover:text-[color:var(--ink)]"
+                    }`}
+                    type="button"
+                    onClick={() => setFilter(entry)}
+                    aria-pressed={filter === entry}
+                  >
+                    {entry}
+                  </button>
+                ))}
               </div>
             </div>
             {skillFilter && (
@@ -590,10 +709,22 @@ export default function Home() {
               </button>
             )}
             <div className="ml-auto hidden rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface-sunken)] p-1 sm:inline-flex">
-              <button className={`flex h-9 w-10 items-center justify-center rounded-md ${viewMode === "grid" ? "control-toggle-active" : "text-[color:var(--ink-soft)] hover:text-[color:var(--ink)]"}`} type="button" onClick={() => setViewMode("grid")} aria-label="Grid view" aria-pressed={viewMode === "grid"}>
+              <button
+                className={`flex h-9 w-10 items-center justify-center rounded-md ${viewMode === "grid" ? "control-toggle-active" : "text-[color:var(--ink-soft)] hover:text-[color:var(--ink)]"}`}
+                type="button"
+                onClick={() => setViewMode("grid")}
+                aria-label="Grid view"
+                aria-pressed={viewMode === "grid"}
+              >
                 <GridIcon className="h-4 w-4" />
               </button>
-              <button className={`flex h-9 w-10 items-center justify-center rounded-md ${viewMode === "list" ? "control-toggle-active" : "text-[color:var(--ink-soft)] hover:text-[color:var(--ink)]"}`} type="button" onClick={() => setViewMode("list")} aria-label="List view" aria-pressed={viewMode === "list"}>
+              <button
+                className={`flex h-9 w-10 items-center justify-center rounded-md ${viewMode === "list" ? "control-toggle-active" : "text-[color:var(--ink-soft)] hover:text-[color:var(--ink)]"}`}
+                type="button"
+                onClick={() => setViewMode("list")}
+                aria-label="List view"
+                aria-pressed={viewMode === "list"}
+              >
                 <ListIcon className="h-4 w-4" />
               </button>
             </div>
@@ -612,18 +743,59 @@ export default function Home() {
                 </button>
               </div>
               <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                <RefineSelect id="practice-area-filter" label="Practice area" value={practiceAreaFilter} onChange={setPracticeAreaFilter} allLabel="All practice areas" options={facetOptions.practiceAreas} />
-                <RefineSelect id="level-filter" label="Level" value={levelFilter} onChange={setLevelFilter} allLabel="All levels" options={facetOptions.levels} />
-                <RefineSelect id="audience-filter" label="Audience" value={audienceFilter} onChange={(value) => setAudienceFilter(value as SelectValue<SearchAudience>)} allLabel="All audiences" options={facetOptions.audiences} />
-                <RefineSelect id="status-filter" label="Status" value={statusFilter} onChange={(value) => setStatusFilter(value as SelectValue<ContentLifecycleStatus>)} allLabel="All statuses" options={facetOptions.statuses} />
-                <RefineSelect id="duration-filter" label="Duration" value={durationFilter} onChange={(value) => setDurationFilter(value as SelectValue<DurationFacet>)} allLabel="Any duration" options={facetOptions.durations} />
+                <RefineSelect
+                  id="practice-area-filter"
+                  label="Practice area"
+                  value={practiceAreaFilter}
+                  onChange={setPracticeAreaFilter}
+                  allLabel="All practice areas"
+                  options={facetOptions.practiceAreas}
+                />
+                <RefineSelect
+                  id="level-filter"
+                  label="Level"
+                  value={levelFilter}
+                  onChange={setLevelFilter}
+                  allLabel="All levels"
+                  options={facetOptions.levels}
+                />
+                <RefineSelect
+                  id="audience-filter"
+                  label="Audience"
+                  value={audienceFilter}
+                  onChange={(value) => setAudienceFilter(value as SelectValue<SearchAudience>)}
+                  allLabel="All audiences"
+                  options={facetOptions.audiences}
+                />
+                <RefineSelect
+                  id="status-filter"
+                  label="Status"
+                  value={statusFilter}
+                  onChange={(value) =>
+                    setStatusFilter(value as SelectValue<ContentLifecycleStatus>)
+                  }
+                  allLabel="All statuses"
+                  options={facetOptions.statuses}
+                />
+                <RefineSelect
+                  id="duration-filter"
+                  label="Duration"
+                  value={durationFilter}
+                  onChange={(value) => setDurationFilter(value as SelectValue<DurationFacet>)}
+                  allLabel="Any duration"
+                  options={facetOptions.durations}
+                />
               </div>
             </div>
           )}
 
           <div className="flex flex-col gap-2 sm:hidden">
             {(filter === "Paths" ? pathItems : catalogItems).map((item) => (
-              <ContentListRow key={`${item.type}-${item.id}`} item={item} onOpen={setSelectedItem} />
+              <ContentListRow
+                key={`${item.type}-${item.id}`}
+                item={item}
+                onOpen={setSelectedItem}
+              />
             ))}
           </div>
 
@@ -638,9 +810,17 @@ export default function Home() {
               <div className="hidden gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {catalogItems.map((item) =>
                   item.type === "PATH" ? (
-                    <PathCard key={`${item.type}-${item.id}`} item={item} onOpen={setSelectedItem} />
+                    <PathCard
+                      key={`${item.type}-${item.id}`}
+                      item={item}
+                      onOpen={setSelectedItem}
+                    />
                   ) : (
-                    <ContentCard key={`${item.type}-${item.id}`} item={item} onOpen={setSelectedItem} />
+                    <ContentCard
+                      key={`${item.type}-${item.id}`}
+                      item={item}
+                      onOpen={setSelectedItem}
+                    />
                   ),
                 )}
               </div>
@@ -648,7 +828,11 @@ export default function Home() {
           ) : (
             <div className="hidden gap-4 sm:grid">
               {catalogItems.map((item) => (
-                <ContentListRow key={`${item.type}-${item.id}`} item={item} onOpen={setSelectedItem} />
+                <ContentListRow
+                  key={`${item.type}-${item.id}`}
+                  item={item}
+                  onOpen={setSelectedItem}
+                />
               ))}
             </div>
           )}
@@ -656,8 +840,12 @@ export default function Home() {
           {catalogItems.length === 0 && (
             <div className="editorial-card rounded-xl border-dashed p-8 text-center">
               <SearchIcon className="mx-auto h-9 w-9 text-[color:var(--ink-soft)]" />
-              <h2 className="mt-4 text-xl font-bold text-[color:var(--ink)]">No matching learning content</h2>
-              <p className="mt-2 text-base text-[color:var(--ink-muted)]">Try a suggested topic or clear one of the active filters.</p>
+              <h2 className="mt-4 text-xl font-bold text-[color:var(--ink)]">
+                No matching learning content
+              </h2>
+              <p className="mt-2 text-base text-[color:var(--ink-muted)]">
+                Try a suggested topic or clear one of the active filters.
+              </p>
               <div className="mt-5 flex flex-wrap justify-center gap-2">
                 {noResultSuggestions.map((suggestion) => (
                   <button
@@ -713,11 +901,18 @@ function SectionHead({
   return (
     <div className="mb-3 flex items-end justify-between gap-4 sm:mb-[18px]">
       <div>
-        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--ink-soft)] sm:text-[11px]">{kicker}</p>
-        <h2 className="section-title mt-1 text-[1.2rem] text-[color:var(--ink)] sm:mt-2 sm:text-[1.5rem]">{title}</h2>
+        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--ink-soft)] sm:text-[11px]">
+          {kicker}
+        </p>
+        <h2 className="section-title mt-1 text-[1.2rem] text-[color:var(--ink)] sm:mt-2 sm:text-[1.5rem]">
+          {title}
+        </h2>
       </div>
       {actionHref && actionLabel && (
-        <Link href={actionHref} className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-[color:var(--brand)]">
+        <Link
+          href={actionHref}
+          className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-[color:var(--brand)]"
+        >
           {actionLabel}
           <ArrowIcon className="h-[15px] w-[15px]" />
         </Link>

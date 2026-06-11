@@ -16,21 +16,26 @@
   color-scheme: light;
   /* UI / body: Geist is the Studio typeface (loaded via next/font in layout.tsx).
      System faces kept as fallbacks so text stays crisp before the font loads. */
-  --font-sans: var(--font-geist, "Geist"), "Segoe UI Variable", "Segoe UI", "Inter", system-ui, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --font-sans:
+    var(--font-geist, "Geist"), "Segoe UI Variable", "Segoe UI", "Inter", system-ui, ui-sans-serif,
+    -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
   /* Display: same Geist family; large headings just lean on tighter tracking. */
-  --font-serif: var(--font-geist, "Geist"), "Segoe UI Variable", "Segoe UI", "Inter", system-ui, sans-serif;
+  --font-serif:
+    var(--font-geist, "Geist"), "Segoe UI Variable", "Segoe UI", "Inter", system-ui, sans-serif;
   /* Mono: IBM Plex Mono — eyebrows, chips, counts, percentages. */
-  --font-mono: var(--font-plex-mono, "IBM Plex Mono"), "SFMono-Regular", "Cascadia Mono", Consolas, ui-monospace, monospace;
+  --font-mono:
+    var(--font-plex-mono, "IBM Plex Mono"), "SFMono-Regular", "Cascadia Mono", Consolas,
+    ui-monospace, monospace;
 
   /* ── Neutral base — cool grey "Studio" canvas (Google-Skills-grade neutrals).
         Colour is reserved as a signal; the page itself stays calm. ───────── */
-  --paper: #f5f6f8;             /* cool grey page canvas */
-  --paper-deep: #eef0f4;        /* deeper section accent, use sparingly */
-  --panel: #eef0f4;             /* section frame */
-  --surface: #ffffff;           /* clean white card */
-  --surface-raised: #ffffff;    /* raised surfaces */
-  --surface-sunken: #eef0f4;    /* sunken tracks, chips, active-nav bg */
-  --hover-tint: #f5f6f8;        /* whisper hover */
+  --paper: #f5f6f8; /* cool grey page canvas */
+  --paper-deep: #eef0f4; /* deeper section accent, use sparingly */
+  --panel: #eef0f4; /* section frame */
+  --surface: #ffffff; /* clean white card */
+  --surface-raised: #ffffff; /* raised surfaces */
+  --surface-sunken: #eef0f4; /* sunken tracks, chips, active-nav bg */
+  --hover-tint: #f5f6f8; /* whisper hover */
   --chrome-bg: rgba(255, 255, 255, 0.85);
   --feature-surface: #14161b;
   --feature-ink: #ffffff;
@@ -41,12 +46,12 @@
   --feature-action-border: transparent;
   --hero-wash: #f5f6f8;
   --hero-wash-soft: #ffffff;
-  --ink: #14161b;              /* near-black — primary text, brand mark */
-  --ink-muted: #565c69;        /* muted — body copy, descriptions */
-  --ink-soft: #8b909d;         /* soft — metadata, captions, icons-default */
-  --line: #e4e7ed;             /* hairline borders */
-  --line-strong: #d3d8e0;      /* stronger hairline */
-  --line-soft: #edeff3;        /* inner dividers, hover border */
+  --ink: #14161b; /* near-black — primary text, brand mark */
+  --ink-muted: #565c69; /* muted — body copy, descriptions */
+  --ink-soft: #8b909d; /* soft — metadata, captions, icons-default */
+  --line: #e4e7ed; /* hairline borders */
+  --line-strong: #d3d8e0; /* stronger hairline */
+  --line-soft: #edeff3; /* inner dividers, hover border */
   --shadow-xs: 0 1px 2px rgba(20, 22, 27, 0.04);
   --shadow-card: 0 1px 2px rgba(20, 22, 27, 0.04), 0 6px 18px rgba(20, 22, 27, 0.06);
   --shadow-sm: 0 1px 2px rgba(20, 22, 27, 0.04), 0 6px 18px rgba(20, 22, 27, 0.06);
@@ -54,42 +59,80 @@
   --shadow-lg: 0 8px 24px rgba(20, 22, 27, 0.1), 0 2px 6px rgba(20, 22, 27, 0.06);
 
   /* ── Brand — Studio blue. Deep for text/links, brighter for fills ─────── */
-  --brand: #1c3fb0;            /* links, active icons, avatar fill */
-  --brand-ink: #1c3fb0;        /* brand text on light */
-  --brand-fill: #2a5bff;       /* primary button / progress fill */
-  --brand-tint: #eaf0ff;       /* "Continue" chip bg */
+  --brand: #1c3fb0; /* links, active icons, avatar fill */
+  --brand-ink: #1c3fb0; /* brand text on light */
+  --brand-fill: #2a5bff; /* primary button / progress fill */
+  --brand-tint: #eaf0ff; /* "Continue" chip bg */
 
   /* ── Skill-hue palette — 8 disciplined hues, used BY INDEX on skill tiles
         and practice-area swatches. Identical S/L feel so it reads systematic.
         Mirrors lib/skill-hue.ts (keep the two in sync). ──────────────────── */
-  --hue-1: #2a5bff;  --hue-1-tint: #e9f0ff;   /* blue */
-  --hue-2: #7a4fe0;  --hue-2-tint: #efeafd;   /* violet */
-  --hue-3: #d24d83;  --hue-3-tint: #fce9f1;   /* pink */
-  --hue-4: #c8791b;  --hue-4-tint: #fbf0dc;   /* amber */
-  --hue-5: #179a72;  --hue-5-tint: #e2f4ed;   /* green */
-  --hue-6: #3a8ec9;  --hue-6-tint: #e7f3fb;   /* sky */
-  --hue-7: #5563d6;  --hue-7-tint: #ebedfc;   /* indigo */
-  --hue-8: #bb573b;  --hue-8-tint: #fbe8e2;   /* rust */
+  --hue-1: #2a5bff;
+  --hue-1-tint: #e9f0ff; /* blue */
+  --hue-2: #7a4fe0;
+  --hue-2-tint: #efeafd; /* violet */
+  --hue-3: #d24d83;
+  --hue-3-tint: #fce9f1; /* pink */
+  --hue-4: #c8791b;
+  --hue-4-tint: #fbf0dc; /* amber */
+  --hue-5: #179a72;
+  --hue-5-tint: #e2f4ed; /* green */
+  --hue-6: #3a8ec9;
+  --hue-6-tint: #e7f3fb; /* sky */
+  --hue-7: #5563d6;
+  --hue-7-tint: #ebedfc; /* indigo */
+  --hue-8: #bb573b;
+  --hue-8-tint: #fbe8e2; /* rust */
 
   /* ── Topic families — one accent per course family. Remapped to the cool
         hue palette so existing cards/dashboard accents read "Studio". ────── */
-  --topic-court: #3a8ec9;          --topic-court-soft: #e7f3fb;        --topic-court-ink: #2b6c9b;
-  --topic-client: #179a72;         --topic-client-soft: #e2f4ed;       --topic-client-ink: #0f6e51;
-  --topic-ethics: #5563d6;         --topic-ethics-soft: #ebedfc;       --topic-ethics-ink: #3f4cb0;
-  --topic-research: #3a8ec9;       --topic-research-soft: #e7f3fb;     --topic-research-ink: #2b6c9b;
-  --topic-drafting: #7a4fe0;       --topic-drafting-soft: #efeafd;     --topic-drafting-ink: #5b39ab;
-  --topic-trauma: #d24d83;         --topic-trauma-soft: #fce9f1;       --topic-trauma-ink: #a83467;
-  --topic-foundations: #5563d6;    --topic-foundations-soft: #ebedfc;  --topic-foundations-ink: #3f4cb0;
-  --topic-neutral: #8b909d;        --topic-neutral-soft: #eef0f4;      --topic-neutral-ink: #565c69;
+  --topic-court: #3a8ec9;
+  --topic-court-soft: #e7f3fb;
+  --topic-court-ink: #2b6c9b;
+  --topic-client: #179a72;
+  --topic-client-soft: #e2f4ed;
+  --topic-client-ink: #0f6e51;
+  --topic-ethics: #5563d6;
+  --topic-ethics-soft: #ebedfc;
+  --topic-ethics-ink: #3f4cb0;
+  --topic-research: #3a8ec9;
+  --topic-research-soft: #e7f3fb;
+  --topic-research-ink: #2b6c9b;
+  --topic-drafting: #7a4fe0;
+  --topic-drafting-soft: #efeafd;
+  --topic-drafting-ink: #5b39ab;
+  --topic-trauma: #d24d83;
+  --topic-trauma-soft: #fce9f1;
+  --topic-trauma-ink: #a83467;
+  --topic-foundations: #5563d6;
+  --topic-foundations-soft: #ebedfc;
+  --topic-foundations-ink: #3f4cb0;
+  --topic-neutral: #8b909d;
+  --topic-neutral-soft: #eef0f4;
+  --topic-neutral-ink: #565c69;
 
   /* ── Status — lifecycle / progress signal. Kept distinct from topics ──── */
-  --status-progress: #179a72;      --status-progress-soft: #e2f4ed;    --status-progress-ink: #0f6e51;
-  --status-next: #2a5bff;          --status-next-soft: #eaf0ff;        --status-next-ink: #1c3fb0;
-  --status-done: #179a72;          --status-done-soft: #e2f4ed;        --status-done-ink: #0f6e51;
-  --status-new: #c8791b;           --status-new-soft: #fbf0dc;         --status-new-ink: #99610f;
-  --status-updated: #c8791b;       --status-updated-soft: #fbf0dc;     --status-updated-ink: #99610f;
-  --status-changed: #c8493b;       --status-changed-soft: #fbe9e6;     --status-changed-ink: #9c3528;
-  --status-later: #8b909d;         --status-later-soft: #eef0f4;       --status-later-ink: #565c69;
+  --status-progress: #179a72;
+  --status-progress-soft: #e2f4ed;
+  --status-progress-ink: #0f6e51;
+  --status-next: #2a5bff;
+  --status-next-soft: #eaf0ff;
+  --status-next-ink: #1c3fb0;
+  --status-done: #179a72;
+  --status-done-soft: #e2f4ed;
+  --status-done-ink: #0f6e51;
+  --status-new: #c8791b;
+  --status-new-soft: #fbf0dc;
+  --status-new-ink: #99610f;
+  --status-updated: #c8791b;
+  --status-updated-soft: #fbf0dc;
+  --status-updated-ink: #99610f;
+  --status-changed: #c8493b;
+  --status-changed-soft: #fbe9e6;
+  --status-changed-ink: #9c3528;
+  --status-later: #8b909d;
+  --status-later-soft: #eef0f4;
+  --status-later-ink: #565c69;
 
   --radius-card: 14px;
   --radius-control: 9px;
@@ -160,31 +203,69 @@
   --brand-tint: #18274f;
 
   /* Skill hues: saturated strokes plus deep fills for icon wells/chips. */
-  --hue-1: #86a5ff;  --hue-1-tint: #18274f;
-  --hue-2: #b49af0;  --hue-2-tint: #251a40;
-  --hue-3: #ef9bbd;  --hue-3-tint: #3a1c2a;
-  --hue-4: #e0a552;  --hue-4-tint: #3a2c10;
-  --hue-5: #5fc9a8;  --hue-5-tint: #133029;
-  --hue-6: #7cc0ec;  --hue-6-tint: #14283a;
-  --hue-7: #9aa3ec;  --hue-7-tint: #1f2340;
-  --hue-8: #e8957a;  --hue-8-tint: #3a1f17;
+  --hue-1: #86a5ff;
+  --hue-1-tint: #18274f;
+  --hue-2: #b49af0;
+  --hue-2-tint: #251a40;
+  --hue-3: #ef9bbd;
+  --hue-3-tint: #3a1c2a;
+  --hue-4: #e0a552;
+  --hue-4-tint: #3a2c10;
+  --hue-5: #5fc9a8;
+  --hue-5-tint: #133029;
+  --hue-6: #7cc0ec;
+  --hue-6-tint: #14283a;
+  --hue-7: #9aa3ec;
+  --hue-7-tint: #1f2340;
+  --hue-8: #e8957a;
+  --hue-8-tint: #3a1f17;
 
-  --topic-court: #7cc0ec;          --topic-court-soft: #14283a;        --topic-court-ink: #7cc0ec;
-  --topic-client: #5fc9a8;         --topic-client-soft: #133029;       --topic-client-ink: #5fc9a8;
-  --topic-ethics: #9aa3ec;         --topic-ethics-soft: #1f2340;       --topic-ethics-ink: #9aa3ec;
-  --topic-research: #7cc0ec;       --topic-research-soft: #14283a;     --topic-research-ink: #7cc0ec;
-  --topic-drafting: #b49af0;       --topic-drafting-soft: #251a40;     --topic-drafting-ink: #b49af0;
-  --topic-trauma: #ef9bbd;         --topic-trauma-soft: #3a1c2a;       --topic-trauma-ink: #ef9bbd;
-  --topic-foundations: #9aa3ec;    --topic-foundations-soft: #1f2340;  --topic-foundations-ink: #9aa3ec;
-  --topic-neutral: #9aa0ad;        --topic-neutral-soft: #262a33;      --topic-neutral-ink: #c0c6d1;
+  --topic-court: #7cc0ec;
+  --topic-court-soft: #14283a;
+  --topic-court-ink: #7cc0ec;
+  --topic-client: #5fc9a8;
+  --topic-client-soft: #133029;
+  --topic-client-ink: #5fc9a8;
+  --topic-ethics: #9aa3ec;
+  --topic-ethics-soft: #1f2340;
+  --topic-ethics-ink: #9aa3ec;
+  --topic-research: #7cc0ec;
+  --topic-research-soft: #14283a;
+  --topic-research-ink: #7cc0ec;
+  --topic-drafting: #b49af0;
+  --topic-drafting-soft: #251a40;
+  --topic-drafting-ink: #b49af0;
+  --topic-trauma: #ef9bbd;
+  --topic-trauma-soft: #3a1c2a;
+  --topic-trauma-ink: #ef9bbd;
+  --topic-foundations: #9aa3ec;
+  --topic-foundations-soft: #1f2340;
+  --topic-foundations-ink: #9aa3ec;
+  --topic-neutral: #9aa0ad;
+  --topic-neutral-soft: #262a33;
+  --topic-neutral-ink: #c0c6d1;
 
-  --status-progress: #5fc9a8;      --status-progress-soft: #133029;    --status-progress-ink: #5fc9a8;
-  --status-next: #86a5ff;          --status-next-soft: #18274f;        --status-next-ink: #9bb4ff;
-  --status-done: #5fc9a8;          --status-done-soft: #133029;        --status-done-ink: #5fc9a8;
-  --status-new: #e0a552;           --status-new-soft: #3a2c10;         --status-new-ink: #e0a552;
-  --status-updated: #e0a552;       --status-updated-soft: #3a2c10;     --status-updated-ink: #e0a552;
-  --status-changed: #ec8275;       --status-changed-soft: #3a1c18;     --status-changed-ink: #ec8275;
-  --status-later: #9aa0ad;         --status-later-soft: #262a33;       --status-later-ink: #c0c6d1;
+  --status-progress: #5fc9a8;
+  --status-progress-soft: #133029;
+  --status-progress-ink: #5fc9a8;
+  --status-next: #86a5ff;
+  --status-next-soft: #18274f;
+  --status-next-ink: #9bb4ff;
+  --status-done: #5fc9a8;
+  --status-done-soft: #133029;
+  --status-done-ink: #5fc9a8;
+  --status-new: #e0a552;
+  --status-new-soft: #3a2c10;
+  --status-new-ink: #e0a552;
+  --status-updated: #e0a552;
+  --status-updated-soft: #3a2c10;
+  --status-updated-ink: #e0a552;
+  --status-changed: #ec8275;
+  --status-changed-soft: #3a1c18;
+  --status-changed-ink: #ec8275;
+  --status-later: #9aa0ad;
+  --status-later-soft: #262a33;
+  --status-later-ink: #c0c6d1;
 
   --bg-main: var(--paper);
   --bg-surface: var(--surface);
@@ -374,7 +455,9 @@ input::placeholder {
 .nav-link-active {
   background: color-mix(in srgb, var(--brand) 10%, var(--surface-raised));
   color: var(--ink);
-  box-shadow: inset 0 0 0 1px rgba(43, 38, 31, 0.1), 0 1px 2px rgba(36, 31, 24, 0.035);
+  box-shadow:
+    inset 0 0 0 1px rgba(43, 38, 31, 0.1),
+    0 1px 2px rgba(36, 31, 24, 0.035);
 }
 
 .nav-link-active::before {
@@ -390,7 +473,9 @@ input::placeholder {
 .control-active {
   background: var(--ink);
   color: var(--surface-raised);
-  box-shadow: var(--shadow-xs), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow:
+    var(--shadow-xs),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .control-toggle-active {
@@ -422,7 +507,11 @@ input::placeholder {
   border-radius: var(--radius-card);
   background: var(--surface-raised);
   box-shadow: var(--shadow-xs);
-  transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
 }
 
 .interactive-tile:hover {

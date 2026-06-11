@@ -32,12 +32,32 @@ type NavItem = {
 const primaryNav: NavItem[] = [
   { label: "Home", href: "/", icon: HomeIcon, match: (p) => p === "/" },
   { label: "Browse", href: "/#browse", icon: GridIcon, match: () => false },
-  { label: "My Learning", href: "/my-learning", icon: BookIcon, learnerOnly: true, match: (p) => p === "/my-learning" || (p.startsWith("/my-learning/") && p !== "/my-learning/admin") },
-  { label: "Updates", href: "/updates", icon: BellIcon, badge: true, learnerOnly: true, match: (p) => p.startsWith("/updates") },
+  {
+    label: "My Learning",
+    href: "/my-learning",
+    icon: BookIcon,
+    learnerOnly: true,
+    match: (p) =>
+      p === "/my-learning" || (p.startsWith("/my-learning/") && p !== "/my-learning/admin"),
+  },
+  {
+    label: "Updates",
+    href: "/updates",
+    icon: BellIcon,
+    badge: true,
+    learnerOnly: true,
+    match: (p) => p.startsWith("/updates"),
+  },
 ];
 
 const roleNav: NavItem[] = [
-  { label: "Admin console", href: "/my-learning/admin", icon: GridIcon, adminOnly: true, match: (p) => p === "/my-learning/admin" },
+  {
+    label: "Admin console",
+    href: "/my-learning/admin",
+    icon: GridIcon,
+    adminOnly: true,
+    match: (p) => p === "/my-learning/admin",
+  },
 ];
 
 function RailItem({
@@ -127,7 +147,17 @@ export function StudioRail({
           aria-expanded={!collapsed}
           className="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[8px] bg-[color:var(--ink)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
         >
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <svg
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#fff"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
             <path d="M12 3v18" />
             <path d="M7 8h10" />
             <path d="M7 8 4 15a3 3 0 0 0 6 0z" />
@@ -135,7 +165,9 @@ export function StudioRail({
           </svg>
         </button>
         {!collapsed && (
-          <span className="text-[20px] font-bold tracking-[-0.02em] text-[color:var(--ink)]">LACE</span>
+          <span className="text-[20px] font-bold tracking-[-0.02em] text-[color:var(--ink)]">
+            LACE
+          </span>
         )}
       </div>
 
@@ -247,8 +279,12 @@ export function StudioRail({
           </span>
           {!collapsed && user && (
             <div className="min-w-0 leading-tight">
-              <div className="truncate text-[13px] font-semibold text-[color:var(--ink)]">{user.name}</div>
-              <div className="truncate text-[11.5px] text-[color:var(--ink-soft)]">{user.title}</div>
+              <div className="truncate text-[13px] font-semibold text-[color:var(--ink)]">
+                {user.name}
+              </div>
+              <div className="truncate text-[11.5px] text-[color:var(--ink-soft)]">
+                {user.title}
+              </div>
             </div>
           )}
         </div>

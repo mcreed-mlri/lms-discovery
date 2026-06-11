@@ -60,7 +60,10 @@ test("Kevin can see approved advocate-safe courses", () => {
 test("Kevin search results do not leak hidden titles", () => {
   const eligibleItems = getEligibleLearningItems(getLearningItems(), kevin);
   const results = searchLearningItems(eligibleItems, "first appearance");
-  assert.equal(results.some((result) => result.item.title === "The First Appearance Checklist"), false);
+  assert.equal(
+    results.some((result) => result.item.title === "The First Appearance Checklist"),
+    false,
+  );
 });
 
 test("Suspended or inactive users receive no discovery items", () => {

@@ -175,7 +175,8 @@ export const modules: Module[] = [
     level: "Foundations",
     tags: ["ethics", "confidentiality", "professional conduct"],
     brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/professional-foundations",
-    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/professional-foundations/viewContent/1001/View",
+    brightspaceModuleUrl:
+      "https://brightspace.example.edu/d2l/le/content/professional-foundations/viewContent/1001/View",
   },
   {
     id: "legal-aid-environment",
@@ -188,7 +189,8 @@ export const modules: Module[] = [
     level: "Foundations",
     tags: ["legal aid", "organization", "mission"],
     brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/professional-foundations",
-    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/professional-foundations/viewContent/1002/View",
+    brightspaceModuleUrl:
+      "https://brightspace.example.edu/d2l/le/content/professional-foundations/viewContent/1002/View",
   },
   {
     id: "case-notes-and-compliance",
@@ -201,7 +203,8 @@ export const modules: Module[] = [
     level: "Foundations",
     tags: ["documentation", "compliance", "time records"],
     brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/professional-foundations",
-    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/professional-foundations/viewContent/1003/View",
+    brightspaceModuleUrl:
+      "https://brightspace.example.edu/d2l/le/content/professional-foundations/viewContent/1003/View",
   },
 
   // Client-Centered Communication modules
@@ -217,7 +220,8 @@ export const modules: Module[] = [
     level: "Foundations",
     tags: ["client intake", "interviewing", "fact gathering"],
     brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/client-centered-practice",
-    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/client-centered-practice/viewContent/2001/View",
+    brightspaceModuleUrl:
+      "https://brightspace.example.edu/d2l/le/content/client-centered-practice/viewContent/2001/View",
   },
   {
     id: "trauma-informed-communication",
@@ -230,13 +234,13 @@ export const modules: Module[] = [
     level: "Foundations",
     tags: ["trauma-informed", "communication", "client services"],
     brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/client-centered-practice",
-    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/client-centered-practice/viewContent/2002/View",
+    brightspaceModuleUrl:
+      "https://brightspace.example.edu/d2l/le/content/client-centered-practice/viewContent/2002/View",
   },
   {
     id: "safety-screening",
     title: "Safety Screening and Crisis Recognition",
-    description:
-      "Spot safety risks early and know when to connect a client to immediate support.",
+    description: "Spot safety risks early and know when to connect a client to immediate support.",
     contentStatus: "New",
     courseId: "client-centered-practice",
     parentCourseTitle: "Client-Centered Communication",
@@ -244,7 +248,8 @@ export const modules: Module[] = [
     level: "Foundations",
     tags: ["safety screening", "crisis", "domestic violence"],
     brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/client-centered-practice",
-    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/client-centered-practice/viewContent/2003/View",
+    brightspaceModuleUrl:
+      "https://brightspace.example.edu/d2l/le/content/client-centered-practice/viewContent/2003/View",
   },
 
   // First Steps in Court modules
@@ -259,7 +264,8 @@ export const modules: Module[] = [
     level: "Foundations",
     tags: ["courtroom procedures", "etiquette", "professionalism"],
     brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/first-steps-in-court",
-    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/first-steps-in-court/viewContent/3001/View",
+    brightspaceModuleUrl:
+      "https://brightspace.example.edu/d2l/le/content/first-steps-in-court/viewContent/3001/View",
   },
   {
     id: "preparing-client-for-court",
@@ -272,7 +278,8 @@ export const modules: Module[] = [
     level: "Foundations",
     tags: ["client preparation", "hearings", "courtroom procedures"],
     brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/first-steps-in-court",
-    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/first-steps-in-court/viewContent/3002/View",
+    brightspaceModuleUrl:
+      "https://brightspace.example.edu/d2l/le/content/first-steps-in-court/viewContent/3002/View",
   },
   {
     id: "first-appearance-checklist",
@@ -286,7 +293,8 @@ export const modules: Module[] = [
     level: "Foundations",
     tags: ["courtroom procedures", "first appearance", "preparation"],
     brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/first-steps-in-court",
-    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/first-steps-in-court/viewContent/3003/View",
+    brightspaceModuleUrl:
+      "https://brightspace.example.edu/d2l/le/content/first-steps-in-court/viewContent/3003/View",
   },
   {
     id: "clock-starts",
@@ -375,7 +383,8 @@ export const modules: Module[] = [
     level: "Foundations",
     tags: ["upl", "advocate boundaries", "supervision", "ethics"],
     brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/upl-boundaries-advocates",
-    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/upl-boundaries-advocates/viewContent/5001/View",
+    brightspaceModuleUrl:
+      "https://brightspace.example.edu/d2l/le/content/upl-boundaries-advocates/viewContent/5001/View",
   },
   {
     id: "when-to-escalate-attorney",
@@ -388,7 +397,8 @@ export const modules: Module[] = [
     level: "Foundations",
     tags: ["upl", "attorney review", "supervision", "client support"],
     brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/upl-boundaries-advocates",
-    brightspaceModuleUrl: "https://brightspace.example.edu/d2l/le/content/upl-boundaries-advocates/viewContent/5002/View",
+    brightspaceModuleUrl:
+      "https://brightspace.example.edu/d2l/le/content/upl-boundaries-advocates/viewContent/5002/View",
   },
 ];
 
@@ -462,10 +472,34 @@ export const continueLearning: ContinueLearningItem[] = [
     resumeUrl:
       "https://mlri.brightspace.com/content/enforced/6703-course.outline/notice-types.html?ou=6703&d2l_body_type=3",
   },
-  { id: "wrapper-self-checks", type: "MODULE", title: "Self Checks", detail: "Brightspace Wrapper Demo", status: "In progress" },
-  { id: "professional-foundations", type: "COURSE", title: "Professional Foundations for Legal Aid", detail: "Module 2 of 3", progress: 45 },
-  { id: "first-client-interview", type: "MODULE", title: "Conducting Your First Client Interview", detail: "Client-Centered Communication", status: "In progress" },
-  { id: "new-attorney-foundations", type: "PATH", title: "New Attorney Foundations", detail: "1 of 3 courses complete", progress: 33 },
+  {
+    id: "wrapper-self-checks",
+    type: "MODULE",
+    title: "Self Checks",
+    detail: "Brightspace Wrapper Demo",
+    status: "In progress",
+  },
+  {
+    id: "professional-foundations",
+    type: "COURSE",
+    title: "Professional Foundations for Legal Aid",
+    detail: "Module 2 of 3",
+    progress: 45,
+  },
+  {
+    id: "first-client-interview",
+    type: "MODULE",
+    title: "Conducting Your First Client Interview",
+    detail: "Client-Centered Communication",
+    status: "In progress",
+  },
+  {
+    id: "new-attorney-foundations",
+    type: "PATH",
+    title: "New Attorney Foundations",
+    detail: "1 of 3 courses complete",
+    progress: 33,
+  },
 ];
 
 // Learner progress for the home hero — training-hour goal + this-week activity.
@@ -476,10 +510,25 @@ export const learnerProgress = {
   cleEarned: 8.5,
   cleRequired: 12,
   // Mon–Sun: completed a module, the current day, or still to come.
-  weeklyActivity: ["done", "done", "done", "today", "upcoming", "upcoming", "upcoming"] as WeekDayActivity[],
+  weeklyActivity: [
+    "done",
+    "done",
+    "done",
+    "today",
+    "upcoming",
+    "upcoming",
+    "upcoming",
+  ] as WeekDayActivity[],
 };
 
-export const popularTopics = ["Notice to Quit", "First Appearance", "Client Intake", "Confidentiality", "Safety Screening", "Court Preparation"];
+export const popularTopics = [
+  "Notice to Quit",
+  "First Appearance",
+  "Client Intake",
+  "Confidentiality",
+  "Safety Screening",
+  "Court Preparation",
+];
 
 // Quick searches surfaced under the command bar — the things a busy advocate
 // reaches for most. Short, scannable, thumb-friendly on mobile.
@@ -556,14 +605,54 @@ export type Skill = {
 };
 
 export const skills: Skill[] = [
-  { id: "interviewing", name: "Client interviewing", glyph: "interview", blurb: "Start the conversation and gather the facts that matter." },
-  { id: "drafting", name: "Drafting & writing", glyph: "draft", blurb: "Write notes, letters, and motions clearly and accurately." },
-  { id: "counseling", name: "Client counseling", glyph: "counsel", blurb: "Explain options and help clients prepare for what is next." },
-  { id: "triage", name: "Case triage", glyph: "triage", blurb: "Spot urgency, name the deadline, and choose the first step." },
-  { id: "negotiation", name: "Negotiation", glyph: "negotiate", blurb: "Prepare for conversations with agencies and opposing counsel." },
-  { id: "courtroom", name: "Courtroom skills", glyph: "court", blurb: "Understand procedure and walk into hearings ready." },
-  { id: "ethics", name: "Ethical judgment", glyph: "ethics", blurb: "Handle confidentiality, conflicts, and daily judgment calls." },
-  { id: "research", name: "Legal research", glyph: "research", blurb: "Find the rule, form, or authority you need quickly." },
+  {
+    id: "interviewing",
+    name: "Client interviewing",
+    glyph: "interview",
+    blurb: "Start the conversation and gather the facts that matter.",
+  },
+  {
+    id: "drafting",
+    name: "Drafting & writing",
+    glyph: "draft",
+    blurb: "Write notes, letters, and motions clearly and accurately.",
+  },
+  {
+    id: "counseling",
+    name: "Client counseling",
+    glyph: "counsel",
+    blurb: "Explain options and help clients prepare for what is next.",
+  },
+  {
+    id: "triage",
+    name: "Case triage",
+    glyph: "triage",
+    blurb: "Spot urgency, name the deadline, and choose the first step.",
+  },
+  {
+    id: "negotiation",
+    name: "Negotiation",
+    glyph: "negotiate",
+    blurb: "Prepare for conversations with agencies and opposing counsel.",
+  },
+  {
+    id: "courtroom",
+    name: "Courtroom skills",
+    glyph: "court",
+    blurb: "Understand procedure and walk into hearings ready.",
+  },
+  {
+    id: "ethics",
+    name: "Ethical judgment",
+    glyph: "ethics",
+    blurb: "Handle confidentiality, conflicts, and daily judgment calls.",
+  },
+  {
+    id: "research",
+    name: "Legal research",
+    glyph: "research",
+    blurb: "Find the rule, form, or authority you need quickly.",
+  },
 ];
 
 export function getSkill(skillId: string): Skill | undefined {
@@ -628,11 +717,29 @@ function countModulesMatching(term: string): number {
 }
 
 export const practiceAreas: PracticeArea[] = [
-  { id: "housing", name: "Housing", query: "housing", count: Math.max(countModulesMatching("housing"), 5), hueIndex: 0 },
+  {
+    id: "housing",
+    name: "Housing",
+    query: "housing",
+    count: Math.max(countModulesMatching("housing"), 5),
+    hueIndex: 0,
+  },
   { id: "benefits", name: "Public Benefits", query: "benefits", count: 6, hueIndex: 1 },
   { id: "family", name: "Family Law", query: "family", count: 4, hueIndex: 2 },
-  { id: "ethics", name: "Ethics", query: "ethics", count: Math.max(countModulesMatching("ethics"), 3), hueIndex: 3 },
-  { id: "skills", name: "Practice Skills", query: "court", count: Math.max(countModulesMatching("court"), 8), hueIndex: 4 },
+  {
+    id: "ethics",
+    name: "Ethics",
+    query: "ethics",
+    count: Math.max(countModulesMatching("ethics"), 3),
+    hueIndex: 3,
+  },
+  {
+    id: "skills",
+    name: "Practice Skills",
+    query: "court",
+    count: Math.max(countModulesMatching("court"), 8),
+    hueIndex: 4,
+  },
   { id: "immigration", name: "Immigration", query: "immigration", count: 3, hueIndex: 5 },
 ];
 
@@ -714,7 +821,10 @@ export function getModuleBrightspaceUrl(module: Module) {
 }
 
 export function getLearningItemUrl(item: LearningItem) {
-  if (item.type === "COURSE" && (item.id === "welcome-to-lace" || item.id === "eviction-defense-48h")) {
+  if (
+    item.type === "COURSE" &&
+    (item.id === "welcome-to-lace" || item.id === "eviction-defense-48h")
+  ) {
     return item.brightspaceUrl;
   }
 
@@ -732,8 +842,14 @@ const dashboardCourseLearningItemIds: Record<string, string> = {
   "6844": "first-client-interview",
 };
 
-export function getLearningUrlForDashboardCourse(course: { offeringId?: string; title: string; resumeUrl?: string }) {
-  const mappedId = course.offeringId ? dashboardCourseLearningItemIds[course.offeringId] : undefined;
+export function getLearningUrlForDashboardCourse(course: {
+  offeringId?: string;
+  title: string;
+  resumeUrl?: string;
+}) {
+  const mappedId = course.offeringId
+    ? dashboardCourseLearningItemIds[course.offeringId]
+    : undefined;
   const mappedItem = mappedId ? getLearningItemById(mappedId) : undefined;
   if (mappedItem) return getLearningItemUrl(mappedItem);
 

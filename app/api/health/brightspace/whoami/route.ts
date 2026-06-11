@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { brightspaceApiFetch, getBrightspaceAccessToken, getBrightspaceBaseUrl } from "@/lib/brightspace/api";
+import {
+  brightspaceApiFetch,
+  getBrightspaceAccessToken,
+  getBrightspaceBaseUrl,
+} from "@/lib/brightspace/api";
 
 export async function GET(request: NextRequest) {
   const baseUrl = getBrightspaceBaseUrl();
@@ -26,7 +30,8 @@ export async function GET(request: NextRequest) {
       {
         ok: false,
         error: error instanceof Error ? error.message : "Brightspace whoami request failed.",
-        nextStep: "Complete the Brightspace OAuth flow from /api/auth/brightspace/start, then retry whoami in the same browser session.",
+        nextStep:
+          "Complete the Brightspace OAuth flow from /api/auth/brightspace/start, then retry whoami in the same browser session.",
       },
       { status: 500 },
     );

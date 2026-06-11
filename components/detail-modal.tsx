@@ -19,27 +19,31 @@ function getDuration(item: LearningItem) {
 
 function getSyllabus(item: LearningItem) {
   if (item.type === "PATH") {
-    return courses.filter((course) => item.courseIds.includes(course.id)).map((course) => ({
-      id: course.id,
-      label: getCourseLabel(course),
-      title: course.title,
-      description: course.description,
-      duration: course.duration,
-      themeId: course.id,
-      href: getLearningItemUrl({ ...course, type: "COURSE" as const }),
-    }));
+    return courses
+      .filter((course) => item.courseIds.includes(course.id))
+      .map((course) => ({
+        id: course.id,
+        label: getCourseLabel(course),
+        title: course.title,
+        description: course.description,
+        duration: course.duration,
+        themeId: course.id,
+        href: getLearningItemUrl({ ...course, type: "COURSE" as const }),
+      }));
   }
 
   if (item.type === "COURSE") {
-    return modules.filter((module) => module.courseId === item.id).map((module) => ({
-      id: module.id,
-      label: "Reading",
-      title: module.title,
-      description: module.description,
-      duration: "25 min",
-      themeId: module.courseId,
-      href: getLearningItemUrl({ ...module, type: "MODULE" as const }),
-    }));
+    return modules
+      .filter((module) => module.courseId === item.id)
+      .map((module) => ({
+        id: module.id,
+        label: "Reading",
+        title: module.title,
+        description: module.description,
+        duration: "25 min",
+        themeId: module.courseId,
+        href: getLearningItemUrl({ ...module, type: "MODULE" as const }),
+      }));
   }
 
   return [
@@ -82,11 +86,22 @@ export function DetailModal({
   if (!item) return null;
 
   const syllabus = getSyllabus(item);
-  const syllabusLabel = item.type === "PATH" ? `${syllabus.length} courses` : `${syllabus.length} modules`;
+  const syllabusLabel =
+    item.type === "PATH" ? `${syllabus.length} courses` : `${syllabus.length} modules`;
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-end justify-center bg-[color:var(--ink)]/35 backdrop-blur-sm sm:items-start sm:py-10 sm:overflow-y-auto sm:px-4" role="dialog" aria-modal="true" aria-labelledby="learning-detail-title">
-      <button className="absolute inset-0 cursor-default" type="button" aria-label="Close detail view" onClick={onClose} />
+    <div
+      className="fixed inset-0 z-[80] flex items-end justify-center bg-[color:var(--ink)]/35 backdrop-blur-sm sm:items-start sm:py-10 sm:overflow-y-auto sm:px-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="learning-detail-title"
+    >
+      <button
+        className="absolute inset-0 cursor-default"
+        type="button"
+        aria-label="Close detail view"
+        onClick={onClose}
+      />
       <section className="editorial-panel animate-slide-up sm:animate-fade-in-scale relative w-full max-w-4xl bg-[color:var(--surface-raised)] p-5 text-[color:var(--ink)] sm:p-8 rounded-t-2xl rounded-b-none sm:rounded-b-2xl sm:rounded-2xl max-sm:max-h-[88vh] max-sm:overflow-y-auto pb-[calc(1.25rem+env(safe-area-inset-bottom))]">
         {/* Pull handle for mobile drawer */}
         <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-[color:var(--line-strong)] sm:hidden" />
@@ -99,14 +114,18 @@ export function DetailModal({
           &times;
         </button>
 
-
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_15rem]">
           <div className="pr-8">
             <TypeBadge type={item.type} />
-            <h2 id="learning-detail-title" className="modal-title mt-5 max-w-2xl text-4xl text-[color:var(--ink)] sm:text-5xl">
+            <h2
+              id="learning-detail-title"
+              className="modal-title mt-5 max-w-2xl text-4xl text-[color:var(--ink)] sm:text-5xl"
+            >
               {item.title}
             </h2>
-            <p className="readable-copy mt-5 max-w-2xl text-[1.02rem] leading-7">{getSummary(item)}</p>
+            <p className="readable-copy mt-5 max-w-2xl text-[1.02rem] leading-7">
+              {getSummary(item)}
+            </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <a
                 className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
@@ -133,7 +152,13 @@ export function DetailModal({
             <dl className="grid gap-5 text-sm">
               <div>
                 <dt className="editorial-eyebrow">Type</dt>
-                <dd className="mt-1 font-bold text-[color:var(--ink)]">{item.type === "PATH" ? "Learning path" : item.type === "COURSE" ? "Course" : "Module"}</dd>
+                <dd className="mt-1 font-bold text-[color:var(--ink)]">
+                  {item.type === "PATH"
+                    ? "Learning path"
+                    : item.type === "COURSE"
+                      ? "Course"
+                      : "Module"}
+                </dd>
               </div>
               <div>
                 <dt className="editorial-eyebrow">Duration</dt>
@@ -165,12 +190,18 @@ export function DetailModal({
                   className={`group relative grid gap-3 py-4 pl-4 pr-2 transition hover:bg-[color:var(--surface-sunken)] md:grid-cols-[7rem_minmax(0,1fr)_auto] md:items-start ${entryTheme.rail} before:absolute before:bottom-4 before:left-0 before:top-4 before:w-0.5`}
                   href={entry.href}
                 >
-                  <span className={`metadata max-w-[8rem] break-words pt-1 leading-4 md:max-w-[6.5rem] ${entryTheme.eyebrow}`}>
+                  <span
+                    className={`metadata max-w-[8rem] break-words pt-1 leading-4 md:max-w-[6.5rem] ${entryTheme.eyebrow}`}
+                  >
                     {entry.label}
                   </span>
                   <span className="min-w-0">
-                    <span className="card-title block text-[1.02rem] leading-snug">{entry.title}</span>
-                    <span className="readable-copy mt-1 block max-w-2xl text-[0.95rem] leading-6">{entry.description}</span>
+                    <span className="card-title block text-[1.02rem] leading-snug">
+                      {entry.title}
+                    </span>
+                    <span className="readable-copy mt-1 block max-w-2xl text-[0.95rem] leading-6">
+                      {entry.description}
+                    </span>
                   </span>
                   <span className="inline-flex items-center gap-3 justify-self-start whitespace-nowrap pt-1 text-sm font-semibold text-[color:var(--ink-muted)] md:justify-self-end">
                     {entry.duration}

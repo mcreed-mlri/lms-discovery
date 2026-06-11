@@ -27,7 +27,13 @@ function getThemeId(item: ContinueItem) {
   return undefined;
 }
 
-export function ContinueCard({ item, priority = "standard" }: { item: ContinueItem; priority?: "primary" | "standard" }) {
+export function ContinueCard({
+  item,
+  priority = "standard",
+}: {
+  item: ContinueItem;
+  priority?: "primary" | "standard";
+}) {
   const themeId = getThemeId(item);
   const courseTheme = themeId ? getCourseTheme(themeId) : getCourseTheme("");
   const isPrimary = priority === "primary";
@@ -54,17 +60,21 @@ export function ContinueCard({ item, priority = "standard" }: { item: ContinueIt
           <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
         </span>
       </div>
-      {isPrimary && (
-        <p className="metadata mt-3 text-[color:var(--ink-soft)]">Resume course</p>
-      )}
-      <h3 className={`card-title ${isPrimary ? "mt-1 text-xl" : "mt-4 min-h-10 text-lg"} leading-snug`}>{item.title}</h3>
+      {isPrimary && <p className="metadata mt-3 text-[color:var(--ink-soft)]">Resume course</p>}
+      <h3
+        className={`card-title ${isPrimary ? "mt-1 text-xl" : "mt-4 min-h-10 text-lg"} leading-snug`}
+      >
+        {item.title}
+      </h3>
       <div className="mt-4">
         {item.type === "MODULE" ? (
           (() => {
             const status = getStatusTheme(resolveStatusKey(item.status));
             return (
               <div className={`rounded-lg border px-3 py-2.5 ${status.pill}`}>
-                <p className="metadata text-[0.62rem] leading-none text-current opacity-80">{item.detail}</p>
+                <p className="metadata text-[0.62rem] leading-none text-current opacity-80">
+                  {item.detail}
+                </p>
                 <p className="mt-1 inline-flex items-center gap-1.5 text-base font-bold text-current">
                   <span className={`h-1.5 w-1.5 rounded-full ${status.dot}`} aria-hidden="true" />
                   {item.status}
@@ -79,7 +89,10 @@ export function ContinueCard({ item, priority = "standard" }: { item: ContinueIt
               <span>{item.progress}%</span>
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-[color:var(--surface-sunken)]">
-              <div className={`h-full rounded-full ${courseTheme.progress}`} style={{ width: `${item.progress}%` }} />
+              <div
+                className={`h-full rounded-full ${courseTheme.progress}`}
+                style={{ width: `${item.progress}%` }}
+              />
             </div>
           </>
         )}
