@@ -18,16 +18,10 @@ This repo keeps a local Node copy in `tools/` (gitignored). Use it when `npm` is
 .\tools\node-v24.15.0-win-x64\npm.cmd install
 ```
 
-Start the dev server:
+Start the dev server (any npm script works the same way through the bundled npm):
 
 ```powershell
-.\tools\node-v24.15.0-win-x64\npm.cmd run dev:win
-```
-
-Or call Next directly (same as the `dev:win` script):
-
-```powershell
-.\tools\node-v24.15.0-win-x64\node.exe ./node_modules/next/dist/bin/next dev -p 3000 --webpack
+.\tools\node-v24.15.0-win-x64\npm.cmd run dev
 ```
 
 Then open `http://localhost:3000`.
@@ -40,6 +34,26 @@ npm run dev
 ```
 
 Then open `http://localhost:3000`.
+
+## Environment variables
+
+Copy `.env.example` to `.env.local` and fill in real values. Never commit `.env` or `.env.local` — only `.env.example` is tracked in git.
+
+- **Supabase** (`NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`): database access, prepared for the dashboard phase. The service role key is server-only — keep it secret.
+- **Brightspace** (`BRIGHTSPACE_*`): OAuth and API credentials for the LMS integration. Without these, the app still runs — the discovery UI and mock dashboard work fine; only the `/api/auth/brightspace/*`, `/api/health/*`, and `/api/admin/sync/*` routes need them.
+- **`ADMIN_SYNC_SECRET`**: shared secret that callers must send in the `x-admin-secret` header to use `/api/admin/*` routes. Admin routes return 503 if it is not configured (fail closed).
+
+For production, set the same variables in the Vercel dashboard (Settings → Environment Variables).
+
+## Other useful scripts
+
+```bash
+npm test        # run the search-ranking and access-filtering tests
+npm run lint    # ESLint
+npm run format  # Prettier (format:check to verify without writing)
+npm run typecheck
+npm run build
+```
 
 ## LACE Hub dashboard (Phase 1 mock)
 
@@ -81,17 +95,10 @@ The active app is the Next.js project at the repository root. The `archive/`
 folder keeps earlier prototype artifacts available for reference without mixing
 them into the app source.
 
-## GitHub Pages deployment checklist
+## Deployment
 
-- [ ] Push this repository to GitHub (default branch: `main`)
-- [ ] In GitHub, open `Settings -> Pages`
-- [ ] Under **Build and deployment**, set **Source** to **GitHub Actions**
-- [ ] Confirm `.github/workflows/deploy-pages.yml` exists on `main`
-- [ ] Push any new commit (or run the workflow manually from the **Actions** tab)
-- [ ] Wait for **Deploy Next.js site to Pages** workflow to succeed
-- [ ] Open your site from `Settings -> Pages` once deployment is complete
+The app deploys to **Vercel** via its GitHub integration: pushing to `main` triggers a production deploy automatically. Environment variables are managed in the Vercel dashboard, not in the repo.
 
-### Notes
+GitHub Pages is **not** a deployment target — this app uses Next.js API routes (Brightspace OAuth, health checks, admin sync), which need a server. The old Pages site was unpublished in June 2026.
 
-- For repositories named `<username>.github.io`, the site is served at the root domain.
-- For all other repository names, the site is served from `/<repo-name>/` automatically.
+Continuous integration runs on GitHub Actions (`.github/workflows/ci.yml`): typecheck, lint, format check, tests, and a production build on every push and pull request. CI does not deploy; Vercel handles that.

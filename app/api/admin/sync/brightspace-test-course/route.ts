@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { requireAdminSecret } from "@/lib/admin-auth";
 import { brightspaceApiFetch, getBrightspaceLpVersion } from "@/lib/brightspace/api";
 import {
   mapBrightspaceCourseToLearningItem,
@@ -10,6 +11,9 @@ import { createSupabaseAdminClient } from "@/lib/supabase/server";
 const DEFAULT_TEST_COURSE_ORG_UNIT_ID = "6703";
 
 export async function POST(request: NextRequest) {
+  const denied = requireAdminSecret(request);
+  if (denied) return denied;
+
   const url = new URL(request.url);
   const orgUnitId = url.searchParams.get("orgUnitId") || DEFAULT_TEST_COURSE_ORG_UNIT_ID;
   const version = url.searchParams.get("version") || getBrightspaceLpVersion();
