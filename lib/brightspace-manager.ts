@@ -1,4 +1,4 @@
-const DEFAULT_BRIGHTSPACE_MANAGER_URL = "http://localhost:3001";
+const DEFAULT_BRIGHTSPACE_MANAGER_URL = "https://brightspace-manager.vercel.app";
 
 export function getBrightspaceManagerUrl(path = "/dashboard") {
   const baseUrl =
