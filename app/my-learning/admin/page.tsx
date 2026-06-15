@@ -1,10 +1,6 @@
-import { AdminDashboardView } from "@/components/dashboard/AdminDashboardView";
-import { RequireRole } from "@/components/dashboard/RequireRole";
+import { redirect } from "next/navigation";
+import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
 
 export default function AdminDashboardPage() {
-  return (
-    <RequireRole allow={["super_admin"]}>
-      <AdminDashboardView />
-    </RequireRole>
-  );
+  redirect(getBrightspaceManagerUrl());
 }

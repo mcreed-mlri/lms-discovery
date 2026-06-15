@@ -7,6 +7,7 @@ import { ArrowIcon, PlayIcon } from "@/components/icons";
 import { ProgressRing } from "@/components/progress-ring";
 import { SearchBox } from "@/components/search-box";
 import { getAccessLabel } from "@/lib/access";
+import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
 import {
   continueLearning,
   courses,
@@ -167,7 +168,7 @@ export function HeroSection({
           {isAdmin ? (
             <aside
               className="order-1 min-w-0 rounded-[12px] bg-[color:var(--feature-surface)] px-3 py-2.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-3 lg:order-2 lg:self-start"
-              aria-label="Admin console"
+              aria-label="Brightspace Manager"
             >
               <div className="flex items-start gap-2.5 sm:items-center sm:gap-3">
                 <div className="min-w-0 flex-1">
@@ -175,20 +176,20 @@ export function HeroSection({
                     Service account
                   </p>
                   <h2 className="mt-0.5 truncate text-[14px] font-bold leading-snug tracking-[-0.01em] text-[color:var(--feature-ink)] sm:text-[15px] sm:leading-tight">
-                    Integrations &amp; health
+                    Brightspace Manager
                   </h2>
                 </div>
                 <Link
-                  href="/my-learning/admin"
-                  aria-label="Open the admin console"
+                  href={getBrightspaceManagerUrl()}
+                  aria-label="Open Brightspace Manager"
                   className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--feature-action-border)] bg-[color:var(--feature-action-bg)] text-[color:var(--feature-action-ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-white/25 sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
                 >
                   <ArrowIcon className="h-[14px] w-[14px]" />
-                  <span className="hidden sm:inline">Console</span>
+                  <span className="hidden sm:inline">Manager</span>
                 </Link>
               </div>
               <p className="mt-1.5 text-[11px] leading-snug text-[color:var(--feature-muted)] sm:mt-2">
-                Headless data admin — API checks, Brightspace &amp; Supabase status.
+                Course operations, sync checks, and Brightspace setup now live there.
               </p>
             </aside>
           ) : (

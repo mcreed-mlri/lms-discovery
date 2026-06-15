@@ -13,6 +13,7 @@ import {
 import { ThemeToggle } from "@/components/theme-toggle";
 import { getEffectiveDashboardRole } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
+import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
 import { practiceAreas } from "@/lib/data";
 import { getHue } from "@/lib/skill-hue";
 import type { ComponentType } from "react";
@@ -52,11 +53,11 @@ const primaryNav: NavItem[] = [
 
 const roleNav: NavItem[] = [
   {
-    label: "Admin console",
-    href: "/my-learning/admin",
+    label: "Brightspace Manager",
+    href: getBrightspaceManagerUrl(),
     icon: GridIcon,
     adminOnly: true,
-    match: (p) => p === "/my-learning/admin",
+    match: () => false,
   },
 ];
 

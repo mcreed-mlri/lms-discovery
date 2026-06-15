@@ -10,6 +10,7 @@ import { StudioContentBar } from "@/components/studio-content-bar";
 import { StudioRail } from "@/components/studio-rail";
 import { getEffectiveDashboardRole, getEligibleLearningItems } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
+import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
 import { getLearningItems } from "@/lib/data";
 import { searchLearningItems, type SearchResult } from "@/lib/search";
 import { recordSearchAnalytics } from "@/lib/search-analytics";
@@ -193,9 +194,9 @@ export function StudioShell({
           />
           {isAdmin ? (
             <BottomNavLink
-              href="/my-learning/admin"
-              label="Console"
-              active={pathname.startsWith("/my-learning/admin")}
+              href={getBrightspaceManagerUrl()}
+              label="Manager"
+              active={false}
               icon={<GridIcon className="h-5 w-5" />}
             />
           ) : (

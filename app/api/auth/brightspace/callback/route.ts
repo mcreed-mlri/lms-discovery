@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
     hasAccessToken: true,
     hasRefreshToken: Boolean(tokenPayload.refresh_token),
     nextStep:
-      "Return to /my-learning/admin/ to verify the Brightspace token status, then test whoami.",
+      "Open Brightspace Manager to verify the Brightspace token status, then test whoami.",
   });
 
   response.cookies.set(ACCESS_TOKEN_COOKIE, tokenPayload.access_token, {

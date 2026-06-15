@@ -4,7 +4,7 @@ A Next.js App Router MVP for discovering MLRI learning content and navigating in
 
 > **Local folder:** `learning-hub/` · **Workspace map:** [`../README.md`](../README.md)
 
-Brightspace remains the system of record for courses, users, enrollment, and progress. This app only handles local discovery UI, search, browsing, learning paths, and simulated Brightspace handoff links.
+Brightspace remains the system of record for courses, users, enrollment, and progress. This app handles discovery UI, search, browsing, learning paths, learner progress surfaces, and handoff links. Course operations, sync checks, and Brightspace setup live in Brightspace Manager.
 
 ## Run locally
 
@@ -40,6 +40,7 @@ Then open `http://localhost:3000`.
 Copy `.env.example` to `.env.local` and fill in real values. Never commit `.env` or `.env.local` — only `.env.example` is tracked in git.
 
 - **Supabase** (`NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`): database access, prepared for the dashboard phase. The service role key is server-only — keep it secret.
+- **Brightspace Manager** (`NEXT_PUBLIC_BRIGHTSPACE_MANAGER_URL`): public handoff URL for the operations console. Local default is `http://localhost:3001`.
 - **Brightspace** (`BRIGHTSPACE_*`): OAuth and API credentials for the LMS integration. Without these, the app still runs — the discovery UI and mock dashboard work fine; only the `/api/auth/brightspace/*`, `/api/health/*`, and `/api/admin/sync/*` routes need them.
 - **`ADMIN_SYNC_SECRET`**: shared secret that callers must send in the `x-admin-secret` header to use `/api/admin/*` routes. Admin routes return 503 if it is not configured (fail closed).
 
@@ -61,7 +62,7 @@ Unified role-based dashboard at **`/my-learning`** (aliases `/dashboard` and `/m
 
 - **Learner** (`/my-learning`): full My Learning UI with course progress cards
 - **Manager** (`/my-learning/team`), **Program** (`/my-learning/program`): Phase 3 scaffolds
-- **Super-admin** (`/my-learning/admin`): integration status scaffold
+- **Super-admin** (`/my-learning/admin`): redirects to Brightspace Manager for course/admin operations
 
 Longer-term, the dashboard should support **multiple role assignments per user over time**, not one permanent user type. A learner may later become a supervisor, and supervisors or super-admins may still have their own learning activity. Keep one stable user record, then attach current and historical roles with scope, such as learner, supervisor/manager, program manager, super-admin, instructor/content manager, or report viewer.
 
@@ -70,7 +71,7 @@ Expected dashboard lenses:
 - **My Learning**: personal progress, courses, deadlines, notices, feedback, and certificates.
 - **My Team**: assigned learners, progress, gaps, overdue work, and supervisor actions.
 - **Program Overview**: cohort, practice area, or program-level reporting.
-- **Admin**: cross-program insight, integrations, exports, permissions, and system status.
+- **Admin/reporting**: cross-program insight and exports stay in the Hub when they support learning operations. Brightspace integrations, sync writes, permissions implementation, and system setup live in Brightspace Manager.
 
 Use the **dev role switcher** (bottom-left on dashboard routes) to preview nav for `learner`, `manager`, `program`, or `super_admin`. Choice persists in `localStorage` key `lace-dev-role`.
 
@@ -83,7 +84,7 @@ app/                         Next.js App Router pages and global styles
 app/dashboard/               LACE Hub unified dashboard (mock Phase 1)
 components/                  Reusable UI components for the learning hub
 components/dashboard/        Dashboard-specific UI (cards, shell, role gate)
-lib/                         Local demo data and Brightspace URL helpers
+lib/                         Local demo data, Brightspace URLs, and Manager handoff helpers
 lib/services/                dashboardService (mock → API swap point)
 mocks/                       Dashboard mock payloads
 types/                       Dashboard TypeScript contracts
