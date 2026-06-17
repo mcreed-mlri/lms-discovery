@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { courses, getLearningItemById, getLearningItemUrl } from "@/lib/data";
+import {
+  continueLearning,
+  courses,
+  getContinueLearningUrl,
+  getLearningItemById,
+  getLearningItemUrl,
+} from "@/lib/data";
 
 test("eviction course opens in the Learning Hub before Brightspace", () => {
   const item = getLearningItemById("eviction-defense-48h");
@@ -15,4 +21,11 @@ test("eviction source link targets the Brightspace course home", () => {
 
   assert.ok(course);
   assert.equal(course.brightspaceUrl, "https://mlri.brightspace.com/d2l/home/6703");
+});
+
+test("resume prefers the saved Brightspace location over the hub overview", () => {
+  const resumeItem = continueLearning.find((entry) => entry.id === "eviction-defense-48h");
+
+  assert.ok(resumeItem);
+  assert.equal(getContinueLearningUrl(resumeItem), "https://mlri.brightspace.com/d2l/home/6703");
 });

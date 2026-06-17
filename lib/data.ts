@@ -463,8 +463,7 @@ export const continueLearning: ContinueLearningItem[] = [
     detail: "The Four Notice Types",
     progress: 40,
     progressLabel: "2/5",
-    resumeUrl:
-      "https://mlri.brightspace.com/content/enforced/6703-course.outline/notice-types.html?ou=6703&d2l_body_type=3",
+    resumeUrl: "https://mlri.brightspace.com/d2l/home/6703",
   },
   {
     id: "wrapper-self-checks",
@@ -824,6 +823,18 @@ export function getLearningItemUrl(item: LearningItem) {
   }
 
   return `/learn/${item.id}`;
+}
+
+export function getContinueLearningUrl(
+  resumeItem: ContinueLearningItem,
+  allItems: LearningItem[] = getLearningItems(),
+) {
+  if ("resumeUrl" in resumeItem && resumeItem.resumeUrl) {
+    return resumeItem.resumeUrl;
+  }
+
+  const learningItem = allItems.find((item) => item.id === resumeItem.id);
+  return learningItem ? getLearningItemUrl(learningItem) : "/";
 }
 
 const dashboardCourseLearningItemIds: Record<string, string> = {

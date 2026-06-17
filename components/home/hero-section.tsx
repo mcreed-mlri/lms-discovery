@@ -11,7 +11,7 @@ import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
 import {
   continueLearning,
   courses,
-  getLearningItemUrl,
+  getContinueLearningUrl,
   learnerProgress,
   type LearningItem,
 } from "@/lib/data";
@@ -44,10 +44,7 @@ function useResumeCard(allItems: LearningItem[]) {
       progress: 0,
       progressLabel: "0%",
     } satisfies ResumeEntry);
-  const resumeLearningItem = allItems.find((item) => item.id === resumeItem.id);
-  const resumeUrl = resumeLearningItem
-    ? getLearningItemUrl(resumeLearningItem)
-    : (resumeItem.resumeUrl ?? "/");
+  const resumeUrl = getContinueLearningUrl(resumeItem, allItems);
   const resumeCourse = courses.find((course) => course.id === resumeItem.id);
   const resumeEyebrow = [resumeCourse?.practiceArea, resumeMinutesLeftLabel(resumeCourse?.duration)]
     .filter(Boolean)
