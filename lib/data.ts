@@ -100,8 +100,7 @@ export const courses: Course[] = [
     level: "Foundations",
     practiceArea: "Housing",
     duration: "12 min",
-    brightspaceUrl:
-      "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3",
+    brightspaceUrl: "https://mlri.brightspace.com/d2l/home/6703",
   },
   {
     id: "upl-boundaries-advocates",
@@ -306,8 +305,7 @@ export const modules: Module[] = [
     practiceArea: "Housing",
     level: "Foundations",
     tags: ["housing", "eviction defense", "notice to quit", "deadlines"],
-    brightspaceCourseUrl:
-      "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3",
+    brightspaceCourseUrl: "https://mlri.brightspace.com/d2l/home/6703",
     brightspaceModuleUrl:
       "https://mlri.brightspace.com/content/enforced/6703-course.outline/clock-starts.html?ou=6703&d2l_body_type=3",
   },
@@ -321,8 +319,7 @@ export const modules: Module[] = [
     practiceArea: "Housing",
     level: "Foundations",
     tags: ["housing", "eviction defense", "notice types", "notice to quit"],
-    brightspaceCourseUrl:
-      "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3",
+    brightspaceCourseUrl: "https://mlri.brightspace.com/d2l/home/6703",
     brightspaceModuleUrl:
       "https://mlri.brightspace.com/content/enforced/6703-course.outline/notice-types.html?ou=6703&d2l_body_type=3",
   },
@@ -336,8 +333,7 @@ export const modules: Module[] = [
     practiceArea: "Housing",
     level: "Foundations",
     tags: ["housing", "eviction defense", "service of process", "checklist"],
-    brightspaceCourseUrl:
-      "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3",
+    brightspaceCourseUrl: "https://mlri.brightspace.com/d2l/home/6703",
     brightspaceModuleUrl:
       "https://mlri.brightspace.com/content/enforced/6703-course.outline/topic-template.html?ou=6703&d2l_body_type=3",
   },
@@ -352,8 +348,7 @@ export const modules: Module[] = [
     practiceArea: "Housing",
     level: "Foundations",
     tags: ["housing", "eviction defense", "drafting", "answer", "motions"],
-    brightspaceCourseUrl:
-      "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3",
+    brightspaceCourseUrl: "https://mlri.brightspace.com/d2l/home/6703",
     brightspaceModuleUrl:
       "https://mlri.brightspace.com/content/enforced/6703-course.outline/drafting-answer.html?ou=6703&d2l_body_type=3",
   },
@@ -367,8 +362,7 @@ export const modules: Module[] = [
     practiceArea: "Housing",
     level: "Foundations",
     tags: ["housing", "eviction defense", "housing court", "client goals"],
-    brightspaceCourseUrl:
-      "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3",
+    brightspaceCourseUrl: "https://mlri.brightspace.com/d2l/home/6703",
     brightspaceModuleUrl:
       "https://mlri.brightspace.com/content/enforced/6703-course.outline/housing-court.html?ou=6703&d2l_body_type=3",
   },
@@ -821,10 +815,7 @@ export function getModuleBrightspaceUrl(module: Module) {
 }
 
 export function getLearningItemUrl(item: LearningItem) {
-  if (
-    item.type === "COURSE" &&
-    (item.id === "welcome-to-lace" || item.id === "eviction-defense-48h")
-  ) {
+  if (item.type === "COURSE" && item.id === "welcome-to-lace") {
     return item.brightspaceUrl;
   }
 
