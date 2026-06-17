@@ -463,7 +463,8 @@ export const continueLearning: ContinueLearningItem[] = [
     detail: "The Four Notice Types",
     progress: 40,
     progressLabel: "2/5",
-    resumeUrl: "https://mlri.brightspace.com/d2l/home/6703",
+    resumeUrl:
+      "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3",
   },
   {
     id: "wrapper-self-checks",

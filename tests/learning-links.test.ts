@@ -27,5 +27,8 @@ test("resume prefers the saved Brightspace location over the hub overview", () =
   const resumeItem = continueLearning.find((entry) => entry.id === "eviction-defense-48h");
 
   assert.ok(resumeItem);
-  assert.equal(getContinueLearningUrl(resumeItem), "https://mlri.brightspace.com/d2l/home/6703");
+  assert.equal(
+    getContinueLearningUrl(resumeItem),
+    "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3",
+  );
 });
