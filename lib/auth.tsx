@@ -70,6 +70,13 @@ export const mlriAdminUser: User = {
 
 export const demoUsers = [demoUser, kevinSmithUser, mlriAdminUser];
 
+/**
+ * Demo mode keeps the localStorage persona picker for stakeholder demos.
+ * When off (production default), login goes through Brightspace OAuth and
+ * the httpOnly session cookie is the only source of truth.
+ */
+export const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+
 type AuthState = {
   user: User | null;
   ready: boolean;
@@ -86,25 +93,60 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setUser(JSON.parse(stored));
+    if (isDemoMode) {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          setUser(JSON.parse(stored));
+        }
+      } catch {
+        // ignore malformed storage
+      } finally {
+        setReady(true);
       }
-    } catch {
-      // ignore malformed storage
-    } finally {
-      setReady(true);
+      return;
     }
+
+    let cancelled = false;
+
+    fetch("/api/me", { cache: "no-store" })
+      .then(async (response) => {
+        if (cancelled) return;
+        if (response.ok) {
+          const payload = (await response.json()) as { ok: boolean; user?: User };
+          if (payload.ok && payload.user) setUser(payload.user);
+        }
+      })
+      .catch(() => {
+        // Signed-out state; login page handles the rest.
+      })
+      .finally(() => {
+        if (!cancelled) setReady(true);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   function login(userId = demoUser.id) {
+    if (!isDemoMode) {
+      window.location.assign("/api/auth/brightspace/start");
+      return;
+    }
     const nextUser = demoUsers.find((candidate) => candidate.id === userId) ?? demoUser;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
     setUser(nextUser);
   }
 
   function logout() {
+    if (!isDemoMode) {
+      void fetch("/api/auth/logout", { method: "POST" }).finally(() => {
+        window.location.assign("/login");
+      });
+      setUser(null);
+      return;
+    }
     localStorage.removeItem(STORAGE_KEY);
     setUser(null);
   }

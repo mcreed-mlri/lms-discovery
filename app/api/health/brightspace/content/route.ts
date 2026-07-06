@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { brightspaceApiFetch, getBrightspaceLeVersion } from "@/lib/brightspace/api";
+import {
+  BrightspaceAuthError,
+  brightspaceApiFetch,
+  getBrightspaceLeVersion,
+  type BrightspaceApiResult,
+} from "@/lib/brightspace/api";
 import {
   summarizeBrightspaceToc,
   type BrightspaceTableOfContents,
 } from "@/lib/brightspace/content";
+import { applyBrightspaceTokenCookies } from "@/lib/brightspace/tokens";
 
 export async function GET(request: NextRequest) {
   const url = new URL(request.url);
@@ -12,14 +18,15 @@ export async function GET(request: NextRequest) {
   const version = url.searchParams.get("version") || getBrightspaceLeVersion();
   const ignoreDateRestrictions = url.searchParams.get("ignoreDateRestrictions") || "true";
 
-  let response: Response;
+  let result: BrightspaceApiResult;
 
   try {
-    response = await brightspaceApiFetch(
+    result = await brightspaceApiFetch(
       request,
       `/d2l/api/le/${version}/${encodeURIComponent(orgUnitId)}/content/toc?ignoreDateRestrictions=${encodeURIComponent(ignoreDateRestrictions)}`,
     );
   } catch (error) {
+    const isAuthError = error instanceof BrightspaceAuthError;
     return NextResponse.json(
       {
         ok: false,
@@ -27,10 +34,11 @@ export async function GET(request: NextRequest) {
         nextStep:
           "Complete the Brightspace OAuth flow from /api/auth/brightspace/start, then retry this content route in the same browser session.",
       },
-      { status: 500 },
+      { status: isAuthError ? 401 : 500 },
     );
   }
 
+  const { response, refreshedTokens } = result;
   const contentType = response.headers.get("content-type") || "";
   const payload = contentType.includes("application/json")
     ? await response.json()
@@ -50,11 +58,13 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  return NextResponse.json({
+  const json = NextResponse.json({
     ok: true,
     orgUnitId,
     version,
     summary: summarizeBrightspaceToc(payload as BrightspaceTableOfContents),
     data: payload,
   });
+  if (refreshedTokens) applyBrightspaceTokenCookies(json, refreshedTokens);
+  return json;
 }

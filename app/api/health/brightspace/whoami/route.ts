@@ -1,31 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import {
+  BrightspaceAuthError,
   brightspaceApiFetch,
-  getBrightspaceAccessToken,
-  getBrightspaceBaseUrl,
+  type BrightspaceApiResult,
 } from "@/lib/brightspace/api";
+import { applyBrightspaceTokenCookies } from "@/lib/brightspace/tokens";
 
 export async function GET(request: NextRequest) {
-  const baseUrl = getBrightspaceBaseUrl();
-  const accessToken = getBrightspaceAccessToken(request);
-
-  if (!baseUrl || !accessToken) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: "Missing Brightspace base URL or access token.",
-        nextStep: "Complete the Brightspace OAuth flow from /api/auth/brightspace/start.",
-      },
-      { status: 500 },
-    );
-  }
-
-  let response: Response;
+  let result: BrightspaceApiResult;
 
   try {
-    response = await brightspaceApiFetch(request, "/d2l/api/lp/1.0/users/whoami");
+    result = await brightspaceApiFetch(request, "/d2l/api/lp/1.0/users/whoami");
   } catch (error) {
+    const isAuthError = error instanceof BrightspaceAuthError;
     return NextResponse.json(
       {
         ok: false,
@@ -33,10 +21,11 @@ export async function GET(request: NextRequest) {
         nextStep:
           "Complete the Brightspace OAuth flow from /api/auth/brightspace/start, then retry whoami in the same browser session.",
       },
-      { status: 500 },
+      { status: isAuthError ? 401 : 500 },
     );
   }
 
+  const { response, refreshedTokens } = result;
   const contentType = response.headers.get("content-type") || "";
   const payload = contentType.includes("application/json")
     ? await response.json()
@@ -54,5 +43,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  return NextResponse.json({ ok: true, data: payload });
+  const json = NextResponse.json({ ok: true, data: payload });
+  if (refreshedTokens) applyBrightspaceTokenCookies(json, refreshedTokens);
+  return json;
 }

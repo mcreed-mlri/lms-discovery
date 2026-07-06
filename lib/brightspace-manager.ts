@@ -8,4 +8,3 @@ export function getBrightspaceManagerUrl(path = "/dashboard") {
 
   return `${normalizedBase}${normalizedPath}`;
 }
-

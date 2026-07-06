@@ -22,7 +22,9 @@ export function getBrightspaceConfigHealth(): BrightspaceConfigHealth {
     userKey: Boolean(process.env.BRIGHTSPACE_USER_KEY),
     clientId: Boolean(process.env.BRIGHTSPACE_CLIENT_ID),
     clientSecret: Boolean(process.env.BRIGHTSPACE_CLIENT_SECRET),
-    accessToken: Boolean(process.env.BRIGHTSPACE_ACCESS_TOKEN),
+    // Server-wide access tokens are no longer supported; the health route
+    // overlays the caller's own cookie token instead.
+    accessToken: false,
   };
 }
 

@@ -1,8 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
+import { requireAdminSecret } from "@/lib/admin-auth";
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  // Uses the service-role client, so this stays operator-only.
+  const denied = requireAdminSecret(request);
+  if (denied) return denied;
+
   try {
     const supabase = createSupabaseAdminClient();
 

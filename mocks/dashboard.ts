@@ -74,7 +74,8 @@ export const learnerDashboardMock: LearnerDashboardPayload = {
       trainingArea: "Practice skills",
       completionPct: 28,
       status: "in_progress",
-      lastAccessedAt: daysAgo(3),
+      // Idle past STALLED_AFTER_DAYS so the stalled-course nudge is demoable.
+      lastAccessedAt: daysAgo(21),
       resumeUrl: "#course-6844",
       dueDate: daysAhead(21),
     },
@@ -223,6 +224,24 @@ export const programDashboardMock: ProgramDashboardPayload = {
       label: "Searches with no results",
       value: "127",
       detail: "Last 30 days — content gaps",
+    },
+    {
+      id: "median-days",
+      label: "Median days to finish",
+      value: "12",
+      detail: "Enrollment to completion, all courses",
+    },
+    {
+      id: "usefulness",
+      label: "Avg usefulness rating",
+      value: "4.4/5",
+      detail: "Post-completion cards — 134 responses",
+    },
+    {
+      id: "need-help",
+      label: "Stalled and need help",
+      value: "9",
+      detail: "From the stalled-course nudge — follow up",
     },
   ],
   byArea: [

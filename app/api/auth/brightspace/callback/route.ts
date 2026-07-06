@@ -1,21 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { getBrightspaceBaseUrl } from "@/lib/brightspace/api";
+import { getBrightspaceRedirectUri, STATE_COOKIE } from "@/lib/brightspace/oauth";
 import {
-  ACCESS_TOKEN_COOKIE,
-  getBrightspaceRedirectUri,
-  REFRESH_TOKEN_COOKIE,
-  STATE_COOKIE,
-} from "@/lib/brightspace/oauth";
+  applyBrightspaceTokenCookies,
+  exchangeBrightspaceToken,
+  type BrightspaceTokenResponse,
+} from "@/lib/brightspace/tokens";
+import {
+  createSessionToken,
+  getSessionSecret,
+  SESSION_COOKIE,
+  SESSION_TTL_SECONDS,
+} from "@/lib/session";
 
-type BrightspaceTokenResponse = {
-  access_token?: string;
-  refresh_token?: string;
-  expires_in?: number;
-  token_type?: string;
-  scope?: string;
-  error?: string;
-  error_description?: string;
+type BrightspaceWhoAmI = {
+  Identifier?: string;
+  FirstName?: string;
+  LastName?: string;
+  UniqueName?: string;
 };
+
+/** Sends the user back to the login page with a short, non-sensitive error code. */
+function loginRedirect(request: NextRequest, errorCode: string) {
+  const url = new URL("/login", request.url);
+  url.searchParams.set("error", errorCode);
+  const response = NextResponse.redirect(url);
+  response.cookies.delete(STATE_COOKIE);
+  return response;
+}
 
 export async function GET(request: NextRequest) {
   const url = new URL(request.url);
@@ -25,88 +38,106 @@ export async function GET(request: NextRequest) {
   const storedState = request.cookies.get(STATE_COOKIE)?.value;
 
   if (error) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error,
-        errorDescription: url.searchParams.get("error_description"),
-      },
-      { status: 400 },
+    console.error(
+      "Brightspace OAuth returned an error:",
+      error,
+      url.searchParams.get("error_description"),
     );
+    return loginRedirect(request, "brightspace_denied");
   }
 
   if (!code || !state || !storedState || state !== storedState) {
-    return NextResponse.json(
-      { ok: false, error: "Invalid Brightspace OAuth callback state." },
-      { status: 400 },
-    );
+    return loginRedirect(request, "invalid_state");
   }
 
-  const clientId = process.env.BRIGHTSPACE_CLIENT_ID;
-  const clientSecret = process.env.BRIGHTSPACE_CLIENT_SECRET;
+  const sessionSecret = getSessionSecret();
+  const baseUrl = getBrightspaceBaseUrl();
 
-  if (!clientId || !clientSecret) {
-    return NextResponse.json(
-      { ok: false, error: "Missing Brightspace OAuth client credentials." },
-      { status: 500 },
+  if (!sessionSecret || !baseUrl) {
+    console.error(
+      "Brightspace login is not fully configured:",
+      !sessionSecret ? "SESSION_SECRET is unset." : "",
+      !baseUrl ? "BRIGHTSPACE_BASE_URL is unset." : "",
     );
+    return loginRedirect(request, "misconfigured");
   }
 
-  const tokenResponse = await fetch("https://auth.brightspace.com/core/connect/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString("base64")}`,
-    },
-    body: new URLSearchParams({
-      grant_type: "authorization_code",
-      code,
-      redirect_uri: getBrightspaceRedirectUri(),
-    }),
-    cache: "no-store",
-  });
+  let tokenPayload: BrightspaceTokenResponse;
 
-  const tokenPayload = (await tokenResponse.json()) as BrightspaceTokenResponse;
+  try {
+    tokenPayload = await exchangeBrightspaceToken(
+      new URLSearchParams({
+        grant_type: "authorization_code",
+        code,
+        redirect_uri: getBrightspaceRedirectUri(),
+      }),
+    );
+  } catch (tokenError) {
+    console.error("Brightspace token exchange failed:", tokenError);
+    return loginRedirect(request, "token_exchange_failed");
+  }
 
-  if (!tokenResponse.ok || tokenPayload.error || !tokenPayload.access_token) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: tokenPayload.error || "Brightspace token exchange failed.",
-        errorDescription: tokenPayload.error_description,
+  if (tokenPayload.error || !tokenPayload.access_token) {
+    console.error(
+      "Brightspace token exchange rejected:",
+      tokenPayload.error,
+      tokenPayload.error_description,
+    );
+    return loginRedirect(request, "token_exchange_failed");
+  }
+
+  let identity: BrightspaceWhoAmI;
+
+  try {
+    const whoamiResponse = await fetch(`${baseUrl}/d2l/api/lp/1.0/users/whoami`, {
+      headers: {
+        Authorization: `Bearer ${tokenPayload.access_token}`,
+        Accept: "application/json",
       },
-      { status: 502 },
-    );
+      cache: "no-store",
+    });
+
+    if (!whoamiResponse.ok) {
+      console.error("Brightspace whoami failed with status", whoamiResponse.status);
+      return loginRedirect(request, "whoami_failed");
+    }
+
+    identity = (await whoamiResponse.json()) as BrightspaceWhoAmI;
+  } catch (whoamiError) {
+    console.error("Brightspace whoami request failed:", whoamiError);
+    return loginRedirect(request, "whoami_failed");
   }
 
-  const response = NextResponse.json({
-    ok: true,
-    tokenType: tokenPayload.token_type,
-    expiresIn: tokenPayload.expires_in,
-    scope: tokenPayload.scope,
-    hasAccessToken: true,
-    hasRefreshToken: Boolean(tokenPayload.refresh_token),
-    nextStep:
-      "Open Brightspace Manager to verify the Brightspace token status, then test whoami.",
-  });
+  if (!identity.Identifier) {
+    console.error("Brightspace whoami returned no Identifier.");
+    return loginRedirect(request, "whoami_failed");
+  }
 
-  response.cookies.set(ACCESS_TOKEN_COOKIE, tokenPayload.access_token, {
+  const sessionToken = createSessionToken(
+    {
+      brightspaceUserId: identity.Identifier,
+      uniqueName: identity.UniqueName ?? "",
+      firstName: identity.FirstName ?? "",
+      lastName: identity.LastName ?? "",
+    },
+    sessionSecret,
+  );
+
+  const response = NextResponse.redirect(new URL("/", request.url));
+
+  response.cookies.set(SESSION_COOKIE, sessionToken, {
     httpOnly: true,
     sameSite: "lax",
     secure: true,
-    maxAge: tokenPayload.expires_in ?? 3600,
+    maxAge: SESSION_TTL_SECONDS,
     path: "/",
   });
 
-  if (tokenPayload.refresh_token) {
-    response.cookies.set(REFRESH_TOKEN_COOKIE, tokenPayload.refresh_token, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: true,
-      maxAge: 30 * 24 * 60 * 60,
-      path: "/",
-    });
-  }
+  applyBrightspaceTokenCookies(response, {
+    accessToken: tokenPayload.access_token,
+    refreshToken: tokenPayload.refresh_token,
+    expiresIn: tokenPayload.expires_in ?? 3600,
+  });
 
   response.cookies.delete(STATE_COOKIE);
   return response;

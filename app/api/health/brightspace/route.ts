@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { requireAdminSecret } from "@/lib/admin-auth";
 import { getBrightspaceAuthMode, getBrightspaceConfigHealth } from "@/lib/brightspace/config";
 import { ACCESS_TOKEN_COOKIE } from "@/lib/brightspace/oauth";
 
 export async function GET(request: NextRequest) {
+  // Reveals which credentials are configured, so it stays operator-only.
+  const denied = requireAdminSecret(request);
+  if (denied) return denied;
+
   const configured = getBrightspaceConfigHealth();
   const hasCookieAccessToken = Boolean(request.cookies.get(ACCESS_TOKEN_COOKIE)?.value);
   configured.accessToken = configured.accessToken || hasCookieAccessToken;

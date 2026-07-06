@@ -47,3 +47,7 @@ insert into public.learning_items (
 
 -- Keep browser/anon access closed during the spike.
 -- The Next.js health route uses SUPABASE_SERVICE_ROLE_KEY server-side.
+
+-- NEXT STEP: apply supabase-rls-learning-items.sql (same folder) before any
+-- production use — it adds the status lifecycle column, read-only grants,
+-- and the active-items-only read policy.

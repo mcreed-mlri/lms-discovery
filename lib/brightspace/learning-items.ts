@@ -23,25 +23,26 @@ export type BrightspaceCourseOffering = {
   } | null;
 };
 
+/**
+ * Maps Brightspace course metadata to a learning_items upsert payload.
+ *
+ * Only provider facts are included. Curated editorial fields
+ * (practice_area, level, duration_label, status) are maintained directly in
+ * Supabase and deliberately left out so a re-sync never overwrites them.
+ */
 export function mapBrightspaceCourseToLearningItem(course: BrightspaceCourseOffering) {
   const orgUnitId = course.Identifier;
+  const baseUrl = process.env.BRIGHTSPACE_BASE_URL || "";
   const path = course.Path || `/d2l/home/${orgUnitId}`;
-  const brightspaceUrl = path.startsWith("http")
-    ? path
-    : `https://mlri.brightspace.com/d2l/home/${orgUnitId}`;
+  const brightspaceUrl = path.startsWith("http") ? path : `${baseUrl}/d2l/home/${orgUnitId}`;
 
   return {
     provider: "brightspace",
     provider_course_id: orgUnitId,
     provider_module_id: null,
     item_type: "course",
-    title: orgUnitId === "6703" ? "Eviction Defense: The First 48 Hours" : course.Name,
-    description:
-      course.Description?.Text ||
-      "Synced from Brightspace course metadata during the connection spike.",
-    practice_area: orgUnitId === "6703" ? "Housing" : null,
-    level: "Foundations",
-    duration_label: orgUnitId === "6703" ? "12 min" : null,
+    title: course.Name,
+    description: course.Description?.Text || null,
     brightspace_url: brightspaceUrl,
     metadata: {
       brightspaceName: course.Name,

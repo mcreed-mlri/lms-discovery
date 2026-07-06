@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { requireAdminSecret } from "@/lib/admin-auth";
-import { brightspaceApiFetch, getBrightspaceLpVersion } from "@/lib/brightspace/api";
+import {
+  BrightspaceAuthError,
+  brightspaceApiFetch,
+  getBrightspaceLpVersion,
+  type BrightspaceApiResult,
+} from "@/lib/brightspace/api";
 import {
   mapBrightspaceCourseToLearningItem,
   type BrightspaceCourseOffering,
@@ -18,14 +23,15 @@ export async function POST(request: NextRequest) {
   const orgUnitId = url.searchParams.get("orgUnitId") || DEFAULT_TEST_COURSE_ORG_UNIT_ID;
   const version = url.searchParams.get("version") || getBrightspaceLpVersion();
 
-  let response: Response;
+  let result: BrightspaceApiResult;
 
   try {
-    response = await brightspaceApiFetch(
+    result = await brightspaceApiFetch(
       request,
       `/d2l/api/lp/${version}/courses/${encodeURIComponent(orgUnitId)}`,
     );
   } catch (error) {
+    const isAuthError = error instanceof BrightspaceAuthError;
     return NextResponse.json(
       {
         ok: false,
@@ -34,23 +40,29 @@ export async function POST(request: NextRequest) {
         nextStep:
           "Complete the Brightspace OAuth flow from /api/auth/brightspace/start, then retry this sync route in the same browser session.",
       },
-      { status: 500 },
+      { status: isAuthError ? 401 : 500 },
     );
   }
 
-  const course = (await response.json()) as BrightspaceCourseOffering;
+  const { response } = result;
+  const contentType = response.headers.get("content-type") || "";
 
-  if (!response.ok) {
+  if (!response.ok || !contentType.includes("application/json")) {
+    const errorPayload = contentType.includes("application/json")
+      ? await response.json()
+      : await response.text();
     return NextResponse.json(
       {
         ok: false,
         status: response.status,
         statusText: response.statusText,
-        error: course,
+        error: errorPayload,
       },
-      { status: response.status },
+      { status: response.ok ? 502 : response.status },
     );
   }
+
+  const course = (await response.json()) as BrightspaceCourseOffering;
 
   const learningItem = mapBrightspaceCourseToLearningItem(course);
   const supabase = createSupabaseAdminClient();

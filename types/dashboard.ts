@@ -31,7 +31,10 @@ export interface LearnerDashboardPayload {
     enrolledCount: number;
     inProgressCount: number;
     completedCount: number;
-    /** Optional consistency + training-hour signals — surfaced as KPI tiles. */
+    /** Personal-facing texture only (streaks, hours, heatmap) — never
+     *  effectiveness KPIs. Busy practitioners learn in bursts; these numbers
+     *  stay out of program/leadership reporting by design. Canonical metric
+     *  definitions: Brightspace-Manager/docs/planning/metrics-framework.md. */
     streakDays?: number;
     longestStreakNote?: string;
     cleEarned?: number;

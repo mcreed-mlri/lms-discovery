@@ -21,12 +21,7 @@ import type { User } from "@/lib/auth";
 
 // Suggested searches under the command bar — a short, scannable set of the
 // things a busy advocate reaches for most. Presented as suggestions, not filters.
-const popularSearches = [
-  "notice to quit",
-  "confidentiality",
-  "SNAP appeal",
-  "709 motion",
-];
+const popularSearches = ["notice to quit", "confidentiality", "SNAP appeal", "709 motion"];
 
 type ResumeEntry = Extract<(typeof continueLearning)[number], { progress: number }>;
 

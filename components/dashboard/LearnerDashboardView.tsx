@@ -13,8 +13,11 @@ import {
   FlameIcon,
   PlayIcon,
 } from "@/components/icons";
+import { RateCourseCard } from "@/components/dashboard/RateCourseCard";
+import { StalledCourseNudge } from "@/components/dashboard/StalledCourseNudge";
 import { formatRelativeDate, greetingForHour } from "@/lib/dashboard-utils";
 import { getLearningItems, getLearningUrlForDashboardCourse } from "@/lib/data";
+import { STALLED_AFTER_DAYS, useFeedbackPrompts } from "@/lib/feedback-prompts";
 import { useSavedLearning } from "@/lib/saved-learning";
 import { dashboardService } from "@/lib/services/dashboardService";
 import type { LearnerCourse, LearnerDashboardPayload } from "@/types/dashboard";
@@ -58,6 +61,10 @@ const toneForArea = (area?: string): Tone => AREA_TONES[area ?? ""] ?? DEFAULT_T
 function daysUntil(iso: string): number {
   const due = new Date(iso).getTime();
   return Math.ceil((due - Date.now()) / (1000 * 60 * 60 * 24));
+}
+
+function daysIdle(iso: string): number {
+  return Math.floor((Date.now() - new Date(iso).getTime()) / (1000 * 60 * 60 * 24));
 }
 
 // ── Small visual atoms ─────────────────────────────────────────────────────
@@ -305,6 +312,7 @@ export function LearnerDashboardView() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const { savedKeys } = useSavedLearning();
+  const feedbackPrompts = useFeedbackPrompts();
   const allItems = useMemo(() => getLearningItems(), []);
 
   useEffect(() => {
@@ -409,6 +417,25 @@ export function LearnerDashboardView() {
     );
   const notStarted = courses.filter((course) => course.status === "not_started");
 
+  // Micro-survey prompts — at most ONE card per session, rating first. Both
+  // resolve permanently (submit/dismiss/resume) via lib/feedback-prompts.
+  const ratingCandidate = feedbackPrompts.hydrated
+    ? courses.find(
+        (course) =>
+          course.status === "completed" &&
+          !feedbackPrompts.isResolved("rating", course.offeringId),
+      )
+    : undefined;
+  const stalledCandidate =
+    feedbackPrompts.hydrated && !ratingCandidate
+      ? courses.find(
+          (course) =>
+            course.status === "in_progress" &&
+            daysIdle(course.lastAccessedAt) >= STALLED_AFTER_DAYS &&
+            !feedbackPrompts.isResolved("stalled", course.offeringId),
+        )
+      : undefined;
+
   const streakDays = summary.streakDays ?? 0;
   const hasCle = summary.cleEarned != null && summary.cleRequired != null;
   const clePct = hasCle
@@ -438,6 +465,27 @@ export function LearnerDashboardView() {
           </Link>
         }
       />
+
+      {/* Micro-survey prompt — never more than one, inline, dismiss = forever */}
+      {ratingCandidate ? (
+        <section aria-label="Course feedback" className="mb-6">
+          <RateCourseCard
+            course={ratingCandidate}
+            onResolved={(action) =>
+              feedbackPrompts.resolvePrompt("rating", ratingCandidate.offeringId, action)
+            }
+          />
+        </section>
+      ) : stalledCandidate ? (
+        <section aria-label="Checking in on a stalled course" className="mb-6">
+          <StalledCourseNudge
+            course={stalledCandidate}
+            onResolved={(action) =>
+              feedbackPrompts.resolvePrompt("stalled", stalledCandidate.offeringId, action)
+            }
+          />
+        </section>
+      ) : null}
 
       {/* KPI tiles — consistency + training hours at a glance */}
       <section
