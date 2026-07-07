@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev -p 3000 --webpack",
+    "dev": "next dev -p 3000 --webpack --experimental-https",
     "build": "next build --webpack",
     "start": "next start -p 3000",
     "test": "node --import tsx --test tests/search-ranking.test.ts tests/access-filtering.test.ts tests/learning-links.test.ts tests/session.test.ts",

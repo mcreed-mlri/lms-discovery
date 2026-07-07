@@ -26,6 +26,15 @@ Start the dev server (any npm script works the same way through the bundled npm)
 
 Then open `http://localhost:3000`.
 
+**If `npm.cmd run dev` fails with `'"node"' is not recognized...`**: the bundled `npm.cmd`/`next.cmd` shims fall back to a bare `node` command when they can't resolve their own path, and that only works if the bundled Node folder is on `PATH`. Fix by adding it for the current terminal session before running npm:
+
+```powershell
+$env:PATH = "C:\dev\learning-hub\tools\node-v24.15.0-win-x64;" + $env:PATH
+.\tools\node-v24.15.0-win-x64\npm.cmd run dev
+```
+
+This only affects the current PowerShell window — re-run it in each new terminal, or add it to your PowerShell profile to make it permanent.
+
 ### macOS / Linux (or when Node/npm is already installed)
 
 ```bash
