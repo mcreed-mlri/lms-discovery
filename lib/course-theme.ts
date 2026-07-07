@@ -160,6 +160,7 @@ const topicThemes: Record<TopicFamily, TopicTheme> = {
 // Which topic family each course belongs to. New courses map here once.
 const courseTopic: Record<string, TopicFamily> = {
   "brightspace-wrapper-demo": "foundations",
+  "faculty-handbook": "foundations",
   "professional-foundations": "foundations",
   "client-centered-practice": "client",
   "first-steps-in-court": "court",
@@ -207,6 +208,7 @@ export function getCourseId(item: Course | Module) {
 export function getCourseLabel(course: Course) {
   const labels: Record<string, string> = {
     "brightspace-wrapper-demo": "Wrapper Demo",
+    "faculty-handbook": "Faculty Handbook",
     "professional-foundations": "Foundations",
     "client-centered-practice": "Client Communication",
     "first-steps-in-court": "Court Skills",

@@ -32,3 +32,10 @@ test("resume prefers the saved Brightspace location over the hub overview", () =
     "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3",
   );
 });
+
+test("faculty handbook opens the published handbook page", () => {
+  const item = getLearningItemById("faculty-handbook");
+
+  assert.ok(item);
+  assert.equal(getLearningItemUrl(item), "/tools-handbook/faculty-showcase.dc.html");
+});

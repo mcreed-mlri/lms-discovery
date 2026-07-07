@@ -63,6 +63,16 @@ export const courses: Course[] = [
       "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3",
   },
   {
+    id: "faculty-handbook",
+    title: "Faculty Handbook: Interactive Elements",
+    description:
+      "A faculty-facing guide for choosing interactive elements, writing handoff notes, and preparing course content for the LACE builder.",
+    level: "Foundations",
+    practiceArea: "Faculty Support",
+    duration: "15 min",
+    brightspaceUrl: "/tools-handbook/faculty-showcase.dc.html",
+  },
+  {
     id: "professional-foundations",
     title: "Professional Foundations for Legal Aid",
     description:
@@ -667,6 +677,7 @@ export type PracticeAreaChip = {
 
 const courseChipLabels: Record<string, string> = {
   "brightspace-wrapper-demo": "Wrapper Demo",
+  "faculty-handbook": "Faculty Handbook",
   "professional-foundations": "Foundations",
   "client-centered-practice": "Client Communication",
   "first-steps-in-court": "Court Skills",
@@ -816,6 +827,10 @@ export function getModuleBrightspaceUrl(module: Module) {
 
 export function getLearningItemUrl(item: LearningItem) {
   if (item.type === "COURSE" && item.id === "welcome-to-lace") {
+    return item.brightspaceUrl;
+  }
+
+  if (item.type === "COURSE" && item.id === "faculty-handbook") {
     return item.brightspaceUrl;
   }
 
