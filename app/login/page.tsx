@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowIcon } from "@/components/icons";
 import { SiteFooter } from "@/components/site-footer";
-import { demoUsers, isDemoMode, useAuth, type User } from "@/lib/auth";
+import { demoUsers, isDemoMode, showDemoUsers, useAuth, type User } from "@/lib/auth";
 
 const LOGIN_ERROR_MESSAGES: Record<string, string> = {
   brightspace_denied: "Brightspace declined the sign-in request. Please try again.",
@@ -60,7 +60,7 @@ export default function LoginPage() {
               <p className="mt-2 text-sm font-medium text-[color:var(--ink-muted)]">
                 {isDemoMode
                   ? "Choose a demo user to preview access-controlled discovery."
-                  : "Use your Brightspace account to access LACE training."}
+                  : "Use Brightspace for real access, or choose a demo user for walkthroughs."}
               </p>
             </div>
 
@@ -73,8 +73,28 @@ export default function LoginPage() {
               </p>
             ) : null}
 
-            {isDemoMode ? (
-              <div className="grid gap-3">
+            {!isDemoMode ? (
+              <a
+                href="/api/auth/brightspace/start"
+                className="group flex items-center justify-center gap-3 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 py-4 text-base font-bold text-[color:var(--surface)] shadow-[var(--shadow-sm)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+              >
+                Sign in with Brightspace
+                <ArrowIcon className="h-4 w-4 transition group-hover:translate-x-0.5" />
+              </a>
+            ) : null}
+
+            {showDemoUsers ? (
+              <div className={isDemoMode ? "grid gap-3" : "mt-6 grid gap-3"}>
+                {!isDemoMode ? (
+                  <div className="flex items-center gap-3">
+                    <span className="h-px flex-1 bg-[color:var(--line)]" />
+                    <span className="editorial-eyebrow text-[color:var(--ink-soft)]">
+                      Demo users
+                    </span>
+                    <span className="h-px flex-1 bg-[color:var(--line)]" />
+                  </div>
+                ) : null}
+
                 {demoUsers.map((candidate) => (
                   <button
                     key={candidate.id}
@@ -89,7 +109,7 @@ export default function LoginPage() {
                       <div className="min-w-0 flex-1">
                         <p className="font-bold text-[color:var(--ink-muted)]">{candidate.name}</p>
                         <p className="text-sm font-medium text-[color:var(--ink-muted)]">
-                          {candidate.title} · {candidate.unit}
+                          {candidate.title} - {candidate.unit}
                         </p>
                         <p className="truncate text-sm text-[color:var(--ink-soft)]">
                           {candidate.organization}
@@ -102,20 +122,12 @@ export default function LoginPage() {
                   </button>
                 ))}
               </div>
-            ) : (
-              <a
-                href="/api/auth/brightspace/start"
-                className="group flex items-center justify-center gap-3 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 py-4 text-base font-bold text-[color:var(--surface)] shadow-[var(--shadow-sm)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
-              >
-                Sign in with Brightspace
-                <ArrowIcon className="h-4 w-4 transition group-hover:translate-x-0.5" />
-              </a>
-            )}
+            ) : null}
 
             <p className="mt-5 text-center text-xs font-medium leading-5 text-[color:var(--ink-soft)]">
               {isDemoMode
                 ? "No real credentials required. This is a demonstration environment."
-                : "You'll be redirected to Brightspace to sign in securely."}
+                : "Brightspace sign-in is secure. Demo users are only for previewing access levels."}
             </p>
           </div>
         </div>

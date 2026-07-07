@@ -51,6 +51,7 @@ Copy `.env.example` to `.env.local` and fill in real values. Never commit `.env`
 - **Supabase** (`NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`): database access, prepared for the dashboard phase. The service role key is server-only — keep it secret.
 - **Brightspace Manager** (`NEXT_PUBLIC_BRIGHTSPACE_MANAGER_URL`): public handoff URL for the operations console. Defaults to `https://brightspace-manager.vercel.app`; set `http://localhost:3001` when running BSM locally.
 - **Brightspace** (`BRIGHTSPACE_*`): OAuth and API credentials for the LMS integration. Without these, the app still runs — the discovery UI and mock dashboard work fine; only the `/api/auth/brightspace/*`, `/api/health/*`, and `/api/admin/sync/*` routes need them.
+- **Demo users** (`NEXT_PUBLIC_SHOW_DEMO_USERS`): persona cards show on `/login` beside Brightspace by default for demos. Set to `false` to hide them.
 - **`ADMIN_SYNC_SECRET`**: shared secret that callers must send in the `x-admin-secret` header to use `/api/admin/*` routes. Admin routes return 503 if it is not configured (fail closed).
 
 For production, set the same variables in the Vercel dashboard (Settings → Environment Variables).

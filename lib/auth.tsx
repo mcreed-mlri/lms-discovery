@@ -71,11 +71,13 @@ export const mlriAdminUser: User = {
 export const demoUsers = [demoUser, kevinSmithUser, mlriAdminUser];
 
 /**
- * Demo mode keeps the localStorage persona picker for stakeholder demos.
- * When off (production default), login goes through Brightspace OAuth and
- * the httpOnly session cookie is the only source of truth.
+ * Demo mode keeps the localStorage persona picker as the only login path.
+ * Demo users can also be shown alongside Brightspace for stakeholder demos;
+ * set NEXT_PUBLIC_SHOW_DEMO_USERS=false to hide them.
  */
 export const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+export const showDemoUsers =
+  isDemoMode || process.env.NEXT_PUBLIC_SHOW_DEMO_USERS !== "false";
 
 type AuthState = {
   user: User | null;
@@ -93,17 +95,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (isDemoMode) {
+    if (showDemoUsers) {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
           setUser(JSON.parse(stored));
+          setReady(true);
+          return;
         }
       } catch {
         // ignore malformed storage
-      } finally {
-        setReady(true);
       }
+    }
+
+    if (isDemoMode) {
+      setReady(true);
       return;
     }
 
@@ -129,17 +135,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  function login(userId = demoUser.id) {
+  function login(userId?: string) {
+    if (showDemoUsers && (isDemoMode || userId)) {
+      const nextUser =
+        demoUsers.find((candidate) => candidate.id === (userId ?? demoUser.id)) ?? demoUser;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
+      setUser(nextUser);
+      return;
+    }
+
     if (!isDemoMode) {
       window.location.assign("/api/auth/brightspace/start");
       return;
     }
-    const nextUser = demoUsers.find((candidate) => candidate.id === userId) ?? demoUser;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
-    setUser(nextUser);
   }
 
   function logout() {
+    if (showDemoUsers) {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+
     if (!isDemoMode) {
       void fetch("/api/auth/logout", { method: "POST" }).finally(() => {
         window.location.assign("/login");
@@ -147,7 +162,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       return;
     }
-    localStorage.removeItem(STORAGE_KEY);
     setUser(null);
   }
 
