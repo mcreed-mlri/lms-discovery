@@ -1,21 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, IBM_Plex_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import type { ReactNode } from "react";
 import { Providers } from "./providers";
 import "./globals.css";
 
-// Geist — the Studio sans, used app-wide. IBM Plex Mono — eyebrows, chips,
-// counts, percentages. Both exposed as CSS vars consumed in globals.css.
+// Geist — the Studio sans, used app-wide (body plus the small-caps label role).
+// Exposed as a CSS var consumed in globals.css.
 const geist = Geist({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-geist",
-});
-
-const plexMono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-plex-mono",
 });
 
 export const metadata: Metadata = {
@@ -64,7 +58,7 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className={`${geist.variable} ${plexMono.variable}`}>
+      <body className={geist.variable}>
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -22,10 +22,12 @@
   /* Display: same Geist family; large headings just lean on tighter tracking. */
   --font-serif:
     var(--font-geist, "Geist"), "Segoe UI Variable", "Segoe UI", "Inter", system-ui, sans-serif;
-  /* Mono: IBM Plex Mono — eyebrows, chips, counts, percentages. */
+  /* "Mono" role — eyebrows, chips, counts, percentages. Points at the Geist sans
+     stack: the small all-caps label treatment reads crisply in the UI sans and
+     avoids the blurry render a webfont mono had at 9–11px. */
   --font-mono:
-    var(--font-plex-mono, "IBM Plex Mono"), "SFMono-Regular", "Cascadia Mono", Consolas,
-    ui-monospace, monospace;
+    var(--font-geist, "Geist"), "Segoe UI Variable", "Segoe UI", "Inter", system-ui, ui-sans-serif,
+    -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
 
   /* ── Neutral base — cool grey "Studio" canvas (Google-Skills-grade neutrals).
         Colour is reserved as a signal; the page itself stays calm. ───────── */
