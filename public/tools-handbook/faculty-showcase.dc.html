@@ -132,6 +132,22 @@
   .tabs-container-vertical .tab-btn { text-align: left; width: 100%; padding: 12px 16px; white-space: normal; line-height: 1.35; }
   .tabs-container-vertical .tab-panel { flex: 1; min-width: 0; min-height: 120px; }
 
+  .timeline { display: flex; flex-direction: column; }
+  .timeline-item { display: grid; grid-template-columns: 28px 1fr; gap: 16px; padding-bottom: 22px; position: relative; }
+  .timeline-item:last-child { padding-bottom: 0; }
+  .timeline-item:not(:last-child)::before { content: ""; position: absolute; left: 13px; top: 30px; bottom: 0; width: 2px; background: var(--hair-strong); }
+  .timeline-dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--brand-fill); background: var(--surface); display: grid; place-items: center; font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: var(--brand); position: relative; z-index: 1; flex-shrink: 0; }
+  .timeline-label { margin: 2px 0 4px; font-size: 15px; font-weight: 700; color: var(--ink); }
+  .timeline-text { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--muted); }
+
+  .carousel { border: 1px solid var(--hair); border-radius: var(--radius-card); background: var(--surface); box-shadow: var(--shadow-card); overflow: hidden; }
+  .carousel-panel { padding: 22px 24px; min-height: 112px; background: var(--warm); }
+  .carousel-title { margin: 0 0 8px; font-size: 16px; font-weight: 700; color: var(--ink); }
+  .carousel-body { margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); }
+  .carousel-controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-top: 1px solid var(--hair); background: var(--surface); }
+  .carousel-btn { cursor: pointer; width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--hair); background: var(--paper); color: var(--muted); font-size: 16px; font-family: var(--font); line-height: 1; padding: 0; transition: all 0.15s; }
+  .carousel-btn:hover { border-color: var(--brand-fill); color: var(--brand); background: var(--brand-tint); }
+
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto; } }
 
   /* ── Handbook-specific additions — new content, but every value still comes
@@ -203,6 +219,8 @@
             <a href="#e-tabs" style="display:block; padding:3px 0; font-size:14.5px; color:var(--muted);">Tabs</a>
             <a href="#e-callouts" style="display:block; padding:3px 0; font-size:14.5px; color:var(--muted);">Callouts</a>
             <a href="#e-quotes" style="display:block; padding:3px 0; font-size:14.5px; color:var(--muted);">Stylized quotes</a>
+            <a href="#e-timeline" style="display:block; padding:3px 0; font-size:14.5px; color:var(--muted);">Timelines</a>
+            <a href="#e-carousel" style="display:block; padding:3px 0; font-size:14.5px; color:var(--muted);">Carousel</a>
             <a href="#e-dayone" style="display:block; padding:3px 0; font-size:14.5px; color:var(--muted);">Day One Experience</a>
           </div>
           <div>
@@ -252,7 +270,7 @@
           <span style="min-width:0;">Recommended element</span>
           <span style="justify-self:end; text-align:right;">Tag</span>
         </div>
-        <sc-for list="{{ chooserRows }}" as="row" hint-placeholder-count="9">
+        <sc-for list="{{ chooserRows }}" as="row" hint-placeholder-count="11">
           <div style="{{ row.rowStyle }}">
             <span style="font-size:14.5px; color:var(--ink); min-width:0;">{{ row.need }}</span>
             <a href="{{ row.href }}" style="font-size:14.5px; font-weight:700; color:var(--muted); justify-self:start; min-width:0;">{{ row.element }}</a>
@@ -414,6 +432,85 @@ Day of court — what to bring, what to expect at the hearing</pre></div></sc-if
         </figure>
 
         <sc-if value="{{ tagsOn }}" hint-placeholder-val="{{ true }}"><div style="margin-top:24px;"><p class="eyebrow eyebrow-muted" style="margin:0 0 10px;">Example in your draft</p><pre class="handbook-code">[QUOTE] "The purpose of the interview is not only to collect facts, but to identify the client's goal." — Advocacy handbook</pre></div></sc-if>
+      </article>
+
+      <!-- TIMELINE -->
+      <article class="step-card" style="margin-bottom:26px; min-height:0;">
+        <div style="display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:14px; margin-bottom:6px;">
+          <div style="max-width:52ch;">
+            <h3 id="e-timeline" class="display" style="font-size:clamp(24px,3vw,30px); margin:0 0 8px; scroll-margin-top:84px;">Timelines</h3>
+            <p style="margin:0; font-size:16px; color:var(--muted);">Steps or dates laid out in order.</p>
+          </div>
+          <sc-if value="{{ tagsOn }}" hint-placeholder-val="{{ true }}"><code class="pill pill-accent" style="white-space:nowrap;">[TIMELINE]</code></sc-if>
+        </div>
+
+        <p style="margin:14px 0 0; font-size:14.5px; color:var(--muted); line-height:1.55;"><strong style="color:var(--ink); font-weight:600;">Use for:</strong> chronological processes, deadlines, or what happens when.</p>
+
+        <p class="eyebrow eyebrow-muted" style="margin:18px 0 12px;">Example</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <span class="timeline-dot">1</span>
+            <div>
+              <p class="timeline-label">Notice to quit served</p>
+              <p class="timeline-text">The landlord serves proper notice. The clock for the next step starts when service is complete.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-dot">2</span>
+            <div>
+              <p class="timeline-label">Summary process filed</p>
+              <p class="timeline-text">After the notice period, the landlord files in court and the tenant receives the summons and complaint.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-dot">3</span>
+            <div>
+              <p class="timeline-label">Answer due</p>
+              <p class="timeline-text">Generally the Monday before the hearing date. Calculate it as soon as you get the case.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-dot">4</span>
+            <div>
+              <p class="timeline-label">Hearing</p>
+              <p class="timeline-text">The tenant must appear. A missed hearing can lead to a default judgment the same day.</p>
+            </div>
+          </div>
+        </div>
+
+        <sc-if value="{{ tagsOn }}" hint-placeholder-val="{{ true }}"><div style="margin-top:22px;"><p class="eyebrow eyebrow-muted" style="margin:0 0 10px;">Example in your draft</p><pre class="handbook-code">[TIMELINE] From notice to hearing
+Notice served → Summary process filed → Answer due → Hearing</pre></div></sc-if>
+      </article>
+
+      <!-- CAROUSEL -->
+      <article class="step-card" style="margin-bottom:26px; min-height:0;">
+        <div style="display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:14px; margin-bottom:6px;">
+          <div style="max-width:52ch;">
+            <h3 id="e-carousel" class="display" style="font-size:clamp(24px,3vw,30px); margin:0 0 8px; scroll-margin-top:84px;">Carousel</h3>
+            <p style="margin:0; font-size:16px; color:var(--muted);">Related slides learners click through one at a time.</p>
+          </div>
+          <sc-if value="{{ tagsOn }}" hint-placeholder-val="{{ true }}"><code class="pill pill-accent" style="white-space:nowrap;">[CAROUSEL]</code></sc-if>
+        </div>
+
+        <p style="margin:14px 0 0; font-size:14.5px; color:var(--muted); line-height:1.55;"><strong style="color:var(--ink); font-weight:600;">Use for:</strong> several related examples, images, or short points when you don't need them all visible at once.</p>
+
+        <p class="eyebrow eyebrow-muted" style="margin:18px 0 12px;">Example · use the arrows</p>
+        <div class="carousel">
+          <div class="carousel-panel">
+            <p class="carousel-title">{{ carouselTitle }}</p>
+            <p class="carousel-body">{{ carouselBody }}</p>
+          </div>
+          <div class="carousel-controls">
+            <button type="button" class="carousel-btn" onClick="{{ onCarouselPrev }}" aria-label="Previous slide">←</button>
+            <span class="eyebrow eyebrow-muted">{{ carouselCount }}</span>
+            <button type="button" class="carousel-btn" onClick="{{ onCarouselNext }}" aria-label="Next slide">→</button>
+          </div>
+        </div>
+
+        <sc-if value="{{ tagsOn }}" hint-placeholder-val="{{ true }}"><div style="margin-top:22px;"><p class="eyebrow eyebrow-muted" style="margin:0 0 10px;">Example in your draft</p><pre class="handbook-code">[CAROUSEL] Common notice defects to spot
+Wrong or missing date
+Reason doesn't match notice type
+Incomplete or improper service</pre></div></sc-if>
       </article>
 
       <!-- DAY ONE -->
@@ -623,7 +720,8 @@ class Component extends DCLogic {
     flips: [false, false, false],
     seq: [2, 0, 3, 1],
     sortB: [null, null, null, null],
-    b1: "", b2: "", checked: false
+    b1: "", b2: "", checked: false,
+    carousel: 0
   };
 
   SEQ = [
@@ -638,11 +736,18 @@ class Component extends DCLogic {
     { label: "Nonpayment after a demand", ans: "A" },
     { label: "No-fault termination, proper notice", ans: "B" }
   ];
+  CAROUSEL = [
+    { title: "Wrong or missing date", body: "A blank, crossed-out, or impossible date can make the notice defective — check it before you move on." },
+    { title: "Reason doesn't match notice type", body: "A 14-day notice for nonpayment can't do the work of a no-fault termination. The stated reason has to match the form." },
+    { title: "Incomplete or improper service", body: "If service wasn't done correctly, the whole case may not be able to proceed. Always verify how and when the tenant received the notice." }
+  ];
   CHOOSER = [
     { need: "FAQ or optional explanation", element: "Accordion", href: "#e-accordion", tag: "[ACCORDION]" },
     { need: "Side-by-side comparison", element: "Tabs", href: "#e-tabs", tag: "[TABS]" },
     { need: "Warning, deadline, exception, or practice tip", element: "Callout", href: "#e-callouts", tag: "[CALLOUT]" },
     { need: "Short expert language or guiding principle", element: "Stylized quote", href: "#e-quotes", tag: "[QUOTE]" },
+    { need: "Steps or dates in chronological order", element: "Timeline", href: "#e-timeline", tag: "[TIMELINE]" },
+    { need: "Related examples, one slide at a time", element: "Carousel", href: "#e-carousel", tag: "[CAROUSEL]" },
     { need: "Definition or vocabulary recall", element: "Flip card", href: "#e-flip", tag: "[FLIPCARDS]" },
     { need: "Categorizing examples", element: "Sorting gallery", href: "#e-sorting", tag: "[SORTING]" },
     { need: "Ordered process", element: "Sequencing", href: "#e-sequencing", tag: "[SEQUENCE]" },
@@ -747,6 +852,12 @@ class Component extends DCLogic {
       tabV0active: s.tabV === 0 ? " active" : "", tabV1active: s.tabV === 1 ? " active" : "",
       tabV0on: s.tabV === 0, tabV1on: s.tabV === 1,
       onTabV0: () => this.setState({ tabV: 0 }), onTabV1: () => this.setState({ tabV: 1 }),
+
+      carouselTitle: this.CAROUSEL[s.carousel].title,
+      carouselBody: this.CAROUSEL[s.carousel].body,
+      carouselCount: (s.carousel + 1) + " / " + this.CAROUSEL.length,
+      onCarouselPrev: () => this.setState({ carousel: (s.carousel - 1 + this.CAROUSEL.length) % this.CAROUSEL.length }),
+      onCarouselNext: () => this.setState({ carousel: (s.carousel + 1) % this.CAROUSEL.length }),
 
       flip0: s.flips[0] ? "rotateY(180deg)" : "rotateY(0deg)",
       flip1: s.flips[1] ? "rotateY(180deg)" : "rotateY(0deg)",
