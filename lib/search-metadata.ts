@@ -2,7 +2,7 @@ import type { LearningItem } from "@/lib/data";
 
 export type SearchAudience = "New attorneys" | "All staff" | "Supervisors" | "Program staff";
 export type ContentLifecycleStatus = "Recommended" | "New" | "Updated" | "Core";
-export type AccessUserType = "attorney" | "non_lawyer_advocate" | "paralegal" | "admin";
+export type AccessUserType = "attorney" | "non_lawyer_advocate" | "paralegal" | "admin" | "faculty";
 
 export type AccessMetadata = {
   allowedUserTypes: AccessUserType[];
@@ -38,6 +38,26 @@ export const searchMetadataById: Record<string, SearchMetadata> = {
     reviewedAt: "2026-06-03",
     access: {
       allowedUserTypes: ["attorney", "non_lawyer_advocate", "paralegal", "admin"],
+    },
+  },
+  "curriculum-map": {
+    audience: ["Program staff"],
+    status: "New",
+    editorialBoost: 14,
+    synonyms: ["curriculum", "roadmap", "pathway", "map", "competencies", "topics"],
+    reviewedAt: "2026-07-01",
+    access: {
+      allowedUserTypes: ["faculty", "admin"],
+    },
+  },
+  "faculty-starter": {
+    audience: ["Program staff"],
+    status: "New",
+    editorialBoost: 14,
+    synonyms: ["faculty", "content creator", "author", "getting started", "orientation"],
+    reviewedAt: "2026-07-01",
+    access: {
+      allowedUserTypes: ["faculty", "admin"],
     },
   },
   "brightspace-wrapper-demo": {

@@ -25,6 +25,10 @@ export function canAccessLearningItem(
 ): boolean {
   if (!user || user.accessStatus !== "approved") return false;
   if (user.userType === "admin") return true;
+  // Faculty / content creators can preview any catalog item so they can see
+  // what finished content looks like. This intentionally bypasses per-item
+  // allowedUserTypes gating (a preview/authoring role, not a learner role).
+  if (user.userType === "faculty") return true;
 
   const metadata = getSearchMetadata(item);
   const access = metadata.access;
@@ -54,6 +58,7 @@ export function getAccessLabel(userType: AccessUserType) {
   if (userType === "non_lawyer_advocate") return "Non-lawyer advocate";
   if (userType === "attorney") return "Attorney";
   if (userType === "paralegal") return "Paralegal";
+  if (userType === "faculty") return "Faculty";
   return "Admin";
 }
 

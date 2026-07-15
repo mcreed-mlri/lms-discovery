@@ -161,6 +161,7 @@ const topicThemes: Record<TopicFamily, TopicTheme> = {
 const courseTopic: Record<string, TopicFamily> = {
   "brightspace-wrapper-demo": "foundations",
   "faculty-handbook": "foundations",
+  "curriculum-map": "foundations",
   "professional-foundations": "foundations",
   "client-centered-practice": "client",
   "first-steps-in-court": "court",
@@ -209,6 +210,7 @@ export function getCourseLabel(course: Course) {
   const labels: Record<string, string> = {
     "brightspace-wrapper-demo": "Wrapper Demo",
     "faculty-handbook": "Faculty Handbook",
+    "curriculum-map": "Curriculum Map",
     "professional-foundations": "Foundations",
     "client-centered-practice": "Client Communication",
     "first-steps-in-court": "Court Skills",

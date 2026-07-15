@@ -39,3 +39,10 @@ test("faculty handbook opens the published handbook page", () => {
   assert.ok(item);
   assert.equal(getLearningItemUrl(item), "/tools-handbook/faculty-showcase.dc.html");
 });
+
+test("curriculum map opens the native discovery view", () => {
+  const item = getLearningItemById("curriculum-map");
+
+  assert.ok(item);
+  assert.equal(getLearningItemUrl(item), "/curriculum-map");
+});

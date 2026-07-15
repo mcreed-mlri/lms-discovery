@@ -11,7 +11,7 @@ export type User = {
   organization: string;
   unit: string;
   initials: string;
-  userType: "attorney" | "non_lawyer_advocate" | "paralegal" | "admin";
+  userType: "attorney" | "non_lawyer_advocate" | "paralegal" | "admin" | "faculty";
   accessStatus: "approved" | "pending" | "suspended" | "inactive";
   jurisdiction: string[];
   practiceArea: string[];
@@ -68,7 +68,22 @@ export const mlriAdminUser: User = {
   practiceArea: ["all"],
 };
 
-export const demoUsers = [demoUser, kevinSmithUser, mlriAdminUser];
+export const facultyUser: User = {
+  id: "faculty-demo",
+  name: "Faculty",
+  firstName: "Faculty",
+  email: "faculty@mlri.example",
+  title: "Content Creator",
+  organization: "MLRI",
+  unit: "Curriculum & Content",
+  initials: "F",
+  userType: "faculty",
+  accessStatus: "approved",
+  jurisdiction: ["MA"],
+  practiceArea: ["all"],
+};
+
+export const demoUsers = [demoUser, kevinSmithUser, mlriAdminUser, facultyUser];
 
 /**
  * Demo mode keeps the localStorage persona picker as the only login path.
@@ -76,8 +91,7 @@ export const demoUsers = [demoUser, kevinSmithUser, mlriAdminUser];
  * set NEXT_PUBLIC_SHOW_DEMO_USERS=false to hide them.
  */
 export const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
-export const showDemoUsers =
-  isDemoMode || process.env.NEXT_PUBLIC_SHOW_DEMO_USERS !== "false";
+export const showDemoUsers = isDemoMode || process.env.NEXT_PUBLIC_SHOW_DEMO_USERS !== "false";
 
 type AuthState = {
   user: User | null;

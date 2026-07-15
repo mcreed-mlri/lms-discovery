@@ -73,6 +73,16 @@ export const courses: Course[] = [
     brightspaceUrl: "/tools-handbook/faculty-showcase.dc.html",
   },
   {
+    id: "curriculum-map",
+    title: "Curriculum Map",
+    description:
+      "How the LACE curriculum is organized across Legal Skills and Substantive Law. Browse where your content fits; built topics link straight to their course.",
+    level: "Foundations",
+    practiceArea: "Faculty Support",
+    duration: "Browse",
+    brightspaceUrl: "/curriculum-map",
+  },
+  {
     id: "professional-foundations",
     title: "Professional Foundations for Legal Aid",
     description:
@@ -441,6 +451,15 @@ export const paths: Path[] = [
       "A short, safe starting path for non-lawyer advocates: professional boundaries, escalation, and client-centered support.",
     courseIds: ["upl-boundaries-advocates", "client-centered-practice"],
     totalDuration: "2 hr 25 min total",
+    level: "Foundations",
+  },
+  {
+    id: "faculty-starter",
+    title: "Faculty & Content Creator Starter",
+    description:
+      "Where your content fits, how to build it, and what a finished course looks like: the curriculum map, the faculty handbook, and a sample course.",
+    courseIds: ["curriculum-map", "faculty-handbook", "welcome-to-lace"],
+    totalDuration: "~30 min",
     level: "Foundations",
   },
 ];
@@ -832,6 +851,10 @@ export function getLearningItemUrl(item: LearningItem) {
 
   if (item.type === "COURSE" && item.id === "faculty-handbook") {
     return item.brightspaceUrl;
+  }
+
+  if (item.type === "COURSE" && item.id === "curriculum-map") {
+    return "/curriculum-map";
   }
 
   if (item.type === "MODULE" && item.courseId === "eviction-defense-48h") {
