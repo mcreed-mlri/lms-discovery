@@ -29,43 +29,43 @@
     var(--font-geist, "Geist"), "Segoe UI Variable", "Segoe UI", "Inter", system-ui, ui-sans-serif,
     -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
 
-  /* ── Neutral base — cool grey "Studio" canvas (Google-Skills-grade neutrals).
-        Colour is reserved as a signal; the page itself stays calm. ───────── */
-  --paper: #f5f6f8; /* cool grey page canvas */
-  --paper-deep: #eef0f4; /* deeper section accent, use sparingly */
-  --panel: #eef0f4; /* section frame */
-  --surface: #ffffff; /* clean white card */
-  --surface-raised: #ffffff; /* raised surfaces */
-  --surface-sunken: #eef0f4; /* sunken tracks, chips, active-nav bg */
-  --hover-tint: #f5f6f8; /* whisper hover */
-  --chrome-bg: rgba(255, 255, 255, 0.85);
-  --feature-surface: #14161b;
+  /* ── Neutral base — warm paper, not beige. The canvas eases the screen down
+        for long legal-work sessions while cards stay crisp and readable. ─── */
+  --paper: #f7f6f2; /* warm grey page canvas */
+  --paper-deep: #eeece6; /* deeper section accent, use sparingly */
+  --panel: #f0eee8; /* section frame */
+  --surface: #fffefb; /* clean paper-white card */
+  --surface-raised: #fffdf8; /* raised surfaces */
+  --surface-sunken: #efede7; /* sunken tracks, chips, active-nav bg */
+  --hover-tint: #f5f2eb; /* whisper hover */
+  --chrome-bg: rgba(255, 253, 248, 0.88);
+  --feature-surface: #1d1b17;
   --feature-ink: #ffffff;
   --feature-muted: rgba(255, 255, 255, 0.55);
   --feature-track: rgba(255, 255, 255, 0.14);
   --feature-action-bg: #ffffff;
-  --feature-action-ink: #14161b;
+  --feature-action-ink: #1d1b17;
   --feature-action-border: transparent;
-  --hero-wash: #f5f6f8;
-  --hero-wash-soft: #ffffff;
-  --ink: #14161b; /* near-black — primary text, brand mark */
-  --ink-muted: #565c69; /* muted — body copy, descriptions */
+  --hero-wash: #f7f6f2;
+  --hero-wash-soft: #fffdf8;
+  --ink: #171511; /* warm near-black — primary text, brand mark */
+  --ink-muted: #575148; /* muted — body copy, descriptions */
   /* Soft — metadata, captions, default icons, placeholders. Dark enough to
      clear WCAG 1.4.3 (4.5:1) on white, paper, AND sunken, since it is used at
      12–13px on all three. Do not lighten it. */
-  --ink-soft: #6a6d77;
-  --line: #e4e7ed; /* hairline borders */
-  --line-strong: #d3d8e0; /* stronger hairline */
-  --line-soft: #edeff3; /* inner dividers, hover border */
+  --ink-soft: #6d675e;
+  --line: #e2ded6; /* hairline borders */
+  --line-strong: #d2ccc1; /* stronger hairline */
+  --line-soft: #ece8df; /* inner dividers, hover border */
   /* Form-control boundary. A control's edge is "information required to
      identify a UI component", so WCAG 1.4.11 wants 3:1 — the decorative
      hairlines above cannot carry an input or select border. */
-  --line-control: #83868c;
-  --shadow-xs: 0 1px 2px rgba(20, 22, 27, 0.04);
-  --shadow-card: 0 1px 2px rgba(20, 22, 27, 0.04), 0 6px 18px rgba(20, 22, 27, 0.06);
-  --shadow-sm: 0 1px 2px rgba(20, 22, 27, 0.04), 0 6px 18px rgba(20, 22, 27, 0.06);
-  --shadow-md: 0 1px 2px rgba(20, 22, 27, 0.04), 0 6px 18px rgba(20, 22, 27, 0.06);
-  --shadow-lg: 0 8px 24px rgba(20, 22, 27, 0.1), 0 2px 6px rgba(20, 22, 27, 0.06);
+  --line-control: #827b70;
+  --shadow-xs: 0 1px 2px rgba(32, 27, 19, 0.04);
+  --shadow-card: 0 1px 2px rgba(32, 27, 19, 0.04), 0 6px 18px rgba(32, 27, 19, 0.06);
+  --shadow-sm: 0 1px 2px rgba(32, 27, 19, 0.04), 0 6px 18px rgba(32, 27, 19, 0.06);
+  --shadow-md: 0 1px 2px rgba(32, 27, 19, 0.04), 0 6px 18px rgba(32, 27, 19, 0.06);
+  --shadow-lg: 0 8px 24px rgba(32, 27, 19, 0.1), 0 2px 6px rgba(32, 27, 19, 0.06);
 
   /* ── Brand — Studio blue. Deep for text/links, brighter for fills ─────── */
   --brand: #1c3fb0; /* links, active icons, avatar fill */
@@ -106,8 +106,8 @@
   --hue-8-tint: #fbe8e2;
   --hue-8-ink: #ab5036; /* rust */
 
-  /* ── Topic families — one accent per course family. Remapped to the cool
-        hue palette so existing cards/dashboard accents read "Studio". ────── */
+  /* ── Topic families — one accent per course family. Remapped to the restrained
+        hue palette so existing cards/dashboard accents stay useful signals. ─ */
   --topic-court: #3a8ec9;
   --topic-court-soft: #e7f3fb;
   --topic-court-ink: #2b6c9b;
@@ -130,7 +130,7 @@
   --topic-foundations-soft: #ebedfc;
   --topic-foundations-ink: #3f4cb0;
   --topic-neutral: #8b909d;
-  --topic-neutral-soft: #eef0f4;
+  --topic-neutral-soft: #efede7;
   --topic-neutral-ink: #565c69;
 
   /* ── Status — lifecycle / progress signal. Kept distinct from topics ──── */
@@ -153,13 +153,13 @@
   --status-changed-soft: #fbe9e6;
   --status-changed-ink: #9c3528;
   --status-later: #8b909d;
-  --status-later-soft: #eef0f4;
+  --status-later-soft: #efede7;
   --status-later-ink: #565c69;
 
   --radius-card: 14px;
   --radius-control: 9px;
 
-  /* Text selection — a cool wash of the brand fill, not the retired gold. */
+  /* Text selection — a clear wash of the brand fill, not the retired gold. */
   --selection-bg: rgba(42, 91, 255, 0.18);
 }
 
@@ -311,7 +311,7 @@ body {
   font-weight: 400;
   font-size: 15px;
   line-height: 1.6;
-  /* A flat, calm cool-grey field — no gradients, no wallpaper. Stable and
+  /* A flat, calm warm-grey field — no gradients, no wallpaper. Stable and
      durable over long sessions. */
   background: var(--paper);
   color: var(--ink);
@@ -480,8 +480,8 @@ input::placeholder {
   background: color-mix(in srgb, var(--brand) 10%, var(--surface-raised));
   color: var(--ink);
   box-shadow:
-    inset 0 0 0 1px rgba(20, 22, 27, 0.1),
-    0 1px 2px rgba(20, 22, 27, 0.035);
+    inset 0 0 0 1px rgba(32, 27, 19, 0.1),
+    0 1px 2px rgba(32, 27, 19, 0.035);
 }
 
 .nav-link-active::before {
