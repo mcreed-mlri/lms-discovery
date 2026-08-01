@@ -437,7 +437,7 @@ export function AdminDashboardView() {
                 href={endpoint.path}
                 target="_blank"
                 rel="noreferrer"
-                className="shrink-0 rounded-[8px] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3 py-1.5 text-xs font-bold text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+                className="shrink-0 rounded-[8px] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3 py-1.5 text-xs font-bold text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
               >
                 Open
               </a>

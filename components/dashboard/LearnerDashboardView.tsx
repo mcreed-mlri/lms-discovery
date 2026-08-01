@@ -150,12 +150,12 @@ function KpiTile({
         <Icon className="h-4 w-4" />
       </div>
       <p className="mt-2.5 flex items-baseline gap-1">
-        <span className="hero-title text-[2rem] text-[color:var(--ink)]">{value}</span>
+        <span className="hero-title text-[32px] text-[color:var(--ink)]">{value}</span>
         {unit ? (
           <span className="text-sm font-semibold text-[color:var(--ink-soft)]">{unit}</span>
         ) : null}
       </p>
-      <p className="mt-1.5 text-[0.82rem] font-medium leading-snug text-[color:var(--ink-muted)]">
+      <p className="mt-1.5 text-[13px] font-medium leading-snug text-[color:var(--ink-muted)]">
         {detail}
       </p>
       {sparkline ? (
@@ -190,10 +190,10 @@ function SectionHeading({
   action?: { label: string; href: string };
 }) {
   return (
-    <div className="mb-4 flex items-end justify-between gap-4 border-b border-[color:var(--lace-hairline)] pb-3">
+    <div className="mb-4 flex items-end justify-between gap-4 border-b border-[color:var(--line)] pb-3">
       <div>
         <p className="section-kicker secondary">{eyebrow}</p>
-        <h2 className="hero-title mt-1 text-[1.5rem] text-[color:var(--ink)]">{title}</h2>
+        <h2 className="hero-title mt-1 text-[22px] text-[color:var(--ink)]">{title}</h2>
       </div>
       {action ? (
         <Link
@@ -234,7 +234,7 @@ function ContinueHeroRow({ course }: { course: LearnerCourse }) {
         color={tone.stripe}
         trackColor="var(--surface-sunken)"
       >
-        <span className="font-mono text-[0.72rem] font-bold text-[color:var(--ink)]">
+        <span className="font-mono text-[12px] font-bold text-[color:var(--ink)]">
           {course.completionPct}%
         </span>
       </ProgressRing>
@@ -245,16 +245,14 @@ function ContinueHeroRow({ course }: { course: LearnerCourse }) {
           </span>
           <AreaPill area={course.trainingArea} />
         </div>
-        <h3 className="section-title mt-1.5 text-[1.2rem] text-[color:var(--ink)]">
-          {course.title}
-        </h3>
+        <h3 className="section-title mt-1.5 text-[19px] text-[color:var(--ink)]">{course.title}</h3>
         <p className="metadata mt-1 text-[color:var(--ink-soft)]">
           Last visited {formatRelativeDate(course.lastAccessedAt)}
         </p>
       </div>
       <a
         href={getLearningUrlForDashboardCourse(course)}
-        className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[0_10px_22px_rgba(23,23,19,0.16)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+        className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus-ring"
         aria-label={`Continue ${course.title}`}
       >
         <PlayIcon className="h-3.5 w-3.5" /> Continue
@@ -266,7 +264,7 @@ function ContinueHeroRow({ course }: { course: LearnerCourse }) {
 function ContinueRow({ course }: { course: LearnerCourse }) {
   const tone = toneForArea(course.trainingArea);
   return (
-    <div className="flex flex-wrap items-center gap-4 border-t border-[color:var(--lace-hairline)] px-5 py-3.5">
+    <div className="flex flex-wrap items-center gap-4 border-t border-[color:var(--line)] px-5 py-3.5">
       <span
         className="hidden h-9 w-1 shrink-0 rounded-full sm:block"
         style={{ background: tone.stripe }}
@@ -278,20 +276,20 @@ function ContinueRow({ course }: { course: LearnerCourse }) {
         color={tone.stripe}
         trackColor="var(--surface-sunken)"
       >
-        <span className="font-mono text-[0.62rem] font-bold text-[color:var(--ink)]">
+        <span className="font-mono text-[10px] font-bold text-[color:var(--ink)]">
           {course.completionPct}
         </span>
       </ProgressRing>
       <div className="min-w-[10rem] flex-1">
         <AreaPill area={course.trainingArea} />
-        <h3 className="section-title mt-1 text-[1rem] text-[color:var(--ink)]">{course.title}</h3>
+        <h3 className="section-title mt-1 text-[16px] text-[color:var(--ink)]">{course.title}</h3>
       </div>
       <p className="metadata text-[color:var(--ink-soft)]">
         {formatRelativeDate(course.lastAccessedAt)}
       </p>
       <a
         href={getLearningUrlForDashboardCourse(course)}
-        className="inline-flex h-8 items-center rounded-[10px] border border-[color:var(--lace-hairline)] bg-[color:var(--surface-raised)] px-3.5 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--border-strong)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+        className="inline-flex h-8 items-center rounded-[10px] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3.5 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--line-strong)] focus-ring"
       >
         Resume
       </a>
@@ -371,7 +369,7 @@ export function LearnerDashboardView() {
         <p className="mt-2 text-sm font-medium text-[color:var(--ink-muted)]">{error}</p>
         <button
           type="button"
-          className="mt-6 inline-flex h-11 items-center rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+          className="mt-6 inline-flex h-11 items-center rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] focus-ring"
           onClick={() => window.location.reload()}
         >
           Try again
@@ -396,7 +394,7 @@ export function LearnerDashboardView() {
           </p>
           <Link
             href="/"
-            className="mt-6 inline-flex h-11 items-center rounded-[var(--radius-control)] border border-[color:var(--border-subtle)] bg-[color:var(--surface-raised)] px-5 text-sm font-bold text-[color:var(--ink-muted)] shadow-sm transition hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+            className="mt-6 inline-flex h-11 items-center rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-5 text-sm font-bold text-[color:var(--ink-muted)] shadow-sm transition hover:text-[color:var(--ink)] focus-ring"
           >
             Browse the discovery library
           </Link>
@@ -422,8 +420,7 @@ export function LearnerDashboardView() {
   const ratingCandidate = feedbackPrompts.hydrated
     ? courses.find(
         (course) =>
-          course.status === "completed" &&
-          !feedbackPrompts.isResolved("rating", course.offeringId),
+          course.status === "completed" && !feedbackPrompts.isResolved("rating", course.offeringId),
       )
     : undefined;
   const stalledCandidate =
@@ -459,7 +456,7 @@ export function LearnerDashboardView() {
         badge={
           <Link
             href="/"
-            className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-4 text-sm font-bold text-[color:var(--surface)] shadow-[0_10px_22px_rgba(23,23,19,0.16)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+            className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-4 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus-ring"
           >
             <BookIcon className="h-4 w-4" /> Browse library
           </Link>
@@ -501,16 +498,16 @@ export function LearnerDashboardView() {
               color="var(--brand-fill)"
               trackColor="var(--surface-sunken)"
             >
-              <span className="hero-title block text-[1.25rem] leading-none text-[color:var(--ink)]">
+              <span className="hero-title block text-[19px] leading-none text-[color:var(--ink)]">
                 {clePct}%
               </span>
             </ProgressRing>
             <div className="min-w-0">
               <p className="stat-label text-[color:var(--ink-soft)]">Training hours</p>
-              <p className="hero-title mt-1 text-[1.35rem] text-[color:var(--ink)]">
+              <p className="hero-title mt-1 text-[22px] text-[color:var(--ink)]">
                 {summary.cleEarned} of {summary.cleRequired} hours
               </p>
-              <p className="mt-1 text-[0.82rem] font-medium text-[color:var(--ink-muted)]">
+              <p className="mt-1 text-[13px] font-medium text-[color:var(--ink-muted)]">
                 {summary.cleDueLabel ?? "On pace"} · on pace
               </p>
             </div>
@@ -573,7 +570,7 @@ export function LearnerDashboardView() {
                     <div
                       key={course.offeringId}
                       className={`flex flex-wrap items-center gap-4 px-5 py-3.5 ${
-                        index > 0 ? "border-t border-[color:var(--lace-hairline)]" : ""
+                        index > 0 ? "border-t border-[color:var(--line)]" : ""
                       }`}
                     >
                       <span
@@ -581,7 +578,7 @@ export function LearnerDashboardView() {
                         style={{ background: urgency }}
                       />
                       <div className="min-w-[10rem] flex-1">
-                        <h3 className="section-title text-[1rem] text-[color:var(--ink)]">
+                        <h3 className="section-title text-[16px] text-[color:var(--ink)]">
                           {course.title}
                         </h3>
                         <div className="mt-1.5">
@@ -602,7 +599,7 @@ export function LearnerDashboardView() {
                       </div>
                       <a
                         href={getLearningUrlForDashboardCourse(course)}
-                        className="inline-flex h-8 items-center rounded-[10px] bg-[color:var(--ink)] px-3.5 text-xs font-bold text-[color:var(--surface)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+                        className="inline-flex h-8 items-center rounded-[10px] bg-[color:var(--ink)] px-3.5 text-xs font-bold text-[color:var(--surface)] transition hover:opacity-90 focus-ring"
                       >
                         {course.completionPct > 0 ? "Resume" : "Start"}
                       </a>
@@ -630,12 +627,12 @@ export function LearnerDashboardView() {
                       style={{ borderTop: `3px solid ${tone.stripe}` }}
                     >
                       <AreaPill area={course.trainingArea} />
-                      <h3 className="section-title text-[1rem] text-[color:var(--ink)]">
+                      <h3 className="section-title text-[16px] text-[color:var(--ink)]">
                         {course.title}
                       </h3>
                       <a
                         href={getLearningUrlForDashboardCourse(course)}
-                        className="mt-1 inline-flex h-9 w-fit items-center gap-2 rounded-[10px] border border-[color:var(--lace-hairline)] bg-[color:var(--surface-raised)] px-3.5 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--border-strong)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+                        className="mt-1 inline-flex h-9 w-fit items-center gap-2 rounded-[10px] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3.5 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--line-strong)] focus-ring"
                       >
                         <PlayIcon className="h-3.5 w-3.5" /> Start course
                       </a>
@@ -656,7 +653,7 @@ export function LearnerDashboardView() {
                 <div className="flex items-center gap-3">
                   <FlameIcon className="h-5 w-5 text-[color:var(--brand)]" />
                   <div>
-                    <p className="hero-title text-[1.3rem] leading-none text-[color:var(--ink)]">
+                    <p className="hero-title text-[22px] leading-none text-[color:var(--ink)]">
                       {streakDays} days
                     </p>
                     <p className="stat-label mt-1 text-[color:var(--ink-soft)]">
@@ -685,7 +682,7 @@ export function LearnerDashboardView() {
                   >
                     <BookmarkFilledIcon className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--brand-fill)]" />
                     <div className="min-w-0">
-                      <h3 className="section-title text-[0.95rem] leading-snug text-[color:var(--ink)]">
+                      <h3 className="section-title text-[15px] leading-snug text-[color:var(--ink)]">
                         {item.title}
                       </h3>
                       <p className="metadata mt-1 text-[color:var(--ink-soft)]">{item.type}</p>
@@ -722,7 +719,7 @@ export function LearnerDashboardView() {
                   <div
                     key={`${entry.label}-${index}`}
                     className={`flex items-center gap-3.5 px-3 py-3 ${
-                      index > 0 ? "border-t border-[color:var(--lace-hairline)]" : ""
+                      index > 0 ? "border-t border-[color:var(--line)]" : ""
                     }`}
                   >
                     <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color:var(--surface-sunken)] text-[color:var(--brand-ink)]">
@@ -732,7 +729,7 @@ export function LearnerDashboardView() {
                       <p className="metadata text-[color:var(--ink-soft)]">
                         {formatRelativeDate(entry.at)}
                       </p>
-                      <p className="section-title text-[0.95rem] leading-snug text-[color:var(--ink)]">
+                      <p className="section-title text-[15px] leading-snug text-[color:var(--ink)]">
                         {entry.label}
                       </p>
                     </div>
@@ -752,9 +749,9 @@ export function LearnerDashboardView() {
                   key={certificate.id}
                   className="editorial-card relative overflow-hidden rounded-[var(--radius-card)] p-4"
                 >
-                  <span className="absolute -right-2 -top-2 h-16 w-16 rounded-full bg-[rgba(184,138,45,0.08)]" />
+                  <span className="absolute -right-2 -top-2 h-16 w-16 rounded-full bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" />
                   <CertificateIcon className="h-5 w-5 text-[color:var(--brand)]" />
-                  <h3 className="section-title mt-3 text-[1rem] text-[color:var(--ink)]">
+                  <h3 className="section-title mt-3 text-[16px] text-[color:var(--ink)]">
                     {certificate.title}
                   </h3>
                   <p className="metadata mt-1.5 text-[color:var(--ink-soft)]">

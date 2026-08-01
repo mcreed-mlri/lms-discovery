@@ -14,9 +14,12 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { getEffectiveDashboardRole } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
-import { practiceAreas } from "@/lib/data";
+import { skillAreas } from "@/lib/data";
 import { getHue } from "@/lib/skill-hue";
-import type { ComponentType } from "react";
+import { useState, type ComponentType } from "react";
+
+// How many skill areas to show in the rail before the "Show more" toggle.
+const RAIL_AREA_LIMIT = 7;
 
 type NavItem = {
   label: string;
@@ -32,7 +35,7 @@ type NavItem = {
 
 const primaryNav: NavItem[] = [
   { label: "Home", href: "/", icon: HomeIcon, match: (p) => p === "/" },
-  { label: "Browse", href: "/#browse", icon: GridIcon, match: () => false },
+  { label: "Browse", href: "/browse", icon: GridIcon, match: (p) => p === "/browse" },
   {
     label: "My Learning",
     href: "/my-learning",
@@ -79,7 +82,7 @@ function RailItem({
       onClick={onNavigate}
       title={collapsed ? item.label : undefined}
       aria-current={active ? "page" : undefined}
-      className={`group relative flex items-center gap-3 overflow-hidden whitespace-nowrap rounded-[9px] text-sm transition focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
+      className={`group relative flex items-center gap-3 overflow-hidden whitespace-nowrap rounded-[9px] text-sm transition focus-ring ${
         collapsed ? "justify-center px-0 py-2.5" : "px-[11px] py-[9px]"
       } ${
         active
@@ -92,7 +95,7 @@ function RailItem({
           className={`h-[19px] w-[19px] ${active ? "text-[color:var(--brand)]" : "text-[color:var(--ink-soft)]"}`}
         />
         {item.badge && (
-          <span className="absolute -right-[3px] -top-[2px] h-[7px] w-[7px] rounded-full border-2 border-[color:var(--surface)] bg-[#c8493b]" />
+          <span className="absolute -right-[3px] -top-[2px] h-[7px] w-[7px] rounded-full border-2 border-[color:var(--surface)] bg-[color:var(--status-changed)]" />
         )}
       </span>
       {!collapsed && <span className="flex-1">{item.label}</span>}
@@ -118,6 +121,12 @@ export function StudioRail({
   const effectiveRole = getEffectiveDashboardRole(user);
   const isAdmin = effectiveRole === "super_admin";
 
+  // The full list is long; show a core set with a "Show more" toggle. When the
+  // rail is collapsed to icons, the compact swatches all fit, so show them all.
+  const [showAllAreas, setShowAllAreas] = useState(false);
+  const visibleSkillAreas =
+    collapsed || showAllAreas ? skillAreas : skillAreas.slice(0, RAIL_AREA_LIMIT);
+
   // The headless admin account is an ops/data login — hide learner surfaces.
   const visiblePrimaryNav = primaryNav.filter((item) => !item.learnerOnly || !isAdmin);
   const visibleRoleNav = roleNav.filter((item) => !item.adminOnly || isAdmin);
@@ -130,7 +139,7 @@ export function StudioRail({
 
   return (
     <div
-      className={`flex min-h-full flex-col border-r border-[color:var(--line)] bg-[color:var(--surface)] transition-[width,padding] duration-200 ease-[cubic-bezier(.4,0,.2,1)] ${
+      className={`flex h-full max-h-screen flex-col overflow-y-auto overflow-x-hidden border-r border-[color:var(--line)] bg-[color:var(--surface)] transition-[width,padding] duration-200 ease-[cubic-bezier(.4,0,.2,1)] ${
         collapsed ? "w-[68px] px-3 py-5" : "w-[248px] px-4 py-5"
       }`}
     >
@@ -146,7 +155,7 @@ export function StudioRail({
           title={collapsed ? "Expand navigation" : "Collapse navigation"}
           aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
           aria-expanded={!collapsed}
-          className="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[8px] bg-[color:var(--ink)] text-[color:var(--surface)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+          className="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[8px] bg-[color:var(--ink)] text-[color:var(--surface)] transition hover:opacity-90 focus-ring"
         >
           <svg
             width="17"
@@ -166,7 +175,7 @@ export function StudioRail({
           </svg>
         </button>
         {!collapsed && (
-          <span className="text-[20px] font-bold tracking-[-0.02em] text-[color:var(--ink)]">
+          <span className="text-[19px] font-bold tracking-[-0.02em] text-[color:var(--ink)]">
             LACE
           </span>
         )}
@@ -178,7 +187,7 @@ export function StudioRail({
           type="button"
           onClick={onSearch}
           title="Search - Ctrl K"
-          className="mx-auto mb-4 flex h-10 w-11 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--paper)] text-[color:var(--ink-soft)] transition hover:border-[color:var(--line-strong)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15"
+          className="mx-auto mb-4 flex h-10 w-11 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--paper)] text-[color:var(--ink-soft)] transition hover:border-[color:var(--line-strong)] focus-ring"
         >
           <SearchIcon className="h-[18px] w-[18px]" />
         </button>
@@ -186,10 +195,10 @@ export function StudioRail({
         <button
           type="button"
           onClick={onSearch}
-          className="mb-4 flex items-center gap-[9px] rounded-[9px] border border-[color:var(--line)] bg-[color:var(--paper)] px-3 py-[9px] text-left transition hover:border-[color:var(--line-strong)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15"
+          className="mb-4 flex items-center gap-[9px] rounded-[9px] border border-[color:var(--line)] bg-[color:var(--paper)] px-3 py-[9px] text-left transition hover:border-[color:var(--line-strong)] focus-ring"
         >
           <SearchIcon className="h-4 w-4 text-[color:var(--ink-soft)]" />
-          <span className="flex-1 text-[13.5px] text-[color:var(--ink-soft)]">Search</span>
+          <span className="flex-1 text-[13px] text-[color:var(--ink-soft)]">Search</span>
           <span className="rounded-[7px] bg-[color:var(--surface-sunken)] px-[7px] py-1 font-mono text-[11px] font-semibold text-[color:var(--ink-soft)]">
             Ctrl K
           </span>
@@ -218,25 +227,25 @@ export function StudioRail({
         ))}
       </nav>
 
-      {/* Practice areas — the reason the rail exists */}
+      {/* Skill areas — the Legal Skills curriculum areas (each a course) */}
       <div className="mt-[26px]">
         {collapsed ? (
           <div className="mx-1.5 mb-[14px] mt-1 h-px bg-[color:var(--line-soft)]" />
         ) : (
           <div className="mb-3 px-[11px] font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-[color:var(--ink-soft)]">
-            Practice areas
+            Skill areas
           </div>
         )}
         <div className={`flex flex-col ${collapsed ? "gap-1.5" : "gap-0.5"}`}>
-          {practiceAreas.map((area) => {
+          {visibleSkillAreas.map((area) => {
             const hue = getHue(area.hueIndex);
             return (
               <Link
                 key={area.id}
-                href={`/?q=${encodeURIComponent(area.query)}#browse`}
+                href={area.href}
                 onClick={onNavigate}
                 title={collapsed ? `${area.name} · ${area.count}` : undefined}
-                className={`flex items-center gap-[11px] overflow-hidden whitespace-nowrap rounded-[8px] text-[13.5px] text-[color:var(--ink-muted)] transition hover:bg-[color:var(--surface-sunken)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
+                className={`flex items-center gap-[11px] overflow-hidden whitespace-nowrap rounded-[8px] text-[13px] text-[color:var(--ink-muted)] transition hover:bg-[color:var(--surface-sunken)] focus-ring ${
                   collapsed ? "justify-center px-0 py-[7px]" : "px-[11px] py-[7px]"
                 }`}
               >
@@ -253,6 +262,16 @@ export function StudioRail({
               </Link>
             );
           })}
+          {!collapsed && skillAreas.length > RAIL_AREA_LIMIT && (
+            <button
+              type="button"
+              onClick={() => setShowAllAreas((value) => !value)}
+              aria-expanded={showAllAreas}
+              className="mt-0.5 flex items-center gap-[11px] rounded-[8px] px-[11px] py-[7px] text-left text-[13px] font-semibold text-[color:var(--brand)] transition hover:bg-[color:var(--surface-sunken)] focus-ring"
+            >
+              {showAllAreas ? "Show fewer" : `Show ${skillAreas.length - RAIL_AREA_LIMIT} more`}
+            </button>
+          )}
         </div>
       </div>
 
@@ -263,7 +282,7 @@ export function StudioRail({
           type="button"
           onClick={onToggle}
           title={collapsed ? "Expand" : "Collapse"}
-          className={`mb-1.5 flex w-full items-center gap-[11px] rounded-[8px] text-[13.5px] font-medium text-[color:var(--ink-soft)] transition hover:bg-[color:var(--surface-sunken)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
+          className={`mb-1.5 flex w-full items-center gap-[11px] rounded-[8px] text-[13px] font-medium text-[color:var(--ink-soft)] transition hover:bg-[color:var(--surface-sunken)] focus-ring ${
             collapsed ? "justify-center px-0 py-[9px]" : "px-[11px] py-[9px]"
           }`}
         >
@@ -275,7 +294,7 @@ export function StudioRail({
         <div
           className={`flex items-center gap-2.5 ${collapsed ? "justify-center px-0 py-1" : "px-[7px] py-1"}`}
         >
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color:var(--brand)] text-[12.5px] font-[650] text-white">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color:var(--brand)] text-[12px] font-[650] text-white">
             {user?.initials ?? "—"}
           </span>
           {!collapsed && user && (
@@ -283,9 +302,7 @@ export function StudioRail({
               <div className="truncate text-[13px] font-semibold text-[color:var(--ink)]">
                 {user.name}
               </div>
-              <div className="truncate text-[11.5px] text-[color:var(--ink-soft)]">
-                {user.title}
-              </div>
+              <div className="truncate text-[11px] text-[color:var(--ink-soft)]">{user.title}</div>
             </div>
           )}
         </div>
@@ -294,7 +311,7 @@ export function StudioRail({
             type="button"
             onClick={handleLogout}
             title={collapsed ? "Log out / switch user" : undefined}
-            className={`mt-2 flex w-full items-center rounded-[8px] text-[13px] font-semibold text-[color:var(--ink-soft)] transition hover:bg-[color:var(--surface-sunken)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
+            className={`mt-2 flex w-full items-center rounded-[8px] text-[13px] font-semibold text-[color:var(--ink-soft)] transition hover:bg-[color:var(--surface-sunken)] hover:text-[color:var(--ink)] focus-ring ${
               collapsed ? "justify-center px-0 py-2" : "px-[11px] py-2"
             }`}
           >

@@ -44,7 +44,7 @@ export function UpdateCard({
       <button
         type="button"
         onClick={() => onOpen(update.moduleId)}
-        className={`mt-4 inline-flex items-center gap-2 self-start rounded-[var(--radius-control)] text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15 ${
+        className={`mt-4 inline-flex items-center gap-2 self-start rounded-[var(--radius-control)] text-sm font-bold transition focus-ring ${
           lead
             ? "h-10 bg-[color:var(--ink)] px-4 text-[color:var(--surface-raised)] hover:opacity-90"
             : "px-0 text-[color:var(--ink-muted)] hover:text-[color:var(--ink)]"

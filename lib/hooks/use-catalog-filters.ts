@@ -35,31 +35,38 @@ function filterToSearchTypes(filter: Filter): SearchFacetFilters["types"] | unde
   return undefined;
 }
 
-function getCuratedCatalogItems(items: LearningItem[]) {
+function getCuratedCatalogItems(items: LearningItem[], limit?: number) {
+  // Lead the default "All" view with the genuinely-available offerings, then
+  // let the curriculum-map "Coming soon" items fill in behind them.
   const preferredIds = [
-    "advocate-upl-onboarding",
-    "upl-boundaries-advocates",
-    "new-attorney-foundations",
-    "client-centered-communication-path",
-    "client-centered-practice",
-    "first-steps-in-court",
-    "first-client-interview",
-    "first-appearance-checklist",
-    "safety-screening",
-    "ethics-and-confidentiality",
+    "welcome-to-lace",
+    "eviction-defense-48h",
+    "clock-starts",
+    "notice-types",
+    "drafting-answer",
+    "walking-into-housing-court",
+    "brightspace-wrapper-demo",
+    "faculty-starter",
   ];
   const byId = new Map(items.map((item) => [item.id, item]));
   const preferredMatches = preferredIds
     .map((id) => byId.get(id))
     .filter((item): item is LearningItem => Boolean(item));
   const remainingMatches = items.filter((item) => !preferredIds.includes(item.id));
-  return [...preferredMatches, ...remainingMatches].slice(0, 8);
+  // Built/real offerings first, then the rest of the curriculum. On the
+  // homepage we show a capped preview; the full set lives on /browse.
+  const ordered = [...preferredMatches, ...remainingMatches];
+  return typeof limit === "number" ? ordered.slice(0, limit) : ordered;
 }
 
 // All catalog search/filter state for the homepage, plus the derived item
 // lists. This is the seam where a future Supabase-backed catalog can replace
 // getLearningItems() without touching the page UI.
-export function useCatalogFilters(user: AccessProfile | null | undefined) {
+export function useCatalogFilters(
+  user: AccessProfile | null | undefined,
+  options: { previewLimit?: number } = {},
+) {
+  const { previewLimit } = options;
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("All");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
@@ -120,8 +127,20 @@ export function useCatalogFilters(user: AccessProfile | null | undefined) {
       count: visibleModuleItems.filter((module) => getModuleSkillId(module.id) === skill.id).length,
     }))
     .filter((entry) => entry.count > 0);
-  const curatedItems = useMemo(() => getCuratedCatalogItems(visibleItems), [visibleItems]);
-  const catalogItems = filter === "All" ? curatedItems : visibleItems;
+  const curatedItems = useMemo(
+    () => getCuratedCatalogItems(visibleItems, previewLimit),
+    [visibleItems, previewLimit],
+  );
+  const catalogItems =
+    filter === "All"
+      ? curatedItems
+      : previewLimit
+        ? visibleItems.slice(0, previewLimit)
+        : visibleItems;
+  // How many items the current search/lens actually matches, and whether the
+  // homepage preview is hiding some (drives the "See all" affordance).
+  const catalogTotal = visibleItems.length;
+  const hasMoreThanPreview = previewLimit ? visibleItems.length > previewLimit : false;
 
   const advancedFilterCount = [
     practiceAreaFilter,
@@ -204,6 +223,8 @@ export function useCatalogFilters(user: AccessProfile | null | undefined) {
     eligiblePathItems,
     skillTiles,
     catalogItems,
+    catalogTotal,
+    hasMoreThanPreview,
     advancedFilterCount,
     selectSkill,
     resetAllFilters,

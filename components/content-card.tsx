@@ -1,28 +1,25 @@
 import { ArrowIcon } from "@/components/icons";
 import { TypeBadge } from "@/components/type-badge";
 import {
-  getCourseId,
+  getCourseAccent,
   getCourseLabel,
-  getCourseTheme,
+  getItemAccent,
   getStatusTheme,
   resolveStatusKey,
+  type Accent,
 } from "@/lib/course-theme";
 import { courses, getModuleMinutes, type LearningItem } from "@/lib/data";
-import type { MouseEvent } from "react";
+import type { CSSProperties } from "react";
 
-const comingSoonHref = "#content-coming-soon";
-const comingSoonLabel = "Open details";
-
-function preventPlaceholderNavigation(event: MouseEvent<HTMLAnchorElement>) {
-  event.preventDefault();
-}
-
-function ComingSoonTooltip() {
-  return (
-    <span className="pointer-events-none absolute right-3 top-3 z-10 rounded-md border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-2.5 py-1 text-xs font-semibold text-[color:var(--ink-soft)] opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
-      {comingSoonLabel}
-    </span>
-  );
+// Expose an item's accent colour as CSS custom properties on a card, so the
+// static Tailwind classes below (`bg-[color:var(--accent)]` etc.) pick up the
+// per-skill-area colour without runtime class names.
+function accentVars(accent: Accent): CSSProperties {
+  return {
+    "--accent": accent.solid,
+    "--accent-tint": accent.tint,
+    "--accent-ink": accent.ink,
+  } as CSSProperties;
 }
 
 function getMeta(item: LearningItem) {
@@ -58,15 +55,6 @@ function DetailsAffordance({ className = "" }: { className?: string }) {
   );
 }
 
-function handleOpen(
-  event: MouseEvent<HTMLAnchorElement>,
-  item: LearningItem,
-  onOpen?: (item: LearningItem) => void,
-) {
-  event.preventDefault();
-  onOpen?.(item);
-}
-
 export function ContentCard({
   item,
   onOpen,
@@ -76,58 +64,52 @@ export function ContentCard({
 }) {
   const isModule = item.type === "MODULE";
   const isCourse = item.type === "COURSE";
-  const courseTheme = item.type === "PATH" ? null : getCourseTheme(getCourseId(item));
+  const accent = getItemAccent(item);
 
+  // A button, not a link: this opens a detail dialog in place. It used to be an
+  // <a href="#content-coming-soon"> with preventDefault, which announced itself
+  // as a link to a fragment that does not exist.
   return (
-    <a
-      href={comingSoonHref}
-      onClick={(event) =>
-        onOpen ? handleOpen(event, item, onOpen) : preventPlaceholderNavigation(event)
-      }
-      title={comingSoonLabel}
+    <button
+      type="button"
+      style={accentVars(accent)}
+      onClick={() => onOpen?.(item)}
       aria-label={`${item.title}. Open detail view.`}
-      className={`editorial-card group relative flex h-full cursor-pointer flex-col overflow-hidden transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 before:opacity-85 focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
+      className={`editorial-card group relative flex h-full cursor-pointer flex-col overflow-hidden text-left transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 before:opacity-85 before:bg-[color:var(--accent)] hover:border-[color:var(--accent)] focus-ring ${
         isModule
           ? "min-h-0 p-3 pt-3.5 before:h-1 sm:min-h-[11.25rem] sm:p-4 sm:pt-4"
           : "min-h-0 p-3 pt-3.5 before:h-1 sm:min-h-[15.75rem] sm:p-[1.125rem] sm:pt-5"
-      } ${
-        courseTheme
-          ? `${courseTheme.hoverBorder} ${courseTheme.rail}`
-          : "before:bg-[color:var(--line-strong)]"
       }`}
     >
-      <ComingSoonTooltip />
       <div
         className={`${isModule ? "mb-2 sm:mb-3" : "mb-2 sm:mb-3.5"} flex min-h-0 flex-wrap items-start gap-1.5 sm:min-h-8 sm:gap-2`}
       >
         <TypeBadge type={item.type} />
         {isModule && item.contentStatus && <ContentStatusChip status={item.contentStatus} />}
-        <span className="ml-auto text-[0.75rem] font-semibold tabular-nums text-[color:var(--ink-soft)] sm:hidden">
+        <span className="ml-auto text-[12px] font-semibold tabular-nums text-[color:var(--ink-soft)] sm:hidden">
           {getMeta(item)}
         </span>
       </div>
       <h3
-        className={`card-title line-clamp-2 ${isModule ? "text-[1rem] sm:text-[1.08rem]" : "text-[1rem] sm:text-[1.18rem]"} leading-snug`}
+        className={`card-title line-clamp-2 ${isModule ? "text-[16px] sm:text-[17px]" : "text-[16px] sm:text-[19px]"} leading-snug`}
       >
         {item.title}
       </h3>
       {isModule && (
-        <p
-          className={`mt-1.5 inline-flex w-fit items-center gap-1.5 rounded-md border px-2 py-0.5 text-[11px] font-semibold leading-5 sm:mt-2 sm:px-2 sm:py-1 sm:text-xs ${courseTheme?.chip}`}
-        >
-          <span className={`h-1.5 w-1.5 rounded-full ${courseTheme?.dot}`} aria-hidden="true" />
+        <p className="mt-1.5 inline-flex w-fit items-center gap-1.5 rounded-md border border-[color:var(--line)] bg-[color:var(--accent-tint)] px-2 py-0.5 text-[11px] font-semibold leading-5 text-[color:var(--accent-ink)] sm:mt-2 sm:px-2 sm:py-1 sm:text-xs">
+          <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--accent)]" aria-hidden="true" />
           {item.parentCourseTitle}
         </p>
       )}
       <p
-        className={`card-description mt-1.5 hidden text-[0.9rem] leading-relaxed sm:mt-2.5 sm:block ${isModule ? "line-clamp-2" : "line-clamp-3"}`}
+        className={`card-description mt-1.5 hidden text-[14px] leading-relaxed sm:mt-2.5 sm:block ${isModule ? "line-clamp-2" : "line-clamp-3"}`}
       >
         {item.description}
       </p>
       <div
         className={`${isModule ? "pt-2.5 sm:pt-3.5" : "pt-2.5 sm:pt-4"} mt-auto flex items-center justify-between gap-3 border-t border-[color:var(--line-soft)]`}
       >
-        <span className="hidden text-[0.82rem] font-semibold leading-5 tabular-nums text-[color:var(--ink-soft)] sm:inline">
+        <span className="hidden text-[13px] font-semibold leading-5 tabular-nums text-[color:var(--ink-soft)] sm:inline">
           {getMeta(item)}
         </span>
         <DetailsAffordance
@@ -138,7 +120,7 @@ export function ContentCard({
           aria-hidden="true"
         />
       </div>
-    </a>
+    </button>
   );
 }
 
@@ -150,39 +132,33 @@ export function ContentListRow({
   onOpen?: (item: LearningItem) => void;
 }) {
   const isModule = item.type === "MODULE";
-  const courseTheme = item.type === "PATH" ? null : getCourseTheme(getCourseId(item));
+  const accent = getItemAccent(item);
 
   return (
-    <a
-      href={comingSoonHref}
-      onClick={(event) =>
-        onOpen ? handleOpen(event, item, onOpen) : preventPlaceholderNavigation(event)
-      }
-      title={comingSoonLabel}
-      aria-label={`${item.title}. ${comingSoonLabel}.`}
-      className={`editorial-card group relative grid cursor-pointer grid-cols-[minmax(0,1fr)_auto] items-center gap-2 overflow-hidden p-3 pl-3.5 transition duration-200 ease-out before:absolute before:inset-y-0 before:left-0 before:w-0.5 focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 sm:grid-cols-1 sm:gap-4 sm:p-5 sm:pl-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-center ${
-        courseTheme
-          ? `${courseTheme.hoverBorder} ${courseTheme.rail}`
-          : "before:bg-[color:var(--line-strong)]"
-      }`}
+    <button
+      type="button"
+      style={accentVars(accent)}
+      onClick={() => onOpen?.(item)}
+      aria-label={`${item.title}. Open detail view.`}
+      className="editorial-card group relative grid w-full cursor-pointer grid-cols-[minmax(0,1fr)_auto] items-center gap-2 overflow-hidden p-3 pl-3.5 text-left transition duration-200 ease-out before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--accent)] hover:border-[color:var(--accent)] focus-ring sm:grid-cols-1 sm:gap-4 sm:p-5 sm:pl-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-center"
     >
-      <ComingSoonTooltip />
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-1.5 sm:mb-2.5 sm:gap-2">
           <TypeBadge type={item.type} />
           {isModule && item.contentStatus && <ContentStatusChip status={item.contentStatus} />}
-          <span className="text-[0.75rem] font-semibold tabular-nums text-[color:var(--ink-soft)] sm:text-[0.82rem]">
+          <span className="text-[12px] font-semibold tabular-nums text-[color:var(--ink-soft)] sm:text-[13px]">
             {getMeta(item)}
           </span>
         </div>
-        <h3 className="card-title line-clamp-2 text-[0.95rem] leading-snug sm:line-clamp-none sm:text-lg">
+        <h3 className="card-title line-clamp-2 text-[15px] leading-snug sm:line-clamp-none sm:text-lg">
           {item.title}
         </h3>
         {isModule && (
-          <p
-            className={`mt-1 hidden w-fit items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-semibold leading-5 sm:mt-2 sm:inline-flex ${courseTheme?.chip}`}
-          >
-            <span className={`h-1.5 w-1.5 rounded-full ${courseTheme?.dot}`} aria-hidden="true" />
+          <p className="mt-1 hidden w-fit items-center gap-1.5 rounded-lg border border-[color:var(--line)] bg-[color:var(--accent-tint)] px-2.5 py-1.5 text-xs font-semibold leading-5 text-[color:var(--accent-ink)] sm:mt-2 sm:inline-flex">
+            <span
+              className="h-1.5 w-1.5 rounded-full bg-[color:var(--accent)]"
+              aria-hidden="true"
+            />
             {item.parentCourseTitle}
           </p>
         )}
@@ -197,7 +173,7 @@ export function ContentListRow({
         aria-hidden="true"
       />
       <DetailsAffordance className="hidden w-fit px-3 py-1.5 sm:inline-flex" />
-    </a>
+    </button>
   );
 }
 
@@ -209,45 +185,42 @@ export function PathCard({
   onOpen?: (item: LearningItem) => void;
 }) {
   const relatedCourses = courses.filter((course) => item.courseIds.includes(course.id));
-  const pathTheme = relatedCourses[0] ? getCourseTheme(relatedCourses[0].id) : null;
+  const firstCourse = relatedCourses[0];
+  // A path spans several courses; take the first course's colour as the card's
+  // rail, and let each course chip below carry its own skill-area colour.
+  const accent = firstCourse
+    ? getCourseAccent(firstCourse.id, firstCourse.hueIndex)
+    : getItemAccent(item);
 
   return (
-    <a
-      href={comingSoonHref}
-      onClick={(event) =>
-        onOpen ? handleOpen(event, item, onOpen) : preventPlaceholderNavigation(event)
-      }
-      title={comingSoonLabel}
-      aria-label={`${item.title}. ${comingSoonLabel}.`}
-      className={`editorial-card group relative block cursor-pointer overflow-hidden p-3 pt-3.5 transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 before:h-1 before:opacity-85 focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 sm:p-[1.125rem] sm:pt-5 ${
-        pathTheme
-          ? `${pathTheme.hoverBorder} ${pathTheme.rail}`
-          : "before:bg-[color:var(--line-strong)]"
-      }`}
+    <button
+      type="button"
+      style={accentVars(accent)}
+      onClick={() => onOpen?.(item)}
+      aria-label={`${item.title}. Open detail view.`}
+      className="editorial-card group relative block w-full cursor-pointer overflow-hidden p-3 pt-3.5 text-left transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 before:h-1 before:opacity-85 before:bg-[color:var(--accent)] hover:border-[color:var(--accent)] focus-ring sm:p-[1.125rem] sm:pt-5"
     >
-      <span className="pointer-events-none absolute right-3 top-3 z-10 hidden rounded-md border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-2.5 py-1 text-xs font-semibold text-[color:var(--ink-soft)] opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100 sm:block">
-        {comingSoonLabel}
-      </span>
       <div className="flex items-start justify-between gap-2">
         <TypeBadge type="PATH" />
-        <span className="text-[0.75rem] font-semibold tabular-nums text-[color:var(--ink-soft)] sm:hidden">
+        <span className="text-[12px] font-semibold tabular-nums text-[color:var(--ink-soft)] sm:hidden">
           {item.courseIds.length} courses
         </span>
       </div>
-      <h3 className="card-title mt-2 line-clamp-2 text-[1rem] leading-snug sm:mt-3.5 sm:line-clamp-none sm:text-[1.18rem] sm:leading-tight">
+      <h3 className="card-title mt-2 line-clamp-2 text-[16px] leading-snug sm:mt-3.5 sm:line-clamp-none sm:text-[19px] sm:leading-tight">
         {item.title}
       </h3>
-      <p className="card-description mt-1.5 hidden line-clamp-3 text-[0.9rem] leading-relaxed sm:mt-2.5 sm:block">
+      <p className="card-description mt-1.5 hidden line-clamp-3 text-[14px] leading-relaxed sm:mt-2.5 sm:block">
         {item.description}
       </p>
       <div className="mt-2.5 hidden flex-wrap gap-1.5 sm:mt-4 sm:flex">
         {relatedCourses.slice(0, 3).map((course) => (
           <span
             key={course.id}
-            className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${getCourseTheme(course.id).chip}`}
+            style={accentVars(getCourseAccent(course.id, course.hueIndex))}
+            className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--line)] bg-[color:var(--accent-tint)] px-2.5 py-1 text-xs font-medium text-[color:var(--accent-ink)]"
           >
             <span
-              className={`h-1.5 w-1.5 rounded-full ${getCourseTheme(course.id).dot}`}
+              className="h-1.5 w-1.5 rounded-full bg-[color:var(--accent)]"
               aria-hidden="true"
             />
             {getCourseLabel(course)}
@@ -255,12 +228,12 @@ export function PathCard({
         ))}
       </div>
       <div className="mt-2.5 flex items-center justify-between border-t border-[color:var(--line-soft)] pt-2.5 sm:mt-5 sm:pt-3.5">
-        <span className="text-[0.75rem] font-semibold leading-5 tabular-nums text-[color:var(--ink-soft)] sm:text-[0.82rem]">
+        <span className="text-[12px] font-semibold leading-5 tabular-nums text-[color:var(--ink-soft)] sm:text-[13px]">
           {item.courseIds.length} courses, {item.totalDuration}
         </span>
         <DetailsAffordance className="hidden px-3 py-1.5 sm:inline-flex" />
         <ArrowIcon className="h-4 w-4 text-[color:var(--ink-soft)] sm:hidden" aria-hidden="true" />
       </div>
-    </a>
+    </button>
   );
 }

@@ -5,25 +5,25 @@ import { getLearningItems } from "@/lib/data";
 import { searchLearningItems } from "@/lib/search";
 
 test("exact title matches rank above tag-only matches", () => {
-  const results = searchLearningItems(getLearningItems(), "Client-Centered Communication");
-  assert.equal(results[0].item.title, "Client-Centered Communication");
+  const results = searchLearningItems(getLearningItems(), "Eviction Defense: The First 48 Hours");
+  assert.equal(results[0].item.title, "Eviction Defense: The First 48 Hours");
   assert.ok(results[0].score > results[1].score);
 });
 
 test("module can match through its parent course relationship", () => {
-  const results = searchLearningItems(getLearningItems(), "Professional Foundations");
+  const results = searchLearningItems(getLearningItems(), "Eviction Defense");
   const titles = results.map((result) => result.item.title);
-  assert.ok(titles.includes("Ethics and Confidentiality in Legal Aid"));
+  assert.ok(titles.includes("When the Clock Starts"));
 });
 
 test("legal aid synonyms return expected learning content", () => {
-  const results = searchLearningItems(getLearningItems(), "DV");
-  assert.equal(results[0].item.title, "Safety Screening and Crisis Recognition");
+  const results = searchLearningItems(getLearningItems(), "summary process");
+  assert.equal(results[0].item.title, "Eviction Defense: The First 48 Hours");
 });
 
 test("plural and singular query variants match", () => {
-  const results = searchLearningItems(getLearningItems(), "motions");
-  assert.ok(results.some((result) => result.item.title === "Your First Steps in Court"));
+  const results = searchLearningItems(getLearningItems(), "motion");
+  assert.ok(results.some((result) => result.item.title === "Motions"));
 });
 
 test("irrelevant multi-token queries do not overmatch", () => {

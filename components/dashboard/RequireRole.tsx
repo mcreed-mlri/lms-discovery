@@ -25,7 +25,7 @@ export function RequireRole({ allow, children }: { allow: LaceRole[]; children: 
         </p>
         <Link
           href="/my-learning"
-          className="mt-6 inline-flex h-11 items-center rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+          className="mt-6 inline-flex h-11 items-center rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] focus-ring"
         >
           Back to My Learning
         </Link>

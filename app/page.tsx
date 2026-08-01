@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { DetailModal } from "@/components/detail-modal";
 import { CatalogSection } from "@/components/home/catalog-section";
 import { HeroSection } from "@/components/home/hero-section";
-import { PathsSection } from "@/components/home/paths-section";
 import { SkillsSection } from "@/components/home/skills-section";
 import { StudioShell } from "@/components/studio-shell";
 import { getEffectiveDashboardRole } from "@/lib/access";
@@ -28,7 +27,7 @@ export default function Home() {
 
   const [selectedItem, setSelectedItem] = useState<LearningItem | null>(null);
   const savedLearning = useSavedLearning();
-  const catalog = useCatalogFilters(user);
+  const catalog = useCatalogFilters(user, { previewLimit: 12 });
   const { allItems, setQuery } = catalog;
 
   function openSearchResult(result: SearchResult) {
@@ -96,7 +95,7 @@ export default function Home() {
             Continue into focused training for Massachusetts legal aid practice.
           </p>
           <button
-            className="mt-7 inline-flex h-11 items-center justify-center rounded-full bg-[color:var(--ink)] px-6 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+            className="mt-7 inline-flex h-11 items-center justify-center rounded-full bg-[color:var(--ink)] px-6 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus-ring"
             type="button"
             onClick={() => login()}
           >
@@ -127,11 +126,7 @@ export default function Home() {
 
       <SkillsSection tiles={catalog.skillTiles} onSelect={catalog.selectSkill} />
 
-      {/* Library before guided paths on mobile for faster content access */}
-      <div className="flex flex-col">
-        <CatalogSection catalog={catalog} onOpenItem={setSelectedItem} />
-        <PathsSection paths={catalog.eligiblePathItems} />
-      </div>
+      <CatalogSection catalog={catalog} onOpenItem={setSelectedItem} seeAllHref="/browse" />
 
       <DetailModal
         item={selectedItem}

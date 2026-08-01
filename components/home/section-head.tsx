@@ -20,7 +20,7 @@ export function SectionHead({
         <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--ink-soft)] sm:text-[11px]">
           {kicker}
         </p>
-        <h2 className="section-title mt-1 text-[1.2rem] text-[color:var(--ink)] sm:mt-2 sm:text-[1.5rem]">
+        <h2 className="section-title mt-1 text-[19px] text-[color:var(--ink)] sm:mt-2 sm:text-[22px]">
           {title}
         </h2>
       </div>

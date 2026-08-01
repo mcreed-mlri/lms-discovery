@@ -25,12 +25,12 @@ export function StudioContentBar({
       >
         <MenuIcon className="h-5 w-5" />
       </button>
-      <span className="font-mono text-[1.1rem] font-bold tracking-[-0.02em] text-[color:var(--ink)] lg:hidden">
+      <span className="font-mono text-[17px] font-bold tracking-[-0.02em] text-[color:var(--ink)] lg:hidden">
         LACE
       </span>
 
       {/* Desktop eyebrow */}
-      <p className="hidden font-mono text-[0.72rem] font-semibold uppercase tracking-[0.06em] text-[color:var(--ink-soft)] lg:block">
+      <p className="hidden font-mono text-[12px] font-semibold uppercase tracking-[0.06em] text-[color:var(--ink-soft)] lg:block">
         Mass. legal aid · continuing education
       </p>
 
@@ -40,7 +40,7 @@ export function StudioContentBar({
         <button
           type="button"
           onClick={onSearch}
-          className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 lg:hidden"
+          className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring lg:hidden"
           aria-label="Search learning library"
         >
           <SearchIcon className="h-[18px] w-[18px]" />
@@ -51,11 +51,11 @@ export function StudioContentBar({
 
       <Link
         href="/updates"
-        className="relative flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15"
+        className="relative flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
         aria-label="Updates and notifications"
       >
         <BellIcon className="h-[18px] w-[18px]" />
-        <span className="absolute right-[9px] top-[8px] h-[7px] w-[7px] rounded-full border-2 border-[color:var(--surface)] bg-[#c8493b]" />
+        <span className="absolute right-[9px] top-[8px] h-[7px] w-[7px] rounded-full border-2 border-[color:var(--surface)] bg-[color:var(--status-changed)]" />
       </Link>
     </div>
   );

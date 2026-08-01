@@ -1,9 +1,19 @@
 "use client";
 
+import Link from "next/link";
+
 import { ContentCard, ContentListRow, PathCard } from "@/components/content-card";
-import { FilterIcon, GridIcon, ListIcon, SearchIcon } from "@/components/icons";
+import {
+  ArrowIcon,
+  CloseIcon,
+  FilterIcon,
+  GridIcon,
+  ListIcon,
+  SearchIcon,
+} from "@/components/icons";
 import { getSkill, type LearningItem } from "@/lib/data";
 import { filters, type CatalogFilters } from "@/lib/hooks/use-catalog-filters";
+import { useIsDesktop } from "@/lib/hooks/use-media-query";
 
 function RefineSelect({
   id,
@@ -27,7 +37,7 @@ function RefineSelect({
         id={id}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-11 w-full rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3 text-sm font-bold text-[color:var(--ink-muted)] shadow-sm outline-none transition hover:border-[color:var(--line-strong)] focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[#2a5bff]/15"
+        className="h-11 w-full rounded-[var(--radius-control)] border border-[color:var(--line-control)] bg-[color:var(--surface-raised)] px-3 text-sm font-bold text-[color:var(--ink-muted)] shadow-sm outline-none transition hover:border-[color:var(--ink-soft)] focus:border-[color:var(--brand)] focus-ring"
       >
         <option value="All">{allLabel}</option>
         {options.map((option) => (
@@ -44,9 +54,15 @@ function RefineSelect({
 export function CatalogSection({
   catalog,
   onOpenItem,
+  seeAllHref,
+  hideHeading = false,
 }: {
   catalog: CatalogFilters;
   onOpenItem: (item: LearningItem) => void;
+  /** When set, render a "See all" link (used on the homepage preview). */
+  seeAllHref?: string;
+  /** Hide the built-in "Library" heading (the page provides its own). */
+  hideHeading?: boolean;
 }) {
   const {
     filter,
@@ -70,10 +86,17 @@ export function CatalogSection({
     noResultSuggestions,
     pathItems,
     catalogItems,
+    catalogTotal,
     advancedFilterCount,
     setQuery,
     resetAllFilters,
   } = catalog;
+
+  // Below `sm` the catalog is always a list — the grid needs two columns to be
+  // worth anything. Above it, the user's view-mode toggle decides.
+  const isDesktop = useIsDesktop();
+  const shownItems = filter === "Paths" ? pathItems : catalogItems;
+  const showGrid = isDesktop && viewMode === "grid";
 
   return (
     <section
@@ -82,18 +105,31 @@ export function CatalogSection({
       tabIndex={-1}
       aria-label="Learning content"
     >
-      <div className="mb-5 border-b border-[color:var(--line)] pb-3.5">
-        <p className="section-kicker secondary">Library</p>
-        <h2 className="section-title mt-1 text-[1.35rem] text-[color:var(--ink)] sm:text-[1.65rem]">
-          All learning options
-        </h2>
-      </div>
+      {!hideHeading && (
+        <div className="mb-5 flex items-end justify-between gap-3 border-b border-[color:var(--line)] pb-3.5">
+          <div>
+            <p className="section-kicker secondary">Library</p>
+            <h2 className="section-title mt-1 text-[22px] text-[color:var(--ink)] sm:text-[26px]">
+              All learning options
+            </h2>
+          </div>
+          {seeAllHref && (
+            <Link
+              href={seeAllHref}
+              className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3.5 py-2 text-xs font-bold text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
+            >
+              See all {catalogTotal}
+              <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </Link>
+          )}
+        </div>
+      )}
       <div className="mb-5 flex flex-wrap items-center gap-3">
         <button
           type="button"
           onClick={() => setShowRefine((value) => !value)}
           aria-expanded={showRefine}
-          className={`inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-[var(--radius-control)] border px-3 text-xs font-bold transition focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15 ${
+          className={`inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-[var(--radius-control)] border px-3 text-xs font-bold transition focus-ring ${
             showRefine || advancedFilterCount > 0
               ? "border-[color:var(--line-strong)] bg-[color:var(--surface-raised)] text-[color:var(--ink)]"
               : "border-[color:var(--line)] bg-[color:var(--surface-raised)] text-[color:var(--ink-muted)] hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)]"
@@ -102,7 +138,7 @@ export function CatalogSection({
           <FilterIcon className="h-4 w-4" />
           Refine
           {advancedFilterCount > 0 && (
-            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[color:var(--ink)] px-1.5 text-[0.7rem] font-bold text-[color:var(--surface)]">
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[color:var(--ink)] px-1.5 text-[11px] font-bold text-[color:var(--surface)]">
               {advancedFilterCount}
             </span>
           )}
@@ -112,7 +148,7 @@ export function CatalogSection({
             {filters.map((entry) => (
               <button
                 key={entry}
-                className={`h-9 rounded-[8px] px-4 text-xs font-bold transition duration-200 ease-out focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15 ${
+                className={`h-9 rounded-[8px] px-4 text-xs font-bold transition duration-200 ease-out focus-ring ${
                   filter === entry
                     ? "control-active"
                     : "text-[color:var(--ink-muted)] hover:bg-[color:var(--surface-raised)] hover:text-[color:var(--ink)]"
@@ -130,10 +166,10 @@ export function CatalogSection({
           <button
             type="button"
             onClick={resetAllFilters}
-            className="inline-flex h-9 items-center gap-2 rounded-full border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+            className="inline-flex h-9 items-center gap-2 rounded-full border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--ink)] focus-ring"
           >
             Skill: {getSkill(skillFilter)?.name}
-            <span aria-hidden="true">✕</span>
+            <CloseIcon className="h-3 w-3" />
             <span className="sr-only">Clear filter</span>
           </button>
         )}
@@ -163,10 +199,12 @@ export function CatalogSection({
         <div className="mb-5 rounded-[var(--radius-card)] border border-[color:var(--line)] bg-[color:var(--surface)] p-4 shadow-[var(--shadow-xs)]">
           <div className="flex items-center justify-between gap-3">
             <p className="section-kicker secondary">Refine results</p>
+            {/* min-h/px give this a 24x24 hit area (WCAG 2.2 2.5.8); as bare
+                text it was ~17px tall. */}
             <button
               type="button"
               onClick={resetAllFilters}
-              className="metadata text-[color:var(--ink-soft)] transition hover:text-[color:var(--ink)] focus:outline-none"
+              className="metadata -mr-2 inline-flex min-h-6 items-center rounded-md px-2 text-[color:var(--ink-soft)] transition hover:text-[color:var(--ink)] focus-ring"
             >
               Reset all
             </button>
@@ -216,33 +254,31 @@ export function CatalogSection({
         </div>
       )}
 
-      <div className="flex flex-col gap-2 sm:hidden">
-        {(filter === "Paths" ? pathItems : catalogItems).map((item) => (
-          <ContentListRow key={`${item.type}-${item.id}`} item={item} onOpen={onOpenItem} />
-        ))}
-      </div>
+      {/* Result count for assistive tech. Filtering and searching swap the grid
+          silently otherwise, so a screen-reader user gets no confirmation that
+          anything changed. */}
+      <p aria-live="polite" className="sr-only">
+        {shownItems.length === 0
+          ? "No matching learning content."
+          : `${shownItems.length} ${shownItems.length === 1 ? "result" : "results"}.`}
+      </p>
 
-      {viewMode === "grid" ? (
-        filter === "Paths" ? (
-          <div className="hidden gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {pathItems.map((item) => (
+      {/* ONE render tree, chosen in JS. Rendering both a mobile list and a
+          desktop grid and hiding one in CSS doubled the DOM for a catalog that
+          grows with the curriculum. */}
+      {showGrid ? (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {shownItems.map((item) =>
+            item.type === "PATH" ? (
               <PathCard key={`${item.type}-${item.id}`} item={item} onOpen={onOpenItem} />
-            ))}
-          </div>
-        ) : (
-          <div className="hidden gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {catalogItems.map((item) =>
-              item.type === "PATH" ? (
-                <PathCard key={`${item.type}-${item.id}`} item={item} onOpen={onOpenItem} />
-              ) : (
-                <ContentCard key={`${item.type}-${item.id}`} item={item} onOpen={onOpenItem} />
-              ),
-            )}
-          </div>
-        )
+            ) : (
+              <ContentCard key={`${item.type}-${item.id}`} item={item} onOpen={onOpenItem} />
+            ),
+          )}
+        </div>
       ) : (
-        <div className="hidden gap-4 sm:grid">
-          {catalogItems.map((item) => (
+        <div className="flex flex-col gap-2 sm:grid sm:gap-4">
+          {shownItems.map((item) => (
             <ContentListRow key={`${item.type}-${item.id}`} item={item} onOpen={onOpenItem} />
           ))}
         </div>
@@ -261,7 +297,7 @@ export function CatalogSection({
             {noResultSuggestions.map((suggestion) => (
               <button
                 key={suggestion}
-                className="rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-sm font-semibold text-[color:var(--ink-muted)] shadow-sm transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+                className="rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-sm font-semibold text-[color:var(--ink-muted)] shadow-sm transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
                 type="button"
                 onClick={() => {
                   setQuery(suggestion);

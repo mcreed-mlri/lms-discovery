@@ -65,7 +65,7 @@ export function RateCourseCard({
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="stat-label text-[color:var(--ink-soft)]">You finished a course</p>
-          <h3 className="section-title mt-1 text-[1.05rem] text-[color:var(--ink)]">
+          <h3 className="section-title mt-1 text-[17px] text-[color:var(--ink)]">
             How useful was “{course.title}”?
           </h3>
         </div>
@@ -86,7 +86,7 @@ export function RateCourseCard({
             role="radio"
             aria-checked={rating === value}
             aria-label={`${value} of 5`}
-            className="rounded p-0.5 focus:outline-none focus:ring-2 focus:ring-[#2a5bff]/30"
+            className="rounded p-0.5 focus-ring"
             onClick={() => setRating(value)}
             onMouseEnter={() => setHovered(value)}
             onMouseLeave={() => setHovered(0)}
@@ -98,7 +98,7 @@ export function RateCourseCard({
       {rating > 0 ? (
         <div className="mt-3 flex flex-wrap items-end gap-3">
           <textarea
-            className="min-h-[2.5rem] flex-1 resize-y rounded-[10px] border border-[color:var(--lace-hairline)] bg-[color:var(--surface-raised)] px-3 py-2 text-sm text-[color:var(--ink)] placeholder:text-[color:var(--ink-soft)] focus:outline-none focus:ring-2 focus:ring-[#2a5bff]/20"
+            className="min-h-[2.5rem] flex-1 resize-y rounded-[10px] border border-[color:var(--line-control)] bg-[color:var(--surface-raised)] px-3 py-2 text-sm text-[color:var(--ink)] placeholder:text-[color:var(--ink-soft)] focus-ring"
             rows={1}
             maxLength={600}
             placeholder="Anything we should change? (optional)"
@@ -107,7 +107,7 @@ export function RateCourseCard({
           />
           <button
             type="button"
-            className="inline-flex h-9 items-center rounded-[10px] bg-[color:var(--ink)] px-4 text-xs font-bold text-[color:var(--surface)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+            className="inline-flex h-9 items-center rounded-[10px] bg-[color:var(--ink)] px-4 text-xs font-bold text-[color:var(--surface)] transition hover:opacity-90 focus-ring"
             onClick={handleSubmit}
           >
             Send

@@ -51,7 +51,7 @@ function Note({ note }: { note: CurriculumNote }) {
     return (
       <Link
         href={href}
-        className={`${base} hover:border-[color:var(--ink)] hover:shadow-[var(--shadow-card)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15`}
+        className={`${base} hover:border-[color:var(--ink)] hover:shadow-[var(--shadow-card)] focus-ring`}
       >
         {body}
         {tag}

@@ -94,9 +94,9 @@ export function SearchBox({
         }}
         onFocus={() => setIsOpen(true)}
         onKeyDown={handleKeyDown}
-        className={`w-full border border-[color:var(--line)] bg-[color:var(--surface-raised)] font-semibold text-[color:var(--ink)] outline-none transition placeholder:font-normal placeholder:text-[color:var(--ink-soft)] hover:border-[color:var(--line-strong)] focus:border-[color:var(--brand)] focus:ring-4 focus:ring-[#2a5bff]/15 ${
+        className={`w-full border border-[color:var(--line-control)] bg-[color:var(--surface-raised)] font-semibold text-[color:var(--ink)] outline-none transition placeholder:font-normal placeholder:text-[color:var(--ink-soft)] hover:border-[color:var(--ink-soft)] focus:border-[color:var(--brand)] focus-ring ${
           prominent
-            ? "h-10 rounded-[12px] pl-10 pr-4 text-[0.875rem] shadow-[var(--shadow-card)] sm:h-[52px] sm:pl-[3.25rem] sm:pr-16 sm:text-[17px]"
+            ? "h-10 rounded-[12px] pl-10 pr-4 text-[14px] shadow-[var(--shadow-card)] sm:h-[52px] sm:pl-[3.25rem] sm:pr-16 sm:text-[17px]"
             : `rounded-[var(--radius-control)] pl-10 pr-4 text-base shadow-[var(--shadow-xs)] ${compact ? "h-9 text-sm" : "h-12"}`
         }`}
         id={inputId}

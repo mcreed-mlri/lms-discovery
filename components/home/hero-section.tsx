@@ -32,10 +32,10 @@ function useResumeCard(allItems: LearningItem[]) {
       | ResumeEntry
       | undefined) ??
     ({
-      id: "client-centered-practice",
+      id: "welcome-to-lace",
       type: "COURSE",
-      title: "Client-Centered Communication",
-      detail: "Start with client-centered intake skills",
+      title: "Welcome to the Learning Hub",
+      detail: "Get oriented and find your assigned learning",
       progress: 0,
       progressLabel: "0%",
     } satisfies ResumeEntry);
@@ -79,7 +79,7 @@ export function HeroSection({
         {/* Top row: headline + training hours / this-week streak */}
         <div className="flex min-w-0 items-center justify-between gap-3 sm:gap-6">
           <div className="min-w-0">
-            <h1 className="hero-display min-w-0 text-[1.45rem] leading-[1.1] text-[color:var(--ink)] sm:text-[2rem] sm:leading-[1.06] lg:text-[2.15rem]">
+            <h1 className="hero-display min-w-0 text-[22px] leading-[1.1] text-[color:var(--ink)] sm:text-[32px] sm:leading-[1.06] lg:text-[34px]">
               Welcome back, {user.firstName}.
             </h1>
             <p className="mt-1 flex flex-wrap items-center gap-x-1.5 text-[13px] text-[color:var(--ink-muted)] sm:mt-1.5 sm:text-[14px]">
@@ -174,7 +174,7 @@ export function HeroSection({
                 <Link
                   href={getBrightspaceManagerUrl()}
                   aria-label="Open Brightspace Manager"
-                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--feature-action-border)] bg-[color:var(--feature-action-bg)] text-[color:var(--feature-action-ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-white/25 sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
+                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--feature-action-border)] bg-[color:var(--feature-action-bg)] text-[color:var(--feature-action-ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:opacity-90 focus-ring-inverse sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
                 >
                   <ArrowIcon className="h-[14px] w-[14px]" />
                   <span className="hidden sm:inline">Manager</span>
@@ -203,7 +203,7 @@ export function HeroSection({
                 <a
                   href={resumeUrl}
                   aria-label={`Resume ${resumeItem.title}. Up next: ${resumeItem.detail}. ${resumeProgressLabel}.`}
-                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--feature-action-border)] bg-[color:var(--feature-action-bg)] text-[color:var(--feature-action-ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-white/25 sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
+                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--feature-action-border)] bg-[color:var(--feature-action-bg)] text-[color:var(--feature-action-ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:opacity-90 focus-ring-inverse sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
                 >
                   <PlayIcon className="h-[14px] w-[14px]" />
                   <span className="hidden sm:inline">Resume</span>
@@ -240,7 +240,7 @@ export function HeroSection({
                     onQueryChange(q);
                     scrollToBrowse();
                   }}
-                  className="shrink-0 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-[12px] font-medium text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+                  className="shrink-0 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-[12px] font-medium text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
                 >
                   {q}
                 </button>
@@ -256,7 +256,7 @@ export function HeroSection({
                     onQueryChange(q);
                     scrollToBrowse();
                   }}
-                  className="rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-[13px] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+                  className="rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-[13px] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
                 >
                   {q}
                 </button>

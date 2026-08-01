@@ -19,7 +19,7 @@ function StudioPathCard({
       <div className="h-1 sm:h-1.5" style={{ background: hue.solid }} />
       <div className="p-3.5 sm:p-5">
         <div className="mb-2 flex items-center gap-1.5 sm:mb-3">
-          <span style={{ color: hue.solid }}>
+          <span style={{ color: hue.ink }}>
             <PathIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           </span>
           <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.04em] text-[color:var(--ink-soft)] sm:text-[11px]">

@@ -37,31 +37,31 @@ function titlesFor(user: AccessProfile) {
   return getEligibleLearningItems(getLearningItems(), user).map((item) => item.title);
 }
 
-test("Sarah can see attorney and new-attorney items", () => {
+test("Sarah can see attorney-only and planned curriculum items", () => {
   const titles = titlesFor(sarah);
-  assert.ok(titles.includes("New Attorney Foundations"));
-  assert.ok(titles.includes("Your First Steps in Court"));
+  assert.ok(titles.includes("Eviction Defense: The First 48 Hours"));
+  // Planned curriculum offerings are open to all standard roles.
+  assert.ok(titles.includes("Case Lifecycle"));
 });
 
 test("Kevin cannot see attorney-only discovery items", () => {
   const titles = titlesFor(kevin);
-  assert.equal(titles.includes("New Attorney Foundations"), false);
-  assert.equal(titles.includes("Your First Steps in Court"), false);
   assert.equal(titles.includes("Eviction Defense: The First 48 Hours"), false);
+  assert.equal(titles.includes("The Four Notice Types"), false);
 });
 
-test("Kevin can see approved advocate-safe courses", () => {
+test("Kevin can see approved advocate-safe content", () => {
   const titles = titlesFor(kevin);
-  assert.ok(titles.includes("Legal Boundaries for Advocates"));
-  assert.ok(titles.includes("Client-Centered Communication"));
-  assert.ok(titles.includes("Advocate Boundaries Onboarding"));
+  assert.ok(titles.includes("Welcome to the Learning Hub"));
+  // Planned curriculum offerings are advocate-safe (no attorney-only gate).
+  assert.ok(titles.includes("Case Lifecycle"));
 });
 
 test("Kevin search results do not leak hidden titles", () => {
   const eligibleItems = getEligibleLearningItems(getLearningItems(), kevin);
-  const results = searchLearningItems(eligibleItems, "first appearance");
+  const results = searchLearningItems(eligibleItems, "notice");
   assert.equal(
-    results.some((result) => result.item.title === "The First Appearance Checklist"),
+    results.some((result) => result.item.title === "The Four Notice Types"),
     false,
   );
 });

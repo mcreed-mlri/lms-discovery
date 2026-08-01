@@ -1,10 +1,35 @@
 "use client";
 
-import { useEffect } from "react";
-import { ArrowIcon, BookIcon } from "@/components/icons";
+import { useEffect, type CSSProperties } from "react";
+import { ArrowIcon, BookIcon, CloseIcon } from "@/components/icons";
 import { TypeBadge } from "@/components/type-badge";
-import { getCourseLabel, getCourseTheme } from "@/lib/course-theme";
-import { courses, getLearningItemUrl, modules, type LearningItem } from "@/lib/data";
+import { useFocusTrap } from "@/lib/hooks/use-focus-trap";
+import { getCourseAccent, getCourseLabel, getItemAccent, type Accent } from "@/lib/course-theme";
+import {
+  courses,
+  getLearningItemUrl,
+  getModuleMinutes,
+  modules,
+  type LearningItem,
+} from "@/lib/data";
+
+function accentVars(accent: Accent): CSSProperties {
+  return {
+    "--accent": accent.solid,
+    "--accent-tint": accent.tint,
+    "--accent-ink": accent.ink,
+  } as CSSProperties;
+}
+
+type SyllabusEntry = {
+  id: string;
+  label: string;
+  title: string;
+  description: string;
+  duration: string;
+  accent: Accent;
+  href?: string;
+};
 
 function getSummary(item: LearningItem) {
   if (item.type === "PATH") return item.description;
@@ -17,7 +42,7 @@ function getDuration(item: LearningItem) {
   return item.duration;
 }
 
-function getSyllabus(item: LearningItem) {
+function getSyllabus(item: LearningItem): SyllabusEntry[] {
   if (item.type === "PATH") {
     return courses
       .filter((course) => item.courseIds.includes(course.id))
@@ -27,7 +52,7 @@ function getSyllabus(item: LearningItem) {
         title: course.title,
         description: course.description,
         duration: course.duration,
-        themeId: course.id,
+        accent: getCourseAccent(course.id, course.hueIndex),
         href: getLearningItemUrl({ ...course, type: "COURSE" as const }),
       }));
   }
@@ -37,13 +62,26 @@ function getSyllabus(item: LearningItem) {
       .filter((module) => module.courseId === item.id)
       .map((module) => ({
         id: module.id,
-        label: "Reading",
+        label: "Module",
         title: module.title,
         description: module.description,
-        duration: "25 min",
-        themeId: module.courseId,
+        duration: `${getModuleMinutes(module.id)} min`,
+        accent: getItemAccent({ ...module, type: "MODULE" as const }),
         href: getLearningItemUrl({ ...module, type: "MODULE" as const }),
       }));
+  }
+
+  // MODULE — its lessons ("micro-modules"); these aren't separate pages.
+  const accent = getItemAccent(item);
+  if (item.lessons && item.lessons.length > 0) {
+    return item.lessons.map((lesson, index) => ({
+      id: `${item.id}-lesson-${index}`,
+      label: `Lesson ${index + 1}`,
+      title: lesson,
+      description: "",
+      duration: "",
+      accent,
+    }));
   }
 
   return [
@@ -52,8 +90,8 @@ function getSyllabus(item: LearningItem) {
       label: item.parentCourseTitle,
       title: item.title,
       description: item.description,
-      duration: "25 min",
-      themeId: item.courseId,
+      duration: `${getModuleMinutes(item.id)} min`,
+      accent,
       href: getLearningItemUrl(item),
     },
   ];
@@ -70,6 +108,8 @@ export function DetailModal({
   isSaved?: boolean;
   onToggleSaved?: (item: LearningItem) => void;
 }) {
+  const dialogRef = useFocusTrap<HTMLDivElement>(Boolean(item));
+
   useEffect(() => {
     if (!item) return;
     function handleKeyDown(event: KeyboardEvent) {
@@ -87,10 +127,17 @@ export function DetailModal({
 
   const syllabus = getSyllabus(item);
   const syllabusLabel =
-    item.type === "PATH" ? `${syllabus.length} courses` : `${syllabus.length} modules`;
+    item.type === "PATH"
+      ? `${syllabus.length} courses`
+      : item.type === "COURSE"
+        ? `${syllabus.length} modules`
+        : item.lessons && item.lessons.length > 0
+          ? `${syllabus.length} lessons`
+          : "Overview";
 
   return (
     <div
+      ref={dialogRef}
       className="fixed inset-0 z-[80] flex items-end justify-center bg-[color:var(--ink)]/35 backdrop-blur-sm sm:items-start sm:py-10 sm:overflow-y-auto sm:px-4"
       role="dialog"
       aria-modal="true"
@@ -100,18 +147,20 @@ export function DetailModal({
         className="absolute inset-0 cursor-default"
         type="button"
         aria-label="Close detail view"
+        data-focus-skip="true"
+        tabIndex={-1}
         onClick={onClose}
       />
       <section className="editorial-panel animate-slide-up sm:animate-fade-in-scale relative w-full max-w-4xl bg-[color:var(--surface-raised)] p-5 text-[color:var(--ink)] sm:p-8 rounded-t-2xl rounded-b-none sm:rounded-b-2xl sm:rounded-2xl max-sm:max-h-[88vh] max-sm:overflow-y-auto pb-[calc(1.25rem+env(safe-area-inset-bottom))]">
         {/* Pull handle for mobile drawer */}
         <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-[color:var(--line-strong)] sm:hidden" />
         <button
-          className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] text-xl leading-none text-[color:var(--ink-muted)] transition hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15 max-sm:top-3"
+          className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] leading-none text-[color:var(--ink-muted)] transition hover:text-[color:var(--ink)] focus-ring max-sm:top-3"
           type="button"
           onClick={onClose}
           aria-label="Close detail view"
         >
-          &times;
+          <CloseIcon className="h-4 w-4" />
         </button>
 
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_15rem]">
@@ -123,19 +172,17 @@ export function DetailModal({
             >
               {item.title}
             </h2>
-            <p className="readable-copy mt-5 max-w-2xl text-[1.02rem] leading-7">
-              {getSummary(item)}
-            </p>
+            <p className="readable-copy mt-5 max-w-2xl text-[16px] leading-7">{getSummary(item)}</p>
             <div className="mt-7 flex flex-wrap gap-3">
               <a
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus-ring"
                 href={getLearningItemUrl(item)}
               >
                 <BookIcon className="h-4 w-4" />
                 Open in Learning Hub
               </a>
               <button
-                className={`inline-flex h-11 items-center justify-center rounded-full border px-5 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15 ${
+                className={`inline-flex h-11 items-center justify-center rounded-full border px-5 text-sm font-bold transition focus-ring ${
                   isSaved
                     ? "border-[color:var(--line-strong)] bg-[color:var(--surface-sunken)] text-[color:var(--ink)]"
                     : "border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)] hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)]"
@@ -183,31 +230,43 @@ export function DetailModal({
           </div>
           <div className="divide-y divide-[color:var(--line)]">
             {syllabus.map((entry) => {
-              const entryTheme = getCourseTheme(entry.themeId);
-              return (
-                <a
-                  key={entry.id}
-                  className={`group relative grid gap-3 py-4 pl-4 pr-2 transition hover:bg-[color:var(--surface-sunken)] md:grid-cols-[7rem_minmax(0,1fr)_auto] md:items-start ${entryTheme.rail} before:absolute before:bottom-4 before:left-0 before:top-4 before:w-0.5`}
-                  href={entry.href}
-                >
-                  <span
-                    className={`metadata max-w-[8rem] break-words pt-1 leading-4 md:max-w-[6.5rem] ${entryTheme.eyebrow}`}
-                  >
+              const rowClass = `group relative grid gap-3 py-4 pl-4 pr-2 transition md:grid-cols-[7rem_minmax(0,1fr)_auto] md:items-start before:absolute before:bottom-4 before:left-0 before:top-4 before:w-0.5 before:bg-[color:var(--accent)] ${
+                entry.href ? "hover:bg-[color:var(--surface-sunken)]" : ""
+              }`;
+              const inner = (
+                <>
+                  <span className="metadata max-w-[8rem] break-words pt-1 leading-4 text-[color:var(--accent-ink)] md:max-w-[6.5rem]">
                     {entry.label}
                   </span>
                   <span className="min-w-0">
-                    <span className="card-title block text-[1.02rem] leading-snug">
-                      {entry.title}
-                    </span>
-                    <span className="readable-copy mt-1 block max-w-2xl text-[0.95rem] leading-6">
-                      {entry.description}
-                    </span>
+                    <span className="card-title block text-[16px] leading-snug">{entry.title}</span>
+                    {entry.description && (
+                      <span className="readable-copy mt-1 block max-w-2xl text-[15px] leading-6">
+                        {entry.description}
+                      </span>
+                    )}
                   </span>
                   <span className="inline-flex items-center gap-3 justify-self-start whitespace-nowrap pt-1 text-sm font-semibold text-[color:var(--ink-muted)] md:justify-self-end">
                     {entry.duration}
-                    <ArrowIcon className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                    {entry.href && (
+                      <ArrowIcon className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                    )}
                   </span>
+                </>
+              );
+              return entry.href ? (
+                <a
+                  key={entry.id}
+                  style={accentVars(entry.accent)}
+                  className={rowClass}
+                  href={entry.href}
+                >
+                  {inner}
                 </a>
+              ) : (
+                <div key={entry.id} style={accentVars(entry.accent)} className={rowClass}>
+                  {inner}
+                </div>
               );
             })}
           </div>

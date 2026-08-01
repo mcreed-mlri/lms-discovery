@@ -29,7 +29,7 @@ Then open `http://localhost:3000`.
 **If `npm.cmd run dev` fails with `'"node"' is not recognized...`**: the bundled `npm.cmd`/`next.cmd` shims fall back to a bare `node` command when they can't resolve their own path, and that only works if the bundled Node folder is on `PATH`. Fix by adding it for the current terminal session before running npm:
 
 ```powershell
-$env:PATH = "C:\dev\learning-hub\tools\node-v24.15.0-win-x64;" + $env:PATH
+$env:PATH = "C:\dev\LACE\learning-hub\tools\node-v24.15.0-win-x64;" + $env:PATH
 .\tools\node-v24.15.0-win-x64\npm.cmd run dev
 ```
 

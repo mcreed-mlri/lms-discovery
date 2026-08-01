@@ -43,13 +43,13 @@ export default function LoginPage() {
       <div className="flex flex-1 items-center justify-center px-4 py-12">
         <div className="relative w-full max-w-md">
           <div className="mb-9 text-center leading-none text-[color:var(--ink)]" aria-hidden="true">
-            <span className="block text-[2rem] font-normal tracking-[-0.055em]">LACE</span>
+            <span className="block text-[32px] font-normal tracking-[-0.055em]">LACE</span>
             <span className="editorial-eyebrow mt-1 block text-[color:var(--ink-soft)]">
               Learning Hub
             </span>
           </div>
 
-          <div className="editorial-panel rounded-[var(--radius-card)] bg-[color:var(--bg-surface)] px-8 pb-8 pt-7">
+          <div className="editorial-panel rounded-[var(--radius-card)] bg-[color:var(--surface)] px-8 pb-8 pt-7">
             <div className="mb-6 text-center">
               <p className="section-kicker primary">
                 {isDemoMode ? "Demo environment" : "LACE Learning Hub"}
@@ -76,7 +76,7 @@ export default function LoginPage() {
             {!isDemoMode ? (
               <a
                 href="/api/auth/brightspace/start"
-                className="group flex items-center justify-center gap-3 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 py-4 text-base font-bold text-[color:var(--surface)] shadow-[var(--shadow-sm)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+                className="group flex items-center justify-center gap-3 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 py-4 text-base font-bold text-[color:var(--surface)] shadow-[var(--shadow-sm)] transition hover:opacity-90 focus-ring"
               >
                 Sign in with Brightspace
                 <ArrowIcon className="h-4 w-4 transition group-hover:translate-x-0.5" />
@@ -100,7 +100,7 @@ export default function LoginPage() {
                     key={candidate.id}
                     type="button"
                     onClick={() => handleDemoLogin(candidate)}
-                    className="group rounded-[var(--radius-control)] border border-[color:var(--border-subtle)] bg-[color:var(--surface-raised)] p-4 text-left shadow-[var(--shadow-sm)] transition hover:border-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+                    className="group rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] p-4 text-left shadow-[var(--shadow-sm)] transition hover:border-[color:var(--ink)] focus-ring"
                   >
                     <div className="flex items-center gap-4">
                       <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[color:var(--ink)] text-lg font-bold text-[color:var(--surface)]">

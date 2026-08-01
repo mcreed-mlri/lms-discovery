@@ -6,6 +6,7 @@ import {
   courses,
   getContinueLearningUrl,
   getLearningItemById,
+  getLearningItems,
   getLearningItemUrl,
 } from "@/lib/data";
 
@@ -45,4 +46,22 @@ test("curriculum map opens the native discovery view", () => {
 
   assert.ok(item);
   assert.equal(getLearningItemUrl(item), "/curriculum-map");
+});
+
+test("curriculum-generated offerings open their Learning Hub page", () => {
+  const generated = getLearningItems().find((item) => item.availability === "planned");
+
+  assert.ok(generated, "expected the catalog to include curriculum-generated offerings");
+  assert.equal(getLearningItemUrl(generated), `/learn/${generated.id}`);
+});
+
+test("retired mock courses are no longer in the catalog", () => {
+  for (const id of [
+    "professional-foundations",
+    "client-centered-practice",
+    "first-steps-in-court",
+    "upl-boundaries-advocates",
+  ]) {
+    assert.equal(getLearningItemById(id), undefined, `${id} should be removed`);
+  }
 });

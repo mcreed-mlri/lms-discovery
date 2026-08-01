@@ -57,7 +57,7 @@ function col(id: string, title: string, notes: CurriculumNote[]): CurriculumColu
 const legalSkills: CurriculumColumn[] = [
   col("foundations", "Foundations", [
     t("Case Lifecycle"),
-    t("History of Legal Aid", undefined, "professional-foundations"),
+    t("History of Legal Aid"),
     t("Trauma-Informed Practice"),
     t("Cultural Humility"),
     t("Structural Competence"),
@@ -66,7 +66,7 @@ const legalSkills: CurriculumColumn[] = [
     t("Working with Interdisciplinary Teams (ethics, strategy, etc.)"),
   ]),
   col("ethics", "Ethics", [
-    t("MA Rules of Prof. Conduct", undefined, "upl-boundaries-advocates"),
+    t("MA Rules of Prof. Conduct"),
     s("Competence / Diligence"),
     s("Confidentiality & A-C Privilege"),
     s("Conflicts of Interest"),
@@ -116,7 +116,7 @@ const legalSkills: CurriculumColumn[] = [
     t("Procedure & Logistics"),
   ]),
   col("pre-trial", "Pre-Trial / Advocacy Skills", [
-    t("Initial Client Interviews", "unit intro", "client-centered-practice"),
+    t("Initial Client Interviews", "unit intro"),
     s("Trauma-Informed Interviewing"),
     s("Working with Translators & Interpreters"),
     s("Prep for Initial Client Interview"),

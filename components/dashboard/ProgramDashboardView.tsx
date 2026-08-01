@@ -46,12 +46,12 @@ export function ProgramDashboardView() {
       </div>
 
       <div className="editorial-panel overflow-hidden rounded-[var(--radius-card)]">
-        <h2 className="section-kicker secondary border-b border-[color:var(--border-subtle)] px-4 py-3">
+        <h2 className="section-kicker secondary border-b border-[color:var(--line)] px-4 py-3">
           By training area
         </h2>
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-[color:var(--lace-hairline)] text-[color:var(--ink-muted)]">
+            <tr className="border-b border-[color:var(--line)] text-[color:var(--ink-muted)]">
               <th className="stat-label px-4 py-2">Area</th>
               <th className="stat-label px-4 py-2">Enrolled</th>
               <th className="stat-label px-4 py-2">Completion</th>
@@ -61,7 +61,7 @@ export function ProgramDashboardView() {
             {data.byArea.map((row) => (
               <tr
                 key={row.trainingArea}
-                className="border-b border-[color:var(--lace-hairline)] last:border-0"
+                className="border-b border-[color:var(--line)] last:border-0"
               >
                 <td className="px-4 py-3 font-bold text-[color:var(--ink-muted)]">
                   {row.trainingArea}

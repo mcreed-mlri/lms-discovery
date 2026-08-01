@@ -66,7 +66,7 @@ export function ManagerDashboardView() {
       <div className="editorial-panel overflow-hidden rounded-[var(--radius-card)]">
         <table className="w-full min-w-[32rem] text-left text-sm">
           <thead>
-            <tr className="border-b border-[color:var(--border-subtle)] text-[color:var(--ink-muted)]">
+            <tr className="border-b border-[color:var(--line)] text-[color:var(--ink-muted)]">
               <th className="stat-label px-4 py-3">Name</th>
               <th className="stat-label px-4 py-3">Course</th>
               <th className="stat-label px-4 py-3">Completion</th>
@@ -76,10 +76,7 @@ export function ManagerDashboardView() {
           </thead>
           <tbody>
             {members.map((member) => (
-              <tr
-                key={member.id}
-                className="border-b border-[color:var(--lace-hairline)] last:border-0"
-              >
+              <tr key={member.id} className="border-b border-[color:var(--line)] last:border-0">
                 <td className="px-4 py-3 font-bold text-[color:var(--ink-muted)]">{member.name}</td>
                 <td className="px-4 py-3 font-medium text-[color:var(--ink-muted)]">
                   {member.course}
@@ -92,7 +89,7 @@ export function ManagerDashboardView() {
                 </td>
                 <td className="px-4 py-3">
                   {member.hasGap ? (
-                    <span className="metadata rounded-full border border-[#d4a090] bg-[#f8ebe6] px-2 py-0.5 text-[#8b4a32]">
+                    <span className="metadata rounded-full border border-[color:var(--line)] bg-[color:var(--status-updated-soft)] px-2 py-0.5 text-[color:var(--status-updated-ink)]">
                       Gap
                     </span>
                   ) : (

@@ -1,4 +1,5 @@
-import type { Course, Module, SkillId } from "@/lib/data";
+import type { Course, LearningItem, Module, SkillId } from "@/lib/data";
+import { getHue } from "@/lib/skill-hue";
 
 /* ============================================================================
    Topic + status colour system
@@ -162,9 +163,6 @@ const courseTopic: Record<string, TopicFamily> = {
   "brightspace-wrapper-demo": "foundations",
   "faculty-handbook": "foundations",
   "curriculum-map": "foundations",
-  "professional-foundations": "foundations",
-  "client-centered-practice": "client",
-  "first-steps-in-court": "court",
   "eviction-defense-48h": "court",
 };
 
@@ -211,13 +209,46 @@ export function getCourseLabel(course: Course) {
     "brightspace-wrapper-demo": "Wrapper Demo",
     "faculty-handbook": "Faculty Handbook",
     "curriculum-map": "Curriculum Map",
-    "professional-foundations": "Foundations",
-    "client-centered-practice": "Client Communication",
-    "first-steps-in-court": "Court Skills",
     "eviction-defense-48h": "Housing Court",
   };
 
   return labels[course.id] ?? course.title;
+}
+
+// ── Colour accents ───────────────────────────────────────────────────────────
+// A single colour per item, as CSS-var strings applied inline (so it can be
+// data-driven — Tailwind can't build class names at runtime). Curriculum items
+// carry a skill-area `hueIndex` shared by a course and all its modules; built
+// items fall back to their topic-family colour. Cards read these into
+// `--accent` / `--accent-tint` / `--accent-ink` custom properties.
+export type Accent = { solid: string; tint: string; ink: string };
+
+function accentFromFamily(family: TopicFamily): Accent {
+  return {
+    solid: `var(--topic-${family})`,
+    tint: `var(--topic-${family}-soft)`,
+    ink: `var(--topic-${family}-ink)`,
+  };
+}
+
+function accentFromHue(index: number): Accent {
+  const hue = getHue(index);
+  // `ink` is the darkened variant, not the solid: a label on the pale tint has
+  // to clear 4.5:1, and the saturated solid does not (see lib/skill-hue.ts).
+  return { solid: hue.solid, tint: hue.tint, ink: hue.ink };
+}
+
+/** Accent for a course id, preferring an explicit skill-area hue. */
+export function getCourseAccent(courseId: string, hueIndex?: number): Accent {
+  if (typeof hueIndex === "number") return accentFromHue(hueIndex);
+  return accentFromFamily(getTopicForCourse(courseId));
+}
+
+/** Accent for any catalog item (path, course, or module). */
+export function getItemAccent(item: LearningItem): Accent {
+  if (typeof item.hueIndex === "number") return accentFromHue(item.hueIndex);
+  if (item.type === "PATH") return accentFromFamily("neutral");
+  return accentFromFamily(getTopicForCourse(getCourseId(item)));
 }
 
 // ── Status colours ─────────────────────────────────────────────────────────

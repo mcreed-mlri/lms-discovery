@@ -20,6 +20,15 @@ export function SearchIcon({ className }: IconProps) {
   );
 }
 
+export function CloseIcon({ className }: IconProps) {
+  return (
+    <svg {...baseProps} className={className} aria-hidden="true">
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
+    </svg>
+  );
+}
+
 export function FolderIcon({ className }: IconProps) {
   return (
     <svg {...baseProps} className={className} aria-hidden="true">

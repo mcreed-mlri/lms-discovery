@@ -44,7 +44,7 @@ export function ContinueCard({
       onClick={preventPlaceholderNavigation}
       title={comingSoonLabel}
       aria-label={`${item.title}. ${comingSoonLabel}.`}
-      className={`editorial-card group relative block cursor-pointer overflow-hidden transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${courseTheme.hoverBorder} ${courseTheme.rail} ${
+      className={`editorial-card group relative block cursor-pointer overflow-hidden transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 focus-ring ${courseTheme.hoverBorder} ${courseTheme.rail} ${
         isPrimary ? "p-4 pt-5 before:h-1 md:col-span-2" : "p-4 pt-5 before:h-0.5"
       }`}
     >
@@ -72,7 +72,7 @@ export function ContinueCard({
             const status = getStatusTheme(resolveStatusKey(item.status));
             return (
               <div className={`rounded-lg border px-3 py-2.5 ${status.pill}`}>
-                <p className="metadata text-[0.62rem] leading-none text-current opacity-80">
+                <p className="metadata text-[10px] leading-none text-current opacity-80">
                   {item.detail}
                 </p>
                 <p className="mt-1 inline-flex items-center gap-1.5 text-base font-bold text-current">

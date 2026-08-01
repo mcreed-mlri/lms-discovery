@@ -15,17 +15,21 @@ export type SkillHue = {
   solid: string;
   /** Pale fill — icon wells, tile backgrounds. */
   tint: string;
+  /** Readable text colour for labels sitting on `tint`. The saturated `solid`
+   *  is NOT accessible as small text on its own pale tint (it lands near 3:1);
+   *  this is the same solid darkened until it clears 4.5:1. */
+  ink: string;
 };
 
 export const SKILL_HUES: readonly SkillHue[] = [
-  { solid: "var(--hue-1)", tint: "var(--hue-1-tint)" }, // blue
-  { solid: "var(--hue-2)", tint: "var(--hue-2-tint)" }, // violet
-  { solid: "var(--hue-3)", tint: "var(--hue-3-tint)" }, // pink
-  { solid: "var(--hue-4)", tint: "var(--hue-4-tint)" }, // amber
-  { solid: "var(--hue-5)", tint: "var(--hue-5-tint)" }, // green
-  { solid: "var(--hue-6)", tint: "var(--hue-6-tint)" }, // sky
-  { solid: "var(--hue-7)", tint: "var(--hue-7-tint)" }, // indigo
-  { solid: "var(--hue-8)", tint: "var(--hue-8-tint)" }, // rust
+  { solid: "var(--hue-1)", tint: "var(--hue-1-tint)", ink: "var(--hue-1-ink)" }, // blue
+  { solid: "var(--hue-2)", tint: "var(--hue-2-tint)", ink: "var(--hue-2-ink)" }, // violet
+  { solid: "var(--hue-3)", tint: "var(--hue-3-tint)", ink: "var(--hue-3-ink)" }, // pink
+  { solid: "var(--hue-4)", tint: "var(--hue-4-tint)", ink: "var(--hue-4-ink)" }, // amber
+  { solid: "var(--hue-5)", tint: "var(--hue-5-tint)", ink: "var(--hue-5-ink)" }, // green
+  { solid: "var(--hue-6)", tint: "var(--hue-6-tint)", ink: "var(--hue-6-ink)" }, // sky
+  { solid: "var(--hue-7)", tint: "var(--hue-7-tint)", ink: "var(--hue-7-ink)" }, // indigo
+  { solid: "var(--hue-8)", tint: "var(--hue-8-tint)", ink: "var(--hue-8-ink)" }, // rust
 ];
 
 /** The hue at index `i`, wrapping after 8. */

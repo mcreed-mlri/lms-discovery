@@ -193,6 +193,7 @@
     const ReactDOM = getReactDOM();
     if (ReactDOM.createRoot)
       ReactDOM.createRoot(hostEl).render(h(StandaloneRoot));
+    // eslint-disable-next-line react/no-deprecated
     else ReactDOM.render(h(StandaloneRoot), hostEl);
     return rootName;
   }
@@ -1086,13 +1087,13 @@
           filename: url,
           presets: ["react", "typescript"]
         }).code : src;
-        const module = { exports: {} };
+        const cjsModule = { exports: {} };
         const before = new Set(Object.keys(window));
         //! nosemgrep: eval-and-function-constructor
         new Function("React", "module", "exports", "require", code)(
           getReact(),
-          module,
-          module.exports,
+          cjsModule,
+          cjsModule.exports,
           () => ({})
         );
         const globals = {};
@@ -1101,7 +1102,7 @@
             globals[k] = window[k];
           }
         }
-        cache.set(url, { mod: module.exports, globals });
+        cache.set(url, { mod: cjsModule.exports, globals });
         console.info(
           "[dc-runtime] x-import: loaded",
           url,

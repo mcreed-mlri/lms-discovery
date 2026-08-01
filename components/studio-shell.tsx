@@ -12,6 +12,7 @@ import { getEffectiveDashboardRole, getEligibleLearningItems } from "@/lib/acces
 import { useAuth } from "@/lib/auth";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
 import { getLearningItems } from "@/lib/data";
+import { useFocusTrap } from "@/lib/hooks/use-focus-trap";
 import { searchLearningItems, type SearchResult } from "@/lib/search";
 import { recordSearchAnalytics } from "@/lib/search-analytics";
 
@@ -244,17 +245,12 @@ function GlobalSearchDialog({
   onClose: () => void;
   onSelect: (result: SearchResult) => void;
 }) {
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      document
-        .querySelector<HTMLInputElement>('[data-global-search="true"] input[type="search"]')
-        ?.focus();
-    }, 0);
-    return () => window.clearTimeout(timer);
-  }, []);
+  // The trap moves focus to the first control, which is the search input.
+  const dialogRef = useFocusTrap<HTMLDivElement>(true);
 
   return (
     <div
+      ref={dialogRef}
       className="fixed inset-0 z-[80] flex items-start justify-center bg-[rgba(20,22,27,0.34)] px-4 pt-[calc(5rem+env(safe-area-inset-top,0px))] backdrop-blur-sm sm:pt-[calc(7rem+env(safe-area-inset-top,0px))]"
       role="dialog"
       aria-modal="true"
@@ -264,12 +260,11 @@ function GlobalSearchDialog({
         type="button"
         className="absolute inset-0"
         aria-label="Close search"
+        data-focus-skip="true"
+        tabIndex={-1}
         onClick={onClose}
       />
-      <div
-        className="relative w-full max-w-2xl rounded-[16px] border border-[color:var(--line)] bg-[color:var(--surface)] p-3 shadow-[var(--shadow-lg)]"
-        data-global-search="true"
-      >
+      <div className="relative w-full max-w-2xl rounded-[16px] border border-[color:var(--line)] bg-[color:var(--surface)] p-3 shadow-[var(--shadow-lg)]">
         <SearchBox
           value={query}
           onChange={onChange}
@@ -282,7 +277,7 @@ function GlobalSearchDialog({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md px-2 py-1 transition hover:bg-[color:var(--surface-sunken)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+            className="rounded-md px-2 py-1 transition hover:bg-[color:var(--surface-sunken)] hover:text-[color:var(--ink)] focus-ring"
           >
             Close
           </button>
@@ -306,7 +301,7 @@ function BottomNavLink({
   return (
     <Link
       href={href}
-      className={`flex flex-col items-center gap-1 rounded-xl py-2 text-xs font-bold focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
+      className={`flex flex-col items-center gap-1 rounded-xl py-2 text-xs font-bold focus-ring ${
         active ? "text-[color:var(--brand)]" : "text-[color:var(--ink-soft)]"
       }`}
       aria-current={active ? "page" : undefined}
@@ -330,7 +325,7 @@ function BottomNavButton({
     <button
       type="button"
       onClick={onClick}
-      className="flex flex-col items-center gap-1 rounded-xl py-2 text-xs font-bold text-[color:var(--ink-soft)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15"
+      className="flex flex-col items-center gap-1 rounded-xl py-2 text-xs font-bold text-[color:var(--ink-soft)] focus-ring"
     >
       {icon}
       {label}

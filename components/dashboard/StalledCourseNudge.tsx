@@ -52,10 +52,10 @@ export function StalledCourseNudge({
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="stat-label text-[color:var(--ink-soft)]">Checking in</p>
-          <h3 className="section-title mt-1 text-[1.05rem] text-[color:var(--ink)]">
+          <h3 className="section-title mt-1 text-[17px] text-[color:var(--ink)]">
             Still working on “{course.title}”?
           </h3>
-          <p className="mt-1 text-[0.82rem] font-medium text-[color:var(--ink-muted)]">
+          <p className="mt-1 text-[13px] font-medium text-[color:var(--ink-muted)]">
             No pressure — pick up where you left off, or tell us what&rsquo;s in the way.
           </p>
         </div>
@@ -74,7 +74,7 @@ export function StalledCourseNudge({
             <button
               key={reason.flag}
               type="button"
-              className="inline-flex h-8 items-center rounded-full border border-[color:var(--lace-hairline)] bg-[color:var(--surface-raised)] px-3.5 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--border-strong)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+              className="inline-flex h-8 items-center rounded-full border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3.5 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--line-strong)] focus-ring"
               onClick={() => handleReason(reason.flag)}
             >
               {reason.label}
@@ -85,14 +85,14 @@ export function StalledCourseNudge({
         <div className="mt-3 flex flex-wrap gap-2">
           <a
             href={getLearningUrlForDashboardCourse(course)}
-            className="inline-flex h-9 items-center rounded-[10px] bg-[color:var(--ink)] px-4 text-xs font-bold text-[color:var(--surface)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+            className="inline-flex h-9 items-center rounded-[10px] bg-[color:var(--ink)] px-4 text-xs font-bold text-[color:var(--surface)] transition hover:opacity-90 focus-ring"
             onClick={() => onResolved("resumed")}
           >
             Resume course
           </a>
           <button
             type="button"
-            className="inline-flex h-9 items-center rounded-[10px] border border-[color:var(--lace-hairline)] bg-[color:var(--surface-raised)] px-4 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--border-strong)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+            className="inline-flex h-9 items-center rounded-[10px] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-4 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--line-strong)] focus-ring"
             onClick={() => setShowReasons(true)}
           >
             Something&rsquo;s in the way

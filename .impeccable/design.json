@@ -1,0 +1,600 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-31T00:00:00.000Z",
+  "title": "Design System: The Studio",
+  "extensions": {
+    "colorMeta": {
+      "studio-blue": {
+        "role": "primary",
+        "displayName": "Studio Blue",
+        "canonical": "#1c3fb0",
+        "tonalRamp": [
+          "oklch(15% 0.19 265)",
+          "oklch(26% 0.19 265)",
+          "oklch(39% 0.19 265)",
+          "oklch(48% 0.19 265)",
+          "oklch(59% 0.17 265)",
+          "oklch(70% 0.13 265)",
+          "oklch(81% 0.08 265)",
+          "oklch(93% 0.03 265)"
+        ]
+      },
+      "signal-blue": {
+        "role": "primary",
+        "displayName": "Signal Blue",
+        "canonical": "#2a5bff",
+        "tonalRamp": [
+          "oklch(15% 0.24 264)",
+          "oklch(26% 0.24 264)",
+          "oklch(37% 0.24 264)",
+          "oklch(53% 0.24 264)",
+          "oklch(64% 0.20 264)",
+          "oklch(75% 0.14 264)",
+          "oklch(85% 0.08 264)",
+          "oklch(95% 0.03 264)"
+        ]
+      },
+      "studio-grey": {
+        "role": "neutral",
+        "displayName": "Studio Grey",
+        "canonical": "#f5f6f8",
+        "tonalRamp": [
+          "oklch(15% 0.004 250)",
+          "oklch(26% 0.004 250)",
+          "oklch(37% 0.004 250)",
+          "oklch(48% 0.004 250)",
+          "oklch(59% 0.004 250)",
+          "oklch(75% 0.004 250)",
+          "oklch(88% 0.004 250)",
+          "oklch(97% 0.004 250)"
+        ]
+      },
+      "panel": {
+        "role": "neutral",
+        "displayName": "Panel / Sunken",
+        "canonical": "#eef0f4",
+        "tonalRamp": [
+          "oklch(15% 0.005 260)",
+          "oklch(26% 0.005 260)",
+          "oklch(37% 0.005 260)",
+          "oklch(48% 0.005 260)",
+          "oklch(62% 0.005 260)",
+          "oklch(78% 0.005 260)",
+          "oklch(88% 0.005 260)",
+          "oklch(95% 0.005 260)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0 0)",
+          "oklch(26% 0 0)",
+          "oklch(37% 0 0)",
+          "oklch(48% 0 0)",
+          "oklch(62% 0 0)",
+          "oklch(78% 0 0)",
+          "oklch(92% 0 0)",
+          "oklch(100% 0 0)"
+        ]
+      },
+      "studio-ink": {
+        "role": "neutral",
+        "displayName": "Studio Ink",
+        "canonical": "#14161b",
+        "tonalRamp": [
+          "oklch(15% 0.01 265)",
+          "oklch(19% 0.01 265)",
+          "oklch(30% 0.01 265)",
+          "oklch(45% 0.02 265)",
+          "oklch(59% 0.02 265)",
+          "oklch(72% 0.015 265)",
+          "oklch(85% 0.01 265)",
+          "oklch(95% 0.005 265)"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Ink Muted",
+        "canonical": "#565c69",
+        "tonalRamp": [
+          "oklch(15% 0.02 265)",
+          "oklch(26% 0.02 265)",
+          "oklch(37% 0.02 265)",
+          "oklch(45% 0.02 265)",
+          "oklch(59% 0.02 265)",
+          "oklch(72% 0.02 265)",
+          "oklch(85% 0.015 265)",
+          "oklch(95% 0.008 265)"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Ink Soft",
+        "canonical": "#6a6d77",
+        "tonalRamp": [
+          "oklch(15% 0.015 265)",
+          "oklch(26% 0.015 265)",
+          "oklch(37% 0.015 265)",
+          "oklch(50% 0.015 265)",
+          "oklch(63% 0.015 265)",
+          "oklch(75% 0.015 265)",
+          "oklch(87% 0.01 265)",
+          "oklch(95% 0.006 265)"
+        ]
+      },
+      "line-control": {
+        "role": "neutral",
+        "displayName": "Line Control",
+        "canonical": "#83868c",
+        "tonalRamp": [
+          "oklch(15% 0.008 265)",
+          "oklch(26% 0.008 265)",
+          "oklch(37% 0.008 265)",
+          "oklch(48% 0.008 265)",
+          "oklch(60% 0.008 265)",
+          "oklch(75% 0.008 265)",
+          "oklch(87% 0.006 265)",
+          "oklch(95% 0.004 265)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "canonical": "#e4e7ed",
+        "tonalRamp": [
+          "oklch(15% 0.006 260)",
+          "oklch(26% 0.006 260)",
+          "oklch(37% 0.006 260)",
+          "oklch(52% 0.006 260)",
+          "oklch(67% 0.006 260)",
+          "oklch(80% 0.006 260)",
+          "oklch(92% 0.006 260)",
+          "oklch(97% 0.006 260)"
+        ]
+      },
+      "hue-1-blue": {
+        "role": "secondary",
+        "displayName": "Skill Hue 1 — Blue",
+        "canonical": "#2a5bff",
+        "tonalRamp": [
+          "oklch(15% 0.24 264)",
+          "oklch(26% 0.24 264)",
+          "oklch(37% 0.24 264)",
+          "oklch(53% 0.24 264)",
+          "oklch(64% 0.20 264)",
+          "oklch(75% 0.14 264)",
+          "oklch(85% 0.08 264)",
+          "oklch(95% 0.03 264)"
+        ]
+      },
+      "hue-2-violet": {
+        "role": "secondary",
+        "displayName": "Skill Hue 2 — Violet",
+        "canonical": "#7a4fe0",
+        "tonalRamp": [
+          "oklch(15% 0.21 295)",
+          "oklch(26% 0.21 295)",
+          "oklch(37% 0.21 295)",
+          "oklch(51% 0.21 295)",
+          "oklch(63% 0.18 295)",
+          "oklch(74% 0.13 295)",
+          "oklch(85% 0.08 295)",
+          "oklch(95% 0.03 295)"
+        ]
+      },
+      "hue-3-pink": {
+        "role": "secondary",
+        "displayName": "Skill Hue 3 — Pink",
+        "canonical": "#d24d83",
+        "tonalRamp": [
+          "oklch(15% 0.18 5)",
+          "oklch(26% 0.18 5)",
+          "oklch(37% 0.18 5)",
+          "oklch(48% 0.18 5)",
+          "oklch(58% 0.18 5)",
+          "oklch(72% 0.13 5)",
+          "oklch(85% 0.08 5)",
+          "oklch(95% 0.03 5)"
+        ]
+      },
+      "hue-4-amber": {
+        "role": "secondary",
+        "displayName": "Skill Hue 4 — Amber",
+        "canonical": "#c8791b",
+        "tonalRamp": [
+          "oklch(15% 0.13 62)",
+          "oklch(26% 0.13 62)",
+          "oklch(37% 0.13 62)",
+          "oklch(48% 0.13 62)",
+          "oklch(60% 0.13 62)",
+          "oklch(73% 0.11 62)",
+          "oklch(86% 0.07 62)",
+          "oklch(95% 0.03 62)"
+        ]
+      },
+      "hue-5-green": {
+        "role": "secondary",
+        "displayName": "Skill Hue 5 — Green",
+        "canonical": "#179a72",
+        "tonalRamp": [
+          "oklch(15% 0.12 165)",
+          "oklch(26% 0.12 165)",
+          "oklch(37% 0.12 165)",
+          "oklch(48% 0.12 165)",
+          "oklch(57% 0.12 165)",
+          "oklch(72% 0.10 165)",
+          "oklch(85% 0.06 165)",
+          "oklch(95% 0.03 165)"
+        ]
+      },
+      "hue-6-sky": {
+        "role": "secondary",
+        "displayName": "Skill Hue 6 — Sky",
+        "canonical": "#3a8ec9",
+        "tonalRamp": [
+          "oklch(15% 0.11 240)",
+          "oklch(26% 0.11 240)",
+          "oklch(37% 0.11 240)",
+          "oklch(48% 0.11 240)",
+          "oklch(60% 0.11 240)",
+          "oklch(73% 0.09 240)",
+          "oklch(86% 0.06 240)",
+          "oklch(95% 0.03 240)"
+        ]
+      },
+      "hue-7-indigo": {
+        "role": "secondary",
+        "displayName": "Skill Hue 7 — Indigo",
+        "canonical": "#5563d6",
+        "tonalRamp": [
+          "oklch(15% 0.17 275)",
+          "oklch(26% 0.17 275)",
+          "oklch(37% 0.17 275)",
+          "oklch(50% 0.17 275)",
+          "oklch(62% 0.15 275)",
+          "oklch(74% 0.11 275)",
+          "oklch(86% 0.07 275)",
+          "oklch(95% 0.03 275)"
+        ]
+      },
+      "hue-8-rust": {
+        "role": "secondary",
+        "displayName": "Skill Hue 8 — Rust",
+        "canonical": "#bb573b",
+        "tonalRamp": [
+          "oklch(15% 0.14 38)",
+          "oklch(26% 0.14 38)",
+          "oklch(37% 0.14 38)",
+          "oklch(48% 0.14 38)",
+          "oklch(53% 0.14 38)",
+          "oklch(70% 0.11 38)",
+          "oklch(85% 0.07 38)",
+          "oklch(95% 0.03 38)"
+        ]
+      },
+      "status-changed": {
+        "role": "tertiary",
+        "displayName": "Alert Red",
+        "canonical": "#c8493b",
+        "tonalRamp": [
+          "oklch(15% 0.17 27)",
+          "oklch(26% 0.17 27)",
+          "oklch(37% 0.17 27)",
+          "oklch(48% 0.17 27)",
+          "oklch(53% 0.17 27)",
+          "oklch(70% 0.13 27)",
+          "oklch(85% 0.08 27)",
+          "oklch(95% 0.03 27)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display-lg": { "displayName": "Display LG", "purpose": "42px. The dashboard page header." },
+      "display": {
+        "displayName": "Display",
+        "purpose": "34px, weight 720, -0.03em. The hero greeting; top of the hero's 22 -> 32 -> 34 responsive climb."
+      },
+      "display-sm": {
+        "displayName": "Display SM",
+        "purpose": "32px. Standalone page titles, hero at sm."
+      },
+      "headline": { "displayName": "Headline", "purpose": "26px. The library section heading." },
+      "title": {
+        "displayName": "Title",
+        "purpose": "22px. Section headings; hero at mobile width."
+      },
+      "card-title": {
+        "displayName": "Card Title",
+        "purpose": "19px at weight 750 — the heaviest weight in the system, because a card title is what gets scanned for."
+      },
+      "subtitle": {
+        "displayName": "Subtitle",
+        "purpose": "17px. Skill-tile names, dark-panel titles."
+      },
+      "body-lg": {
+        "displayName": "Body LG",
+        "purpose": "16px. Modal summaries and long-form intros."
+      },
+      "body": { "displayName": "Body", "purpose": "15px / 1.6. The app default, set on body." },
+      "reading": {
+        "displayName": "Reading",
+        "purpose": "14px. Card descriptions. The one role that leaves Geist for the Segoe UI Variable stack. Capped at ~65ch."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "13px. The workhorse — metadata, nav links, stat labels, durations, counts. The most-used step in the product."
+      },
+      "label": { "displayName": "Label", "purpose": "12px. Chips, badges, secondary counts." },
+      "label-sm": { "displayName": "Label SM", "purpose": "11px. Dense chrome, keyboard hints." },
+      "eyebrow": {
+        "displayName": "Eyebrow",
+        "purpose": "10px, +0.06em, uppercase. Rail section headers. One of only two uppercase steps."
+      },
+      "micro": {
+        "displayName": "Micro",
+        "purpose": "9px, +0.04em, uppercase. The dark feature panel's small caps only."
+      }
+    },
+    "shadows": [
+      {
+        "name": "seam",
+        "value": "0 1px 2px rgba(20, 22, 27, 0.04)",
+        "purpose": "The resting state of every card and control. Barely visible by design — it reads as a seam, not a lift."
+      },
+      {
+        "name": "ambient",
+        "value": "0 1px 2px rgba(20, 22, 27, 0.04), 0 6px 18px rgba(20, 22, 27, 0.06)",
+        "purpose": "Hover on cards and tiles; the resting state of the prominent search field and hero panels."
+      },
+      {
+        "name": "overlay",
+        "value": "0 8px 24px rgba(20, 22, 27, 0.1), 0 2px 6px rgba(20, 22, 27, 0.06)",
+        "purpose": "Modals, dialogs, suggestion dropdowns, the mobile drawer, the skip link. The only free-floating plane."
+      },
+      {
+        "name": "seam-dark",
+        "value": "0 1px 2px rgba(0, 0, 0, 0.2)",
+        "purpose": "Dark-mode resting seam. Dark mode redefines every shadow rather than filtering the light values."
+      },
+      {
+        "name": "ambient-dark",
+        "value": "0 1px 2px rgba(0, 0, 0, 0.22), 0 10px 28px rgba(0, 0, 0, 0.22)",
+        "purpose": "Dark-mode hover on cards and tiles."
+      },
+      {
+        "name": "overlay-dark",
+        "value": "0 16px 42px rgba(0, 0, 0, 0.38), 0 2px 8px rgba(0, 0, 0, 0.28)",
+        "purpose": "Dark-mode overlays."
+      },
+      {
+        "name": "focus-ring",
+        "value": "outline: 2px solid var(--brand); outline-offset: 2px",
+        "purpose": "The system's single focus treatment, applied via .focus-ring on :focus-visible. An outline, NOT a shadow — the previous 4px rgba(42,91,255,0.15) ring measured 1.24:1 against white. .focus-ring-inverse swaps to solid white on the dark feature panel."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-state",
+        "value": "160ms ease",
+        "purpose": "Border, background, and shadow changes on hover and focus — the default state transition."
+      },
+      {
+        "name": "ease-out-state",
+        "value": "200ms ease-out",
+        "purpose": "Card and tile hover, including the 1px translate on interactive tiles."
+      },
+      {
+        "name": "ease-rail",
+        "value": "200ms cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "The rail's width and padding transition between 248px and 68px."
+      },
+      {
+        "name": "ease-entrance",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Overlay entrances only: 320ms slide-up for the mobile bottom sheet, 220ms fade-and-scale for desktop modals."
+      },
+      {
+        "name": "ease-progress",
+        "value": "500ms ease-out",
+        "purpose": "Progress bar width changes, so a value change reads as movement rather than a jump."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "transition-property: color, background-color, border-color, box-shadow, opacity",
+        "purpose": "prefers-reduced-motion drops movement (transforms, entrances, progress-width slides) but KEEPS the colour/border/shadow/opacity transitions that carry state feedback. A blanket 0.01ms would destroy hover and focus affordances too."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single strongest action on a surface — opening a learning item. Studio Ink pill with a leading icon.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 19.5A2.5 2.5 0 0 1 6.5 17H20\"/><path d=\"M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z\"/></svg>Open in Learning Hub</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border: none; border-radius: 999px; background: var(--ink, #14161b); color: var(--surface, #ffffff); font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); font-size: 0.875rem; font-weight: 700; text-decoration: none; box-shadow: 0 1px 2px rgba(20,22,27,0.04), 0 6px 18px rgba(20,22,27,0.06); transition: opacity 160ms ease; } .ds-btn-primary:hover { opacity: 0.9; } .ds-btn-primary:focus-visible { outline: 2px solid var(--brand, #1c3fb0); outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "The paired lower-emphasis action. White pill on a hairline; hover darkens border and text without changing fill.",
+      "html": "<button class=\"ds-btn-secondary\" type=\"button\">Add to my list</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px; border: 1px solid var(--line, #e4e7ed); border-radius: 999px; background: var(--surface, #ffffff); color: var(--ink-muted, #565c69); font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); font-size: 0.875rem; font-weight: 700; cursor: pointer; transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease; } .ds-btn-secondary:hover { border-color: var(--line-strong, #d3d8e0); color: var(--ink, #14161b); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--brand, #1c3fb0); outline-offset: 2px; } .ds-btn-secondary[aria-pressed=\"true\"] { border-color: var(--line-strong, #d3d8e0); background: var(--surface-sunken, #eef0f4); color: var(--ink, #14161b); }"
+    },
+    {
+      "name": "Content Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "The catalog's core unit. Flat white on a hairline with a 4px topic-colour rail across the top; hover moves the border to the accent colour.",
+      "html": "<a class=\"ds-card\" href=\"#\" style=\"--accent: #3a8ec9; --accent-tint: #e7f3fb; --accent-ink: #2b6c9b;\"><span class=\"ds-card-badges\"><span class=\"ds-badge-type\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 19.5A2.5 2.5 0 0 1 6.5 17H20\"/><path d=\"M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z\"/></svg>Course</span></span><h3 class=\"ds-card-title\">Eviction Defense: The First 48 Hours</h3><p class=\"ds-card-desc\">Five short topics for the first moments after a notice to quit: deadlines, defenses, service, and the first court ask.</p><span class=\"ds-card-foot\"><span class=\"ds-card-meta\">Housing, 12 min</span><span class=\"ds-details\">Details <svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></span></span></a>",
+      "css": ".ds-card { position: relative; display: flex; flex-direction: column; overflow: hidden; min-height: 252px; padding: 20px 18px 18px; border: 1px solid var(--line, #e4e7ed); border-radius: 14px; background: var(--surface, #ffffff); box-shadow: 0 1px 2px rgba(20,22,27,0.04); text-decoration: none; font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); transition: border-color 200ms ease-out, background-color 200ms ease-out, box-shadow 200ms ease-out; } .ds-card::before { content: \"\"; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--accent); opacity: 0.85; } .ds-card:hover { border-color: var(--accent); background: var(--hover-tint, #f5f6f8); box-shadow: 0 1px 2px rgba(20,22,27,0.04), 0 6px 18px rgba(20,22,27,0.06); } .ds-card:focus-visible { outline: 2px solid var(--brand, #1c3fb0); outline-offset: 2px; } .ds-card-badges { display: flex; gap: 8px; margin-bottom: 14px; } .ds-card-title { margin: 0; color: var(--ink, #14161b); font-size: 1.18rem; font-weight: 750; letter-spacing: -0.012em; line-height: 1.2; } .ds-card-desc { margin: 10px 0 0; font-family: 'Segoe UI Variable', 'Segoe UI', Aptos, ui-sans-serif, system-ui, sans-serif; color: var(--ink-muted, #565c69); font-size: 0.9rem; font-weight: 400; line-height: 1.58; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; } .ds-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line-soft, #edeff3); } .ds-card-meta { color: var(--ink-soft, #6a6d77); font-size: 0.82rem; font-weight: 600; font-variant-numeric: tabular-nums; } .ds-details { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: 1px solid var(--line, #e4e7ed); border-radius: 999px; background: var(--surface, #ffffff); color: var(--ink-muted, #565c69); font-size: 0.75rem; font-weight: 600; box-shadow: 0 1px 2px rgba(20,22,27,0.04); transition: border-color 200ms ease-out, color 200ms ease-out; } .ds-card:hover .ds-details { border-color: var(--line-strong, #d3d8e0); color: var(--ink, #14161b); } .ds-card:hover .ds-details svg { transform: translateX(2px); } .ds-details svg { transition: transform 200ms ease-out; }"
+    },
+    {
+      "name": "Search Input (Prominent)",
+      "kind": "input",
+      "refersTo": "input-search-prominent",
+      "description": "The hero and command-palette search field. The one input that carries a resting Ambient shadow, with a Ctrl K key hint in a sunken well.",
+      "html": "<span class=\"ds-search\"><svg class=\"ds-search-icon\" width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m20 20-3.5-3.5\"/></svg><input class=\"ds-search-input\" type=\"search\" placeholder=\"Search the library - ethics, intake, first appearance...\" aria-label=\"Search courses, modules, paths, or topics\"><span class=\"ds-search-key\" aria-hidden=\"true\">Ctrl K</span></span>",
+      "css": ".ds-search { position: relative; display: block; width: 100%; font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); } .ds-search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--ink-soft, #6a6d77); pointer-events: none; transition: color 160ms ease; } .ds-search:focus-within .ds-search-icon { color: var(--brand, #1c3fb0); } .ds-search-input { width: 100%; height: 52px; padding: 0 64px 0 52px; border: 1px solid var(--line-control, #83868c); border-radius: 12px; background: var(--surface, #ffffff); color: var(--ink, #14161b); font-size: 17px; font-weight: 600; outline: none; box-shadow: 0 1px 2px rgba(20,22,27,0.04), 0 6px 18px rgba(20,22,27,0.06); transition: border-color 160ms ease, box-shadow 160ms ease; } .ds-search-input::placeholder { color: var(--ink-soft, #6a6d77); font-weight: 400; opacity: 1; } .ds-search-input:hover { border-color: var(--ink-soft, #6a6d77); } .ds-search-input:focus { border-color: var(--brand, #1c3fb0); outline: 2px solid var(--brand, #1c3fb0); outline-offset: 2px; } .ds-search-key { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); padding: 4px 8px; border: 1px solid var(--line, #e4e7ed); border-radius: 7px; background: var(--surface-sunken, #eef0f4); color: var(--ink-soft, #6a6d77); font-size: 12px; font-weight: 500; pointer-events: none; }"
+    },
+    {
+      "name": "Type Badge",
+      "kind": "chip",
+      "refersTo": "badge-type",
+      "description": "Names the shape of the content — Course, Module, or Path. Deliberately the most neutral chip in the system so it never competes with topic or status colour.",
+      "html": "<span class=\"ds-badge-type\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 19.5A2.5 2.5 0 0 1 6.5 17H20\"/><path d=\"M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z\"/></svg>Course</span>",
+      "css": ".ds-badge-type { display: inline-flex; width: fit-content; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid var(--line, #e4e7ed); border-radius: 6px; background: var(--surface-sunken, #eef0f4); color: var(--ink-soft, #6a6d77); font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.01em; line-height: 1; }"
+    },
+    {
+      "name": "Status Pill",
+      "kind": "chip",
+      "refersTo": "badge-type",
+      "description": "Lifecycle signal — New, Updated, In progress, Law changed. Always a dot plus a word, never colour alone.",
+      "html": "<span class=\"ds-status ds-status--new\"><span class=\"ds-status-dot\" aria-hidden=\"true\"></span>New</span> <span class=\"ds-status ds-status--progress\"><span class=\"ds-status-dot\" aria-hidden=\"true\"></span>In progress</span> <span class=\"ds-status ds-status--changed\"><span class=\"ds-status-dot\" aria-hidden=\"true\"></span>Law changed</span>",
+      "css": ".ds-status { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border: 1px solid var(--line, #e4e7ed); border-radius: 6px; font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.01em; line-height: 1; } .ds-status-dot { width: 6px; height: 6px; border-radius: 999px; } .ds-status--new { background: var(--status-new-soft, #fbf0dc); color: var(--status-new-ink, #99610f); } .ds-status--new .ds-status-dot { background: var(--status-new, #c8791b); } .ds-status--progress { background: var(--status-progress-soft, #e2f4ed); color: var(--status-progress-ink, #0f6e51); } .ds-status--progress .ds-status-dot { background: var(--status-progress, #179a72); } .ds-status--changed { background: var(--status-changed-soft, #fbe9e6); color: var(--status-changed-ink, #9c3528); } .ds-status--changed .ds-status-dot { background: var(--status-changed, #c8493b); }"
+    },
+    {
+      "name": "Rail Nav Item",
+      "kind": "nav",
+      "refersTo": "nav-item",
+      "description": "A row in the left rail. Active state takes a sunken fill, weight 650, full ink, and a brand-coloured icon.",
+      "html": "<nav class=\"ds-rail\" aria-label=\"Primary\"><a class=\"ds-rail-item ds-rail-item--active\" href=\"#\" aria-current=\"page\"><svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 10.5 12 3l9 7.5\"/><path d=\"M5 9.5V21h14V9.5\"/></svg><span>Home</span></a><a class=\"ds-rail-item\" href=\"#\"><svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/></svg><span>Browse</span></a><span class=\"ds-rail-head\">Skill areas</span><a class=\"ds-rail-area\" href=\"#\"><span class=\"ds-rail-swatch\" style=\"background:#7a4fe0\"></span><span class=\"ds-rail-area-name\">Legal Writing</span><span class=\"ds-rail-count\">12</span></a></nav>",
+      "css": ".ds-rail { display: flex; flex-direction: column; gap: 3px; width: 248px; padding: 16px; border-right: 1px solid var(--line, #e4e7ed); background: var(--surface, #ffffff); font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); } .ds-rail-item { display: flex; align-items: center; gap: 12px; padding: 9px 11px; border-radius: 9px; color: var(--ink-muted, #565c69); font-size: 14px; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 160ms ease, color 160ms ease; } .ds-rail-item svg { color: var(--ink-soft, #6a6d77); flex-shrink: 0; } .ds-rail-item:hover { background: var(--surface-sunken, #eef0f4); } .ds-rail-item:focus-visible { outline: 2px solid var(--brand, #1c3fb0); outline-offset: 2px; } .ds-rail-item--active { background: var(--surface-sunken, #eef0f4); color: var(--ink, #14161b); font-weight: 650; } .ds-rail-item--active svg { color: var(--brand, #1c3fb0); } .ds-rail-head { margin: 26px 0 12px; padding: 0 11px; color: var(--ink-soft, #6a6d77); font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; } .ds-rail-area { display: flex; align-items: center; gap: 11px; padding: 7px 11px; border-radius: 8px; color: var(--ink-muted, #565c69); font-size: 13.5px; text-decoration: none; transition: background-color 160ms ease; } .ds-rail-area:hover { background: var(--surface-sunken, #eef0f4); } .ds-rail-swatch { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; } .ds-rail-area-name { flex: 1; } .ds-rail-count { color: var(--ink-soft, #6a6d77); font-size: 12px; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "custom",
+      "refersTo": "segment-track",
+      "description": "The catalog's type filter. A sunken track holding 36px buttons; the active button inverts to Studio Ink with a 1px inner white highlight.",
+      "html": "<div class=\"ds-segment\" role=\"group\" aria-label=\"Filter by type\"><button class=\"ds-segment-btn ds-segment-btn--active\" type=\"button\" aria-pressed=\"true\">All</button><button class=\"ds-segment-btn\" type=\"button\" aria-pressed=\"false\">Courses</button><button class=\"ds-segment-btn\" type=\"button\" aria-pressed=\"false\">Modules</button><button class=\"ds-segment-btn\" type=\"button\" aria-pressed=\"false\">Paths</button></div>",
+      "css": ".ds-segment { display: inline-flex; padding: 4px; border: 1px solid var(--line, #e4e7ed); border-radius: 9px; background: var(--surface-sunken, #eef0f4); font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); } .ds-segment-btn { height: 36px; padding: 0 16px; border: none; border-radius: 8px; background: transparent; color: var(--ink-muted, #565c69); font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: background-color 200ms ease-out, color 200ms ease-out; } .ds-segment-btn:hover { background: var(--surface, #ffffff); color: var(--ink, #14161b); } .ds-segment-btn:focus-visible { outline: 2px solid var(--brand, #1c3fb0); outline-offset: 2px; } .ds-segment-btn--active, .ds-segment-btn--active:hover { background: var(--ink, #14161b); color: var(--surface, #ffffff); box-shadow: 0 1px 2px rgba(20,22,27,0.04), inset 0 1px 0 rgba(255,255,255,0.08); }"
+    },
+    {
+      "name": "Feature Panel",
+      "kind": "custom",
+      "refersTo": "feature-panel",
+      "description": "The near-black inversion used for exactly one element per screen — the resume / Brightspace handoff card in the hero. Its action button and focus ring both invert to white.",
+      "html": "<aside class=\"ds-feature\" aria-label=\"Resume learning\"><span class=\"ds-feature-row\"><span class=\"ds-feature-text\"><span class=\"ds-feature-eyebrow\">HOUSING · 12 MIN LEFT</span><span class=\"ds-feature-title\">Eviction Defense: The First 48 Hours</span></span><a class=\"ds-feature-action\" href=\"#\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M8 5v14l11-7z\"/></svg><span>Resume</span></a></span><span class=\"ds-feature-track\"><span class=\"ds-feature-fill\" style=\"width:45%\"></span></span></aside>",
+      "css": ".ds-feature { display: block; max-width: 352px; padding: 12px 16px; border-radius: 12px; background: var(--feature-surface, #14161b); font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); box-shadow: 0 1px 2px rgba(20,22,27,0.04), 0 6px 18px rgba(20,22,27,0.06); } .ds-feature-row { display: flex; align-items: center; gap: 12px; } .ds-feature-text { display: block; min-width: 0; flex: 1; } .ds-feature-eyebrow { display: block; color: var(--feature-muted, rgba(255,255,255,0.55)); font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; } .ds-feature-title { display: block; margin-top: 2px; color: var(--feature-ink, #ffffff); font-size: 15px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .ds-feature-action { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 1px solid var(--feature-action-border, transparent); border-radius: 8px; background: var(--feature-action-bg, #ffffff); color: var(--feature-action-ink, #14161b); font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.14); transition: opacity 160ms ease; } .ds-feature-action:hover { opacity: 0.9; } .ds-feature-action:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; } .ds-feature-track { display: block; height: 4px; margin-top: 8px; border-radius: 999px; background: var(--feature-track, rgba(255,255,255,0.14)); overflow: hidden; } .ds-feature-fill { display: block; height: 100%; border-radius: 999px; background: var(--brand-fill, #2a5bff); transition: width 500ms ease-out; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Studio",
+    "overview": "The Studio is a working surface, not a showpiece. A cool grey canvas holds white cards on hairline borders; typography carries the hierarchy; and colour is withheld until it has something to say. The name comes from the implementation itself — Studio Blue, the Studio canvas, StudioShell, StudioRail — and this document keeps that vocabulary rather than inventing a new one.\n\nThe system's discipline is a single decision applied everywhere: colour is a signal, never decoration. It speaks in exactly two languages that never mix. Topic colour answers \"which part of the curriculum am I in?\" and appears only on small accents — a card's top rail, a parent-course pill, an icon well, a swatch in the rail. Status colour answers \"what state is this content in?\" and always arrives with a text label beside it. The page itself stays silent: flat grey field, no gradients, no wallpaper, no illustration.\n\nIts warmth is behavioural rather than chromatic. The surface temperature is deliberately cool and stays that way, but the system is built around someone under real pressure — an advocate with a hearing in an hour. So it never makes them decode a colour, never animates for its own sake, never rewards them for showing up. It labels things, keeps numbers tabular so they scan, dims what is secondary, and gets out of the way. Restraint is how this system is kind.",
+    "keyCharacteristics": [
+      "One typeface (Geist) doing every job, from 9px eyebrow to 2.15rem display",
+      "Cool grey canvas (#f5f6f8) with pure white cards on 1px hairlines",
+      "Two independent colour languages: topic (orientation) and status (lifecycle), never blended",
+      "Eight matched hues at deliberately identical saturation, assigned by index so a grid reads as one family",
+      "Flat at rest; depth is a response to interaction, not a resting state",
+      "Full light and dark parity — every token is redefined, never filtered",
+      "Colour never carries meaning alone; a text label is always present"
+    ],
+    "rules": [
+      {
+        "name": "The Two Languages Rule",
+        "body": "Topic colour means where; status colour means what state. A single element never carries both. When a card needs both, topic goes to the rail and status goes to a labelled chip.",
+        "section": "colors"
+      },
+      {
+        "name": "The Never-Colour-Alone Rule",
+        "body": "No state, status, or category is communicated by hue alone. Every status pill pairs its dot with a word; every topic pill pairs its dot with the parent course name. This is a WCAG 1.4.1 obligation and it is also why the system survives being printed, dimmed, or read by someone colourblind.",
+        "section": "colors"
+      },
+      {
+        "name": "The Small-Accent Rule",
+        "body": "Topic colour appears only on small accents: a 4px card rail, a 2px list rail, a 9px swatch, a 6px dot, a chip fill, an icon well. It never fills a card, a section, or a page.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Red Rule",
+        "body": "Alert Red (#c8493b) is reserved for substantive change notices — the law or process behind the content changed. It is never used for form validation, destructive actions, or emphasis.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Family Rule",
+        "body": "--font-sans, --font-serif, and --font-mono all resolve to Geist. This is deliberate, not an oversight: the \"mono\" role exists for eyebrows, counts, and percentages, and a real monospace webfont rendered blurry at 9-11px. If a second family is ever introduced, it must earn its place against this rule explicitly.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Numbers Rule",
+        "body": "Every number that a user compares or watches change — durations, counts, percentages, training hours — carries tabular-nums. Digits must not shift width as they update.",
+        "section": "typography"
+      },
+      {
+        "name": "The Sentence-Case Rule",
+        "body": "Labels are sentence case. Uppercase is reserved for the 9px and 10px steps and nothing else; uppercasing a readable-size label is a regression.",
+        "section": "typography"
+      },
+      {
+        "name": "The Fifteen Steps Rule",
+        "body": "The ladder above is the whole scale. A new size is not a local decision — if a design genuinely needs a step that isn't there, add it here first. rem literals in component classes are how the scale rotted to 38 values once already.",
+        "section": "typography"
+      },
+      {
+        "name": "The Three Roles Rule",
+        "body": "Every accent colour — topic or hue — exists as solid / tint / ink. Strokes and rails take solid, fills take tint, and anything a person reads takes ink. Putting solid on tint is the one way this palette produces an accessibility failure, and it is always avoidable.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Focus Rule",
+        "body": "Every interactive element gets .focus-ring (or .focus-ring-inverse on the dark feature panel) and nothing else. No per-component focus treatments, no translucent rings, and never outline: none without a replacement — the class already scopes the outline to :focus-visible, so pointer users never see it.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Flat-At-Rest Rule",
+        "body": "In-page surfaces rest on a hairline and the Seam shadow. Resting elevation above Seam is reserved for overlays and the prominent search field. If a surface looks lifted before the user touches it, it is wrong.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Hairline-First Rule",
+        "body": "Separation is a 1px line before it is ever a shadow. line at rest, line-strong on hover, line-soft for dividers inside a surface. Form controls are the exception and take line-control.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep colour to the two languages: topic for orientation, status for lifecycle. If a new colour need doesn't fit either, the answer is a neutral.",
+      "Do pair every status and topic colour with a text label. Colour alone is never the signal.",
+      "Do define new colours as CSS custom properties in app/globals.css under both :root and [data-theme=\"dark\"], then expose them through tailwind.config.ts. Both themes, always, in the same commit.",
+      "Do use var(--radius-card) (14px) for containers and var(--radius-control) (9px) for controls.",
+      "Do put .focus-ring on every interactive element, and .focus-ring-inverse on the dark feature panel. Never hand-roll a focus treatment.",
+      "Do give comparable numbers tabular-nums.",
+      "Do let the hairline do the separating — line at rest, line-strong on hover, line-soft inside a surface — and use line-control on inputs, selects, and textareas.",
+      "Do pick every font size from the 15-step px ladder.",
+      "Do use an accent's ink role for anything readable and solid only for strokes and rails.",
+      "Do make an element that opens a dialog a <button>. A link whose href is a fragment that doesn't exist lies to assistive tech.",
+      "Do give controls a 24x24 minimum hit area, and announce result-count changes in a polite live region.",
+      "Do set an item's accent through the --accent / --accent-tint / --accent-ink inline custom properties, and write Tailwind arbitrary values out in full so the content scanner keeps them.",
+      "Do hide description copy and switch to list rows below sm. Mobile is an index, not a shrunken desktop.",
+      "Do cap reading copy at max-w-2xl (~65ch).",
+      "Do meet WCAG 2.2 AA, including target size — controls sit at 36px minimum, and 44px for primary actions."
+    ],
+    "donts": [
+      "Don't fill a card, section, or page with topic colour. Topic colour lives on rails, dots, swatches, wells, and chip tints only.",
+      "Don't use Alert Red (#c8493b) for anything but a substantive law-or-process change notice.",
+      "Don't add a gradient, glow, glassmorphism, or a neon dark mode. The canvas is a flat cool grey field; blur exists only on overlay scrims. No AI-SaaS dashboard cliché.",
+      "Don't reintroduce legacy-LMS chrome — bevels, dense tab strips, tables used for layout, or a second nav bar. The hub exists as the alternative to that.",
+      "Don't let calm become lifeless. Corporate compliance grey is the failure mode on the other side: the eight hues, the accent rails, and the near-black feature panel are what keep the system from flattening into enterprise grey-on-grey.",
+      "Don't give a resting surface more than the Seam shadow. Lift is a response to interaction; overlays and the prominent search field are the only exceptions.",
+      "Don't introduce a second typeface without explicitly overturning The One Family Rule.",
+      "Don't uppercase anything at readable size. Uppercase belongs to the 9px and 10px steps.",
+      "Don't write a rem font size or an off-ladder px value in a component class.",
+      "Don't use an accent's saturated solid as text or as a glyph on its own tint — that is the palette's one reliable contrast failure.",
+      "Don't let a control's hover state lighten its border. Hover goes darker; anything else trades contrast for feedback.",
+      "Don't render a mobile tree and a desktop tree and hide one with sm:hidden. Branch on useIsDesktop() and render once.",
+      "Don't build a new light-mode token and leave dark mode to a filter or an opacity trick. Every token is redefined by hand.",
+      "Don't add warm neutrals. Legacy warm values survive in a few places (the gold ::selection wash, the brown-tinted nav-link-active shadows, the --lace-gold / --accent-gold aliases) as leftovers from an earlier palette; they are drift to be retired, not precedent to follow.",
+      "Don't animate for its own sake. Transitions are 160-200ms ease/ease-out on colour, border, shadow, and at most a 1px translate; entrance animations are 220-320ms on cubic-bezier(0.16,1,0.3,1) and reserved for overlays.",
+      "Don't blanket-kill motion under prefers-reduced-motion. The rule keeps colour, border, shadow, and opacity transitions and drops only movement — a 0.01ms global also destroys the state feedback those transitions carry."
+    ]
+  }
+}

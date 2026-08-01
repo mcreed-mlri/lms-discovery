@@ -21,7 +21,7 @@ export function ThemeToggle({
       aria-label={label}
       aria-pressed={isDark}
       title={label}
-      className={`flex h-[38px] shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[color:var(--brand)]/15 ${
+      className={`flex h-[38px] shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring ${
         collapsed ? "w-[38px]" : "w-full gap-2 px-3"
       } ${className}`}
     >

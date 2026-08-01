@@ -1,4 +1,17 @@
+import {
+  plannedCourses,
+  plannedModuleMeta,
+  plannedModules,
+  plannedPaths,
+} from "@/lib/curriculum-catalog";
+
 export type Level = "Foundations" | "Intermediate" | "Advanced";
+
+// Whether an offering is live today ("available", the default) or planned as
+// the curriculum is built out ("planned"). Planned items come from the
+// curriculum map (lib/curriculum-catalog.ts); they're browsable but route back
+// to the map rather than into Brightspace.
+export type Availability = "available" | "planned";
 
 export type Course = {
   id: string;
@@ -8,6 +21,12 @@ export type Course = {
   practiceArea: string;
   duration: string;
   brightspaceUrl: string;
+  availability?: Availability;
+  plannedTag?: "tentative";
+  /** Skill-area colour index (into the 8-hue palette) shared by a path and all
+   *  its courses/modules. Set on curriculum-generated items; absent on built
+   *  ones (which fall back to their topic-family colour). */
+  hueIndex?: number;
 };
 
 export type Module = {
@@ -23,6 +42,12 @@ export type Module = {
   brightspaceCourseUrl: string;
   brightspaceModuleUrl?: string;
   moduleAnchorUrl?: string;
+  availability?: Availability;
+  plannedTag?: "tentative";
+  hueIndex?: number;
+  /** Short lessons ("micro-modules") inside a module — the curriculum map's
+   *  sub-topics. Shown in the module's detail, not as separate catalog cards. */
+  lessons?: string[];
 };
 
 export type Path = {
@@ -32,6 +57,9 @@ export type Path = {
   courseIds: string[];
   totalDuration: string;
   level: Level;
+  availability?: Availability;
+  plannedTag?: "tentative";
+  hueIndex?: number;
 };
 
 export type LearningItem =
@@ -39,7 +67,7 @@ export type LearningItem =
   | (Module & { type: "MODULE" })
   | (Path & { type: "PATH" });
 
-export const courses: Course[] = [
+const builtCourses: Course[] = [
   {
     id: "welcome-to-lace",
     title: "Welcome to the Learning Hub",
@@ -83,36 +111,6 @@ export const courses: Course[] = [
     brightspaceUrl: "/curriculum-map",
   },
   {
-    id: "professional-foundations",
-    title: "Professional Foundations for Legal Aid",
-    description:
-      "Core legal aid habits for new advocates: ethics, client service, documentation, and sound judgment.",
-    level: "Foundations",
-    practiceArea: "All Practice Areas",
-    duration: "1 hr 45 min",
-    brightspaceUrl: "https://brightspace.example.edu/d2l/home/professional-foundations",
-  },
-  {
-    id: "client-centered-practice",
-    title: "Client-Centered Communication",
-    description:
-      "Interview, listen, and counsel in ways that build trust and surface the facts that matter.",
-    level: "Foundations",
-    practiceArea: "Client Services",
-    duration: "1 hr 50 min",
-    brightspaceUrl: "https://brightspace.example.edu/d2l/home/client-centered-practice",
-  },
-  {
-    id: "first-steps-in-court",
-    title: "Your First Steps in Court",
-    description:
-      "Prepare for the first hearing: procedure, courtroom conduct, and what your client needs to know.",
-    level: "Foundations",
-    practiceArea: "All Practice Areas",
-    duration: "1 hr 55 min",
-    brightspaceUrl: "https://brightspace.example.edu/d2l/home/first-steps-in-court",
-  },
-  {
     id: "eviction-defense-48h",
     title: "Eviction Defense: The First 48 Hours",
     description:
@@ -122,19 +120,9 @@ export const courses: Course[] = [
     duration: "12 min",
     brightspaceUrl: "https://mlri.brightspace.com/d2l/home/6703",
   },
-  {
-    id: "upl-boundaries-advocates",
-    title: "Legal Boundaries for Advocates",
-    description:
-      "A practical guide to recognizing when to give approved information, document next steps, and bring in attorney supervision.",
-    level: "Foundations",
-    practiceArea: "Ethics",
-    duration: "35 min",
-    brightspaceUrl: "https://brightspace.example.edu/d2l/home/upl-boundaries-advocates",
-  },
 ];
 
-export const modules: Module[] = [
+const builtModules: Module[] = [
   // Brightspace Wrapper Demo modules
   {
     id: "wrapper-static-layouts",
@@ -182,139 +170,7 @@ export const modules: Module[] = [
       "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Brightspace%20Interactive%20Elements.html?ou=6698&d2l_body_type=3#insert-media",
   },
 
-  // Professional Foundations modules
-  {
-    id: "ethics-and-confidentiality",
-    title: "Ethics and Confidentiality in Legal Aid",
-    description:
-      "Apply core confidentiality, privilege, and conflict rules in everyday legal aid practice.",
-    courseId: "professional-foundations",
-    parentCourseTitle: "Professional Foundations for Legal Aid",
-    practiceArea: "All Practice Areas",
-    level: "Foundations",
-    tags: ["ethics", "confidentiality", "professional conduct"],
-    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/professional-foundations",
-    brightspaceModuleUrl:
-      "https://brightspace.example.edu/d2l/le/content/professional-foundations/viewContent/1001/View",
-  },
-  {
-    id: "legal-aid-environment",
-    title: "Working in a Legal Aid Environment",
-    description:
-      "Understand the legal aid mission, how cases are prioritized, and what that means for client service.",
-    courseId: "professional-foundations",
-    parentCourseTitle: "Professional Foundations for Legal Aid",
-    practiceArea: "All Practice Areas",
-    level: "Foundations",
-    tags: ["legal aid", "organization", "mission"],
-    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/professional-foundations",
-    brightspaceModuleUrl:
-      "https://brightspace.example.edu/d2l/le/content/professional-foundations/viewContent/1002/View",
-  },
-  {
-    id: "case-notes-and-compliance",
-    title: "Case Notes, Time Records, and Compliance",
-    description:
-      "Build simple habits for accurate notes, time records, and grant-reporting requirements.",
-    courseId: "professional-foundations",
-    parentCourseTitle: "Professional Foundations for Legal Aid",
-    practiceArea: "All Practice Areas",
-    level: "Foundations",
-    tags: ["documentation", "compliance", "time records"],
-    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/professional-foundations",
-    brightspaceModuleUrl:
-      "https://brightspace.example.edu/d2l/le/content/professional-foundations/viewContent/1003/View",
-  },
-
-  // Client-Centered Communication modules
-  {
-    id: "first-client-interview",
-    title: "Conducting Your First Client Interview",
-    description:
-      "Open the conversation, gather key facts, identify urgency, and help the client feel heard.",
-    contentStatus: "Updated",
-    courseId: "client-centered-practice",
-    parentCourseTitle: "Client-Centered Communication",
-    practiceArea: "Client Services",
-    level: "Foundations",
-    tags: ["client intake", "interviewing", "fact gathering"],
-    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/client-centered-practice",
-    brightspaceModuleUrl:
-      "https://brightspace.example.edu/d2l/le/content/client-centered-practice/viewContent/2001/View",
-  },
-  {
-    id: "trauma-informed-communication",
-    title: "Trauma-Informed Communication",
-    description:
-      "Use clear, respectful communication when sensitive facts or trauma may shape the conversation.",
-    courseId: "client-centered-practice",
-    parentCourseTitle: "Client-Centered Communication",
-    practiceArea: "Client Services",
-    level: "Foundations",
-    tags: ["trauma-informed", "communication", "client services"],
-    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/client-centered-practice",
-    brightspaceModuleUrl:
-      "https://brightspace.example.edu/d2l/le/content/client-centered-practice/viewContent/2002/View",
-  },
-  {
-    id: "safety-screening",
-    title: "Safety Screening and Crisis Recognition",
-    description: "Spot safety risks early and know when to connect a client to immediate support.",
-    contentStatus: "New",
-    courseId: "client-centered-practice",
-    parentCourseTitle: "Client-Centered Communication",
-    practiceArea: "Client Services",
-    level: "Foundations",
-    tags: ["safety screening", "crisis", "domestic violence"],
-    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/client-centered-practice",
-    brightspaceModuleUrl:
-      "https://brightspace.example.edu/d2l/le/content/client-centered-practice/viewContent/2003/View",
-  },
-
-  // First Steps in Court modules
-  {
-    id: "courtroom-roles-etiquette",
-    title: "Courtroom Roles and Etiquette",
-    description:
-      "Know who does what, how to address the court, and how to move through the room professionally.",
-    courseId: "first-steps-in-court",
-    parentCourseTitle: "Your First Steps in Court",
-    practiceArea: "All Practice Areas",
-    level: "Foundations",
-    tags: ["courtroom procedures", "etiquette", "professionalism"],
-    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/first-steps-in-court",
-    brightspaceModuleUrl:
-      "https://brightspace.example.edu/d2l/le/content/first-steps-in-court/viewContent/3001/View",
-  },
-  {
-    id: "preparing-client-for-court",
-    title: "Preparing Your Client for Court",
-    description:
-      "Help clients understand what to bring, what to expect, and how the hearing day may unfold.",
-    courseId: "first-steps-in-court",
-    parentCourseTitle: "Your First Steps in Court",
-    practiceArea: "All Practice Areas",
-    level: "Foundations",
-    tags: ["client preparation", "hearings", "courtroom procedures"],
-    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/first-steps-in-court",
-    brightspaceModuleUrl:
-      "https://brightspace.example.edu/d2l/le/content/first-steps-in-court/viewContent/3002/View",
-  },
-  {
-    id: "first-appearance-checklist",
-    title: "The First Appearance Checklist",
-    description:
-      "Organize the file, confirm the facts, and prepare the first ask before the case is called.",
-    contentStatus: "Updated",
-    courseId: "first-steps-in-court",
-    parentCourseTitle: "Your First Steps in Court",
-    practiceArea: "All Practice Areas",
-    level: "Foundations",
-    tags: ["courtroom procedures", "first appearance", "preparation"],
-    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/first-steps-in-court",
-    brightspaceModuleUrl:
-      "https://brightspace.example.edu/d2l/le/content/first-steps-in-court/viewContent/3003/View",
-  },
+  // Eviction Defense: The First 48 Hours modules
   {
     id: "clock-starts",
     title: "When the Clock Starts",
@@ -386,73 +242,9 @@ export const modules: Module[] = [
     brightspaceModuleUrl:
       "https://mlri.brightspace.com/content/enforced/6703-course.outline/housing-court.html?ou=6703&d2l_body_type=3",
   },
-  {
-    id: "upl-scenarios",
-    title: "Legal Boundaries Scenarios for Advocates",
-    description:
-      "Work through common intake and follow-up moments where an advocate should document facts, share approved information, or escalate.",
-    courseId: "upl-boundaries-advocates",
-    parentCourseTitle: "Legal Boundaries for Advocates",
-    practiceArea: "Ethics",
-    level: "Foundations",
-    tags: ["upl", "advocate boundaries", "supervision", "ethics"],
-    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/upl-boundaries-advocates",
-    brightspaceModuleUrl:
-      "https://brightspace.example.edu/d2l/le/content/upl-boundaries-advocates/viewContent/5001/View",
-  },
-  {
-    id: "when-to-escalate-attorney",
-    title: "When to Escalate to an Attorney",
-    description:
-      "Use a simple decision framework for moving from advocate support to attorney review without delaying urgent client needs.",
-    courseId: "upl-boundaries-advocates",
-    parentCourseTitle: "Legal Boundaries for Advocates",
-    practiceArea: "Ethics",
-    level: "Foundations",
-    tags: ["upl", "attorney review", "supervision", "client support"],
-    brightspaceCourseUrl: "https://brightspace.example.edu/d2l/home/upl-boundaries-advocates",
-    brightspaceModuleUrl:
-      "https://brightspace.example.edu/d2l/le/content/upl-boundaries-advocates/viewContent/5002/View",
-  },
 ];
 
-export const paths: Path[] = [
-  {
-    id: "new-attorney-foundations",
-    title: "New Attorney Foundations",
-    description:
-      "A first-year path for the core moves of legal aid practice: ethics, communication, case records, and court readiness.",
-    courseIds: ["professional-foundations", "client-centered-practice", "first-steps-in-court"],
-    totalDuration: "5 hr 30 min total",
-    level: "Foundations",
-  },
-  {
-    id: "client-centered-communication-path",
-    title: "Client-Centered Communication",
-    description:
-      "Build interviewing, listening, and counseling habits that make client conversations clearer.",
-    courseIds: ["client-centered-practice"],
-    totalDuration: "1 hr 50 min total",
-    level: "Foundations",
-  },
-  {
-    id: "courtroom-readiness",
-    title: "Your First Steps in Court",
-    description:
-      "A short path for understanding court procedure, preparing clients, and showing up ready.",
-    courseIds: ["first-steps-in-court"],
-    totalDuration: "1 hr 55 min total",
-    level: "Foundations",
-  },
-  {
-    id: "advocate-upl-onboarding",
-    title: "Advocate Boundaries Onboarding",
-    description:
-      "A short, safe starting path for non-lawyer advocates: professional boundaries, escalation, and client-centered support.",
-    courseIds: ["upl-boundaries-advocates", "client-centered-practice"],
-    totalDuration: "2 hr 25 min total",
-    level: "Foundations",
-  },
+const builtPaths: Path[] = [
   {
     id: "faculty-starter",
     title: "Faculty & Content Creator Starter",
@@ -463,6 +255,32 @@ export const paths: Path[] = [
     level: "Foundations",
   },
 ];
+
+// The catalog = the handful of built offerings above + everything generated
+// from the curriculum map (Legal Skills). This is the seam a future
+// Supabase-backed catalog can replace.
+export const courses: Course[] = [...builtCourses, ...plannedCourses];
+export const modules: Module[] = [...builtModules, ...plannedModules];
+export const paths: Path[] = [...plannedPaths, ...builtPaths]; // curated journeys, then faculty-starter
+
+// Skill areas for the left rail — the Legal Skills curriculum areas (each is a
+// course), coloured by the same hue as their course/module cards. Derived from
+// the generated courses so the rail stays in sync with the curriculum map.
+export type SkillArea = {
+  id: string;
+  name: string;
+  hueIndex: number;
+  count: number;
+  href: string;
+};
+
+export const skillAreas: SkillArea[] = plannedCourses.map((course) => ({
+  id: course.id,
+  name: course.title,
+  hueIndex: course.hueIndex ?? 0,
+  count: modules.filter((module) => module.courseId === course.id).length,
+  href: `/learn/${course.id}`,
+}));
 
 export type LearningStatus = "Not started" | "In progress" | "Completed";
 
@@ -501,27 +319,6 @@ export const continueLearning: ContinueLearningItem[] = [
     title: "Self Checks",
     detail: "Brightspace Wrapper Demo",
     status: "In progress",
-  },
-  {
-    id: "professional-foundations",
-    type: "COURSE",
-    title: "Professional Foundations for Legal Aid",
-    detail: "Module 2 of 3",
-    progress: 45,
-  },
-  {
-    id: "first-client-interview",
-    type: "MODULE",
-    title: "Conducting Your First Client Interview",
-    detail: "Client-Centered Communication",
-    status: "In progress",
-  },
-  {
-    id: "new-attorney-foundations",
-    type: "PATH",
-    title: "New Attorney Foundations",
-    detail: "1 of 3 courses complete",
-    progress: 33,
   },
 ];
 
@@ -571,22 +368,14 @@ const moduleMeta: Record<string, { minutes: number; skillId: SkillId }> = {
   "wrapper-static-layouts": { minutes: 9, skillId: "research" },
   "wrapper-self-checks": { minutes: 11, skillId: "research" },
   "wrapper-insert-media": { minutes: 7, skillId: "research" },
-  "ethics-and-confidentiality": { minutes: 14, skillId: "ethics" },
-  "legal-aid-environment": { minutes: 10, skillId: "triage" },
-  "case-notes-and-compliance": { minutes: 12, skillId: "drafting" },
-  "first-client-interview": { minutes: 13, skillId: "interviewing" },
-  "trauma-informed-communication": { minutes: 11, skillId: "counseling" },
-  "safety-screening": { minutes: 9, skillId: "triage" },
-  "courtroom-roles-etiquette": { minutes: 8, skillId: "courtroom" },
-  "preparing-client-for-court": { minutes: 12, skillId: "counseling" },
-  "first-appearance-checklist": { minutes: 10, skillId: "courtroom" },
   "clock-starts": { minutes: 2, skillId: "triage" },
   "notice-types": { minutes: 3, skillId: "research" },
   "service-of-process": { minutes: 3, skillId: "triage" },
   "drafting-answer": { minutes: 3, skillId: "drafting" },
   "walking-into-housing-court": { minutes: 1, skillId: "courtroom" },
-  "upl-scenarios": { minutes: 18, skillId: "ethics" },
-  "when-to-escalate-attorney": { minutes: 17, skillId: "ethics" },
+  // Planned modules from the curriculum map carry their skill lens so the
+  // homepage skills tiles stay coherent (see lib/curriculum-catalog.ts).
+  ...plannedModuleMeta,
 };
 
 export function getModuleMinutes(moduleId: string): number {
@@ -697,11 +486,7 @@ export type PracticeAreaChip = {
 const courseChipLabels: Record<string, string> = {
   "brightspace-wrapper-demo": "Wrapper Demo",
   "faculty-handbook": "Faculty Handbook",
-  "professional-foundations": "Foundations",
-  "client-centered-practice": "Client Communication",
-  "first-steps-in-court": "Court Skills",
   "eviction-defense-48h": "Housing Court",
-  "upl-boundaries-advocates": "Boundaries",
 };
 
 export const practiceAreaChips: PracticeAreaChip[] = courses.map((course) => ({
@@ -787,37 +572,37 @@ export type ContentUpdate = {
 
 export const contentUpdates: ContentUpdate[] = [
   {
-    id: "u-first-appearance",
-    title: "First Appearance Checklist updated for the 2026 call sequence",
+    id: "u-drafting-answer",
+    title: "The Answer deadline changed under c.239 §5",
     summary:
-      "The checklist now walks through the new sequence and what to have ready before your case is called.",
-    courseId: "first-steps-in-court",
-    moduleId: "first-appearance-checklist",
+      "Drafting the Answer now reflects the updated response window and the defenses to preserve before the first court date.",
+    courseId: "eviction-defense-48h",
+    moduleId: "drafting-answer",
     when: "2 days ago",
     severity: "high",
-    tag: "Process changed",
+    tag: "Law changed",
   },
   {
-    id: "u-safety-screening",
-    title: "New module: Safety Screening and Crisis Recognition",
+    id: "u-notice-types",
+    title: "Notice types refreshed for 2026 summary process",
     summary:
-      "A short framework for spotting safety risks during an intake call and choosing the next support step.",
-    courseId: "client-centered-practice",
-    moduleId: "safety-screening",
+      "The Four Notice Types now walks through what the landlord must prove for each notice before you build the defense.",
+    courseId: "eviction-defense-48h",
+    moduleId: "notice-types",
     when: "Yesterday",
     severity: "standard",
-    tag: "New",
+    tag: "Updated",
   },
   {
-    id: "u-first-interview",
-    title: "Conducting Your First Client Interview refreshed",
+    id: "u-walking-into-court",
+    title: "New module: Walking into Housing Court",
     summary:
-      "Updated intake language gives advocates a clearer opening for the first five minutes of the call.",
-    courseId: "client-centered-practice",
-    moduleId: "first-client-interview",
+      "A short prep for the first ask, the strongest issue, and the client goal before your case is called.",
+    courseId: "eviction-defense-48h",
+    moduleId: "walking-into-housing-court",
     when: "4 days ago",
     severity: "standard",
-    tag: "Updated",
+    tag: "New",
   },
 ];
 
@@ -879,8 +664,6 @@ export function getContinueLearningUrl(
 const dashboardCourseLearningItemIds: Record<string, string> = {
   "6698": "wrapper-self-checks",
   "6703": "eviction-defense-48h",
-  "7102": "upl-boundaries-advocates",
-  "6844": "first-client-interview",
 };
 
 export function getLearningUrlForDashboardCourse(course: {

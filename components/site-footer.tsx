@@ -30,7 +30,7 @@ export function SiteFooter() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-[12px] font-semibold text-[color:var(--ink-muted)] transition hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+                className="text-[12px] font-semibold text-[color:var(--ink-muted)] transition hover:text-[color:var(--ink)] focus-ring"
               >
                 {link.label}
               </Link>

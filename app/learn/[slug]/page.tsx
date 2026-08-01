@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import { ArrowIcon, BookIcon, CheckIcon, ClockIcon } from "@/components/icons";
 import { TypeBadge } from "@/components/type-badge";
 import {
@@ -14,7 +15,15 @@ import {
   paths,
   type LearningItem,
 } from "@/lib/data";
-import { getCourseLabel, getCourseTheme } from "@/lib/course-theme";
+import { getCourseLabel, getItemAccent, type Accent } from "@/lib/course-theme";
+
+function accentVars(accent: Accent): CSSProperties {
+  return {
+    "--accent": accent.solid,
+    "--accent-tint": accent.tint,
+    "--accent-ink": accent.ink,
+  } as CSSProperties;
+}
 
 type LearnPageProps = {
   params: Promise<{
@@ -113,10 +122,7 @@ export default async function LearnPage({ params }: LearnPageProps) {
 
   const relatedItems = getRelatedItems(item);
   const sourceUrl = getBrightspaceSourceUrl(item);
-  const theme =
-    item.type === "PATH"
-      ? getCourseTheme(relatedItems[0]?.id ?? "")
-      : getCourseTheme(item.type === "MODULE" ? item.courseId : item.id);
+  const accent = getItemAccent(item);
   const sections = getLessonSections(item);
 
   return (
@@ -130,9 +136,10 @@ export default async function LearnPage({ params }: LearnPageProps) {
         </Link>
 
         <section
-          className={`mt-4 overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] shadow-[var(--shadow-xs)] ${theme.rail}`}
+          style={accentVars(accent)}
+          className="mt-4 overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] shadow-[var(--shadow-xs)]"
         >
-          <div className="h-1.5" />
+          <div className="h-1.5 bg-[color:var(--accent)]" />
           <div className="grid gap-7 p-5 sm:p-7 lg:grid-cols-[minmax(0,1fr)_16rem] lg:p-9">
             <div>
               <TypeBadge type={item.type} />
@@ -146,7 +153,7 @@ export default async function LearnPage({ params }: LearnPageProps) {
                 {relatedItems[0] ? (
                   <Link
                     href={getLearningItemUrl(relatedItems[0])}
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus-ring"
                   >
                     {item.type === "MODULE" ? "Next related module" : "Start in Learning Hub"}
                     <ArrowIcon className="h-4 w-4" />
@@ -154,7 +161,7 @@ export default async function LearnPage({ params }: LearnPageProps) {
                 ) : null}
                 <a
                   href={sourceUrl}
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface)] px-5 text-sm font-bold text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus:outline-none focus:ring-4 focus:ring-[#2a5bff]/15"
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface)] px-5 text-sm font-bold text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
                 >
                   Open source in Brightspace
                   <ArrowIcon className="h-4 w-4" />
@@ -184,6 +191,27 @@ export default async function LearnPage({ params }: LearnPageProps) {
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
           <section className="editorial-card p-5 sm:p-7">
+            {item.type === "MODULE" && item.lessons && item.lessons.length > 0 && (
+              <div className="mb-6 border-b border-[color:var(--line)] pb-6">
+                <p className="section-kicker secondary">Lessons in this module</p>
+                <ol className="mt-3 grid gap-2">
+                  {item.lessons.map((lesson, index) => (
+                    <li
+                      key={`${item.id}-lesson-${index}`}
+                      style={accentVars(accent)}
+                      className="flex items-center gap-3 rounded-[10px] border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-2.5"
+                    >
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color:var(--accent-tint)] text-[12px] font-bold tabular-nums text-[color:var(--accent-ink)]">
+                        {index + 1}
+                      </span>
+                      <span className="text-sm font-semibold text-[color:var(--ink)]">
+                        {lesson}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
             <p className="section-kicker primary">Learning Hub lesson</p>
             <div className="mt-5 grid gap-5">
               {sections.map((section, index) => (
@@ -220,14 +248,12 @@ export default async function LearnPage({ params }: LearnPageProps) {
             <div className="mt-4 grid gap-2">
               {relatedItems.length > 0 ? (
                 relatedItems.map((related) => {
-                  const relatedTheme = getCourseTheme(
-                    related.type === "MODULE" ? related.courseId : related.id,
-                  );
                   return (
                     <Link
                       key={related.id}
                       href={getLearningItemUrl(related)}
-                      className={`group relative block rounded-[10px] border border-[color:var(--line)] bg-[color:var(--surface)] p-3 transition hover:border-[color:var(--line-strong)] hover:bg-[color:var(--hover-tint)] ${relatedTheme.rail}`}
+                      style={accentVars(getItemAccent(related))}
+                      className="group relative block overflow-hidden rounded-[10px] border border-[color:var(--line)] bg-[color:var(--surface)] p-3 pl-4 transition before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--accent)] hover:border-[color:var(--line-strong)] hover:bg-[color:var(--hover-tint)]"
                     >
                       <span className="metadata text-[color:var(--ink-soft)]">
                         {related.type === "COURSE"
