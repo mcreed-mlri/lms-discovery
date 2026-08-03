@@ -39,12 +39,15 @@
   --surface-sunken: #efede7; /* sunken tracks, chips, active-nav bg */
   --hover-tint: #f5f2eb; /* whisper hover */
   --chrome-bg: rgba(255, 253, 248, 0.88);
-  --feature-surface: #27215f;
+  /* Inversion surface — near-black, warm to match --ink rather than a coloured
+     panel. Black carries the *structural* emphasis in this system; blue is left
+     to mean "interactive". */
+  --feature-surface: #191814;
   --feature-ink: #ffffff;
-  --feature-muted: rgba(255, 255, 255, 0.55);
-  --feature-track: rgba(255, 255, 255, 0.14);
+  --feature-muted: rgba(255, 255, 255, 0.58);
+  --feature-track: rgba(255, 255, 255, 0.16);
   --feature-action-bg: #ffffff;
-  --feature-action-ink: #27215f;
+  --feature-action-ink: #191814;
   --feature-action-border: transparent;
   --hero-wash: #f7f6f2;
   --hero-wash-soft: #ffffff;
@@ -67,11 +70,20 @@
   --shadow-md: 0 1px 2px rgba(32, 27, 19, 0.04), 0 6px 18px rgba(32, 27, 19, 0.06);
   --shadow-lg: 0 8px 24px rgba(32, 27, 19, 0.1), 0 2px 6px rgba(32, 27, 19, 0.06);
 
-  /* ── Brand — Studio indigo. Deep for text/links, brighter for fills ───── */
-  --brand: #4338ca; /* links, active icons, avatar fill */
-  --brand-ink: #3730a3; /* brand text on light */
-  --brand-fill: #4f46e5; /* primary button / progress fill */
-  --brand-tint: #eef2ff; /* "Continue" chip bg */
+  /* ── Brand — steel blue, drawn from the MLRI blue family. Institutional, not
+        electric, and firmly on the blue side of the wheel (no violet cast).
+        Blue means *interactive*: links, active icons, progress, resume. ────── */
+  --brand: #1a5aa0; /* links, active icons, avatar fill */
+  --brand-ink: #12447c; /* brand text on light */
+  --brand-fill: #1c63b0; /* progress fill / accent graphics */
+  --brand-tint: #e8eff8; /* "Continue" chip bg */
+
+  /* Maximum-contrast solid — the "black" action. Selected filter chips and any
+     control that must read as chosen use this instead of a colour fill, so the
+     UI's weight comes from ink and colour stays a signal. Flips to near-white
+     in dark mode, which is why it is a token pair and not `var(--ink)`. */
+  --solid-bg: #191814;
+  --solid-ink: #ffffff;
 
   /* ── Skill-hue palette — 8 disciplined hues, used BY INDEX on skill tiles
         and practice-area swatches. Identical S/L feel so it reads systematic.
@@ -80,16 +92,20 @@
         Each hue carries three roles, exactly like the topic families: `solid`
         for strokes/swatches/rails, `tint` for pale fills, and `ink` for TEXT on
         that tint. The saturated solid is never used as text — at 11–12px it
-        lands around 3:1 on its own tint. Use `-ink` for any label. ────────── */
-  --hue-1: #2a5bff;
-  --hue-1-tint: #e9f0ff;
-  --hue-1-ink: #2a5bff; /* blue */
-  --hue-2: #7a4fe0;
-  --hue-2-tint: #efeafd;
-  --hue-2-ink: #794ede; /* violet */
-  --hue-3: #d24d83;
-  --hue-3-tint: #fce9f1;
-  --hue-3-ink: #b54271; /* pink */
+        lands around 3:1 on its own tint. Use `-ink` for any label.
+
+        The family is deliberately grounded: steel, teal, olive, amber, green,
+        sky, graphite, rust. No violet or pink — the set should read sober and
+        earthy, and graphite keeps ink in rotation as a colour. ─────────────── */
+  --hue-1: #1a5aa0;
+  --hue-1-tint: #e8eff8;
+  --hue-1-ink: #16508f; /* steel blue */
+  --hue-2: #0e7a80;
+  --hue-2-tint: #e0f1f1;
+  --hue-2-ink: #0b666b; /* teal */
+  --hue-3: #5c7326;
+  --hue-3-tint: #eef2e2;
+  --hue-3-ink: #4c6020; /* olive */
   --hue-4: #c8791b;
   --hue-4-tint: #fbf0dc;
   --hue-4-ink: #9e5f15; /* amber */
@@ -99,9 +115,9 @@
   --hue-6: #3a8ec9;
   --hue-6-tint: #e7f3fb;
   --hue-6-ink: #2f73a3; /* sky */
-  --hue-7: #5563d6;
-  --hue-7-tint: #ebedfc;
-  --hue-7-ink: #5361d2; /* indigo */
+  --hue-7: #414852;
+  --hue-7-tint: #eaecef;
+  --hue-7-ink: #363c45; /* graphite */
   --hue-8: #bb573b;
   --hue-8-tint: #fbe8e2;
   --hue-8-ink: #ab5036; /* rust */
@@ -110,25 +126,25 @@
         hue palette so existing cards/dashboard accents stay useful signals. ─ */
   --topic-court: #3a8ec9;
   --topic-court-soft: #e7f3fb;
-  --topic-court-ink: #2b6c9b;
+  --topic-court-ink: #2b6c9b; /* sky */
   --topic-client: #179a72;
   --topic-client-soft: #e2f4ed;
-  --topic-client-ink: #0f6e51;
-  --topic-ethics: #5563d6;
-  --topic-ethics-soft: #ebedfc;
-  --topic-ethics-ink: #3f4cb0;
-  --topic-research: #3a8ec9;
-  --topic-research-soft: #e7f3fb;
-  --topic-research-ink: #2b6c9b;
-  --topic-drafting: #7a4fe0;
-  --topic-drafting-soft: #efeafd;
-  --topic-drafting-ink: #5b39ab;
-  --topic-trauma: #d24d83;
-  --topic-trauma-soft: #fce9f1;
-  --topic-trauma-ink: #a83467;
-  --topic-foundations: #5563d6;
-  --topic-foundations-soft: #ebedfc;
-  --topic-foundations-ink: #3f4cb0;
+  --topic-client-ink: #0f6e51; /* green */
+  --topic-ethics: #414852;
+  --topic-ethics-soft: #eaecef;
+  --topic-ethics-ink: #363c45; /* graphite */
+  --topic-research: #0e7a80;
+  --topic-research-soft: #e0f1f1;
+  --topic-research-ink: #0b666b; /* teal */
+  --topic-drafting: #1a5aa0;
+  --topic-drafting-soft: #e8eff8;
+  --topic-drafting-ink: #16508f; /* steel */
+  --topic-trauma: #bb573b;
+  --topic-trauma-soft: #fbe8e2;
+  --topic-trauma-ink: #ab5036; /* rust */
+  --topic-foundations: #5c7326;
+  --topic-foundations-soft: #eef2e2;
+  --topic-foundations-ink: #4c6020; /* olive */
   --topic-neutral: #8b909d;
   --topic-neutral-soft: #efede7;
   --topic-neutral-ink: #565c69;
@@ -137,9 +153,9 @@
   --status-progress: #179a72;
   --status-progress-soft: #e2f4ed;
   --status-progress-ink: #0f6e51;
-  --status-next: #4f46e5;
-  --status-next-soft: #eef2ff;
-  --status-next-ink: #3730a3;
+  --status-next: #1c63b0;
+  --status-next-soft: #e8eff8;
+  --status-next-ink: #12447c;
   --status-done: #179a72;
   --status-done-soft: #e2f4ed;
   --status-done-ink: #0f6e51;
@@ -160,7 +176,7 @@
   --radius-control: 9px;
 
   /* Text selection — a clear wash of the brand fill, not the retired gold. */
-  --selection-bg: rgba(42, 91, 255, 0.18);
+  --selection-bg: rgba(28, 99, 176, 0.18);
 }
 
 [data-theme="dark"] {
@@ -176,13 +192,15 @@
   --surface-sunken: #262a33;
   --hover-tint: #20242b;
   --chrome-bg: rgba(28, 31, 38, 0.86);
-  --feature-surface: #202633;
+  /* Neutral graphite, not the old navy — dark mode can't invert to black, so the
+     feature panel lifts instead. Colour stays out of it either way. */
+  --feature-surface: #23262c;
   --feature-ink: #f3f4f6;
   --feature-muted: #9da6b5;
   --feature-track: rgba(255, 255, 255, 0.13);
-  --feature-action-bg: #2c3442;
+  --feature-action-bg: #32363e;
   --feature-action-ink: #f3f4f6;
-  --feature-action-border: #3a4352;
+  --feature-action-border: #41464f;
   --hero-wash: #15171c;
   --hero-wash-soft: #1c1f26;
   --ink: #f3f4f6;
@@ -199,24 +217,29 @@
   --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.24), 0 16px 38px rgba(0, 0, 0, 0.26);
   --shadow-lg: 0 16px 42px rgba(0, 0, 0, 0.38), 0 2px 8px rgba(0, 0, 0, 0.28);
 
-  /* Brand: preserve Learning Hub blue in dark mode. */
-  --brand: #86a5ff;
-  --brand-ink: #9bb4ff;
-  --brand-fill: #5f84ff;
-  --brand-tint: #18274f;
+  /* Brand: the same steel blue, lifted for dark surfaces. */
+  --brand: #7fb3ee;
+  --brand-ink: #98c2f3;
+  --brand-fill: #3b8ede;
+  --brand-tint: #13304d;
+
+  /* Solid action inverts: near-white chip with dark ink. Black-on-black would
+     disappear, so the "maximum contrast" intent flips direction here. */
+  --solid-bg: #eceef2;
+  --solid-ink: #14161b;
 
   /* Skill hues: saturated strokes plus deep fills for icon wells/chips. */
   /* Dark tints are deep, so each solid already clears 4.5:1 as text on its own
      tint (6.1–7.6:1); ink mirrors solid here rather than inventing a value. */
-  --hue-1: #86a5ff;
-  --hue-1-tint: #18274f;
-  --hue-1-ink: #86a5ff;
-  --hue-2: #b49af0;
-  --hue-2-tint: #251a40;
-  --hue-2-ink: #b49af0;
-  --hue-3: #ef9bbd;
-  --hue-3-tint: #3a1c2a;
-  --hue-3-ink: #ef9bbd;
+  --hue-1: #6f9fe8;
+  --hue-1-tint: #13304d;
+  --hue-1-ink: #6f9fe8;
+  --hue-2: #4fc3c3;
+  --hue-2-tint: #0e2f31;
+  --hue-2-ink: #4fc3c3;
+  --hue-3: #a9c06a;
+  --hue-3-tint: #262e14;
+  --hue-3-ink: #a9c06a;
   --hue-4: #e0a552;
   --hue-4-tint: #3a2c10;
   --hue-4-ink: #e0a552;
@@ -226,9 +249,9 @@
   --hue-6: #7cc0ec;
   --hue-6-tint: #14283a;
   --hue-6-ink: #7cc0ec;
-  --hue-7: #9aa3ec;
-  --hue-7-tint: #1f2340;
-  --hue-7-ink: #9aa3ec;
+  --hue-7: #a9b2c0;
+  --hue-7-tint: #262a31;
+  --hue-7-ink: #a9b2c0;
   --hue-8: #e8957a;
   --hue-8-tint: #3a1f17;
   --hue-8-ink: #e8957a;
@@ -239,21 +262,21 @@
   --topic-client: #5fc9a8;
   --topic-client-soft: #133029;
   --topic-client-ink: #5fc9a8;
-  --topic-ethics: #9aa3ec;
-  --topic-ethics-soft: #1f2340;
-  --topic-ethics-ink: #9aa3ec;
-  --topic-research: #7cc0ec;
-  --topic-research-soft: #14283a;
-  --topic-research-ink: #7cc0ec;
-  --topic-drafting: #b49af0;
-  --topic-drafting-soft: #251a40;
-  --topic-drafting-ink: #b49af0;
-  --topic-trauma: #ef9bbd;
-  --topic-trauma-soft: #3a1c2a;
-  --topic-trauma-ink: #ef9bbd;
-  --topic-foundations: #9aa3ec;
-  --topic-foundations-soft: #1f2340;
-  --topic-foundations-ink: #9aa3ec;
+  --topic-ethics: #a9b2c0;
+  --topic-ethics-soft: #262a31;
+  --topic-ethics-ink: #a9b2c0;
+  --topic-research: #4fc3c3;
+  --topic-research-soft: #0e2f31;
+  --topic-research-ink: #4fc3c3;
+  --topic-drafting: #6f9fe8;
+  --topic-drafting-soft: #13304d;
+  --topic-drafting-ink: #6f9fe8;
+  --topic-trauma: #e8957a;
+  --topic-trauma-soft: #3a1f17;
+  --topic-trauma-ink: #e8957a;
+  --topic-foundations: #a9c06a;
+  --topic-foundations-soft: #262e14;
+  --topic-foundations-ink: #a9c06a;
   --topic-neutral: #9aa0ad;
   --topic-neutral-soft: #262a33;
   --topic-neutral-ink: #c0c6d1;
@@ -261,9 +284,9 @@
   --status-progress: #5fc9a8;
   --status-progress-soft: #133029;
   --status-progress-ink: #5fc9a8;
-  --status-next: #86a5ff;
-  --status-next-soft: #18274f;
-  --status-next-ink: #9bb4ff;
+  --status-next: #7fb3ee;
+  --status-next-soft: #13304d;
+  --status-next-ink: #98c2f3;
   --status-done: #5fc9a8;
   --status-done-soft: #133029;
   --status-done-ink: #5fc9a8;
@@ -281,7 +304,7 @@
   --status-later-ink: #c0c6d1;
 
   /* Brighter wash so the selection stays visible on the dark canvas. */
-  --selection-bg: rgba(95, 132, 255, 0.34);
+  --selection-bg: rgba(59, 142, 222, 0.34);
 }
 
 * {
@@ -465,6 +488,8 @@ input::placeholder {
   position: relative;
 }
 
+/* Structural accents are ink, not colour — a black rule reads editorial and
+   leaves blue to mean "you can act on this". */
 .action-section::before {
   content: "";
   position: absolute;
@@ -472,15 +497,16 @@ input::placeholder {
   width: 4.25rem;
   height: 2px;
   border-radius: 999px;
-  background: var(--brand-fill);
+  background: var(--ink);
 }
 
-/* Shared nav active state — a brand tint over the surface, hairline-first. */
+/* Shared nav active state — a sunken ink wash, hairline-first. The marker rail
+   stays brand blue so the current location still reads as navigation. */
 .nav-link-active {
-  background: color-mix(in srgb, var(--brand) 14%, var(--surface-raised));
+  background: color-mix(in srgb, var(--ink) 7%, var(--surface-raised));
   color: var(--ink);
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--brand) 22%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--ink) 14%, transparent),
     0 1px 2px rgba(32, 27, 19, 0.035);
 }
 
@@ -489,14 +515,15 @@ input::placeholder {
   width: 3px;
   height: 1.25rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--brand) 72%, var(--ink));
-  box-shadow: 0 0 0 2px rgba(42, 91, 255, 0.08);
+  background: var(--brand);
+  box-shadow: 0 0 0 2px rgba(28, 99, 176, 0.1);
 }
 
-/* Catalog / control active states — clear but not heavy. */
+/* Catalog / control active states — solid ink, so a chosen filter is the
+   heaviest thing in the control row without spending a colour on it. */
 .control-active {
-  background: var(--brand);
-  color: #ffffff;
+  background: var(--solid-bg);
+  color: var(--solid-ink);
   box-shadow:
     var(--shadow-xs),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);

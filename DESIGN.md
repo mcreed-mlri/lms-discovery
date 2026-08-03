@@ -2,14 +2,15 @@
 name: The Studio
 description: A calm warm-grey learning studio where colour is never decoration — only orientation or status.
 colors:
-  studio-blue: "#4338ca"
-  signal-blue: "#4f46e5"
-  studio-blue-tint: "#eef2ff"
+  studio-blue: "#1a5aa0"
+  signal-blue: "#1c63b0"
+  studio-blue-tint: "#e8eff8"
   studio-grey: "#f7f6f2"
   panel: "#f0eee8"
   surface: "#ffffff"
   surface-sunken: "#efede7"
-  feature-surface: "#27215f"
+  feature-surface: "#191814"
+  solid-bg: "#191814"
   studio-ink: "#171511"
   ink-muted: "#575148"
   ink-soft: "#6d675e"
@@ -17,15 +18,15 @@ colors:
   line-strong: "#d2ccc1"
   line-soft: "#ece8df"
   line-control: "#827b70"
-  hue-1-blue: "#2a5bff"
-  hue-1-blue-tint: "#e9f0ff"
-  hue-1-blue-ink: "#2a5bff"
-  hue-2-violet: "#7a4fe0"
-  hue-2-violet-tint: "#efeafd"
-  hue-2-violet-ink: "#794ede"
-  hue-3-pink: "#d24d83"
-  hue-3-pink-tint: "#fce9f1"
-  hue-3-pink-ink: "#b54271"
+  hue-1-steel: "#1a5aa0"
+  hue-1-steel-tint: "#e8eff8"
+  hue-1-steel-ink: "#16508f"
+  hue-2-teal: "#0e7a80"
+  hue-2-teal-tint: "#e0f1f1"
+  hue-2-teal-ink: "#0b666b"
+  hue-3-olive: "#5c7326"
+  hue-3-olive-tint: "#eef2e2"
+  hue-3-olive-ink: "#4c6020"
   hue-4-amber: "#c8791b"
   hue-4-amber-tint: "#fbf0dc"
   hue-4-amber-ink: "#9e5f15"
@@ -35,9 +36,9 @@ colors:
   hue-6-sky: "#3a8ec9"
   hue-6-sky-tint: "#e7f3fb"
   hue-6-sky-ink: "#2f73a3"
-  hue-7-indigo: "#5563d6"
-  hue-7-indigo-tint: "#ebedfc"
-  hue-7-indigo-ink: "#5361d2"
+  hue-7-graphite: "#414852"
+  hue-7-graphite-tint: "#eaecef"
+  hue-7-graphite-ink: "#363c45"
   hue-8-rust: "#bb573b"
   hue-8-rust-tint: "#fbe8e2"
   hue-8-rust-ink: "#ab5036"
@@ -259,11 +260,11 @@ components:
 
 **Creative North Star: "The Studio"**
 
-The Studio is a working surface, not a showpiece. A warm-grey paper canvas holds crisp white cards on hairline borders; typography carries the hierarchy; and colour is withheld until it has something to say. The name comes from the implementation itself — Studio Indigo, the Studio canvas, `StudioShell`, `StudioRail` — and this document keeps that vocabulary rather than inventing a new one.
+The Studio is a working surface, not a showpiece. A warm-grey paper canvas holds crisp white cards on hairline borders; typography carries the hierarchy; and colour is withheld until it has something to say. The name comes from the implementation itself — Studio Blue, the Studio canvas, `StudioShell`, `StudioRail` — and this document keeps that vocabulary rather than inventing a new one.
 
 The system's discipline is a single decision applied everywhere: **colour is a signal, never decoration.** It speaks in exactly two languages that never mix. _Topic colour_ answers "which part of the curriculum am I in?" and appears only on small accents — a card's top rail, a parent-course pill, an icon well, a swatch in the rail. _Status colour_ answers "what state is this content in?" and always arrives with a text label beside it. The page itself stays silent: flat warm-grey field, no gradients, no wallpaper, no illustration.
 
-Its warmth is both behavioural and material. The system is built around someone under real pressure — an advocate with a hearing in an hour, or a tired lawyer trying not to feel fried by another screen. So the canvas has a slight paper warmth and the ink is a warmer charcoal. But cards are true white, the resume/progress system uses confident indigo, and the palette never drifts into cream, tan, or cozy decoration. It labels things, keeps numbers tabular so they scan, dims what is secondary, and gets out of the way. Restraint is how this system is kind.
+Its warmth is both behavioural and material. The system is built around someone under real pressure — an advocate with a hearing in an hour, or a tired lawyer trying not to feel fried by another screen. So the canvas has a slight paper warmth and the ink is a warmer charcoal. But cards are true white, the resume/progress system uses confident steel blue, and the palette never drifts into cream, tan, or cozy decoration. It labels things, keeps numbers tabular so they scan, dims what is secondary, and gets out of the way. Restraint is how this system is kind.
 
 **Key Characteristics:**
 
@@ -281,24 +282,25 @@ A warm, low-chroma neutral base with a single blue brand voice, plus two strictl
 
 ### Primary
 
-- **Studio Indigo** (`#4338ca`): The brand voice at text weight — links, active nav icons, the avatar fill, active navigation, and the "Show more" affordance. Deep enough to read as body-adjacent text on white.
-- **Signal Indigo** (`#4f46e5`): The brighter sibling, used only for _fills_ — progress bars, the training-hours ring, weekly-activity squares, featured-card borders, and the accent stroke above an action section. Never used for running text.
-- **Studio Indigo Tint** (`#eef2ff`): The pale wash behind next-up and active navigation states.
+- **Studio Ink** (`#191814`): the system's heaviest voice. Black carries _structure_ — the feature/resume inversion, the rule above an action section, the selected filter chip, the app icon. Anywhere the UI needs weight rather than meaning, it spends ink instead of colour.
+- **Studio Blue** (`#1a5aa0`): the brand voice at text weight — links, active nav icons, the current-location marker, the avatar fill, and the "Show more" affordance. A steel blue from the MLRI blue family: institutional, no violet cast. Deep enough to read as body-adjacent text on white.
+- **Signal Blue** (`#1c63b0`): the brighter sibling, used only for _fills_ — progress bars, the training-hours ring, weekly-activity squares, featured-card borders. Never used for running text.
+- **Studio Blue Tint** (`#e8eff8`): the pale wash behind next-up states.
 
 ### Secondary
 
-The **eight-hue skill palette** — Blue, Violet, Pink, Amber, Green, Sky, Indigo, Rust — held at a deliberately matched saturation and lightness so that eight of them side by side read as one systematic family rather than a rainbow. They are assigned **by index**, wrapping after eight: the Nth skill area takes the Nth hue, and a skill area shares its hue with every course and module beneath it. That is the whole orientation mechanism.
+The **eight-hue skill palette** — Steel, Teal, Olive, Amber, Green, Sky, Graphite, Rust — held at a deliberately matched saturation and lightness so that eight of them side by side read as one systematic family rather than a rainbow. The set is deliberately grounded and earthy: no violet, no pink, and one slot spent on graphite so ink stays in rotation as a colour. They are assigned **by index**, wrapping after eight: the Nth skill area takes the Nth hue, and a skill area shares its hue with every course and module beneath it. That is the whole orientation mechanism.
 
 Each hue carries **three roles**, exactly like the topic families: `solid` for strokes, swatches, and rails; `tint` for pale fills; and `ink` for text or glyphs sitting on that tint. The three-role split is not cosmetic — the saturated `solid` lands between 3.0:1 and 4.6:1 on its own pale tint, so using it for an 11px label fails WCAG 1.4.3. `ink` is the same hue darkened until it clears 4.5:1 (amber, the worst case, moves from 3.00:1 to 4.53:1). In dark mode the tints are deep enough that `ink` mirrors `solid`.
 
-The **topic families** (Court Skills, Client Communication, Ethics, Legal Research, Drafting, Trauma-Informed Practice, Foundations) are not a separate palette. Every topic token is an alias onto a value in the eight-hue family — Court and Research both resolve to Sky, Ethics and Foundations both to Indigo, Client to Green, Drafting to Violet, Trauma to Pink. Built courses use their topic family; curriculum-generated items use an explicit hue index. Both paths land in the same eight values.
+The **topic families** (Court Skills, Client Communication, Ethics, Legal Research, Drafting, Trauma-Informed Practice, Foundations) are not a separate palette. Every topic token is an alias onto a value in the eight-hue family — Court to Sky, Research to Teal, Client to Green, Ethics to Graphite, Drafting to Steel, Foundations to Olive, Trauma to Rust; each family now holds its own hue. Built courses use their topic family; curriculum-generated items use an explicit hue index. Both paths land in the same eight values.
 
 ### Tertiary
 
 The **status palette**, kept deliberately distinct in role from topic colour even where it reuses a hue value:
 
 - **Green** (`#179a72`, ink `#0f6e51`): in progress, and completed.
-- **Signal Indigo** (`#4f46e5`): next up.
+- **Signal Blue** (`#1c63b0`, tint `#e8eff8`, ink `#12447c`): next up.
 - **Amber** (`#c8791b`, ink `#99610f`): new, and updated.
 - **Alert Red** (`#c8493b`, tint `#fbe9e6`, ink `#9c3528`): law changed or process changed — the only red in the system, and the only colour reserved for a substantive legal-content warning.
 - **Grey** (`#8b909d`): later, not started, inactive.
@@ -310,7 +312,8 @@ The **status palette**, kept deliberately distinct in role from topic colour eve
 - **Panel / Sunken** (`#efede7`): segmented-control tracks, progress tracks, type badges, active-nav backgrounds.
 - **Surface** (`#ffffff`): card and control surfaces. True white against the warm canvas, not cream.
 - **Surface Raised** (`#ffffff`): raised panels and cards. Same true-white plane; warmth comes from the page, borders, and shadows.
-- **Feature Surface** (`#27215f`): the deep indigo inversion used for exactly one element per screen — the resume/handoff panel in the hero.
+- **Feature Surface** (`#191814`): the near-black inversion used for exactly one element per screen — the resume/handoff panel in the hero. Warm to match Studio Ink, so it reads as the same black as the type, not as a coloured panel. Dark mode cannot invert to black, so it lifts to graphite `#23262c` instead.
+- **Solid Action** (`#191814` on `#ffffff` text; inverts to `#eceef2` / `#14161b` in dark): the maximum-contrast chip used for a chosen filter or segmented-control value.
 - **Studio Ink** (`#171511`): primary text, the brand mark, and the primary-button fill.
 - **Ink Muted** (`#575148`): body copy and descriptions.
 - **Ink Soft** (`#6d675e`): metadata, captions, counts, default icon colour, placeholders. Set at the darkest of its three backgrounds because it is the smallest text in the product — never lighten it.
@@ -428,7 +431,7 @@ Buttons, cards, and inputs are **restrained and precise**. Nothing is approximat
 - **Primary:** Studio Ink fill, white text, 44px tall, 20px horizontal padding, bold, with a leading 16px icon. Hover reduces opacity to 90% rather than shifting hue.
 - **Secondary:** White fill, 1px `line` border, muted ink text, same 44px height. Hover moves the border to `line-strong` and the text to full ink. Its selected state (an item already saved) swaps to a sunken fill with a `line-strong` border.
 - **Focus:** `.focus-ring` — a solid 2px `brand` outline at 2px offset, on `:focus-visible`. The system's single focus treatment; buttons, links, inputs, chips, nav items, and cards all use the same class.
-- **On the dark feature panel:** white fill, deep-indigo text, and `.focus-ring-inverse`, because a standard brand outline has too little separation from `#27215f`.
+- **On the dark feature panel:** white fill, near-black text, and `.focus-ring-inverse`, because a standard brand outline has too little separation from `#191814`.
 
 ### Chips
 
@@ -446,19 +449,19 @@ Buttons, cards, and inputs are **restrained and precise**. Nothing is approximat
 - **Border:** 1px `line`, moving to the item's **accent colour** on hover — the hover border is itself an orientation cue, not just a highlight.
 - **Internal Padding:** 18px for course cards, 16px for module cards, 12px on mobile, with an extra 2–4px on top to sit clear of the accent rail.
 - **Structure:** badge row → title (2-line clamp) → optional topic label → description (2–3 line clamp) → `line-soft` divider → footer with metadata and a Details affordance. The footer is pushed down with `mt-auto` so it aligns across a row.
-- **Featured course:** one course in the grid may become a two-column "Recommended next" treatment with an indigo border and larger title. It breaks the uniform grid without turning the whole catalog into marketing cards.
+- **Featured course:** one course in the grid may become a two-column "Recommended next" treatment with a Studio Blue border and larger title. It breaks the uniform grid without turning the whole catalog into marketing cards.
 
 ### Inputs / Fields
 
 - **Style:** White fill, 1px **`line-control`** (not the decorative hairline), 9px radius (12px for the prominent variant), 48px tall (52px prominent), leading search icon in soft ink, semibold input text with a normal-weight placeholder.
-- **Focus:** Border shifts to Studio Indigo and the `.focus-ring` outline appears; the leading icon also shifts to brand colour via `group-focus-within`. Hover moves the border **darker** to `ink-soft` — a control's hover must never reduce its own edge contrast.
+- **Focus:** Border shifts to Studio Blue and the `.focus-ring` outline appears; the leading icon also shifts to brand colour via `group-focus-within`. Hover moves the border **darker** to `ink-soft` — a control's hover must never reduce its own edge contrast.
 - **Prominent variant:** carries the Ambient shadow at rest and a `Ctrl K` key hint in a 7px-radius sunken well, hidden below `sm`.
 - **Suggestions:** a 12px-radius overlay-shadowed listbox, each row a two-column grid of badge + context + title against an "Open" tag, with the active row on a sunken fill. Full combobox semantics — `role="combobox"`, `aria-expanded`, `aria-activedescendant`, arrow/enter/escape keys.
 - **Selects (Refine):** 44px tall, 9px radius, bold muted text, same focus treatment as inputs.
 
 ### Navigation
 
-- **Rail:** White surface against the warm-grey canvas, separated by a right hairline. Items are 9px-radius rows at 13.5–14px, muted ink with soft-ink icons; the active item takes a stronger indigo-tinted fill, weight 650, full ink, and a **brand-coloured icon**. Width transitions over 200ms on `cubic-bezier(.4,0,.2,1)`.
+- **Rail:** White surface against the warm-grey canvas, separated by a right hairline. Items are 9px-radius rows at 13.5–14px, muted ink with soft-ink icons; the active item takes a quiet ink-washed fill with a **brand-blue marker rail** at its left edge, weight 650, full ink, and a **brand-coloured icon** — black for the weight, blue for the "you are here". Width transitions over 200ms on `cubic-bezier(.4,0,.2,1)`.
 - **Brand mark:** a 30px Studio Ink square holding a scales-of-justice glyph, doubling as the collapse toggle, with the wordmark beside it at 20px/700/−0.02em.
 - **Skill areas:** a labelled group below the primary nav, each row a 9px rounded swatch in the area's indexed hue plus a name and a count, capped at 7 with a "Show more" toggle. Collapsed, all swatches show — the compact form fits.
 - **Mobile:** the rail becomes a left drawer over a warm near-black scrim; a fixed bottom tab bar takes over primary navigation with brand-coloured active icons. The bar's item count changes by role.
@@ -474,7 +477,7 @@ The system's signature component. Every catalog item exposes its colour as three
 
 - **Do** keep colour to the two languages: topic for orientation, status for lifecycle. If a new colour need doesn't fit either, the answer is a neutral.
 - **Do** warm the environment before warming the components: canvas, hairlines, shadows, and ink can carry warmth; cards, inputs, and chips stay white and crisp.
-- **Do** use indigo confidently for resume, progress, active navigation, and the single featured-course treatment.
+- **Do** spend ink where the UI needs weight — inversions, structural rules, the chosen filter — and blue where it needs to say "interactive": resume, progress, links, active navigation, and the single featured-course treatment.
 - **Do** pair every status and topic colour with a text label. Colour alone is never the signal.
 - **Do** define new colours as CSS custom properties in `app/globals.css` under both `:root` and `[data-theme="dark"]`, then expose them through `tailwind.config.ts`. Both themes, always, in the same commit.
 - **Do** use `var(--radius-card)` (14px) for containers and `var(--radius-control)` (9px) for controls.

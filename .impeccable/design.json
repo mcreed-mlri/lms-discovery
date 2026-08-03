@@ -6,32 +6,32 @@
     "colorMeta": {
       "studio-blue": {
         "role": "primary",
-        "displayName": "Studio Indigo",
-        "canonical": "#4338ca",
+        "displayName": "Studio Blue",
+        "canonical": "#1a5aa0",
         "tonalRamp": [
-          "oklch(15% 0.19 265)",
-          "oklch(26% 0.19 265)",
-          "oklch(39% 0.19 265)",
-          "oklch(48% 0.19 265)",
-          "oklch(59% 0.17 265)",
-          "oklch(70% 0.13 265)",
-          "oklch(81% 0.08 265)",
-          "oklch(93% 0.03 265)"
+          "oklch(15% 0.13 250)",
+          "oklch(26% 0.13 250)",
+          "oklch(37% 0.13 250)",
+          "oklch(48% 0.13 250)",
+          "oklch(60% 0.13 250)",
+          "oklch(73% 0.13 250)",
+          "oklch(86% 0.13 250)",
+          "oklch(95% 0.13 250)"
         ]
       },
       "signal-blue": {
         "role": "primary",
-        "displayName": "Signal Indigo",
-        "canonical": "#4f46e5",
+        "displayName": "Signal Blue",
+        "canonical": "#1c63b0",
         "tonalRamp": [
-          "oklch(15% 0.24 264)",
-          "oklch(26% 0.24 264)",
-          "oklch(37% 0.24 264)",
-          "oklch(53% 0.24 264)",
-          "oklch(64% 0.20 264)",
-          "oklch(75% 0.14 264)",
-          "oklch(85% 0.08 264)",
-          "oklch(95% 0.03 264)"
+          "oklch(15% 0.14 250)",
+          "oklch(26% 0.14 250)",
+          "oklch(37% 0.14 250)",
+          "oklch(48% 0.14 250)",
+          "oklch(60% 0.14 250)",
+          "oklch(73% 0.14 250)",
+          "oklch(86% 0.14 250)",
+          "oklch(95% 0.14 250)"
         ]
       },
       "studio-grey": {
@@ -154,49 +154,49 @@
           "oklch(97% 0.006 260)"
         ]
       },
-      "hue-1-blue": {
+      "hue-1-steel": {
         "role": "secondary",
-        "displayName": "Skill Hue 1 — Blue",
-        "canonical": "#4f46e5",
+        "displayName": "Skill Hue 1 — Steel",
+        "canonical": "#1a5aa0",
         "tonalRamp": [
-          "oklch(15% 0.24 264)",
-          "oklch(26% 0.24 264)",
-          "oklch(37% 0.24 264)",
-          "oklch(53% 0.24 264)",
-          "oklch(64% 0.20 264)",
-          "oklch(75% 0.14 264)",
-          "oklch(85% 0.08 264)",
-          "oklch(95% 0.03 264)"
+          "oklch(15% 0.13 250)",
+          "oklch(26% 0.13 250)",
+          "oklch(37% 0.13 250)",
+          "oklch(48% 0.13 250)",
+          "oklch(60% 0.13 250)",
+          "oklch(73% 0.13 250)",
+          "oklch(86% 0.13 250)",
+          "oklch(95% 0.13 250)"
         ]
       },
-      "hue-2-violet": {
+      "hue-2-teal": {
         "role": "secondary",
-        "displayName": "Skill Hue 2 — Violet",
-        "canonical": "#7a4fe0",
+        "displayName": "Skill Hue 2 — Teal",
+        "canonical": "#0e7a80",
         "tonalRamp": [
-          "oklch(15% 0.21 295)",
-          "oklch(26% 0.21 295)",
-          "oklch(37% 0.21 295)",
-          "oklch(51% 0.21 295)",
-          "oklch(63% 0.18 295)",
-          "oklch(74% 0.13 295)",
-          "oklch(85% 0.08 295)",
-          "oklch(95% 0.03 295)"
+          "oklch(15% 0.09 195)",
+          "oklch(26% 0.09 195)",
+          "oklch(37% 0.09 195)",
+          "oklch(48% 0.09 195)",
+          "oklch(60% 0.09 195)",
+          "oklch(73% 0.09 195)",
+          "oklch(86% 0.09 195)",
+          "oklch(95% 0.09 195)"
         ]
       },
-      "hue-3-pink": {
+      "hue-3-olive": {
         "role": "secondary",
-        "displayName": "Skill Hue 3 — Pink",
-        "canonical": "#d24d83",
+        "displayName": "Skill Hue 3 — Olive",
+        "canonical": "#5c7326",
         "tonalRamp": [
-          "oklch(15% 0.18 5)",
-          "oklch(26% 0.18 5)",
-          "oklch(37% 0.18 5)",
-          "oklch(48% 0.18 5)",
-          "oklch(58% 0.18 5)",
-          "oklch(72% 0.13 5)",
-          "oklch(85% 0.08 5)",
-          "oklch(95% 0.03 5)"
+          "oklch(15% 0.10 125)",
+          "oklch(26% 0.10 125)",
+          "oklch(37% 0.10 125)",
+          "oklch(48% 0.10 125)",
+          "oklch(60% 0.10 125)",
+          "oklch(73% 0.10 125)",
+          "oklch(86% 0.10 125)",
+          "oklch(95% 0.10 125)"
         ]
       },
       "hue-4-amber": {
@@ -244,19 +244,19 @@
           "oklch(95% 0.03 240)"
         ]
       },
-      "hue-7-indigo": {
+      "hue-7-graphite": {
         "role": "secondary",
-        "displayName": "Skill Hue 7 — Indigo",
-        "canonical": "#5563d6",
+        "displayName": "Skill Hue 7 — Graphite",
+        "canonical": "#414852",
         "tonalRamp": [
-          "oklch(15% 0.17 275)",
-          "oklch(26% 0.17 275)",
-          "oklch(37% 0.17 275)",
-          "oklch(50% 0.17 275)",
-          "oklch(62% 0.15 275)",
-          "oklch(74% 0.11 275)",
-          "oklch(86% 0.07 275)",
-          "oklch(95% 0.03 275)"
+          "oklch(15% 0.015 260)",
+          "oklch(26% 0.015 260)",
+          "oklch(37% 0.015 260)",
+          "oklch(48% 0.015 260)",
+          "oklch(60% 0.015 260)",
+          "oklch(73% 0.015 260)",
+          "oklch(86% 0.015 260)",
+          "oklch(95% 0.015 260)"
         ]
       },
       "hue-8-rust": {
@@ -447,7 +447,7 @@
       "refersTo": "button-primary",
       "description": "The single strongest action on a surface — opening a learning item. Studio Ink pill with a leading icon.",
       "html": "<a class=\"ds-btn-primary\" href=\"#\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 19.5A2.5 2.5 0 0 1 6.5 17H20\"/><path d=\"M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z\"/></svg>Open in Learning Hub</a>",
-      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border: none; border-radius: 999px; background: var(--ink, #171511); color: var(--surface, #ffffff); font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); font-size: 0.875rem; font-weight: 700; text-decoration: none; box-shadow: 0 1px 2px rgba(32,27,19,0.04), 0 6px 18px rgba(32,27,19,0.06); transition: opacity 160ms ease; } .ds-btn-primary:hover { opacity: 0.9; } .ds-btn-primary:focus-visible { outline: 2px solid var(--brand, #4338ca); outline-offset: 2px; }"
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border: none; border-radius: 999px; background: var(--ink, #171511); color: var(--surface, #ffffff); font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); font-size: 0.875rem; font-weight: 700; text-decoration: none; box-shadow: 0 1px 2px rgba(32,27,19,0.04), 0 6px 18px rgba(32,27,19,0.06); transition: opacity 160ms ease; } .ds-btn-primary:hover { opacity: 0.9; } .ds-btn-primary:focus-visible { outline: 2px solid var(--brand, #1a5aa0); outline-offset: 2px; }"
     },
     {
       "name": "Secondary Button",
@@ -455,7 +455,7 @@
       "refersTo": "button-secondary",
       "description": "The paired lower-emphasis action. White pill on a hairline; hover darkens border and text without changing fill.",
       "html": "<button class=\"ds-btn-secondary\" type=\"button\">Add to my list</button>",
-      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px; border: 1px solid var(--line, #e2ded6); border-radius: 999px; background: var(--surface, #ffffff); color: var(--ink-muted, #575148); font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); font-size: 0.875rem; font-weight: 700; cursor: pointer; transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease; } .ds-btn-secondary:hover { border-color: var(--line-strong, #d2ccc1); color: var(--ink, #171511); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--brand, #4338ca); outline-offset: 2px; } .ds-btn-secondary[aria-pressed=\"true\"] { border-color: var(--line-strong, #d2ccc1); background: var(--surface-sunken, #efede7); color: var(--ink, #171511); }"
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px; border: 1px solid var(--line, #e2ded6); border-radius: 999px; background: var(--surface, #ffffff); color: var(--ink-muted, #575148); font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); font-size: 0.875rem; font-weight: 700; cursor: pointer; transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease; } .ds-btn-secondary:hover { border-color: var(--line-strong, #d2ccc1); color: var(--ink, #171511); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--brand, #1a5aa0); outline-offset: 2px; } .ds-btn-secondary[aria-pressed=\"true\"] { border-color: var(--line-strong, #d2ccc1); background: var(--surface-sunken, #efede7); color: var(--ink, #171511); }"
     },
     {
       "name": "Content Card",
@@ -463,7 +463,7 @@
       "refersTo": "card",
       "description": "The catalog's core unit. Flat white on a hairline with a 4px topic-colour rail across the top; hover moves the border to the accent colour.",
       "html": "<a class=\"ds-card\" href=\"#\" style=\"--accent: #3a8ec9; --accent-tint: #e7f3fb; --accent-ink: #2b6c9b;\"><span class=\"ds-card-badges\"><span class=\"ds-badge-type\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 19.5A2.5 2.5 0 0 1 6.5 17H20\"/><path d=\"M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z\"/></svg>Course</span></span><h3 class=\"ds-card-title\">Eviction Defense: The First 48 Hours</h3><p class=\"ds-card-desc\">Five short topics for the first moments after a notice to quit: deadlines, defenses, service, and the first court ask.</p><span class=\"ds-card-foot\"><span class=\"ds-card-meta\">Housing, 12 min</span><span class=\"ds-details\">Details <svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></span></span></a>",
-      "css": ".ds-card { position: relative; display: flex; flex-direction: column; overflow: hidden; min-height: 252px; padding: 20px 18px 18px; border: 1px solid var(--line, #e2ded6); border-radius: 14px; background: var(--surface, #ffffff); box-shadow: 0 1px 2px rgba(32,27,19,0.04); text-decoration: none; font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); transition: border-color 200ms ease-out, background-color 200ms ease-out, box-shadow 200ms ease-out; } .ds-card::before { content: \"\"; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--accent); opacity: 0.85; } .ds-card:hover { border-color: var(--accent); background: var(--hover-tint, #f7f6f2); box-shadow: 0 1px 2px rgba(32,27,19,0.04), 0 6px 18px rgba(32,27,19,0.06); } .ds-card:focus-visible { outline: 2px solid var(--brand, #4338ca); outline-offset: 2px; } .ds-card-badges { display: flex; gap: 8px; margin-bottom: 14px; } .ds-card-title { margin: 0; color: var(--ink, #171511); font-size: 1.18rem; font-weight: 750; letter-spacing: -0.012em; line-height: 1.2; } .ds-card-desc { margin: 10px 0 0; font-family: 'Segoe UI Variable', 'Segoe UI', Aptos, ui-sans-serif, system-ui, sans-serif; color: var(--ink-muted, #575148); font-size: 0.9rem; font-weight: 400; line-height: 1.58; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; } .ds-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line-soft, #ece8df); } .ds-card-meta { color: var(--ink-soft, #6d675e); font-size: 0.82rem; font-weight: 600; font-variant-numeric: tabular-nums; } .ds-details { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: 1px solid var(--line, #e2ded6); border-radius: 999px; background: var(--surface, #ffffff); color: var(--ink-muted, #575148); font-size: 0.75rem; font-weight: 600; box-shadow: 0 1px 2px rgba(32,27,19,0.04); transition: border-color 200ms ease-out, color 200ms ease-out; } .ds-card:hover .ds-details { border-color: var(--line-strong, #d2ccc1); color: var(--ink, #171511); } .ds-card:hover .ds-details svg { transform: translateX(2px); } .ds-details svg { transition: transform 200ms ease-out; }"
+      "css": ".ds-card { position: relative; display: flex; flex-direction: column; overflow: hidden; min-height: 252px; padding: 20px 18px 18px; border: 1px solid var(--line, #e2ded6); border-radius: 14px; background: var(--surface, #ffffff); box-shadow: 0 1px 2px rgba(32,27,19,0.04); text-decoration: none; font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); transition: border-color 200ms ease-out, background-color 200ms ease-out, box-shadow 200ms ease-out; } .ds-card::before { content: \"\"; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--accent); opacity: 0.85; } .ds-card:hover { border-color: var(--accent); background: var(--hover-tint, #f7f6f2); box-shadow: 0 1px 2px rgba(32,27,19,0.04), 0 6px 18px rgba(32,27,19,0.06); } .ds-card:focus-visible { outline: 2px solid var(--brand, #1a5aa0); outline-offset: 2px; } .ds-card-badges { display: flex; gap: 8px; margin-bottom: 14px; } .ds-card-title { margin: 0; color: var(--ink, #171511); font-size: 1.18rem; font-weight: 750; letter-spacing: -0.012em; line-height: 1.2; } .ds-card-desc { margin: 10px 0 0; font-family: 'Segoe UI Variable', 'Segoe UI', Aptos, ui-sans-serif, system-ui, sans-serif; color: var(--ink-muted, #575148); font-size: 0.9rem; font-weight: 400; line-height: 1.58; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; } .ds-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line-soft, #ece8df); } .ds-card-meta { color: var(--ink-soft, #6d675e); font-size: 0.82rem; font-weight: 600; font-variant-numeric: tabular-nums; } .ds-details { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: 1px solid var(--line, #e2ded6); border-radius: 999px; background: var(--surface, #ffffff); color: var(--ink-muted, #575148); font-size: 0.75rem; font-weight: 600; box-shadow: 0 1px 2px rgba(32,27,19,0.04); transition: border-color 200ms ease-out, color 200ms ease-out; } .ds-card:hover .ds-details { border-color: var(--line-strong, #d2ccc1); color: var(--ink, #171511); } .ds-card:hover .ds-details svg { transform: translateX(2px); } .ds-details svg { transition: transform 200ms ease-out; }"
     },
     {
       "name": "Search Input (Prominent)",
@@ -471,7 +471,7 @@
       "refersTo": "input-search-prominent",
       "description": "The hero and command-palette search field. The one input that carries a resting Ambient shadow, with a Ctrl K key hint in a sunken well.",
       "html": "<span class=\"ds-search\"><svg class=\"ds-search-icon\" width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m20 20-3.5-3.5\"/></svg><input class=\"ds-search-input\" type=\"search\" placeholder=\"Search the library - ethics, intake, first appearance...\" aria-label=\"Search courses, modules, paths, or topics\"><span class=\"ds-search-key\" aria-hidden=\"true\">Ctrl K</span></span>",
-      "css": ".ds-search { position: relative; display: block; width: 100%; font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); } .ds-search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--ink-soft, #6d675e); pointer-events: none; transition: color 160ms ease; } .ds-search:focus-within .ds-search-icon { color: var(--brand, #4338ca); } .ds-search-input { width: 100%; height: 52px; padding: 0 64px 0 52px; border: 1px solid var(--line-control, #827b70); border-radius: 12px; background: var(--surface, #ffffff); color: var(--ink, #171511); font-size: 17px; font-weight: 600; outline: none; box-shadow: 0 1px 2px rgba(32,27,19,0.04), 0 6px 18px rgba(32,27,19,0.06); transition: border-color 160ms ease, box-shadow 160ms ease; } .ds-search-input::placeholder { color: var(--ink-soft, #6d675e); font-weight: 400; opacity: 1; } .ds-search-input:hover { border-color: var(--ink-soft, #6d675e); } .ds-search-input:focus { border-color: var(--brand, #4338ca); outline: 2px solid var(--brand, #4338ca); outline-offset: 2px; } .ds-search-key { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); padding: 4px 8px; border: 1px solid var(--line, #e2ded6); border-radius: 7px; background: var(--surface-sunken, #efede7); color: var(--ink-soft, #6d675e); font-size: 12px; font-weight: 500; pointer-events: none; }"
+      "css": ".ds-search { position: relative; display: block; width: 100%; font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); } .ds-search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--ink-soft, #6d675e); pointer-events: none; transition: color 160ms ease; } .ds-search:focus-within .ds-search-icon { color: var(--brand, #1a5aa0); } .ds-search-input { width: 100%; height: 52px; padding: 0 64px 0 52px; border: 1px solid var(--line-control, #827b70); border-radius: 12px; background: var(--surface, #ffffff); color: var(--ink, #171511); font-size: 17px; font-weight: 600; outline: none; box-shadow: 0 1px 2px rgba(32,27,19,0.04), 0 6px 18px rgba(32,27,19,0.06); transition: border-color 160ms ease, box-shadow 160ms ease; } .ds-search-input::placeholder { color: var(--ink-soft, #6d675e); font-weight: 400; opacity: 1; } .ds-search-input:hover { border-color: var(--ink-soft, #6d675e); } .ds-search-input:focus { border-color: var(--brand, #1a5aa0); outline: 2px solid var(--brand, #1a5aa0); outline-offset: 2px; } .ds-search-key { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); padding: 4px 8px; border: 1px solid var(--line, #e2ded6); border-radius: 7px; background: var(--surface-sunken, #efede7); color: var(--ink-soft, #6d675e); font-size: 12px; font-weight: 500; pointer-events: none; }"
     },
     {
       "name": "Type Badge",
@@ -494,8 +494,8 @@
       "kind": "nav",
       "refersTo": "nav-item",
       "description": "A row in the left rail. Active state takes a stronger indigo-tinted fill, weight 650, full ink, and a brand-coloured icon.",
-      "html": "<nav class=\"ds-rail\" aria-label=\"Primary\"><a class=\"ds-rail-item ds-rail-item--active\" href=\"#\" aria-current=\"page\"><svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 10.5 12 3l9 7.5\"/><path d=\"M5 9.5V21h14V9.5\"/></svg><span>Home</span></a><a class=\"ds-rail-item\" href=\"#\"><svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/></svg><span>Browse</span></a><span class=\"ds-rail-head\">Skill areas</span><a class=\"ds-rail-area\" href=\"#\"><span class=\"ds-rail-swatch\" style=\"background:#7a4fe0\"></span><span class=\"ds-rail-area-name\">Legal Writing</span><span class=\"ds-rail-count\">12</span></a></nav>",
-      "css": ".ds-rail { display: flex; flex-direction: column; gap: 3px; width: 248px; padding: 16px; border-right: 1px solid var(--line, #e2ded6); background: var(--surface, #ffffff); font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); } .ds-rail-item { display: flex; align-items: center; gap: 12px; padding: 9px 11px; border-radius: 9px; color: var(--ink-muted, #575148); font-size: 14px; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 160ms ease, color 160ms ease; } .ds-rail-item svg { color: var(--ink-soft, #6d675e); flex-shrink: 0; } .ds-rail-item:hover { background: var(--surface-sunken, #efede7); } .ds-rail-item:focus-visible { outline: 2px solid var(--brand, #4338ca); outline-offset: 2px; } .ds-rail-item--active { background: var(--surface-sunken, #efede7); color: var(--ink, #171511); font-weight: 650; } .ds-rail-item--active svg { color: var(--brand, #4338ca); } .ds-rail-head { margin: 26px 0 12px; padding: 0 11px; color: var(--ink-soft, #6d675e); font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; } .ds-rail-area { display: flex; align-items: center; gap: 11px; padding: 7px 11px; border-radius: 8px; color: var(--ink-muted, #575148); font-size: 13.5px; text-decoration: none; transition: background-color 160ms ease; } .ds-rail-area:hover { background: var(--surface-sunken, #efede7); } .ds-rail-swatch { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; } .ds-rail-area-name { flex: 1; } .ds-rail-count { color: var(--ink-soft, #6d675e); font-size: 12px; font-variant-numeric: tabular-nums; }"
+      "html": "<nav class=\"ds-rail\" aria-label=\"Primary\"><a class=\"ds-rail-item ds-rail-item--active\" href=\"#\" aria-current=\"page\"><svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 10.5 12 3l9 7.5\"/><path d=\"M5 9.5V21h14V9.5\"/></svg><span>Home</span></a><a class=\"ds-rail-item\" href=\"#\"><svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/></svg><span>Browse</span></a><span class=\"ds-rail-head\">Skill areas</span><a class=\"ds-rail-area\" href=\"#\"><span class=\"ds-rail-swatch\" style=\"background:#0e7a80\"></span><span class=\"ds-rail-area-name\">Legal Writing</span><span class=\"ds-rail-count\">12</span></a></nav>",
+      "css": ".ds-rail { display: flex; flex-direction: column; gap: 3px; width: 248px; padding: 16px; border-right: 1px solid var(--line, #e2ded6); background: var(--surface, #ffffff); font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); } .ds-rail-item { display: flex; align-items: center; gap: 12px; padding: 9px 11px; border-radius: 9px; color: var(--ink-muted, #575148); font-size: 14px; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 160ms ease, color 160ms ease; } .ds-rail-item svg { color: var(--ink-soft, #6d675e); flex-shrink: 0; } .ds-rail-item:hover { background: var(--surface-sunken, #efede7); } .ds-rail-item:focus-visible { outline: 2px solid var(--brand, #1a5aa0); outline-offset: 2px; } .ds-rail-item--active { background: var(--surface-sunken, #efede7); color: var(--ink, #171511); font-weight: 650; } .ds-rail-item--active svg { color: var(--brand, #1a5aa0); } .ds-rail-head { margin: 26px 0 12px; padding: 0 11px; color: var(--ink-soft, #6d675e); font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; } .ds-rail-area { display: flex; align-items: center; gap: 11px; padding: 7px 11px; border-radius: 8px; color: var(--ink-muted, #575148); font-size: 13.5px; text-decoration: none; transition: background-color 160ms ease; } .ds-rail-area:hover { background: var(--surface-sunken, #efede7); } .ds-rail-swatch { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; } .ds-rail-area-name { flex: 1; } .ds-rail-count { color: var(--ink-soft, #6d675e); font-size: 12px; font-variant-numeric: tabular-nums; }"
     },
     {
       "name": "Segmented Control",
@@ -503,7 +503,7 @@
       "refersTo": "segment-track",
       "description": "The catalog's type filter. A sunken track holding 36px buttons; the active button inverts to Studio Ink with a 1px inner white highlight.",
       "html": "<div class=\"ds-segment\" role=\"group\" aria-label=\"Filter by type\"><button class=\"ds-segment-btn ds-segment-btn--active\" type=\"button\" aria-pressed=\"true\">All</button><button class=\"ds-segment-btn\" type=\"button\" aria-pressed=\"false\">Courses</button><button class=\"ds-segment-btn\" type=\"button\" aria-pressed=\"false\">Modules</button><button class=\"ds-segment-btn\" type=\"button\" aria-pressed=\"false\">Paths</button></div>",
-      "css": ".ds-segment { display: inline-flex; padding: 4px; border: 1px solid var(--line, #e2ded6); border-radius: 9px; background: var(--surface-sunken, #efede7); font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); } .ds-segment-btn { height: 36px; padding: 0 16px; border: none; border-radius: 8px; background: transparent; color: var(--ink-muted, #575148); font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: background-color 200ms ease-out, color 200ms ease-out; } .ds-segment-btn:hover { background: var(--surface, #ffffff); color: var(--ink, #171511); } .ds-segment-btn:focus-visible { outline: 2px solid var(--brand, #4338ca); outline-offset: 2px; } .ds-segment-btn--active, .ds-segment-btn--active:hover { background: var(--ink, #171511); color: var(--surface, #ffffff); box-shadow: 0 1px 2px rgba(32,27,19,0.04), inset 0 1px 0 rgba(255,255,255,0.08); }"
+      "css": ".ds-segment { display: inline-flex; padding: 4px; border: 1px solid var(--line, #e2ded6); border-radius: 9px; background: var(--surface-sunken, #efede7); font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); } .ds-segment-btn { height: 36px; padding: 0 16px; border: none; border-radius: 8px; background: transparent; color: var(--ink-muted, #575148); font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: background-color 200ms ease-out, color 200ms ease-out; } .ds-segment-btn:hover { background: var(--surface, #ffffff); color: var(--ink, #171511); } .ds-segment-btn:focus-visible { outline: 2px solid var(--brand, #1a5aa0); outline-offset: 2px; } .ds-segment-btn--active, .ds-segment-btn--active:hover { background: var(--ink, #171511); color: var(--surface, #ffffff); box-shadow: 0 1px 2px rgba(32,27,19,0.04), inset 0 1px 0 rgba(255,255,255,0.08); }"
     },
     {
       "name": "Feature Panel",
@@ -511,12 +511,12 @@
       "refersTo": "feature-panel",
       "description": "The near-black inversion used for exactly one element per screen — the resume / Brightspace handoff card in the hero. Its action button and focus ring both invert to white.",
       "html": "<aside class=\"ds-feature\" aria-label=\"Resume learning\"><span class=\"ds-feature-row\"><span class=\"ds-feature-text\"><span class=\"ds-feature-eyebrow\">HOUSING · 12 MIN LEFT</span><span class=\"ds-feature-title\">Eviction Defense: The First 48 Hours</span></span><a class=\"ds-feature-action\" href=\"#\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M8 5v14l11-7z\"/></svg><span>Resume</span></a></span><span class=\"ds-feature-track\"><span class=\"ds-feature-fill\" style=\"width:45%\"></span></span></aside>",
-      "css": ".ds-feature { display: block; max-width: 352px; padding: 12px 16px; border-radius: 12px; background: var(--feature-surface, #171511); font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); box-shadow: 0 1px 2px rgba(32,27,19,0.04), 0 6px 18px rgba(32,27,19,0.06); } .ds-feature-row { display: flex; align-items: center; gap: 12px; } .ds-feature-text { display: block; min-width: 0; flex: 1; } .ds-feature-eyebrow { display: block; color: var(--feature-muted, rgba(255,255,255,0.55)); font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; } .ds-feature-title { display: block; margin-top: 2px; color: var(--feature-ink, #ffffff); font-size: 15px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .ds-feature-action { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 1px solid var(--feature-action-border, transparent); border-radius: 8px; background: var(--feature-action-bg, #ffffff); color: var(--feature-action-ink, #171511); font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.14); transition: opacity 160ms ease; } .ds-feature-action:hover { opacity: 0.9; } .ds-feature-action:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; } .ds-feature-track { display: block; height: 4px; margin-top: 8px; border-radius: 999px; background: var(--feature-track, rgba(255,255,255,0.14)); overflow: hidden; } .ds-feature-fill { display: block; height: 100%; border-radius: 999px; background: var(--brand-fill, #4f46e5); transition: width 500ms ease-out; }"
+      "css": ".ds-feature { display: block; max-width: 352px; padding: 12px 16px; border-radius: 12px; background: var(--feature-surface, #191814); font-family: var(--font-sans, Geist, 'Segoe UI Variable', system-ui, sans-serif); box-shadow: 0 1px 2px rgba(32,27,19,0.04), 0 6px 18px rgba(32,27,19,0.06); } .ds-feature-row { display: flex; align-items: center; gap: 12px; } .ds-feature-text { display: block; min-width: 0; flex: 1; } .ds-feature-eyebrow { display: block; color: var(--feature-muted, rgba(255,255,255,0.55)); font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; } .ds-feature-title { display: block; margin-top: 2px; color: var(--feature-ink, #ffffff); font-size: 15px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .ds-feature-action { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 1px solid var(--feature-action-border, transparent); border-radius: 8px; background: var(--feature-action-bg, #ffffff); color: var(--feature-action-ink, #191814); font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.14); transition: opacity 160ms ease; } .ds-feature-action:hover { opacity: 0.9; } .ds-feature-action:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; } .ds-feature-track { display: block; height: 4px; margin-top: 8px; border-radius: 999px; background: var(--feature-track, rgba(255,255,255,0.14)); overflow: hidden; } .ds-feature-fill { display: block; height: 100%; border-radius: 999px; background: var(--brand-fill, #1c63b0); transition: width 500ms ease-out; }"
     }
   ],
   "narrative": {
     "northStar": "The Studio",
-    "overview": "The Studio is a working surface, not a showpiece. A warm-grey canvas holds white cards on hairline borders; typography carries the hierarchy; and colour is withheld until it has something to say. The name comes from the implementation itself — Studio Indigo, the Studio canvas, StudioShell, StudioRail — and this document keeps that vocabulary rather than inventing a new one.\n\nThe system's discipline is a single decision applied everywhere: colour is a signal, never decoration. It speaks in exactly two languages that never mix. Topic colour answers \"which part of the curriculum am I in?\" and appears only on small accents — a card's top rail, a parent-course pill, an icon well, a swatch in the rail. Status colour answers \"what state is this content in?\" and always arrives with a text label beside it. The page itself stays silent: flat warm-grey field, no gradients, no wallpaper, no illustration.\n\nIts warmth is behavioural rather than chromatic. The surface temperature is deliberately cool and stays that way, but the system is built around someone under real pressure — an advocate with a hearing in an hour. So it never makes them decode a colour, never animates for its own sake, never rewards them for showing up. It labels things, keeps numbers tabular so they scan, dims what is secondary, and gets out of the way. Restraint is how this system is kind.",
+    "overview": "The Studio is a working surface, not a showpiece. A warm-grey canvas holds white cards on hairline borders; typography carries the hierarchy; and colour is withheld until it has something to say. The name comes from the implementation itself — Studio Blue, the Studio canvas, StudioShell, StudioRail — and this document keeps that vocabulary rather than inventing a new one.\n\nThe system's discipline is a single decision applied everywhere: colour is a signal, never decoration. It speaks in exactly two languages that never mix. Topic colour answers \"which part of the curriculum am I in?\" and appears only on small accents — a card's top rail, a parent-course pill, an icon well, a swatch in the rail. Status colour answers \"what state is this content in?\" and always arrives with a text label beside it. The page itself stays silent: flat warm-grey field, no gradients, no wallpaper, no illustration.\n\nIts warmth is behavioural rather than chromatic. The surface temperature is deliberately cool and stays that way, but the system is built around someone under real pressure — an advocate with a hearing in an hour. So it never makes them decode a colour, never animates for its own sake, never rewards them for showing up. It labels things, keeps numbers tabular so they scan, dims what is secondary, and gets out of the way. Restraint is how this system is kind.",
     "keyCharacteristics": [
       "One typeface (Geist) doing every job, from 9px eyebrow to 2.15rem display",
       "Warm-grey canvas (#f7f6f2) with crisp white cards on 1px hairlines",
