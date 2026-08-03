@@ -116,7 +116,7 @@ export function CatalogSection({
           {seeAllHref && (
             <Link
               href={seeAllHref}
-              className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3.5 py-2 text-xs font-bold text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
+              className="group inline-flex shrink-0 items-center gap-1.5 rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3.5 py-2 text-xs font-bold text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
             >
               See all {catalogTotal}
               <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -138,7 +138,7 @@ export function CatalogSection({
           <FilterIcon className="h-4 w-4" />
           Refine
           {advancedFilterCount > 0 && (
-            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[color:var(--ink)] px-1.5 text-[11px] font-bold text-[color:var(--surface)]">
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-[6px] bg-[color:var(--brand)] px-1.5 text-[11px] font-bold text-white">
               {advancedFilterCount}
             </span>
           )}
@@ -166,7 +166,7 @@ export function CatalogSection({
           <button
             type="button"
             onClick={resetAllFilters}
-            className="inline-flex h-9 items-center gap-2 rounded-full border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--ink)] focus-ring"
+            className="inline-flex h-9 items-center gap-2 rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--brand)] focus-ring"
           >
             Skill: {getSkill(skillFilter)?.name}
             <CloseIcon className="h-3 w-3" />
@@ -268,11 +268,20 @@ export function CatalogSection({
           grows with the curriculum. */}
       {showGrid ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {shownItems.map((item) =>
+          {shownItems.map((item, index) =>
             item.type === "PATH" ? (
               <PathCard key={`${item.type}-${item.id}`} item={item} onOpen={onOpenItem} />
             ) : (
-              <ContentCard key={`${item.type}-${item.id}`} item={item} onOpen={onOpenItem} />
+              <ContentCard
+                key={`${item.type}-${item.id}`}
+                item={item}
+                onOpen={onOpenItem}
+                variant={
+                  index === shownItems.findIndex((entry) => entry.type === "COURSE")
+                    ? "featured"
+                    : "standard"
+                }
+              />
             ),
           )}
         </div>
@@ -297,7 +306,7 @@ export function CatalogSection({
             {noResultSuggestions.map((suggestion) => (
               <button
                 key={suggestion}
-                className="rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-sm font-semibold text-[color:var(--ink-muted)] shadow-sm transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
+                className="rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-sm font-semibold text-[color:var(--ink-muted)] shadow-sm transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
                 type="button"
                 onClick={() => {
                   setQuery(suggestion);

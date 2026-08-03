@@ -1,22 +1,22 @@
 ---
 name: The Studio
-description: A calm cool-grey learning studio where colour is never decoration — only orientation or status.
+description: A calm warm-grey learning studio where colour is never decoration — only orientation or status.
 colors:
-  studio-blue: "#1c3fb0"
-  signal-blue: "#2a5bff"
-  studio-blue-tint: "#eaf0ff"
-  studio-grey: "#f5f6f8"
-  panel: "#eef0f4"
+  studio-blue: "#4338ca"
+  signal-blue: "#4f46e5"
+  studio-blue-tint: "#eef2ff"
+  studio-grey: "#f7f6f2"
+  panel: "#f0eee8"
   surface: "#ffffff"
-  surface-sunken: "#eef0f4"
-  feature-surface: "#14161b"
-  studio-ink: "#14161b"
-  ink-muted: "#565c69"
-  ink-soft: "#6a6d77"
-  line: "#e4e7ed"
-  line-strong: "#d3d8e0"
-  line-soft: "#edeff3"
-  line-control: "#83868c"
+  surface-sunken: "#efede7"
+  feature-surface: "#27215f"
+  studio-ink: "#171511"
+  ink-muted: "#575148"
+  ink-soft: "#6d675e"
+  line: "#e2ded6"
+  line-strong: "#d2ccc1"
+  line-soft: "#ece8df"
+  line-control: "#827b70"
   hue-1-blue: "#2a5bff"
   hue-1-blue-tint: "#e9f0ff"
   hue-1-blue-ink: "#2a5bff"
@@ -259,16 +259,16 @@ components:
 
 **Creative North Star: "The Studio"**
 
-The Studio is a working surface, not a showpiece. A cool grey canvas holds white cards on hairline borders; typography carries the hierarchy; and colour is withheld until it has something to say. The name comes from the implementation itself — Studio Blue, the Studio canvas, `StudioShell`, `StudioRail` — and this document keeps that vocabulary rather than inventing a new one.
+The Studio is a working surface, not a showpiece. A warm-grey paper canvas holds crisp white cards on hairline borders; typography carries the hierarchy; and colour is withheld until it has something to say. The name comes from the implementation itself — Studio Indigo, the Studio canvas, `StudioShell`, `StudioRail` — and this document keeps that vocabulary rather than inventing a new one.
 
-The system's discipline is a single decision applied everywhere: **colour is a signal, never decoration.** It speaks in exactly two languages that never mix. _Topic colour_ answers "which part of the curriculum am I in?" and appears only on small accents — a card's top rail, a parent-course pill, an icon well, a swatch in the rail. _Status colour_ answers "what state is this content in?" and always arrives with a text label beside it. The page itself stays silent: flat grey field, no gradients, no wallpaper, no illustration.
+The system's discipline is a single decision applied everywhere: **colour is a signal, never decoration.** It speaks in exactly two languages that never mix. _Topic colour_ answers "which part of the curriculum am I in?" and appears only on small accents — a card's top rail, a parent-course pill, an icon well, a swatch in the rail. _Status colour_ answers "what state is this content in?" and always arrives with a text label beside it. The page itself stays silent: flat warm-grey field, no gradients, no wallpaper, no illustration.
 
-Its warmth is behavioural rather than chromatic. The surface temperature is deliberately cool and stays that way, but the system is built around someone under real pressure — an advocate with a hearing in an hour. So it never makes them decode a colour, never animates for its own sake, never rewards them for showing up. It labels things, keeps numbers tabular so they scan, dims what is secondary, and gets out of the way. Restraint is how this system is kind.
+Its warmth is both behavioural and material. The system is built around someone under real pressure — an advocate with a hearing in an hour, or a tired lawyer trying not to feel fried by another screen. So the canvas has a slight paper warmth and the ink is a warmer charcoal. But cards are true white, the resume/progress system uses confident indigo, and the palette never drifts into cream, tan, or cozy decoration. It labels things, keeps numbers tabular so they scan, dims what is secondary, and gets out of the way. Restraint is how this system is kind.
 
 **Key Characteristics:**
 
 - One typeface (Geist) doing every job, from 9px eyebrow to 2.15rem display
-- Cool grey canvas (#f5f6f8) with pure white cards on 1px hairlines
+- Warm-grey canvas (#f7f6f2) with crisp white cards on 1px hairlines
 - Two independent colour languages: topic (orientation) and status (lifecycle), never blended
 - Eight matched hues at deliberately identical saturation, assigned by index so a grid reads as one family
 - Flat at rest; depth is a response to interaction, not a resting state
@@ -277,13 +277,13 @@ Its warmth is behavioural rather than chromatic. The surface temperature is deli
 
 ## Colors
 
-A cool, low-chroma neutral base with a single blue brand voice, plus two strictly separated signal palettes drawn from one eight-hue family.
+A warm, low-chroma neutral base with a single blue brand voice, plus two strictly separated signal palettes drawn from one eight-hue family. The warmth belongs to the environment — canvas, lines, shadows, and charcoal ink — not to decorative fills.
 
 ### Primary
 
-- **Studio Blue** (`#1c3fb0`): The brand voice at text weight — links, active nav icons, the avatar fill, the "Show more" affordance. Deep enough to read as body-adjacent text on white.
-- **Signal Blue** (`#2a5bff`): The brighter sibling, used only for _fills_ — progress bars, the training-hours ring, weekly-activity squares, the accent stroke above an action section. Never used for running text.
-- **Studio Blue Tint** (`#eaf0ff`): The pale wash behind "Continue"-style chips and next-up status pills.
+- **Studio Indigo** (`#4338ca`): The brand voice at text weight — links, active nav icons, the avatar fill, active navigation, and the "Show more" affordance. Deep enough to read as body-adjacent text on white.
+- **Signal Indigo** (`#4f46e5`): The brighter sibling, used only for _fills_ — progress bars, the training-hours ring, weekly-activity squares, featured-card borders, and the accent stroke above an action section. Never used for running text.
+- **Studio Indigo Tint** (`#eef2ff`): The pale wash behind next-up and active navigation states.
 
 ### Secondary
 
@@ -298,22 +298,24 @@ The **topic families** (Court Skills, Client Communication, Ethics, Legal Resear
 The **status palette**, kept deliberately distinct in role from topic colour even where it reuses a hue value:
 
 - **Green** (`#179a72`, ink `#0f6e51`): in progress, and completed.
-- **Signal Blue** (`#2a5bff`): next up.
+- **Signal Indigo** (`#4f46e5`): next up.
 - **Amber** (`#c8791b`, ink `#99610f`): new, and updated.
 - **Alert Red** (`#c8493b`, tint `#fbe9e6`, ink `#9c3528`): law changed or process changed — the only red in the system, and the only colour reserved for a substantive legal-content warning.
 - **Grey** (`#8b909d`): later, not started, inactive.
 
 ### Neutral
 
-- **Studio Grey** (`#f5f6f8`): the page canvas. Flat, cool, unbroken.
-- **Panel / Sunken** (`#eef0f4`): section frames, segmented-control tracks, progress tracks, type badges, active-nav backgrounds.
-- **Surface** (`#ffffff`): every card and raised panel. Pure white, no tint.
-- **Feature Surface** (`#14161b`): the near-black inversion used for exactly one element per screen — the resume/handoff panel in the hero.
-- **Studio Ink** (`#14161b`): primary text, the brand mark, and the primary-button fill.
-- **Ink Muted** (`#565c69`): body copy and descriptions.
-- **Ink Soft** (`#6a6d77`): metadata, captions, counts, default icon colour, placeholders. Set at the darkest of its three backgrounds (sunken, 4.53:1) because it is the smallest text in the product — never lighten it.
-- **Line** (`#e4e7ed`) / **Line Strong** (`#d3d8e0`) / **Line Soft** (`#edeff3`): the hairline vocabulary — resting border, hover border, and inner divider respectively. Decorative separation only.
-- **Line Control** (`#83868c`): the border of an input, select, or textarea. Visibly darker than the hairlines by necessity: a control's edge is information required to identify it, so WCAG 1.4.11 wants 3:1 (this lands at 3.65:1) where the hairlines sit near 1.2:1.
+- **Studio Grey** (`#f7f6f2`): the page canvas. Flat, warm-grey, unbroken.
+- **Panel** (`#f0eee8`): section frames and quiet bands.
+- **Panel / Sunken** (`#efede7`): segmented-control tracks, progress tracks, type badges, active-nav backgrounds.
+- **Surface** (`#ffffff`): card and control surfaces. True white against the warm canvas, not cream.
+- **Surface Raised** (`#ffffff`): raised panels and cards. Same true-white plane; warmth comes from the page, borders, and shadows.
+- **Feature Surface** (`#27215f`): the deep indigo inversion used for exactly one element per screen — the resume/handoff panel in the hero.
+- **Studio Ink** (`#171511`): primary text, the brand mark, and the primary-button fill.
+- **Ink Muted** (`#575148`): body copy and descriptions.
+- **Ink Soft** (`#6d675e`): metadata, captions, counts, default icon colour, placeholders. Set at the darkest of its three backgrounds because it is the smallest text in the product — never lighten it.
+- **Line** (`#e2ded6`) / **Line Strong** (`#d2ccc1`) / **Line Soft** (`#ece8df`): the hairline vocabulary — resting border, hover border, and inner divider respectively. Decorative separation only.
+- **Line Control** (`#827b70`): the border of an input, select, or textarea. Visibly darker than the hairlines by necessity: a control's edge is information required to identify it, so WCAG 1.4.11 wants 3:1 where the hairlines sit near decorative contrast.
 
 ### Named Rules
 
@@ -382,17 +384,17 @@ Breakpoints are Tailwind defaults: `sm` 640px, `md` 768px, `lg` 1024px, `xl` 128
 
 ## Elevation & Depth
 
-**Flat at rest; depth is a response, not a state.** In-page surfaces sit on a 1px hairline with a shadow so faint it reads as a seam (`0 1px 2px rgba(20,22,27,0.04)`). On hover a card gains its border-strong colour, a whisper of tint, and a soft ambient shadow — the depth arrives _because_ the user pointed at it. Default cards do not translate; only `.interactive-tile` lifts, and only by 1px.
+**Flat at rest; depth is a response, not a state.** In-page surfaces sit on a 1px hairline with a shadow so faint it reads as a seam (`0 1px 2px rgba(32,27,19,0.04)`). On hover a card gains its border-strong colour, a whisper of tint, and a soft ambient shadow — the depth arrives _because_ the user pointed at it. Default cards do not translate; only `.interactive-tile` lifts, and only by 1px.
 
 Overlays are the deliberate exception. Modals, the global search dialog, and the mobile drawer float freely on the heaviest shadow plus a `backdrop-blur-sm` scrim over near-black at 34–40% opacity. They are a different plane, and they are allowed to look like it.
 
-Depth otherwise comes from **tonal layering**, not shadow: sunken (`#eef0f4`) for tracks and segmented-control wells, canvas (`#f5f6f8`) for the page, surface (`#ffffff`) for cards. Three tones, three planes.
+Depth otherwise comes from **tonal layering**, not shadow: sunken (`#efede7`) for tracks and segmented-control wells, canvas (`#f7f6f2`) for the page, surface (`#ffffff`) for cards and controls. Three tones, three planes.
 
 ### Shadow Vocabulary
 
-- **Seam** (`box-shadow: 0 1px 2px rgba(20,22,27,0.04)`): the resting state of every card and control. Barely visible by design.
-- **Ambient** (`box-shadow: 0 1px 2px rgba(20,22,27,0.04), 0 6px 18px rgba(20,22,27,0.06)`): hover on cards and tiles, and the resting state of the prominent search field and hero panels.
-- **Overlay** (`box-shadow: 0 8px 24px rgba(20,22,27,0.1), 0 2px 6px rgba(20,22,27,0.06)`): modals, dialogs, suggestion dropdowns, the mobile drawer, the skip link.
+- **Seam** (`box-shadow: 0 1px 2px rgba(32,27,19,0.04)`): the resting state of every card and control. Barely visible by design.
+- **Ambient** (`box-shadow: 0 1px 2px rgba(32,27,19,0.04), 0 6px 18px rgba(32,27,19,0.06)`): hover on cards and tiles, and the resting state of the prominent search field and hero panels.
+- **Overlay** (`box-shadow: 0 8px 24px rgba(32,27,19,0.1), 0 2px 6px rgba(32,27,19,0.06)`): modals, dialogs, suggestion dropdowns, the mobile drawer, the skip link.
 
 Dark mode redefines all three with black at 0.2–0.38 alpha rather than reusing the light values.
 
@@ -410,7 +412,7 @@ Focus is **not** part of the depth system. It is a solid 2px `brand` outline at 
 
 A **two-radius system** with a pill exception. Containers round at 14px (`--radius-card`); controls round at 9px (`--radius-control`). Small chrome tightens further — 8px for rail items and segment buttons, 7px for the keyboard-shortcut key, 6px for type and status badges. Overlays round at 16px, and on mobile the detail modal squares its bottom corners entirely to sit as a bottom sheet against the viewport edge.
 
-Fully round (999px) is reserved for things that are conceptually _tokens_ rather than containers: suggestion chips, topic pills, primary and secondary buttons, progress tracks, dots, and the avatar. The primary CTA being a pill while its container is 14px is intentional — the action reads as a distinct object, not a region of the panel.
+Fully round (999px) is reserved for things that are conceptually _tokens_ rather than containers: primary and secondary buttons, progress tracks, dots, and the avatar. Suggestion actions, utility controls, counts, and "Details" affordances use the 9px control radius so the interface does not collapse into a field of pills.
 
 The recurring silhouette is the **accent rail**: a 4px bar across the top of a card, a 2px bar down the left of a list row or syllabus entry, drawn with a `::before` pseudo-element in the item's topic colour at 85% opacity. It is the system's signature and the only place topic colour appears at any scale.
 
@@ -426,39 +428,40 @@ Buttons, cards, and inputs are **restrained and precise**. Nothing is approximat
 - **Primary:** Studio Ink fill, white text, 44px tall, 20px horizontal padding, bold, with a leading 16px icon. Hover reduces opacity to 90% rather than shifting hue.
 - **Secondary:** White fill, 1px `line` border, muted ink text, same 44px height. Hover moves the border to `line-strong` and the text to full ink. Its selected state (an item already saved) swaps to a sunken fill with a `line-strong` border.
 - **Focus:** `.focus-ring` — a solid 2px `brand` outline at 2px offset, on `:focus-visible`. The system's single focus treatment; buttons, links, inputs, chips, nav items, and cards all use the same class.
-- **On the dark feature panel:** white fill, near-black text, and `.focus-ring-inverse`, because brand blue has too little separation from `#14161b`.
+- **On the dark feature panel:** white fill, deep-indigo text, and `.focus-ring-inverse`, because a standard brand outline has too little separation from `#27215f`.
 
 ### Chips
 
-- **Suggestion chips** (popular searches, no-result suggestions): pill, white fill, `line` border, muted ink at 12–13px. Hover moves border and text one step darker. No fill change.
+- **Suggestion actions** (popular searches, no-result suggestions): 9px control radius, white fill, `line` border, muted ink at 12–13px. Hover moves border and text one step darker. No fill change.
 - **Type badge** (Course / Module / Path): 6px radius, sunken fill, soft ink, 12px icon, sentence case. Deliberately the most neutral chip in the system — it describes the _shape_ of the content, so it must never compete with topic or status colour on the same card.
 - **Status pill**: 6px radius, soft status fill, status-ink text, neutral `line` border, with a 6px saturated dot and always a word.
 - **Topic pill** (parent course on a module card): tinted in the item's accent, accent-ink text, neutral border, 6px accent dot.
-- **Active filter chip**: pill with full-ink text and a `✕` plus a screen-reader-only "Clear filter".
+- **Active filter chip**: 9px control radius with full-ink text and a `✕` plus a screen-reader-only "Clear filter".
 
 ### Cards / Containers
 
 - **Corner Style:** 14px (`--radius-card`).
-- **Background:** Pure white surface on the grey canvas.
+- **Background:** White surface on the warm-grey canvas.
 - **Shadow Strategy:** Seam at rest, Ambient on hover. See Elevation.
 - **Border:** 1px `line`, moving to the item's **accent colour** on hover — the hover border is itself an orientation cue, not just a highlight.
 - **Internal Padding:** 18px for course cards, 16px for module cards, 12px on mobile, with an extra 2–4px on top to sit clear of the accent rail.
-- **Structure:** badge row → title (2-line clamp) → optional topic pill → description (2–3 line clamp) → `line-soft` divider → footer with metadata and a Details affordance. The footer is pushed down with `mt-auto` so it aligns across a row.
+- **Structure:** badge row → title (2-line clamp) → optional topic label → description (2–3 line clamp) → `line-soft` divider → footer with metadata and a Details affordance. The footer is pushed down with `mt-auto` so it aligns across a row.
+- **Featured course:** one course in the grid may become a two-column "Recommended next" treatment with an indigo border and larger title. It breaks the uniform grid without turning the whole catalog into marketing cards.
 
 ### Inputs / Fields
 
 - **Style:** White fill, 1px **`line-control`** (not the decorative hairline), 9px radius (12px for the prominent variant), 48px tall (52px prominent), leading search icon in soft ink, semibold input text with a normal-weight placeholder.
-- **Focus:** Border shifts to Studio Blue and the `.focus-ring` outline appears; the leading icon also shifts to brand colour via `group-focus-within`. Hover moves the border **darker** to `ink-soft` — a control's hover must never reduce its own edge contrast.
+- **Focus:** Border shifts to Studio Indigo and the `.focus-ring` outline appears; the leading icon also shifts to brand colour via `group-focus-within`. Hover moves the border **darker** to `ink-soft` — a control's hover must never reduce its own edge contrast.
 - **Prominent variant:** carries the Ambient shadow at rest and a `Ctrl K` key hint in a 7px-radius sunken well, hidden below `sm`.
 - **Suggestions:** a 12px-radius overlay-shadowed listbox, each row a two-column grid of badge + context + title against an "Open" tag, with the active row on a sunken fill. Full combobox semantics — `role="combobox"`, `aria-expanded`, `aria-activedescendant`, arrow/enter/escape keys.
 - **Selects (Refine):** 44px tall, 9px radius, bold muted text, same focus treatment as inputs.
 
 ### Navigation
 
-- **Rail:** White surface against the grey canvas, separated by a right hairline. Items are 9px-radius rows at 13.5–14px, muted ink with soft-ink icons; the active item takes a sunken fill, weight 650, full ink, and a **brand-coloured icon**. Width transitions over 200ms on `cubic-bezier(.4,0,.2,1)`.
+- **Rail:** White surface against the warm-grey canvas, separated by a right hairline. Items are 9px-radius rows at 13.5–14px, muted ink with soft-ink icons; the active item takes a stronger indigo-tinted fill, weight 650, full ink, and a **brand-coloured icon**. Width transitions over 200ms on `cubic-bezier(.4,0,.2,1)`.
 - **Brand mark:** a 30px Studio Ink square holding a scales-of-justice glyph, doubling as the collapse toggle, with the wordmark beside it at 20px/700/−0.02em.
 - **Skill areas:** a labelled group below the primary nav, each row a 9px rounded swatch in the area's indexed hue plus a name and a count, capped at 7 with a "Show more" toggle. Collapsed, all swatches show — the compact form fits.
-- **Mobile:** the rail becomes a left drawer over a `rgba(20,22,27,0.4)` scrim; a fixed bottom tab bar takes over primary navigation with brand-coloured active icons. The bar's item count changes by role.
+- **Mobile:** the rail becomes a left drawer over a warm near-black scrim; a fixed bottom tab bar takes over primary navigation with brand-coloured active icons. The bar's item count changes by role.
 - **Segmented control:** a sunken 9px track with 4px padding holding 8px-radius 36px buttons; the active button inverts to Studio Ink with white text plus a 1px inner white highlight, while the view-mode toggle's active state instead lifts to a white surface with a border.
 
 ### The Accent Rail
@@ -470,6 +473,8 @@ The system's signature component. Every catalog item exposes its colour as three
 ### Do:
 
 - **Do** keep colour to the two languages: topic for orientation, status for lifecycle. If a new colour need doesn't fit either, the answer is a neutral.
+- **Do** warm the environment before warming the components: canvas, hairlines, shadows, and ink can carry warmth; cards, inputs, and chips stay white and crisp.
+- **Do** use indigo confidently for resume, progress, active navigation, and the single featured-course treatment.
 - **Do** pair every status and topic colour with a text label. Colour alone is never the signal.
 - **Do** define new colours as CSS custom properties in `app/globals.css` under both `:root` and `[data-theme="dark"]`, then expose them through `tailwind.config.ts`. Both themes, always, in the same commit.
 - **Do** use `var(--radius-card)` (14px) for containers and `var(--radius-control)` (9px) for controls.
@@ -484,14 +489,17 @@ The system's signature component. Every catalog item exposes its colour as three
 - **Do** hide description copy and switch to list rows below `sm`. Mobile is an index, not a shrunken desktop.
 - **Do** cap reading copy at `max-w-2xl` (~65ch).
 - **Do** meet WCAG 2.2 AA, including target size — controls sit at 36px minimum, and 44px for primary actions.
+- **Do** prefer the 9px control radius for repeated inline actions. Pills are reserved, not the default.
 
 ### Don't:
 
 - **Don't** fill a card, section, or page with topic colour. Topic colour lives on rails, dots, swatches, wells, and chip tints only.
 - **Don't** use Alert Red (`#c8493b`) for anything but a substantive law-or-process change notice.
-- **Don't** add a gradient, glow, glassmorphism, or a neon dark mode. The canvas is a flat cool grey field; blur exists only on overlay scrims. No AI-SaaS dashboard cliché.
+- **Don't** add a gradient, glow, glassmorphism, or a neon dark mode. The canvas is a flat warm-grey field; blur exists only on overlay scrims. No AI-SaaS dashboard cliché.
 - **Don't** reintroduce legacy-LMS chrome — bevels, dense tab strips, tables used for layout, or a second nav bar. The hub exists as the alternative to that.
 - **Don't** let calm become lifeless. Corporate compliance grey is the failure mode on the other side: the eight hues, the accent rails, and the near-black feature panel are what keep the system from flattening into enterprise grey-on-grey.
+- **Don't** let warmth become beige. Avoid cream, tan, oatmeal, parchment, coffee, or hospitality palettes. The product should feel like a calm working library table, not a lifestyle app.
+- **Don't** use pill shape as the default way to make something look clickable. Repeated pills make the screen feel busier and less professional.
 - **Don't** give a resting surface more than the Seam shadow. Lift is a response to interaction; overlays and the prominent search field are the only exceptions.
 - **Don't** introduce a second typeface without explicitly overturning The One Family Rule.
 - **Don't** uppercase anything at readable size. Uppercase belongs to the 9px and 10px steps.
@@ -500,6 +508,6 @@ The system's signature component. Every catalog item exposes its colour as three
 - **Don't** let a control's hover state lighten its border. Hover goes darker; anything else trades contrast for feedback.
 - **Don't** render a mobile tree and a desktop tree and hide one with `sm:hidden`. Branch on `useIsDesktop()` and render once.
 - **Don't** build a new light-mode token and leave dark mode to a filter or an opacity trick. Every token is redefined by hand.
-- **Don't** add warm neutrals. Legacy warm values survive in a few places (the gold `::selection` wash, the brown-tinted `nav-link-active` shadows, the `--lace-gold` / `--accent-gold` aliases) as leftovers from an earlier palette; they are drift to be retired, not precedent to follow.
+- **Don't** add new warm-neutral values locally in components. If the product needs a warmer surface, change the global token ladder in `app/globals.css` and keep dark-mode parity in the same commit.
 - **Don't** animate for its own sake. Transitions are 160–200ms `ease`/`ease-out` on colour, border, shadow, and at most a 1px translate; entrance animations are 220–320ms on `cubic-bezier(0.16,1,0.3,1)` and reserved for overlays.
 - **Don't** blanket-kill motion under `prefers-reduced-motion`. The rule keeps colour, border, shadow, and opacity transitions and drops only movement — a 0.01ms global also destroys the state feedback those transitions carry.

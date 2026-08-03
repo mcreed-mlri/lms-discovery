@@ -86,7 +86,7 @@ function RailItem({
         collapsed ? "justify-center px-0 py-2.5" : "px-[11px] py-[9px]"
       } ${
         active
-          ? "bg-[color:var(--surface-sunken)] font-[650] text-[color:var(--ink)]"
+          ? "nav-link-active font-[650] text-[color:var(--ink)]"
           : "font-medium text-[color:var(--ink-muted)] hover:bg-[color:var(--surface-sunken)]"
       }`}
     >
@@ -157,22 +157,9 @@ export function StudioRail({
           aria-expanded={!collapsed}
           className="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[8px] bg-[color:var(--ink)] text-[color:var(--surface)] transition hover:opacity-90 focus-ring"
         >
-          <svg
-            width="17"
-            height="17"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M12 3v18" />
-            <path d="M7 8h10" />
-            <path d="M7 8 4 15a3 3 0 0 0 6 0z" />
-            <path d="M17 8l-3 7a3 3 0 0 0 6 0z" />
-          </svg>
+          <span aria-hidden="true" className="text-[17px] font-bold leading-none">
+            L
+          </span>
         </button>
         {!collapsed && (
           <span className="text-[19px] font-bold tracking-[-0.02em] text-[color:var(--ink)]">

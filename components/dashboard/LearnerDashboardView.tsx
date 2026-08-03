@@ -551,9 +551,9 @@ export function LearnerDashboardView() {
         </section>
       ) : null}
 
-      <div className="mt-10 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
+      <div className="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(340px,1fr)]">
         {/* Left column — required + not started */}
-        <div>
+        <div className="flex min-w-0 flex-col gap-9">
           {requiredCourses.length > 0 ? (
             <section aria-label="Required this quarter">
               <SectionHeading eyebrow="Required" title="Due this quarter" />
@@ -611,13 +611,13 @@ export function LearnerDashboardView() {
           ) : null}
 
           {notStarted.length > 0 ? (
-            <section aria-label="Not started" className="mt-9">
+            <section aria-label="Not started">
               <SectionHeading
                 eyebrow="Up next"
                 title="Not started yet"
                 action={{ label: "Browse library", href: "/" }}
               />
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-3 2xl:grid-cols-2">
                 {notStarted.map((course) => {
                   const tone = toneForArea(course.trainingArea);
                   return (
@@ -642,10 +642,41 @@ export function LearnerDashboardView() {
               </div>
             </section>
           ) : null}
+
+          {recentActivity && recentActivity.length > 0 ? (
+            <section aria-label="Recent activity">
+              <SectionHeading eyebrow="Recent activity" title="What you've been doing" />
+              <div className="editorial-card rounded-[var(--radius-card)] p-2">
+                {recentActivity.map((entry, index) => {
+                  const Icon = activityIcon(entry.label);
+                  return (
+                    <div
+                      key={`${entry.label}-${index}`}
+                      className={`flex items-center gap-3.5 px-3 py-3 ${
+                        index > 0 ? "border-t border-[color:var(--line)]" : ""
+                      }`}
+                    >
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color:var(--surface-sunken)] text-[color:var(--brand-ink)]">
+                        <Icon className="h-3.5 w-3.5" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="metadata text-[color:var(--ink-soft)]">
+                          {formatRelativeDate(entry.at)}
+                        </p>
+                        <p className="section-title text-[15px] leading-snug text-[color:var(--ink)]">
+                          {entry.label}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          ) : null}
         </div>
 
         {/* Right column — consistency + bookmarks */}
-        <div>
+        <div className="flex min-w-0 flex-col gap-9">
           <section aria-label="Consistency">
             <SectionHeading eyebrow="Consistency" title="Your last 12 weeks" />
             <div className="editorial-panel rounded-[var(--radius-card)] p-4">
@@ -671,7 +702,7 @@ export function LearnerDashboardView() {
             </div>
           </section>
 
-          <section aria-label="Bookmarks" className="mt-9">
+          <section aria-label="Bookmarks">
             <SectionHeading eyebrow="Saved" title="Your bookmarks" />
             {bookmarks.length > 0 ? (
               <div className="flex flex-col gap-2.5">
@@ -704,64 +735,30 @@ export function LearnerDashboardView() {
               </div>
             )}
           </section>
-        </div>
-      </div>
 
-      {/* Activity + certificates */}
-      <div className="mt-10 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
-        {recentActivity && recentActivity.length > 0 ? (
-          <section aria-label="Recent activity">
-            <SectionHeading eyebrow="Recent activity" title="What you've been doing" />
-            <div className="editorial-card rounded-[var(--radius-card)] p-2">
-              {recentActivity.map((entry, index) => {
-                const Icon = activityIcon(entry.label);
-                return (
-                  <div
-                    key={`${entry.label}-${index}`}
-                    className={`flex items-center gap-3.5 px-3 py-3 ${
-                      index > 0 ? "border-t border-[color:var(--line)]" : ""
-                    }`}
+          {certificates && certificates.length > 0 ? (
+            <section aria-label="Certificates">
+              <SectionHeading eyebrow="Earned" title="Certificates" />
+              <div className="flex flex-col gap-3">
+                {certificates.map((certificate) => (
+                  <article
+                    key={certificate.id}
+                    className="editorial-card relative overflow-hidden rounded-[var(--radius-card)] p-4"
                   >
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color:var(--surface-sunken)] text-[color:var(--brand-ink)]">
-                      <Icon className="h-3.5 w-3.5" />
-                    </span>
-                    <div className="min-w-0">
-                      <p className="metadata text-[color:var(--ink-soft)]">
-                        {formatRelativeDate(entry.at)}
-                      </p>
-                      <p className="section-title text-[15px] leading-snug text-[color:var(--ink)]">
-                        {entry.label}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-        ) : null}
-
-        {certificates && certificates.length > 0 ? (
-          <section aria-label="Certificates">
-            <SectionHeading eyebrow="Earned" title="Certificates" />
-            <div className="flex flex-col gap-3">
-              {certificates.map((certificate) => (
-                <article
-                  key={certificate.id}
-                  className="editorial-card relative overflow-hidden rounded-[var(--radius-card)] p-4"
-                >
-                  <span className="absolute -right-2 -top-2 h-16 w-16 rounded-full bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" />
-                  <CertificateIcon className="h-5 w-5 text-[color:var(--brand)]" />
-                  <h3 className="section-title mt-3 text-[16px] text-[color:var(--ink)]">
-                    {certificate.title}
-                  </h3>
-                  <p className="metadata mt-1.5 text-[color:var(--ink-soft)]">
-                    {certificate.earnedOn} · {certificate.credits}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </section>
-        ) : null}
+                    <span className="absolute -right-2 -top-2 h-16 w-16 rounded-full bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" />
+                    <CertificateIcon className="h-5 w-5 text-[color:var(--brand)]" />
+                    <h3 className="section-title mt-3 text-[16px] text-[color:var(--ink)]">
+                      {certificate.title}
+                    </h3>
+                    <p className="metadata mt-1.5 text-[color:var(--ink-soft)]">
+                      {certificate.earnedOn} {"\u00b7"} {certificate.credits}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ) : null}
+        </div>
       </div>
     </>
   );

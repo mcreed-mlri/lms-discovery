@@ -84,6 +84,7 @@ Explicitly undecided product facts:
 - The hub is **its own sub-brand**, related to but not governed by MLRI's existing identity. Future design work has room to define the visual identity.
 - **"LACE" is a placeholder. The real organization/product name is to be announced.** Do not build identity around the LACE wordmark, do not treat it as a fixed brand, and do not invent an expansion of the acronym — it is not recorded anywhere and has not been confirmed.
 - No binding logo, palette, or type commitments exist yet. Existing icon assets in `public/` (`icon.svg`, `icon-192.png`, `icon-512.png`) are placeholders of the same status as the name.
+- Current product UI direction does hold until deliberately changed: a calm warm-grey working surface with crisp white cards, warmer charcoal ink, confident indigo for progress/navigation/resume moments, and colour reserved for orientation or status. The aim is to reduce screen fatigue for advocates who may be tired, rushed, or coming from dense legal work — without drifting into cream, tan, or lifestyle-app warmth.
 - Voice constraint that does hold: never blur the line between this app and Brightspace.
 
 ## Evidence on Hand
@@ -108,6 +109,7 @@ Absences future work must not fabricate:
 3. **Below the course line.** Modules, topics, and lessons are the unit of value. Do not let course containers become the only way in.
 4. **Eligibility is part of discovery.** Role, jurisdiction, and UPL boundaries shape what a person is shown, and being ineligible must be legible rather than silently empty.
 5. **Show the whole curriculum, honestly.** Planned offerings are visible so the plan is legible, and always distinguishable from what a learner can start today.
+6. **Lower visual load.** The interface should feel calm after a long legal-work day: warm the environment, keep controls crisp, avoid decorative colour, and never make a tired advocate work harder to read the screen.
 
 ## Accessibility & Inclusion
 

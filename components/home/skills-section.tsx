@@ -33,7 +33,7 @@ function SkillTile({
         >
           <SkillGlyph kind={skill.glyph} className="h-5 w-5 sm:h-6 sm:w-6" />
         </span>
-        <span className="rounded-full border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase leading-4 tracking-[0.03em] text-[color:var(--ink-soft)] sm:px-2 sm:text-[11px] sm:leading-5">
+        <span className="rounded-[7px] border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase leading-4 tracking-[0.03em] text-[color:var(--ink-soft)] sm:px-2 sm:text-[11px] sm:leading-5">
           {count} modules
         </span>
       </div>

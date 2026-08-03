@@ -47,7 +47,7 @@ function ContentStatusChip({ status }: { status: "New" | "Updated" }) {
 function DetailsAffordance({ className = "" }: { className?: string }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] text-xs font-semibold text-[color:var(--ink-muted)] shadow-[var(--shadow-xs)] transition duration-200 ease-out group-hover:border-[color:var(--line-strong)] group-hover:bg-[color:var(--surface-raised)] group-hover:text-[color:var(--ink)] ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface)] text-xs font-semibold text-[color:var(--ink-muted)] shadow-[var(--shadow-xs)] transition duration-200 ease-out group-hover:border-[color:var(--line-strong)] group-hover:bg-[color:var(--surface-raised)] group-hover:text-[color:var(--ink)] ${className}`}
     >
       Details{" "}
       <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -58,12 +58,15 @@ function DetailsAffordance({ className = "" }: { className?: string }) {
 export function ContentCard({
   item,
   onOpen,
+  variant = "standard",
 }: {
   item: LearningItem;
   onOpen?: (item: LearningItem) => void;
+  variant?: "standard" | "featured";
 }) {
   const isModule = item.type === "MODULE";
   const isCourse = item.type === "COURSE";
+  const isFeatured = variant === "featured" && isCourse;
   const accent = getItemAccent(item);
 
   // A button, not a link: this opens a detail dialog in place. It used to be an
@@ -76,11 +79,18 @@ export function ContentCard({
       onClick={() => onOpen?.(item)}
       aria-label={`${item.title}. Open detail view.`}
       className={`editorial-card group relative flex h-full cursor-pointer flex-col overflow-hidden text-left transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 before:opacity-85 before:bg-[color:var(--accent)] hover:border-[color:var(--accent)] focus-ring ${
-        isModule
-          ? "min-h-0 p-3 pt-3.5 before:h-1 sm:min-h-[11.25rem] sm:p-4 sm:pt-4"
-          : "min-h-0 p-3 pt-3.5 before:h-1 sm:min-h-[15.75rem] sm:p-[1.125rem] sm:pt-5"
+        isFeatured
+          ? "min-h-0 border-[color:var(--brand)] p-4 pt-5 before:h-1.5 sm:col-span-2 sm:min-h-[15.75rem] sm:p-6 sm:pt-7 lg:col-span-2"
+          : isModule
+            ? "min-h-0 p-3 pt-3.5 before:h-1 sm:min-h-[11.25rem] sm:p-4 sm:pt-4"
+            : "min-h-0 p-3 pt-3.5 before:h-1 sm:min-h-[15.75rem] sm:p-[1.125rem] sm:pt-5"
       }`}
     >
+      {isFeatured && (
+        <div className="mb-3 flex items-center gap-2 border-l-2 border-[color:var(--brand)] pl-3 text-[12px] font-bold text-[color:var(--brand-ink)]">
+          Recommended next
+        </div>
+      )}
       <div
         className={`${isModule ? "mb-2 sm:mb-3" : "mb-2 sm:mb-3.5"} flex min-h-0 flex-wrap items-start gap-1.5 sm:min-h-8 sm:gap-2`}
       >
@@ -91,7 +101,13 @@ export function ContentCard({
         </span>
       </div>
       <h3
-        className={`card-title line-clamp-2 ${isModule ? "text-[16px] sm:text-[17px]" : "text-[16px] sm:text-[19px]"} leading-snug`}
+        className={`card-title line-clamp-2 ${
+          isFeatured
+            ? "text-[20px] sm:text-[24px]"
+            : isModule
+              ? "text-[16px] sm:text-[17px]"
+              : "text-[16px] sm:text-[19px]"
+        } leading-snug`}
       >
         {item.title}
       </h3>
@@ -102,7 +118,13 @@ export function ContentCard({
         </p>
       )}
       <p
-        className={`card-description mt-1.5 hidden text-[14px] leading-relaxed sm:mt-2.5 sm:block ${isModule ? "line-clamp-2" : "line-clamp-3"}`}
+        className={`card-description mt-1.5 hidden text-[14px] leading-relaxed sm:mt-2.5 sm:block ${
+          isFeatured
+            ? "max-w-xl text-[15px] line-clamp-3"
+            : isModule
+              ? "line-clamp-2"
+              : "line-clamp-3"
+        }`}
       >
         {item.description}
       </p>
@@ -217,7 +239,7 @@ export function PathCard({
           <span
             key={course.id}
             style={accentVars(getCourseAccent(course.id, course.hueIndex))}
-            className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--line)] bg-[color:var(--accent-tint)] px-2.5 py-1 text-xs font-medium text-[color:var(--accent-ink)]"
+            className="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--line)] bg-[color:var(--accent-tint)] px-2.5 py-1 text-xs font-medium text-[color:var(--accent-ink)]"
           >
             <span
               className="h-1.5 w-1.5 rounded-full bg-[color:var(--accent)]"

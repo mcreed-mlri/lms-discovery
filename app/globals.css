@@ -34,20 +34,20 @@
   --paper: #f7f6f2; /* warm grey page canvas */
   --paper-deep: #eeece6; /* deeper section accent, use sparingly */
   --panel: #f0eee8; /* section frame */
-  --surface: #fffefb; /* clean paper-white card */
-  --surface-raised: #fffdf8; /* raised surfaces */
+  --surface: #ffffff; /* clean white card */
+  --surface-raised: #ffffff; /* raised surfaces */
   --surface-sunken: #efede7; /* sunken tracks, chips, active-nav bg */
   --hover-tint: #f5f2eb; /* whisper hover */
   --chrome-bg: rgba(255, 253, 248, 0.88);
-  --feature-surface: #1d1b17;
+  --feature-surface: #27215f;
   --feature-ink: #ffffff;
   --feature-muted: rgba(255, 255, 255, 0.55);
   --feature-track: rgba(255, 255, 255, 0.14);
   --feature-action-bg: #ffffff;
-  --feature-action-ink: #1d1b17;
+  --feature-action-ink: #27215f;
   --feature-action-border: transparent;
   --hero-wash: #f7f6f2;
-  --hero-wash-soft: #fffdf8;
+  --hero-wash-soft: #ffffff;
   --ink: #171511; /* warm near-black — primary text, brand mark */
   --ink-muted: #575148; /* muted — body copy, descriptions */
   /* Soft — metadata, captions, default icons, placeholders. Dark enough to
@@ -67,11 +67,11 @@
   --shadow-md: 0 1px 2px rgba(32, 27, 19, 0.04), 0 6px 18px rgba(32, 27, 19, 0.06);
   --shadow-lg: 0 8px 24px rgba(32, 27, 19, 0.1), 0 2px 6px rgba(32, 27, 19, 0.06);
 
-  /* ── Brand — Studio blue. Deep for text/links, brighter for fills ─────── */
-  --brand: #1c3fb0; /* links, active icons, avatar fill */
-  --brand-ink: #1c3fb0; /* brand text on light */
-  --brand-fill: #2a5bff; /* primary button / progress fill */
-  --brand-tint: #eaf0ff; /* "Continue" chip bg */
+  /* ── Brand — Studio indigo. Deep for text/links, brighter for fills ───── */
+  --brand: #4338ca; /* links, active icons, avatar fill */
+  --brand-ink: #3730a3; /* brand text on light */
+  --brand-fill: #4f46e5; /* primary button / progress fill */
+  --brand-tint: #eef2ff; /* "Continue" chip bg */
 
   /* ── Skill-hue palette — 8 disciplined hues, used BY INDEX on skill tiles
         and practice-area swatches. Identical S/L feel so it reads systematic.
@@ -137,9 +137,9 @@
   --status-progress: #179a72;
   --status-progress-soft: #e2f4ed;
   --status-progress-ink: #0f6e51;
-  --status-next: #2a5bff;
-  --status-next-soft: #eaf0ff;
-  --status-next-ink: #1c3fb0;
+  --status-next: #4f46e5;
+  --status-next-soft: #eef2ff;
+  --status-next-ink: #3730a3;
   --status-done: #179a72;
   --status-done-soft: #e2f4ed;
   --status-done-ink: #0f6e51;
@@ -477,10 +477,10 @@ input::placeholder {
 
 /* Shared nav active state — a brand tint over the surface, hairline-first. */
 .nav-link-active {
-  background: color-mix(in srgb, var(--brand) 10%, var(--surface-raised));
+  background: color-mix(in srgb, var(--brand) 14%, var(--surface-raised));
   color: var(--ink);
   box-shadow:
-    inset 0 0 0 1px rgba(32, 27, 19, 0.1),
+    inset 0 0 0 1px color-mix(in srgb, var(--brand) 22%, transparent),
     0 1px 2px rgba(32, 27, 19, 0.035);
 }
 
@@ -495,8 +495,8 @@ input::placeholder {
 
 /* Catalog / control active states — clear but not heavy. */
 .control-active {
-  background: var(--ink);
-  color: var(--surface-raised);
+  background: var(--brand);
+  color: #ffffff;
   box-shadow:
     var(--shadow-xs),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
