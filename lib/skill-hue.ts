@@ -2,9 +2,10 @@
    Skill-hue palette — Studio "Direction A2"
    ----------------------------------------------------------------------------
    Eight disciplined hues with an identical saturation/lightness feel, so a grid
-   of them reads as one systematic family rather than a rainbow. Used BY INDEX
-   (not by topic) on the "Browse by skill" tiles and the rail's practice-area
-   swatches: the Nth tile takes the Nth hue, wrapping after 8.
+   of them reads as one systematic family rather than a rainbow. Assigned BY
+   SKILL (see SKILL_HUE_INDEX below) — not by topic family, and not by grid
+   position: a skill lens keeps its hue on the "Browse by skill" tiles, on the
+   rail's skill-area swatches, and on every course/module card in that area.
 
    The set is deliberately grounded — steel, teal, olive, amber, green, sky,
    graphite, rust. No violet or pink, and one slot spent on graphite so ink
@@ -13,6 +14,8 @@
    Raw hexes live here for inline use (SVG strokes, swatch backgrounds). The same
    values are mirrored as `--hue-1..8` CSS vars in app/globals.css — keep in sync.
    ========================================================================= */
+
+import type { SkillId } from "@/lib/data";
 
 export type SkillHue = {
   /** Saturated colour — icon strokes, swatches, accent bars. */
@@ -39,4 +42,36 @@ export const SKILL_HUES: readonly SkillHue[] = [
 /** The hue at index `i`, wrapping after 8. */
 export function getHue(i: number): SkillHue {
   return SKILL_HUES[((i % SKILL_HUES.length) + SKILL_HUES.length) % SKILL_HUES.length];
+}
+
+/* ----------------------------------------------------------------------------
+   Skill → hue assignment
+   ----------------------------------------------------------------------------
+   THE single assignment of hue to skill lens, so one skill reads as one colour
+   everywhere: the homepage skill tiles read it by id, and each curriculum
+   skill-area course + its modules inherit it as `hueIndex`
+   (lib/curriculum-catalog.ts), which is what getItemAccent resolves.
+
+   Keyed by skill id, NOT by grid position: the homepage hides skill lenses the
+   signed-in user has no content for, so a positional index would slide every
+   colour along for those users.
+   -------------------------------------------------------------------------- */
+export const SKILL_HUE_INDEX: Record<SkillId, number> = {
+  interviewing: 0, // steel
+  drafting: 1, // teal
+  counseling: 2, // olive
+  triage: 3, // amber
+  negotiation: 4, // green
+  courtroom: 5, // sky
+  ethics: 6, // graphite
+  research: 7, // rust
+};
+
+export function getSkillHueIndex(skillId: SkillId): number {
+  return SKILL_HUE_INDEX[skillId];
+}
+
+/** The hue a skill lens owns, wherever it appears. */
+export function getSkillHue(skillId: SkillId): SkillHue {
+  return getHue(getSkillHueIndex(skillId));
 }

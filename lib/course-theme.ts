@@ -218,7 +218,8 @@ export function getCourseLabel(course: Course) {
 // ── Colour accents ───────────────────────────────────────────────────────────
 // A single colour per item, as CSS-var strings applied inline (so it can be
 // data-driven — Tailwind can't build class names at runtime). Curriculum items
-// carry a skill-area `hueIndex` shared by a course and all its modules; built
+// carry a skill-area `hueIndex` shared by a course and all its modules — the hue
+// that area's skill lens owns (SKILL_HUE_INDEX in lib/skill-hue.ts); built
 // items fall back to their topic-family colour. Cards read these into
 // `--accent` / `--accent-tint` / `--accent-ink` custom properties.
 export type Accent = { solid: string; tint: string; ink: string };

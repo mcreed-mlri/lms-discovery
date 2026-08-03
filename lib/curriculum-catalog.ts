@@ -14,10 +14,13 @@
      · Sub-topic note      → lesson        (a short "micro-module" inside a module)
      · Learning Paths       → curated journeys across courses (see plannedPaths)
 
-   Each skill-area course + its modules share a colour (hueIndex). Substantive
-   Law is skipped; its built course (eviction-defense-48h) stays in lib/data.ts. */
+   Each skill-area course + its modules share a colour (hueIndex), taken from the
+   hue its skill lens owns (lib/skill-hue.ts) so the same skill reads the same on
+   a tile and on a card. Substantive Law is skipped; its built course
+   (eviction-defense-48h) stays in lib/data.ts. */
 
 import { curriculumMap, type CurriculumColumn } from "@/lib/curriculum-map";
+import { getSkillHueIndex } from "@/lib/skill-hue";
 import type { Course, Level, Module, Path, SkillId } from "@/lib/data";
 
 // Skill-area column → editorial level, so the generated catalog reads as a real
@@ -60,9 +63,10 @@ export const plannedModules: Module[] = [];
 // Minutes + skill for each planned module, merged into moduleMeta in lib/data.ts.
 export const plannedModuleMeta: Record<string, { minutes: number; skillId: SkillId }> = {};
 
-function generateColumn(column: CurriculumColumn, hueIndex: number) {
+function generateColumn(column: CurriculumColumn) {
   const level = columnLevel[column.id] ?? "Foundations";
   const skillId = columnSkill[column.id] ?? "research";
+  const hueIndex = getSkillHueIndex(skillId);
   const courseId = `course-${column.id}`;
 
   // Skill Area → Course.
@@ -107,7 +111,7 @@ function generateColumn(column: CurriculumColumn, hueIndex: number) {
 
 const legalSkills = curriculumMap.branches.find((branch) => branch.id === "legal-skills");
 if (legalSkills && legalSkills.type === "columns") {
-  legalSkills.columns.forEach((column, index) => generateColumn(column, index));
+  legalSkills.columns.forEach((column) => generateColumn(column));
 }
 
 // Curated learning journeys across the skill-area courses. Drafted as starting
