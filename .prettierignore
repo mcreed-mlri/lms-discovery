@@ -5,3 +5,7 @@ archive/
 design_handoff_studio_rail/
 package-lock.json
 next-env.d.ts
+# Standalone handbook artifacts, shipped as-is. Prettier wants to rewrap ~3900
+# lines of the HTML/JS, and reflowing inline elements can change how the page
+# renders — not worth it for a static asset nothing imports.
+public/tools-handbook/

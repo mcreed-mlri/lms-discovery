@@ -43,11 +43,7 @@ export function useFeedbackPrompts() {
     setHydrated(true);
   }, []);
 
-  function resolvePrompt(
-    kind: FeedbackPromptKind,
-    offeringId: string,
-    action: PromptResolution,
-  ) {
+  function resolvePrompt(kind: FeedbackPromptKind, offeringId: string, action: PromptResolution) {
     const next: ResolvedMap = {
       ...resolved,
       [promptKey(kind, offeringId)]: { action, at: new Date().toISOString() },
