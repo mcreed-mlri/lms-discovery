@@ -77,6 +77,12 @@
   --brand-ink: #12447c; /* brand text on light */
   --brand-fill: #1c63b0; /* progress fill / accent graphics */
   --brand-tint: #e8eff8; /* "Continue" chip bg */
+  /* Foreground for text sitting ON the solid --brand fill (avatar initials, the
+     filter-count badge). NOT --brand-ink, which is brand-coloured text on a page
+     background. This has to flip with the theme: white clears 5.6:1 on the light
+     brand but measures 2.19:1 on the lifted dark brand, an AA failure that axe
+     caught on the dark-theme sweep. */
+  --brand-on: #ffffff;
 
   /* Maximum-contrast solid — the "black" action. Selected filter chips and any
      control that must read as chosen use this instead of a colour fill, so the
@@ -222,6 +228,9 @@
   --brand-ink: #98c2f3;
   --brand-fill: #3b8ede;
   --brand-tint: #13304d;
+  /* The lifted brand is a light blue, so its foreground inverts to dark ink —
+     same reasoning as --solid-ink just below. Do not set this to white. */
+  --brand-on: #14161b;
 
   /* Solid action inverts: near-white chip with dark ink. Black-on-black would
      disappear, so the "maximum contrast" intent flips direction here. */

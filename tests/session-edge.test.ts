@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import test from "node:test";
+import { test } from "vitest";
 
 import { createSessionToken, verifySessionToken, type SessionUser } from "@/lib/session";
 import { verifySessionTokenEdge } from "@/lib/session-edge";

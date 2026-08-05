@@ -134,7 +134,7 @@ export function CatalogSection({
           <FilterIcon className="h-4 w-4" />
           Refine
           {advancedFilterCount > 0 && (
-            <span className="flex h-5 min-w-5 items-center justify-center rounded-[6px] bg-[color:var(--brand)] px-1.5 text-[11px] font-bold text-white">
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-[6px] bg-[color:var(--brand)] px-1.5 text-[11px] font-bold text-[color:var(--brand-on)]">
               {advancedFilterCount}
             </span>
           )}

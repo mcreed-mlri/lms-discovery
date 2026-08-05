@@ -283,7 +283,7 @@ export function StudioRail({
         <div
           className={`flex items-center gap-2.5 ${collapsed ? "justify-center px-0 py-1" : "px-[7px] py-1"}`}
         >
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color:var(--brand)] text-[12px] font-[650] text-white">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color:var(--brand)] text-[12px] font-[650] text-[color:var(--brand-on)]">
             {user?.initials ?? "—"}
           </span>
           {!collapsed && user && (

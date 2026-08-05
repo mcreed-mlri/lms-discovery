@@ -3,6 +3,13 @@ node_modules/
 out/
 dist/
 
+# Test output: Vitest coverage, Playwright traces/screenshots and its HTML report.
+coverage/
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+
 .npm-cache/
 certificates/
 tools/

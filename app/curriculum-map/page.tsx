@@ -93,7 +93,18 @@ function Branch({ branch }: { branch: CurriculumBranch }) {
     <section className="mb-10">
       <SectionHead kicker="Curriculum branch" title={branch.title} />
       {branch.type === "columns" ? (
-        <div className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-3">
+        /* This region scrolls horizontally and its children are static text, so
+           there is nothing inside for the keyboard to land on — a keyboard-only
+           user could not scroll it at all. Making the region itself focusable is
+           what axe's scrollable-region-focusable rule (WCAG 2.1.1) asks for, and
+           focus-ring is required alongside it: a focusable element with no
+           visible focus indicator trades one failure for another (2.4.7). */
+        <div
+          className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-3 focus-ring"
+          tabIndex={0}
+          role="group"
+          aria-label={`${branch.title}: scrollable columns`}
+        >
           {branch.columns.map((column) => (
             <Column key={column.id} column={column} />
           ))}

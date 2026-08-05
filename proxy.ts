@@ -6,6 +6,9 @@ import { verifySessionTokenEdge } from "@/lib/session-edge";
 /**
  * Server-side route gating.
  *
+ * Next 16.3 renamed this file convention from `middleware` to `proxy`; the
+ * exported function name has to match the file. Behaviour is unchanged.
+ *
  * Before this existed, every gated page was a client component that rendered a
  * loading card, called /api/me from an effect, and only then decided whether to
  * redirect. Two consequences: role gating was entirely client-side, and the
@@ -41,7 +44,7 @@ function isProtected(pathname: string) {
   );
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   if (demoPersonasEnabled) return NextResponse.next();
 
   const { pathname, search } = request.nextUrl;

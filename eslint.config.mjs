@@ -27,5 +27,10 @@ export default defineConfig([
     // is generated output; linting it produced the only warnings in the repo and
     // hid real ones in the noise.
     "public/**",
+    // Generated test output — Vitest coverage reports and Playwright artifacts.
+    "coverage/**",
+    "test-results/**",
+    "playwright-report/**",
+    "blob-report/**",
   ]),
 ]);

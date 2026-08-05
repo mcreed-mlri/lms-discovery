@@ -8,15 +8,26 @@ on:
     branches: [main]
   pull_request:
 
+# A new push to the same branch supersedes the old run. Without this, rapid
+# pushes queue up redundant jobs and the useful result waits behind stale ones.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Least privilege: nothing here writes to the repo.
+permissions:
+  contents: read
+
 jobs:
   checks:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
@@ -31,8 +42,51 @@ jobs:
       - name: Check formatting
         run: npm run format:check
 
-      - name: Test
-        run: npm test
+      - name: Unit and component tests
+        run: npm run test:coverage
 
       - name: Build
         run: npm run build
+
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 7
+
+  # Separate job so a browser download and a 130-page production build do not
+  # slow down the fast feedback above, and so an e2e flake is distinguishable at
+  # a glance from a type error.
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      # Covers the critical user paths AND runs axe against every route in both
+      # themes. The accessibility work in this app is deliberate and detailed;
+      # this stage is what stops a palette or layout change from quietly undoing
+      # it. Playwright starts its own production server (see playwright.config.ts).
+      - name: End-to-end and accessibility tests
+        run: npm run e2e
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
