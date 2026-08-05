@@ -309,6 +309,11 @@ export function LearnerDashboardView() {
   const [data, setData] = useState<LearnerDashboardPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  // Bumped by "Try again" to re-run the fetch effect. This used to be
+  // window.location.reload(), which threw away every bit of client state —
+  // scroll position, open dialogs, saved-learning hydration — and re-ran the
+  // whole auth waterfall to retry a single request.
+  const [attempt, setAttempt] = useState(0);
   const { savedKeys } = useSavedLearning();
   const feedbackPrompts = useFeedbackPrompts();
   const allItems = useMemo(() => getLearningItems(), []);
@@ -333,7 +338,7 @@ export function LearnerDashboardView() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [attempt]);
 
   const bookmarks = useMemo(
     () =>
@@ -370,7 +375,7 @@ export function LearnerDashboardView() {
         <button
           type="button"
           className="mt-6 inline-flex h-11 items-center rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] focus-ring"
-          onClick={() => window.location.reload()}
+          onClick={() => setAttempt((n) => n + 1)}
         >
           Try again
         </button>

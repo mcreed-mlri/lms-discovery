@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowIcon } from "@/components/icons";
 import { SiteFooter } from "@/components/site-footer";
 import { demoUsers, isDemoMode, showDemoUsers, useAuth, type User } from "@/lib/auth";
+import { sanitizeReturnTo } from "@/lib/safe-return-to";
 
 const LOGIN_ERROR_MESSAGES: Record<string, string> = {
   brightspace_denied: "Brightspace declined the sign-in request. Please try again.",
@@ -19,24 +20,33 @@ export default function LoginPage() {
   const { user, ready, login } = useAuth();
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // Where middleware wanted to send them before the gate intervened. Sanitized
+  // again on the server; this copy only drives client-side navigation.
+  const [returnTo, setReturnTo] = useState<string | null>(null);
 
   useEffect(() => {
-    if (ready && user) router.replace("/");
-  }, [ready, user, router]);
+    if (ready && user) router.replace(returnTo ?? "/");
+  }, [ready, user, router, returnTo]);
 
   useEffect(() => {
-    const errorCode = new URLSearchParams(window.location.search).get("error");
+    const params = new URLSearchParams(window.location.search);
+    const errorCode = params.get("error");
     if (errorCode) {
       setErrorMessage(
         LOGIN_ERROR_MESSAGES[errorCode] ?? LOGIN_ERROR_MESSAGES.token_exchange_failed,
       );
     }
+    setReturnTo(sanitizeReturnTo(params.get("returnTo")));
   }, []);
 
   function handleDemoLogin(nextUser: User) {
     login(nextUser.id);
-    router.push("/");
+    router.push(returnTo ?? "/");
   }
+
+  const brightspaceStartHref = returnTo
+    ? `/api/auth/brightspace/start?returnTo=${encodeURIComponent(returnTo)}`
+    : "/api/auth/brightspace/start";
 
   return (
     <div className="hub-shell flex min-h-screen flex-col">
@@ -75,7 +85,7 @@ export default function LoginPage() {
 
             {!isDemoMode ? (
               <a
-                href="/api/auth/brightspace/start"
+                href={brightspaceStartHref}
                 className="group flex items-center justify-center gap-3 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 py-4 text-base font-bold text-[color:var(--surface)] shadow-[var(--shadow-sm)] transition hover:opacity-90 focus-ring"
               >
                 Sign in with Brightspace

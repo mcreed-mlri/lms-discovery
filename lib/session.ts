@@ -9,8 +9,12 @@ import { createHmac, timingSafeEqual } from "node:crypto";
  * SESSION_SECRET (which invalidates every session at once).
  */
 
-export const SESSION_COOKIE = "lace_session";
-export const SESSION_TTL_SECONDS = 12 * 60 * 60;
+// Re-exported so existing importers (api/me, logout, the OAuth callback) keep
+// a single import site. The values live in a node:crypto-free module because
+// middleware runs on the Edge runtime — see lib/session-constants.ts.
+export { SESSION_COOKIE, SESSION_TTL_SECONDS } from "@/lib/session-constants";
+
+import { SESSION_TTL_SECONDS as TTL_SECONDS } from "@/lib/session-constants";
 
 export type SessionUser = {
   /** Brightspace user Identifier from whoami. */
@@ -44,7 +48,7 @@ export function createSessionToken(
   const payload: SessionPayload = {
     user,
     iat: nowSeconds,
-    exp: nowSeconds + SESSION_TTL_SECONDS,
+    exp: nowSeconds + TTL_SECONDS,
   };
   const encoded = Buffer.from(JSON.stringify(payload)).toString("base64url");
   return `${encoded}.${sign(encoded, secret)}`;

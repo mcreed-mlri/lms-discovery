@@ -13,6 +13,7 @@ import { useAuth } from "@/lib/auth";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
 import { getLearningItems } from "@/lib/data";
 import { useFocusTrap } from "@/lib/hooks/use-focus-trap";
+import { useScrollLock } from "@/lib/hooks/use-scroll-lock";
 import { searchLearningItems, type SearchResult } from "@/lib/search";
 import { recordSearchAnalytics } from "@/lib/search-analytics";
 
@@ -36,6 +37,11 @@ export function StudioShell({
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [globalQuery, setGlobalQuery] = useState("");
+
+  // The drawer is a modal overlay, so it gets the same containment as the two
+  // dialogs: focus stays inside it and the page behind cannot scroll.
+  const drawerRef = useFocusTrap<HTMLDivElement>(mobileOpen);
+  useScrollLock(mobileOpen || searchOpen);
 
   const allItems = useMemo(() => getEligibleLearningItems(getLearningItems(), user), [user]);
   const globalResults = useMemo(
@@ -112,7 +118,10 @@ export function StudioShell({
         return;
       }
       if (event.key === "Escape") {
+        // Both overlays need a keyboard exit (WCAG 2.1.2). The drawer used to
+        // have none: Escape only reached the search dialog.
         closeGlobalSearch();
+        setMobileOpen(false);
       }
     }
     window.addEventListener("keydown", onKeyDown);
@@ -148,11 +157,19 @@ export function StudioShell({
 
       {/* Mobile rail drawer */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
+        <div
+          ref={drawerRef}
+          className="fixed inset-0 z-50 lg:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site navigation"
+        >
           <button
             type="button"
             aria-label="Close navigation"
             className="absolute inset-0 bg-[rgba(20,22,27,0.4)]"
+            data-focus-skip="true"
+            tabIndex={-1}
             onClick={() => setMobileOpen(false)}
           />
           <div className="absolute inset-y-0 left-0 flex max-h-screen overflow-y-auto pt-[env(safe-area-inset-top,0px)] shadow-[var(--shadow-lg)]">

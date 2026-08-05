@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { ContentCard, ContentListRow, PathCard } from "@/components/content-card";
+import { SectionBand } from "@/components/home/section-band";
 import {
   ArrowIcon,
   CloseIcon,
@@ -99,20 +100,15 @@ export function CatalogSection({
   const showGrid = isDesktop && viewMode === "grid";
 
   return (
-    <section
+    <SectionBand
       id="browse"
-      className="order-2 mx-auto max-w-[1120px] scroll-mt-[calc(5rem+env(safe-area-inset-top,0px))] px-4 py-5 sm:px-6 sm:py-9 lg:order-3 lg:px-10"
+      label="Learning Library"
+      helper="Courses, modules, and learning paths."
+      className="order-2 lg:order-3"
       tabIndex={-1}
-      aria-label="Learning content"
     >
       {!hideHeading && (
-        <div className="mb-5 flex items-end justify-between gap-3 border-b border-[color:var(--line)] pb-3.5">
-          <div>
-            <p className="section-kicker secondary">Library</p>
-            <h2 className="section-title mt-1 text-[22px] text-[color:var(--ink)] sm:text-[26px]">
-              All learning options
-            </h2>
-          </div>
+        <div className="mb-4 flex justify-end">
           {seeAllHref && (
             <Link
               href={seeAllHref}
@@ -124,7 +120,7 @@ export function CatalogSection({
           )}
         </div>
       )}
-      <div className="mb-5 flex flex-wrap items-center gap-3">
+      <div className="mb-6 flex flex-wrap items-center gap-3">
         <button
           type="button"
           onClick={() => setShowRefine((value) => !value)}
@@ -196,7 +192,7 @@ export function CatalogSection({
       </div>
 
       {showRefine && (
-        <div className="mb-5 rounded-[var(--radius-card)] border border-[color:var(--line)] bg-[color:var(--surface)] p-4 shadow-[var(--shadow-xs)]">
+        <div className="mb-6 rounded-[var(--radius-card)] border border-[color:var(--line)] bg-[color:var(--surface)] p-4 shadow-[var(--shadow-xs)]">
           <div className="flex items-center justify-between gap-3">
             <p className="section-kicker secondary">Refine results</p>
             {/* min-h/px give this a 24x24 hit area (WCAG 2.2 2.5.8); as bare
@@ -268,20 +264,11 @@ export function CatalogSection({
           grows with the curriculum. */}
       {showGrid ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {shownItems.map((item, index) =>
+          {shownItems.map((item) =>
             item.type === "PATH" ? (
               <PathCard key={`${item.type}-${item.id}`} item={item} onOpen={onOpenItem} />
             ) : (
-              <ContentCard
-                key={`${item.type}-${item.id}`}
-                item={item}
-                onOpen={onOpenItem}
-                variant={
-                  index === shownItems.findIndex((entry) => entry.type === "COURSE")
-                    ? "featured"
-                    : "standard"
-                }
-              />
+              <ContentCard key={`${item.type}-${item.id}`} item={item} onOpen={onOpenItem} />
             ),
           )}
         </div>
@@ -319,6 +306,6 @@ export function CatalogSection({
           </div>
         </div>
       )}
-    </section>
+    </SectionBand>
   );
 }

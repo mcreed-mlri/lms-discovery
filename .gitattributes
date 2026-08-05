@@ -1,0 +1,18 @@
+# Normalize line endings so the working tree is LF on every platform.
+#
+# Without this, Windows checkouts get CRLF (core.autocrlf=true) while Prettier
+# defaults to endOfLine: "lf". The result was that `npm run format:check` could
+# pass in CI (Linux, LF checkout) and never pass locally on Windows, and
+# `npm run format` would rewrite files that git then re-converted on checkout.
+# Git already stores these blobs as LF, so this only fixes checkout behavior.
+* text=auto eol=lf
+
+# Binary assets — never touch these.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary

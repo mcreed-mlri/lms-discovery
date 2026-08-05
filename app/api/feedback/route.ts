@@ -5,7 +5,7 @@ import { createSupabaseAdminClient } from "@/lib/supabase/server";
 /**
  * Learner micro-survey intake: the post-completion rating card and the
  * stalled-course nudge both POST here. Target table is Supabase `feedback`
- * (draft: docs/planning/supabase-analytics.sql + platform-wiki schema page).
+ * (draft: docs/planning/supabase-analytics.sql).
  *
  * Until that table is live (and profiles provide a user_id), inserts will
  * fail — by design this route then returns 202 "accepted, not stored" instead
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
     if (!item) return accepted("Course is not in learning_items yet.");
 
     // No user_id yet: learner identity attaches when the profiles table lands
-    // (see platform-wiki supabase-schema.html). Until the feedback table
+    // (see docs/planning/supabase-analytics.sql). Until the feedback table
     // exists and allows this shape, the insert fails into the 202 path.
     const { error } = await supabase.from("feedback").insert({
       item_id: item.id,

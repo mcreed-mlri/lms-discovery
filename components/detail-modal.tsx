@@ -4,6 +4,7 @@ import { useEffect, type CSSProperties } from "react";
 import { ArrowIcon, BookIcon, CloseIcon } from "@/components/icons";
 import { TypeBadge } from "@/components/type-badge";
 import { useFocusTrap } from "@/lib/hooks/use-focus-trap";
+import { useScrollLock } from "@/lib/hooks/use-scroll-lock";
 import { getCourseAccent, getCourseLabel, getItemAccent, type Accent } from "@/lib/course-theme";
 import {
   courses,
@@ -110,17 +111,15 @@ export function DetailModal({
 }) {
   const dialogRef = useFocusTrap<HTMLDivElement>(Boolean(item));
 
+  useScrollLock(Boolean(item));
+
   useEffect(() => {
     if (!item) return;
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") onClose();
     }
     document.addEventListener("keydown", handleKeyDown);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
-    };
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [item, onClose]);
 
   if (!item) return null;

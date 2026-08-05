@@ -88,10 +88,18 @@ export const demoUsers = [demoUser, kevinSmithUser, mlriAdminUser, facultyUser];
 /**
  * Demo mode keeps the localStorage persona picker as the only login path.
  * Demo users can also be shown alongside Brightspace for stakeholder demos;
- * set NEXT_PUBLIC_SHOW_DEMO_USERS=false to hide them.
+ * set NEXT_PUBLIC_SHOW_DEMO_USERS=true to opt in.
+ *
+ * This flag MUST stay opt-in. The AuthProvider effect below reads a persona
+ * from localStorage and returns early, before /api/me is ever called — so
+ * while it is on, anyone can write {"userType":"admin","accessStatus":
+ * "approved"} to the `mlri-demo-user` key and hold a client-side admin session.
+ * Real Brightspace logins are correctly capped server-side in /api/me, and this
+ * path bypasses that cap. It previously defaulted to ON (`!== "false"`), which
+ * meant any deployment that did not explicitly disable it was exposed.
  */
 export const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
-export const showDemoUsers = isDemoMode || process.env.NEXT_PUBLIC_SHOW_DEMO_USERS !== "false";
+export const showDemoUsers = isDemoMode || process.env.NEXT_PUBLIC_SHOW_DEMO_USERS === "true";
 
 type AuthState = {
   user: User | null;

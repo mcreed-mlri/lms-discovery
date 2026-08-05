@@ -3,11 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "scripts": {
     "dev": "next dev -p 3000 --webpack --experimental-https",
     "build": "next build --webpack",
     "start": "next start -p 3000",
-    "test": "node --import tsx --test tests/search-ranking.test.ts tests/access-filtering.test.ts tests/learning-links.test.ts tests/session.test.ts",
+    "test": "node --import tsx --test \"tests/**/*.test.ts\"",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

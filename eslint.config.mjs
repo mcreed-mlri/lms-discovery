@@ -23,5 +23,9 @@ export default defineConfig([
     "tools/**",
     "archive/**",
     "design_handoff_studio_rail/**",
+    // Static assets served verbatim, not application source. public/tools-handbook
+    // is generated output; linting it produced the only warnings in the repo and
+    // hid real ones in the noise.
+    "public/**",
   ]),
 ]);

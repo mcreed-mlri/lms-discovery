@@ -78,12 +78,12 @@ export function ContentCard({
       style={accentVars(accent)}
       onClick={() => onOpen?.(item)}
       aria-label={`${item.title}. Open detail view.`}
-      className={`editorial-card group relative flex h-full cursor-pointer flex-col overflow-hidden text-left transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 before:opacity-85 before:bg-[color:var(--accent)] hover:border-[color:var(--accent)] focus-ring ${
+      className={`editorial-card group relative flex h-full cursor-pointer flex-col overflow-hidden text-left transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 before:opacity-45 before:bg-[color:var(--accent)] hover:border-[color:var(--line-strong)] focus-ring ${
         isFeatured
           ? "min-h-0 border-[color:var(--brand)] p-4 pt-5 before:h-1.5 sm:col-span-2 sm:min-h-[15.75rem] sm:p-6 sm:pt-7 lg:col-span-2"
           : isModule
-            ? "min-h-0 p-3 pt-3.5 before:h-1 sm:min-h-[11.25rem] sm:p-4 sm:pt-4"
-            : "min-h-0 p-3 pt-3.5 before:h-1 sm:min-h-[15.75rem] sm:p-[1.125rem] sm:pt-5"
+            ? "min-h-0 p-3 pt-3.5 before:h-0.5 sm:min-h-[12rem] sm:p-4 sm:pt-4"
+            : "min-h-0 p-3 pt-3.5 before:h-0.5 sm:min-h-[16rem] sm:p-4 sm:pt-5"
       }`}
     >
       {isFeatured && (
@@ -122,8 +122,8 @@ export function ContentCard({
           isFeatured
             ? "max-w-xl text-[15px] line-clamp-3"
             : isModule
-              ? "line-clamp-2"
-              : "line-clamp-3"
+              ? "min-h-[2.75rem] line-clamp-2"
+              : "min-h-[4.125rem] line-clamp-3"
         }`}
       >
         {item.description}
@@ -162,7 +162,7 @@ export function ContentListRow({
       style={accentVars(accent)}
       onClick={() => onOpen?.(item)}
       aria-label={`${item.title}. Open detail view.`}
-      className="editorial-card group relative grid w-full cursor-pointer grid-cols-[minmax(0,1fr)_auto] items-center gap-2 overflow-hidden p-3 pl-3.5 text-left transition duration-200 ease-out before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--accent)] hover:border-[color:var(--accent)] focus-ring sm:grid-cols-1 sm:gap-4 sm:p-5 sm:pl-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-center"
+      className="editorial-card group relative grid w-full cursor-pointer grid-cols-[minmax(0,1fr)_auto] items-center gap-2 overflow-hidden p-3 pl-3.5 text-left transition duration-200 ease-out before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--accent)] before:opacity-55 hover:border-[color:var(--line-strong)] focus-ring sm:grid-cols-1 sm:gap-4 sm:p-5 sm:pl-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-center"
     >
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-1.5 sm:mb-2.5 sm:gap-2">
@@ -220,7 +220,7 @@ export function PathCard({
       style={accentVars(accent)}
       onClick={() => onOpen?.(item)}
       aria-label={`${item.title}. Open detail view.`}
-      className="editorial-card group relative block w-full cursor-pointer overflow-hidden p-3 pt-3.5 text-left transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 before:h-1 before:opacity-85 before:bg-[color:var(--accent)] hover:border-[color:var(--accent)] focus-ring sm:p-[1.125rem] sm:pt-5"
+      className="editorial-card group relative flex h-full w-full cursor-pointer flex-col overflow-hidden p-3 pt-3.5 text-left transition duration-200 ease-out before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:opacity-45 before:bg-[color:var(--accent)] hover:border-[color:var(--line-strong)] focus-ring sm:min-h-[16rem] sm:p-4 sm:pt-5"
     >
       <div className="flex items-start justify-between gap-2">
         <TypeBadge type="PATH" />
@@ -231,7 +231,7 @@ export function PathCard({
       <h3 className="card-title mt-2 line-clamp-2 text-[16px] leading-snug sm:mt-3.5 sm:line-clamp-none sm:text-[19px] sm:leading-tight">
         {item.title}
       </h3>
-      <p className="card-description mt-1.5 hidden line-clamp-3 text-[14px] leading-relaxed sm:mt-2.5 sm:block">
+      <p className="card-description mt-1.5 hidden min-h-[4.125rem] line-clamp-3 text-[14px] leading-relaxed sm:mt-2.5 sm:block">
         {item.description}
       </p>
       <div className="mt-2.5 hidden flex-wrap gap-1.5 sm:mt-4 sm:flex">
@@ -239,7 +239,7 @@ export function PathCard({
           <span
             key={course.id}
             style={accentVars(getCourseAccent(course.id, course.hueIndex))}
-            className="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--line)] bg-[color:var(--accent-tint)] px-2.5 py-1 text-xs font-medium text-[color:var(--accent-ink)]"
+            className="inline-flex items-center gap-1.5 rounded-md border border-[color:var(--line-soft)] bg-[color:var(--surface-sunken)] px-2.5 py-1 text-xs font-medium text-[color:var(--ink-soft)]"
           >
             <span
               className="h-1.5 w-1.5 rounded-full bg-[color:var(--accent)]"
@@ -249,7 +249,7 @@ export function PathCard({
           </span>
         ))}
       </div>
-      <div className="mt-2.5 flex items-center justify-between border-t border-[color:var(--line-soft)] pt-2.5 sm:mt-5 sm:pt-3.5">
+      <div className="mt-auto flex items-center justify-between border-t border-[color:var(--line-soft)] pt-2.5 sm:mt-5 sm:pt-3.5">
         <span className="text-[12px] font-semibold leading-5 tabular-nums text-[color:var(--ink-soft)] sm:text-[13px]">
           {item.courseIds.length} courses, {item.totalDuration}
         </span>

@@ -2,19 +2,8 @@
  * Dashboard data layer — mock today, API tomorrow.
  * Replace mocks with fetch('/api/me/dashboard') in Phase 1 when the server route ships.
  */
-import {
-  adminDashboardMock,
-  emptyLearnerDashboardMock,
-  learnerDashboardMock,
-  managerDashboardMock,
-  programDashboardMock,
-} from "@/mocks/dashboard";
-import type {
-  AdminDashboardPayload,
-  LearnerDashboardPayload,
-  ManagerDashboardPayload,
-  ProgramDashboardPayload,
-} from "@/types/dashboard";
+import { emptyLearnerDashboardMock, learnerDashboardMock } from "@/mocks/dashboard";
+import type { LearnerDashboardPayload } from "@/types/dashboard";
 
 const MOCK_DELAY_MS = 400;
 
@@ -44,17 +33,5 @@ export const dashboardService = {
       () => (options?.empty ? emptyLearnerDashboardMock : learnerDashboardMock),
       options,
     );
-  },
-
-  async getManagerDashboard(options?: DashboardFetchOptions): Promise<ManagerDashboardPayload> {
-    return withMockLatency(() => managerDashboardMock, options);
-  },
-
-  async getProgramDashboard(options?: DashboardFetchOptions): Promise<ProgramDashboardPayload> {
-    return withMockLatency(() => programDashboardMock, options);
-  },
-
-  async getAdminDashboard(options?: DashboardFetchOptions): Promise<AdminDashboardPayload> {
-    return withMockLatency(() => adminDashboardMock, options);
   },
 };

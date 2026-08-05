@@ -65,9 +65,9 @@
      hairlines above cannot carry an input or select border. */
   --line-control: #827b70;
   --shadow-xs: 0 1px 2px rgba(32, 27, 19, 0.04);
-  --shadow-card: 0 1px 2px rgba(32, 27, 19, 0.04), 0 6px 18px rgba(32, 27, 19, 0.06);
-  --shadow-sm: 0 1px 2px rgba(32, 27, 19, 0.04), 0 6px 18px rgba(32, 27, 19, 0.06);
-  --shadow-md: 0 1px 2px rgba(32, 27, 19, 0.04), 0 6px 18px rgba(32, 27, 19, 0.06);
+  --shadow-card: 0 1px 2px rgba(32, 27, 19, 0.035), 0 4px 14px rgba(32, 27, 19, 0.045);
+  --shadow-sm: 0 1px 2px rgba(32, 27, 19, 0.035), 0 4px 14px rgba(32, 27, 19, 0.045);
+  --shadow-md: 0 1px 2px rgba(32, 27, 19, 0.04), 0 6px 18px rgba(32, 27, 19, 0.05);
   --shadow-lg: 0 8px 24px rgba(32, 27, 19, 0.1), 0 2px 6px rgba(32, 27, 19, 0.06);
 
   /* ── Brand — steel blue, drawn from the MLRI blue family. Institutional, not
@@ -452,7 +452,7 @@ input::placeholder {
 .editorial-card:hover {
   border-color: var(--line-strong);
   background: var(--hover-tint);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-xs);
 }
 
 .surface-featured {
@@ -464,6 +464,15 @@ input::placeholder {
 /* Section rhythm — spacing and a divider, not a nested box. */
 .section-panel {
   border-top: 1px solid var(--line);
+}
+
+.section-label {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 780;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+  text-transform: uppercase;
 }
 
 .hero-continue {
@@ -568,8 +577,7 @@ input::placeholder {
 .interactive-tile:hover {
   border-color: var(--line-strong);
   background: var(--hover-tint);
-  box-shadow: var(--shadow-card);
-  transform: translateY(-1px);
+  box-shadow: var(--shadow-xs);
 }
 
 /* ── Text atoms ─────────────────────────────────────────────────────────── */

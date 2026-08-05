@@ -140,7 +140,7 @@ export function StudioRail({
   return (
     <div
       className={`flex h-full max-h-screen flex-col overflow-y-auto overflow-x-hidden border-r border-[color:var(--line)] bg-[color:var(--surface)] transition-[width,padding] duration-200 ease-[cubic-bezier(.4,0,.2,1)] ${
-        collapsed ? "w-[68px] px-3 py-5" : "w-[248px] px-4 py-5"
+        collapsed ? "w-[68px] px-3 py-5" : "w-[240px] px-3.5 py-5"
       }`}
     >
       {/* Brand — the mark doubles as the expand/collapse toggle */}
@@ -155,7 +155,7 @@ export function StudioRail({
           title={collapsed ? "Expand navigation" : "Collapse navigation"}
           aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
           aria-expanded={!collapsed}
-          className="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[8px] bg-[color:var(--ink)] text-[color:var(--surface)] transition hover:opacity-90 focus-ring"
+          className="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[8px] bg-[color:var(--ink)] text-[color:var(--surface)] shadow-[var(--shadow-xs)] transition hover:opacity-90 focus-ring"
         >
           <span aria-hidden="true" className="text-[17px] font-bold leading-none">
             L
@@ -182,7 +182,7 @@ export function StudioRail({
         <button
           type="button"
           onClick={onSearch}
-          className="mb-4 flex items-center gap-[9px] rounded-[9px] border border-[color:var(--line)] bg-[color:var(--paper)] px-3 py-[9px] text-left transition hover:border-[color:var(--line-strong)] focus-ring"
+          className="mb-4 flex items-center gap-[9px] rounded-[9px] border border-[color:var(--line-soft)] bg-[color:var(--surface)] px-3 py-[9px] text-left shadow-[var(--shadow-xs)] transition hover:border-[color:var(--line-strong)] focus-ring"
         >
           <SearchIcon className="h-4 w-4 text-[color:var(--ink-soft)]" />
           <span className="flex-1 text-[13px] text-[color:var(--ink-soft)]">Search</span>
@@ -243,7 +243,9 @@ export function StudioRail({
                 {!collapsed && (
                   <>
                     <span className="flex-1">{area.name}</span>
-                    <span className="text-[12px] text-[color:var(--ink-soft)]">{area.count}</span>
+                    <span className="text-[12px] font-medium text-[color:var(--ink-soft)]">
+                      {area.count}
+                    </span>
                   </>
                 )}
               </Link>

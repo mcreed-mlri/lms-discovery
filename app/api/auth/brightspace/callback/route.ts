@@ -7,6 +7,8 @@ import {
   exchangeBrightspaceToken,
   type BrightspaceTokenResponse,
 } from "@/lib/brightspace/tokens";
+import { RETURN_TO_COOKIE } from "@/lib/return-to-cookie";
+import { sanitizeReturnTo } from "@/lib/safe-return-to";
 import {
   createSessionToken,
   getSessionSecret,
@@ -123,7 +125,12 @@ export async function GET(request: NextRequest) {
     sessionSecret,
   );
 
-  const response = NextResponse.redirect(new URL("/", request.url));
+  // Re-sanitize on the way out. The cookie was written by our own start route,
+  // but validating again means a single missed check upstream cannot become an
+  // open redirect here — and `new URL(path, origin)` keeps us same-origin
+  // regardless.
+  const returnTo = sanitizeReturnTo(request.cookies.get(RETURN_TO_COOKIE)?.value);
+  const response = NextResponse.redirect(new URL(returnTo ?? "/", request.url));
 
   response.cookies.set(SESSION_COOKIE, sessionToken, {
     httpOnly: true,
@@ -140,5 +147,8 @@ export async function GET(request: NextRequest) {
   });
 
   response.cookies.delete(STATE_COOKIE);
+  // Consumed — drop it. The error path deliberately leaves it in place so a
+  // retry still lands on the originally requested page; it expires in 10 min.
+  response.cookies.delete(RETURN_TO_COOKIE);
   return response;
 }
