@@ -14,6 +14,21 @@ export default defineConfig([
       // rule's suggested alternative (useSyncExternalStore) is a bigger
       // refactor than it is worth today. Revisit if adopting React Compiler.
       "react-hooks/set-state-in-effect": "off",
+
+      // Off because both call sites in lib/auth.tsx genuinely need a full
+      // document navigation, and the rule cannot tell the difference:
+      //
+      //   · login() navigates to /api/auth/brightspace/start, an API route that
+      //     302s to auth.brightspace.com. Client-side routing cannot follow a
+      //     redirect off-origin, so router.push() would break OAuth.
+      //   · logout() navigates to /login *in order to* discard client state.
+      //     A soft push keeps the SPA alive with a stale user in memory, which
+      //     is the exact thing logging out is supposed to prevent.
+      //
+      // Rewriting these to window.location.href would silence the rule without
+      // changing behaviour — suppression by obfuscation. An honest entry here is
+      // better. Added when eslint-config-next 16.3.0 introduced the rule.
+      "@next/next/no-location-assign-relative-destination": "off",
     },
   },
   globalIgnores([

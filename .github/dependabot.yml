@@ -18,14 +18,24 @@ updates:
       runtime-patches:
         dependency-type: production
         update-types: ["patch"]
-    # Majors for the framework and React are deliberate migrations, not
-    # dependency bumps — raise them as their own piece of work.
+    # Majors for the framework, React, and the linter are deliberate migrations,
+    # not dependency bumps — raise them as their own piece of work.
+    #
+    # eslint is here because of a concrete failure: Dependabot proposed
+    # eslint 10.8.0 and CI failed. eslint-config-next declares its peer range as
+    # ">=9.0.0", which *permits* a major it has not been validated against, so
+    # npm installs it happily and the config then breaks at runtime. The peer
+    # range cannot be relied on to gate this; the ignore rule can.
     ignore:
       - dependency-name: next
         update-types: ["version-update:semver-major"]
       - dependency-name: react
         update-types: ["version-update:semver-major"]
       - dependency-name: react-dom
+        update-types: ["version-update:semver-major"]
+      - dependency-name: eslint
+        update-types: ["version-update:semver-major"]
+      - dependency-name: eslint-config-next
         update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions

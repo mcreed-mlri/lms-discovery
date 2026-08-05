@@ -25,11 +25,12 @@ exist, and each was written for a specific reason recorded in its own comments.
 Overlays in particular must use the existing focus trap **and** scroll lock; the
 drawer shipped without either and Tab walked straight out of it.
 
-**Don't add `eslint-disable`.** There are currently zero in the repo and exactly
-one disabled rule in `eslint.config.mjs`, with its reasoning inline (ADR 0009).
-That is a property worth keeping. If a rule is genuinely wrong for this codebase,
-disable it in the config with a comment explaining why, rather than scattering
-suppressions.
+**Don't add `eslint-disable`.** There are currently zero in the repo. Two rules
+are disabled in `eslint.config.mjs`, each with its reasoning inline (ADR 0009).
+The property worth keeping is the zero: a config entry has to be justified in one
+reviewable place, whereas suppressions scattered through source are invisible. If
+a rule is genuinely wrong for this codebase — wrong, not merely inconvenient —
+disable it in the config with a comment saying why.
 
 **Don't add `any`, `as any`, or `@ts-ignore`.** There are currently zero of each,
 under `strict: true`. Narrow `unknown` properly — `app/api/feedback/route.ts` is
