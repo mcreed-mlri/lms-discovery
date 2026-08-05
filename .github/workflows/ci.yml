@@ -33,6 +33,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Next 16.2.9 sat in this repo with 9 high-severity advisories, including a
+      # proxy bypass, until someone ran this by hand. High and critical fail the
+      # build; anything lower is Dependabot's job, not a blocker.
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
+
       - name: Typecheck
         run: npm run typecheck
 

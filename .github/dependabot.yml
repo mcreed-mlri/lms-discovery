@@ -1,0 +1,34 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    # Security patches matter here; routine version churn does not. Next 16.2.9
+    # shipped with 9 high-severity advisories and nothing surfaced them until
+    # someone happened to run `npm audit` by hand.
+    groups:
+      # One PR for all dev tooling — lint, test, build. Low risk, high volume.
+      dev-tooling:
+        dependency-type: development
+        update-types: ["minor", "patch"]
+      # Runtime patches grouped too, but kept separate so they get real review.
+      runtime-patches:
+        dependency-type: production
+        update-types: ["patch"]
+    # Majors for the framework and React are deliberate migrations, not
+    # dependency bumps — raise them as their own piece of work.
+    ignore:
+      - dependency-name: next
+        update-types: ["version-update:semver-major"]
+      - dependency-name: react
+        update-types: ["version-update:semver-major"]
+      - dependency-name: react-dom
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly

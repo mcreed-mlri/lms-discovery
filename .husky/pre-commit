@@ -1,0 +1,27 @@
+# Staged files only, so the hook stays fast enough that nobody reaches for
+# --no-verify. The full suite (typecheck, tests, build, e2e) is CI's job.
+
+# cd to the repo root and then use $PWD, rather than using the output of
+# `git rev-parse --show-toplevel` directly: on Windows that returns a "C:/..."
+# path, which git bash will not search as a PATH entry. $PWD after a cd is in
+# POSIX form ("/c/...") and works.
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+# This repo is developed on a machine with no global Node install, using the
+# bundled toolchain under tools/. Add it if present — a glob rather than a pinned
+# version, and a fallback rather than a requirement, so this behaves identically
+# on a normal checkout where tools/ does not exist (it is gitignored).
+for candidate in tools/node-v*-win-x64; do
+  if [ -d "$candidate" ]; then
+    PATH="$PWD/$candidate:$PATH"
+  fi
+done
+export PATH
+
+if command -v node >/dev/null 2>&1; then
+  ./node_modules/.bin/lint-staged
+else
+  # A hook that cannot run is not a reason to lose someone's work, and CI checks
+  # the same things.
+  echo "husky: no node on PATH — skipping lint-staged. CI will still check." >&2
+fi
