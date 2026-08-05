@@ -245,7 +245,33 @@ function expandQuery(rawQuery: string) {
   };
 }
 
+/**
+ * Per-item document cache.
+ *
+ * `createSearchDocument` is not cheap: for a COURSE it filters every module, and
+ * for a PATH it filters every course *and* every module. `buildSearchIndex` maps
+ * it over the whole catalog, and `searchLearningItems` called `buildSearchIndex`
+ * fresh on every query — so a single keystroke rebuilt the entire index, and the
+ * home page did it twice (once for the catalog grid, once for the global search
+ * box). That is O(items x modules) of string work per character typed.
+ *
+ * A WeakMap keyed on the item is safe because catalog items are module-level
+ * constants in lib/data.ts: stable identity, never mutated. A different item
+ * object gets its own entry, and entries disappear with the items if the catalog
+ * ever becomes dynamic.
+ */
+const documentCache = new WeakMap<LearningItem, SearchDocument>();
+
 export function buildSearchDocument(item: LearningItem): SearchDocument {
+  const cached = documentCache.get(item);
+  if (cached) return cached;
+
+  const document = createSearchDocument(item);
+  documentCache.set(item, document);
+  return document;
+}
+
+function createSearchDocument(item: LearningItem): SearchDocument {
   const metadata = getSearchMetadata(item);
   const relatedCourses =
     item.type === "PATH"

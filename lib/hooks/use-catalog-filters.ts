@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
 
 import { getEligibleLearningItems, type AccessProfile } from "@/lib/access";
 import {
@@ -78,6 +78,19 @@ export function useCatalogFilters(
   const [statusFilter, setStatusFilter] = useState<SelectValue<ContentLifecycleStatus>>("All");
   const [durationFilter, setDurationFilter] = useState<SelectValue<DurationFacet>>("All");
 
+  /**
+   * Scoring is ~99% of a query's cost (the index itself is cached per item in
+   * lib/search.ts), and it runs over every catalog item on every keystroke. At
+   * today's ~100 items that is under a millisecond, but it is synchronous work
+   * between the keypress and the next paint, and it grows with the catalog.
+   *
+   * Deferring the value keeps the input itself responsive: React renders the
+   * typed character immediately and re-runs the search at lower priority,
+   * interrupting it if another key arrives. `query` still drives the input, so
+   * typing never lags; `deferredQuery` drives the expensive derivation.
+   */
+  const deferredQuery = useDeferredValue(query);
+
   const allItems = useMemo(() => getEligibleLearningItems(getLearningItems(), user), [user]);
   const facetOptions = useMemo(() => getSearchFacetOptions(allItems), [allItems]);
   const activeSearchFilters = useMemo<SearchFacetFilters>(
@@ -92,11 +105,11 @@ export function useCatalogFilters(
     [audienceFilter, durationFilter, filter, levelFilter, practiceAreaFilter, statusFilter],
   );
   const searchResults = useMemo(
-    () => searchLearningItems(allItems, query, activeSearchFilters),
-    [allItems, query, activeSearchFilters],
+    () => searchLearningItems(allItems, deferredQuery, activeSearchFilters),
+    [allItems, deferredQuery, activeSearchFilters],
   );
   const searchSuggestions = useMemo(() => searchResults.slice(0, 6), [searchResults]);
-  const noResultSuggestions = useMemo(() => getNoResultSuggestions(query), [query]);
+  const noResultSuggestions = useMemo(() => getNoResultSuggestions(deferredQuery), [deferredQuery]);
 
   // Search results, then narrowed by the homepage skill lens.
   const visibleItems = useMemo(() => {
@@ -169,8 +182,12 @@ export function useCatalogFilters(
   useEffect(() => {
     const handle = window.setTimeout(() => {
       recordSearchAnalytics({
+        // deferredQuery, not query: visibleItems derives from the deferred value,
+        // so logging the live one could pair a query with the previous query's
+        // result count — which would corrupt zero-result tracking, the single most
+        // useful signal this records.
         type: "search_performed",
-        query,
+        query: deferredQuery,
         resultCount: visibleItems.length,
         filters: {
           type: filter,
@@ -190,7 +207,7 @@ export function useCatalogFilters(
     filter,
     levelFilter,
     practiceAreaFilter,
-    query,
+    deferredQuery,
     statusFilter,
     visibleItems.length,
   ]);

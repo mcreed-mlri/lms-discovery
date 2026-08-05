@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { DetailModal } from "@/components/detail-modal";
 import { CatalogSection } from "@/components/home/catalog-section";
@@ -42,30 +42,32 @@ export default function Home() {
     });
   }
 
-  // Practice-area rows in the rail link to /?q=<term>#browse. Seed the catalog
-  // search from that param on mount so the lens works from any page. (⌘K focus
-  // is handled once, app-wide, by StudioShell.)
+  /**
+   * Practice-area rows in the rail and results from the global search dialog both
+   * navigate to /?q=<term>&open=<id>#browse. Reading those params through
+   * useSearchParams makes this react to the URL changing.
+   *
+   * It used to read window.location.search once in a mount effect, which meant a
+   * push from an already-mounted page had no effect — the effect had already run.
+   * StudioShell worked around that by *also* dispatching a
+   * "lace-open-learning-item" CustomEvent, so the app carried a DOM event bus in
+   * parallel with its own router, and neither half worked alone: the push was
+   * needed to survive the navigation, the event to be heard after it. Making the
+   * params reactive removes the need for the event entirely.
+   */
+  const searchParams = useSearchParams();
+  const seededQuery = searchParams.get("q");
+  const openId = searchParams.get("open");
+
   useEffect(() => {
-    const openById = (id: string | null) => {
-      if (!id) return;
-      const match = allItems.find((item) => `${item.type}-${item.id}` === id);
-      if (match) setSelectedItem(match);
-    };
+    if (seededQuery) setQuery(seededQuery);
+  }, [seededQuery, setQuery]);
 
-    const params = new URLSearchParams(window.location.search);
-    const seeded = params.get("q");
-    if (seeded) setQuery(seeded);
-    openById(params.get("open"));
-
-    function handleOpenLearningItem(event: Event) {
-      const detail = (event as CustomEvent<{ id?: string; query?: string }>).detail;
-      if (detail?.query) setQuery(detail.query);
-      openById(detail?.id ?? null);
-    }
-
-    window.addEventListener("lace-open-learning-item", handleOpenLearningItem);
-    return () => window.removeEventListener("lace-open-learning-item", handleOpenLearningItem);
-  }, [allItems, setQuery]);
+  useEffect(() => {
+    if (!openId) return;
+    const match = allItems.find((item) => `${item.type}-${item.id}` === openId);
+    if (match) setSelectedItem(match);
+  }, [openId, allItems]);
 
   if (!ready) {
     return (

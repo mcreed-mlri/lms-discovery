@@ -51,6 +51,40 @@ test.describe("signed in", () => {
     await expect(dialog.getByRole("option").first()).toBeVisible();
   });
 
+  test("selecting a global search result cross-navigates and opens it", async ({ page }) => {
+    // This is the flow that used to need a CustomEvent bus *and* a router.push,
+    // because the home page read q/open only once on mount. It is now driven by
+    // useSearchParams alone, so this test is what proves the event was redundant
+    // rather than load-bearing. Starting from /browse makes it a real
+    // cross-navigation.
+    await page.goto("/browse/");
+    await expect(page.getByRole("main")).toBeVisible();
+
+    await page.keyboard.press("ControlOrMeta+k");
+    const dialog = page.getByRole("dialog", { name: /search/i });
+    await dialog.getByRole("combobox").fill("housing");
+    const firstOption = dialog.getByRole("option").first();
+    await expect(firstOption).toBeVisible();
+    await firstOption.click();
+
+    // Landed on home with both params, and the detail dialog opened from them.
+    await expect(page).toHaveURL(/[?&]q=/);
+    await expect(page).toHaveURL(/[?&]open=/);
+    await expect(page.getByRole("dialog", { name: /.+/ })).toBeVisible();
+  });
+
+  test("a shared /?q=&open= link opens the item on a cold load", async ({ page }) => {
+    // The corollary: because the params drive state, such a URL is now genuinely
+    // shareable rather than only working in-session.
+    await page.goto("/?q=housing&open=COURSE-housing-law-fundamentals");
+    await expect(page.getByRole("main")).toBeVisible();
+
+    // role="combobox" is set explicitly on the input, which overrides the
+    // implicit searchbox role that type="search" would otherwise give it.
+    const search = page.getByRole("combobox").first();
+    await expect(search).toHaveValue("housing");
+  });
+
   test("the theme choice survives a reload", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("main")).toBeVisible();

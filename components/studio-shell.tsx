@@ -67,16 +67,11 @@ export function StudioShell({
         resultType: result.item.type,
         resultTitle: result.item.title,
       });
-      window.dispatchEvent(
-        new CustomEvent("lace-open-learning-item", {
-          detail: {
-            id: `${result.item.type}-${result.item.id}`,
-            query: result.item.title,
-          },
-        }),
-      );
       setSearchOpen(false);
       setGlobalQuery("");
+      // The home page reads q/open via useSearchParams, so this push is the whole
+      // mechanism. It used to be accompanied by a CustomEvent because the home
+      // page only read the URL once on mount.
       router.push(
         `/?q=${encodeURIComponent(result.item.title)}&open=${encodeURIComponent(`${result.item.type}-${result.item.id}`)}#browse`,
       );
