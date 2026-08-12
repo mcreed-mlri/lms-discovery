@@ -1,12 +1,19 @@
 # Continuous integration: quality checks on every push and pull request.
 # Deployment is NOT handled here — Vercel's GitHub integration deploys
 # automatically when main is updated.
+#
+# Also runs weekly on Mondays (after Dependabot's Monday npm PRs) so main
+# still gets validated when nothing merged, and on demand via workflow_dispatch.
 name: CI
 
 on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    # Mondays 14:00 UTC ≈ 10:00 ET — same day as Dependabot npm updates.
+    - cron: "0 14 * * 1"
+  workflow_dispatch:
 
 # A new push to the same branch supersedes the old run. Without this, rapid
 # pushes queue up redundant jobs and the useful result waits behind stale ones.
