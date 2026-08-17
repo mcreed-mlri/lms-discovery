@@ -43,3 +43,13 @@ CI (`.github/workflows/ci.yml`) is two jobs: `checks` (audit + typecheck + lint 
 - **Colour tokens with a recorded contrast ratio in `app/globals.css` are locked** (ADR 0008). Changing one means running `npm run e2e` — the axe sweep checks every route in both themes. Text on a solid `--brand` fill uses `--brand-on`, not `text-white`.
 - Coverage thresholds in `vitest.config.ts` are a ratchet set just under the current baseline: raise them, never lower them to make a build pass (ADR 0011).
 - Line endings are LF everywhere via `.gitattributes` (ADR 0010). If `format:check` fails on files you didn't touch, run `git add --renormalize .`.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
