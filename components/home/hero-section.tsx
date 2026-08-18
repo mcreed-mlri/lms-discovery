@@ -29,8 +29,7 @@ function useResumeCard(allItems: LearningItem[]) {
   const eligibleItemIds = useMemo(() => new Set(allItems.map((item) => item.id)), [allItems]);
   const resumeItem =
     (continueLearning.find((item) => "progress" in item && eligibleItemIds.has(item.id)) as
-      | ResumeEntry
-      | undefined) ??
+      ResumeEntry | undefined) ??
     ({
       id: "welcome-to-lace",
       type: "COURSE",

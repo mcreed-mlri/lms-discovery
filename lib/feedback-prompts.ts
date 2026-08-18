@@ -64,12 +64,7 @@ export function useFeedbackPrompts() {
 }
 
 export type FeedbackFlag =
-  | "outdated"
-  | "unclear"
-  | "not_relevant"
-  | "too_busy"
-  | "too_long"
-  | "need_help";
+  "outdated" | "unclear" | "not_relevant" | "too_busy" | "too_long" | "need_help";
 
 /* Fire-and-forget: feedback must never block or break the dashboard. The
    route degrades to 202 (accepted, not stored) until the Supabase feedback
