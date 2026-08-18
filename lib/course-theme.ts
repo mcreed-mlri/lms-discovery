@@ -19,14 +19,7 @@ import { getHue } from "@/lib/skill-hue";
 
 // ── Topic families ─────────────────────────────────────────────────────────
 export type TopicFamily =
-  | "court"
-  | "client"
-  | "ethics"
-  | "research"
-  | "drafting"
-  | "trauma"
-  | "foundations"
-  | "neutral";
+  "court" | "client" | "ethics" | "research" | "drafting" | "trauma" | "foundations" | "neutral";
 
 export type TopicTheme = {
   family: TopicFamily;

@@ -63,9 +63,7 @@ export type Path = {
 };
 
 export type LearningItem =
-  | (Course & { type: "COURSE" })
-  | (Module & { type: "MODULE" })
-  | (Path & { type: "PATH" });
+  (Course & { type: "COURSE" }) | (Module & { type: "MODULE" }) | (Path & { type: "PATH" });
 
 const builtCourses: Course[] = [
   {
@@ -400,14 +398,7 @@ export type SkillId =
   | "research";
 
 export type SkillGlyphKind =
-  | "interview"
-  | "draft"
-  | "counsel"
-  | "triage"
-  | "negotiate"
-  | "court"
-  | "ethics"
-  | "research";
+  "interview" | "draft" | "counsel" | "triage" | "negotiate" | "court" | "ethics" | "research";
 
 export type Skill = {
   id: SkillId;
