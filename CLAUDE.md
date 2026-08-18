@@ -18,7 +18,7 @@ npm run build
 
 Windows without global Node: prefix any script with the bundled npm, e.g. `.\tools\node-v24.15.0-win-x64\npm.cmd run dev`. Node version is pinned in `.nvmrc` + `engines`. `npm run e2e` needs `npx playwright install chromium` once.
 
-CI (`.github/workflows/ci.yml`) is two jobs: `checks` (audit + typecheck + lint + format:check + coverage + build) and `e2e` (Playwright + axe). Vercel deploys `main` via its git integration. A Husky pre-commit hook runs lint-staged on staged files only.
+CI (`.github/workflows/ci.yml`) is three jobs: `audit` (`npm audit --audit-level=high`, no install — it reads the lockfile), `checks` (typecheck + lint + format:check + coverage + build), and `e2e` (Playwright + axe). The audit is deliberately its own job so a newly published advisory fails on its own instead of skipping every other check. Vercel deploys `main` via its git integration. A Husky pre-commit hook runs lint-staged on staged files only.
 
 **Operational docs**: [`docs/runbook.md`](docs/runbook.md) for setup and troubleshooting, [`docs/adr/`](docs/adr/README.md) for decisions that look odd and are deliberate, [`CONTRIBUTING.md`](CONTRIBUTING.md) for house rules. Read the ADR index before changing auth, colour tokens, or the lint config.
 
