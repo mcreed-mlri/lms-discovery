@@ -57,8 +57,25 @@ npm run build
 
 `npm run e2e` needs a browser once: `npx playwright install chromium`.
 
-CI runs all of the above as two jobs — fast checks, and a separate e2e job so a
-browser download and a 130-page build do not slow down feedback.
+CI runs all of the above as three jobs — a standalone dependency audit, the fast
+checks, and a separate e2e job so a browser download and a 130-page build do not
+slow down feedback.
+
+### "CI is red but the code is fine"
+
+Check which job failed. A red `audit` with green `checks` means a new advisory
+landed against something already in `package-lock.json` — nobody's push broke it,
+and the weekly scheduled run exists to catch exactly this. Reproduce it without a
+full install:
+
+```bash
+npm audit --audit-level=high   # resolves from the lockfile; no node_modules needed
+```
+
+Prefer an in-range lockfile-only bump (`npm audit fix`) over widening a version
+range in `package.json`. Note that a Dependabot PR bumping the _parent_ package
+often does not fix the advisory — it can widen the range while leaving the
+vulnerable version pinned.
 
 ## Common problems
 
