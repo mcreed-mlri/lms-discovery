@@ -18,14 +18,26 @@ updates:
       runtime-patches:
         dependency-type: production
         update-types: ["patch"]
-    # Majors for the framework, React, and the linter are deliberate migrations,
-    # not dependency bumps — raise them as their own piece of work.
+    # Majors for the framework, React, the linter, the compiler, and the CSS
+    # engine are deliberate migrations, not dependency bumps — raise them as
+    # their own piece of work.
     #
     # eslint is here because of a concrete failure: Dependabot proposed
     # eslint 10.8.0 and CI failed. eslint-config-next declares its peer range as
     # ">=9.0.0", which *permits* a major it has not been validated against, so
     # npm installs it happily and the config then breaks at runtime. The peer
     # range cannot be relied on to gate this; the ignore rule can.
+    #
+    # typescript and tailwindcss were added the same way, after PRs #19 and #18
+    # failed on 2026-08-24:
+    #   · typescript 7.0.2 — `tsc --noEmit` passes, then `eslint .` dies on
+    #     import with "typescript-eslint does not support TS 7.0"
+    #     (typescript-eslint#10940). A toolchain gap, not our code.
+    #   · tailwindcss 4.3.3 — v4 is a rewrite. The build fails at
+    #     app/globals.css because the PostCSS plugin moved to
+    #     @tailwindcss/postcss, and the v3 `content` + `theme.extend` config
+    #     would have to become CSS-first `@theme`. That regenerates the locked
+    #     colour tokens, so it needs a full axe sweep (ADR 0008), not a bump.
     ignore:
       - dependency-name: next
         update-types: ["version-update:semver-major"]
@@ -36,6 +48,10 @@ updates:
       - dependency-name: eslint
         update-types: ["version-update:semver-major"]
       - dependency-name: eslint-config-next
+        update-types: ["version-update:semver-major"]
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
+      - dependency-name: tailwindcss
         update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
