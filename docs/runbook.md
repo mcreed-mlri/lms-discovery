@@ -11,7 +11,7 @@ cp .env.example .env.local   # then fill in values
 npm run dev                  # https://localhost:3000
 ```
 
-Node version is pinned in `.nvmrc` (24.15.0) and enforced by `engines`. On Windows
+Node version is pinned in `.nvmrc` (24.20.0) and enforced by `engines`. On Windows
 without a global Node, prefix any script with the bundled binary:
 
 ```bash
