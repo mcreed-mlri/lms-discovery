@@ -14,13 +14,6 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        mlri: {
-          navy: "#082d57",
-          blue: "#1669b7",
-          sky: "#2a9bd6",
-          ink: "#0b1f35",
-          mist: "#eef5fb",
-        },
         // Neutral base
         paper: "var(--paper)",
         surface: {
@@ -125,10 +118,6 @@ const config: Config = {
             ink: "var(--status-later-ink)",
           },
         },
-      },
-      boxShadow: {
-        soft: "var(--shadow-sm)",
-        lift: "var(--shadow-md)",
       },
       fontFamily: {
         sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
