@@ -252,11 +252,12 @@ const builtModules: Module[] = [
     level: "Foundations",
     tags: ["housing", "eviction defense", "intake", "scenario", "practice"],
     brightspaceCourseUrl: "https://mlri.brightspace.com/d2l/home/6703",
-    // Interactive scenario hosted in this app rather than Brightspace, so the
-    // module URL is an internal route. Same convention as the faculty handbook
-    // and curriculum map courses above; getModuleBrightspaceUrl returns this
-    // field first, so the handoff resolves without a special case.
-    brightspaceModuleUrl: "/demo/scenario",
+    // The scenario ships as a Brightspace topic in the 6703-course.outline
+    // package (brightspace-courses/Course-Template/intake-scenario.html), so
+    // this is an ordinary handoff like its five siblings. The React prototype
+    // at /demo/scenario is kept as the design source, not as the live target.
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6703-course.outline/intake-scenario.html?ou=6703&d2l_body_type=3",
   },
 ];
 
