@@ -48,6 +48,21 @@ test("curriculum map opens the native discovery view", () => {
   assert.equal(getLearningItemUrl(item), "/curriculum-map");
 });
 
+test("eviction intake scenario opens the in-app scenario, not Brightspace", () => {
+  const item = getLearningItemById("eviction-intake-scenario");
+
+  assert.ok(item);
+  assert.equal(getLearningItemUrl(item), "/demo/scenario");
+});
+
+test("eviction intake scenario is a module of the eviction course", () => {
+  const item = getLearningItemById("eviction-intake-scenario");
+
+  assert.ok(item);
+  assert.equal(item.type, "MODULE");
+  assert.equal(item.type === "MODULE" && item.courseId, "eviction-defense-48h");
+});
+
 test("curriculum-generated offerings open their Learning Hub page", () => {
   const generated = getLearningItems().find((item) => item.availability === "planned");
 

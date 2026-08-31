@@ -165,6 +165,17 @@ export const searchMetadataById: Record<string, SearchMetadata> = {
       jurisdictions: ["MA"],
     },
   },
+  "eviction-intake-scenario": {
+    audience: ["New attorneys"],
+    status: "New",
+    synonyms: ["scenario", "simulation", "intake", "practice", "first call", "roleplay"],
+    reviewedAt: "2026-08-31",
+    access: {
+      allowedUserTypes: ["attorney", "admin"],
+      attorneyOnly: true,
+      jurisdictions: ["MA"],
+    },
+  },
 };
 
 export function getSearchMetadata(item: LearningItem): SearchMetadata {
