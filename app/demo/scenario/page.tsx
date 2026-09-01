@@ -11,7 +11,6 @@ import { PhoneCall, type CallLine } from "@/components/scenario/PhoneCall";
 import type { ScenarioChoice, ScenarioFact } from "@/components/scenario/types";
 import { PdfReaderApp } from "@/components/workspace/apps/PdfReaderApp";
 import { defaultWorkspaceHost, pdfDocuments } from "@/components/workspace";
-import type { WorkspaceCompletion } from "@/components/workspace";
 
 /**
  * Interactive eviction-intake scenario.
@@ -140,9 +139,6 @@ export default function ScenarioPage() {
   const [justAdded, setJustAdded] = useState<string | null>(null);
   const [picked, setPicked] = useState<string | null>(null);
   const [callDone, setCallDone] = useState(false);
-  const [events, setEvents] = useState<string[]>([]);
-
-  const log = (line: string) => setEvents((prev) => [line, ...prev].slice(0, 8));
 
   const reveal = (ids: string[]) => {
     setKnown((prev) => new Set([...prev, ...ids]));
@@ -151,15 +147,7 @@ export default function ScenarioPage() {
 
   const chosen = CHOICES.find((c) => c.id === picked);
 
-  // The workspace kit reports learner actions through this one callback.
-  const host = {
-    ...defaultWorkspaceHost,
-    userName: "Intake Advocate",
-    organizationName: "Harborside Legal Aid",
-    onNudge: (message: string) => log(`nudge: ${message}`),
-    onComplete: (event: WorkspaceCompletion) =>
-      log(`complete: ${event.appKey} / ${event.action} / ${event.label ?? ""}`),
-  };
+  const host = defaultWorkspaceHost;
 
   const notice = pdfDocuments.filter((d) => d.id === NOTICE_ID);
   const lease = pdfDocuments.filter((d) => d.id === LEASE_ID);
@@ -238,7 +226,6 @@ export default function ScenarioPage() {
                   onClick={() => {
                     reveal(["type"]);
                     setStep("choice");
-                    log("event: notice-reviewed");
                   }}
                 >
                   Log it as a Notice to Vacate
@@ -255,7 +242,6 @@ export default function ScenarioPage() {
                 onPick={(choice) => {
                   setPicked(choice.id);
                   setJustAdded(null);
-                  log(`choice: ${choice.id} (${choice.correct ? "correct" : "incorrect"})`);
                   setStep("feedback");
                 }}
               />
@@ -300,7 +286,6 @@ export default function ScenarioPage() {
                   onClick={() => {
                     reveal(["term", "rent"]);
                     setStep("lease");
-                    log("event: lease-reviewed");
                   }}
                 >
                   Add these to my case notes
@@ -369,7 +354,6 @@ export default function ScenarioPage() {
                     setCallDone(false);
                     setJustAdded(null);
                     setPicked(null);
-                    log("event: scenario-restarted");
                   }}
                   className="rounded-lg bg-white/95 px-5 py-2.5 text-[14px] font-medium text-[#1c1c1c] hover:bg-white"
                 >
@@ -380,11 +364,6 @@ export default function ScenarioPage() {
           </main>
 
           {!isBookend && <CaseNotesPanel facts={FACTS} known={known} justAdded={justAdded} />}
-        </div>
-
-        <div className="mt-7 font-mono text-[12px] text-[#8a8f96]">
-          <div className="mb-1">scoring events</div>
-          {events.length === 0 ? <div>none yet</div> : events.map((e, i) => <div key={i}>{e}</div>)}
         </div>
       </div>
     </div>
