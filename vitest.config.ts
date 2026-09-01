@@ -27,7 +27,21 @@ export default defineConfig({
       reporter: ["text", "html"],
       reportsDirectory: "coverage",
       include: ["lib/**/*.{ts,tsx}", "components/**/*.tsx", "app/**/*.tsx"],
-      exclude: ["**/*.d.ts", "mocks/**"],
+      /**
+       * The demo-only surfaces are excluded rather than tested: the eviction
+       * intake scenario and the workspace shell are demo scaffolding, not
+       * shipping features, and nothing in them reaches learners yet. This is a
+       * scope decision, NOT a threshold one — the ratchet below is untouched
+       * (see ADR 0011). When a demo graduates, delete its exclusion and land
+       * its suite in the same change, so the ratchet sees it.
+       */
+      exclude: [
+        "**/*.d.ts",
+        "mocks/**",
+        "app/demo/**",
+        "components/scenario/**",
+        "components/workspace/**",
+      ],
       /**
        * A ratchet, not a target. These sit just under the measured baseline at
        * the time coverage was introduced (35.5% statements / 30.7% branches), so

@@ -1,0 +1,78 @@
+{
+  "_note": "One entry per scenario step. `id` must match the step key in app/demo/scenario/page.tsx so the player can find /audio/<id>.mp3. Run `npm run voices` to pick a voice, `npm run voiceover` to generate.",
+  "voiceId": "EXAVITQu4vr4xnSDxMaL",
+  "modelId": "eleven_multilingual_v2",
+  "voiceSettings": {
+    "stability": 0.6,
+    "similarity_boost": 0.8,
+    "style": 0.0,
+    "use_speaker_boost": true
+  },
+  "lines": [
+    {
+      "id": "intro",
+      "text": "It's Tuesday morning, just after nine. The office is quiet, and the phone rings."
+    },
+    {
+      "id": "call-0",
+      "voiceId": "pNInz6obpgDQGcFmaJgB",
+      "text": "Hi, I need some help. I just got a notice from my landlord."
+    },
+    {
+      "id": "call-1",
+      "voiceId": "XrExE9yKIg1WjnnlVkGX",
+      "text": "I'm here to help. Can you tell me more about it?"
+    },
+    {
+      "id": "call-2",
+      "voiceId": "pNInz6obpgDQGcFmaJgB",
+      "text": "He says I have to move out by the end of the month."
+    },
+    {
+      "id": "call-3",
+      "voiceId": "XrExE9yKIg1WjnnlVkGX",
+      "text": "Do you know why?"
+    },
+    {
+      "id": "call-4",
+      "voiceId": "pNInz6obpgDQGcFmaJgB",
+      "text": "He says he's renovating and moving in."
+    },
+    {
+      "id": "call-5",
+      "voiceId": "pNInz6obpgDQGcFmaJgB",
+      "text": "He gave me this yesterday."
+    },
+    {
+      "id": "notice",
+      "text": "Here is the document the client received. Read it carefully. Look for the date it was issued, the deadline it sets, and the reason the landlord gives."
+    },
+    {
+      "id": "choice",
+      "text": "You have the basic facts. Now decide what to ask next. Choose the step that tells you the most about whether this notice is valid."
+    },
+    {
+      "id": "feedback",
+      "text": "Asking about the lease is the strongest next step. It tells you the tenant's rights and whether proper notice was given."
+    },
+    {
+      "id": "lease-doc",
+      "text": "The lease fills in the gaps. Note the term dates and the monthly rent, and watch them appear in your case notes."
+    },
+    {
+      "id": "lease",
+      "text": "Now place the dates on a timeline. Compare the notice date against the deadline, and ask whether the required notice period was met."
+    },
+    {
+      "id": "complete",
+      "text": "Scenario complete. You gathered the key facts, identified the type of notice, and took the right next step for your client."
+    }
+  ],
+  "_voiceIdNote": "Sarah - American English female, soft news register. Verified usable on a free ElevenLabs plan (2026-08-31). Library voices return 402 on free tiers; Matilda XrExE9yKIg1WjnnlVkGX and Adam pNInz6obpgDQGcFmaJgB also work. Note: ELEVENLABS_VOICE_ID in .env/.env.local overrides this value.",
+  "_voices": {
+    "narrator": "EXAVITQu4vr4xnSDxMaL  Sarah - step narration",
+    "client": "pNInz6obpgDQGcFmaJgB  Adam - the caller",
+    "advocate": "XrExE9yKIg1WjnnlVkGX  Matilda - the learner",
+    "_note": "All three verified usable on a free ElevenLabs plan (npm run probe-voices)."
+  }
+}

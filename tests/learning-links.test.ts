@@ -48,6 +48,24 @@ test("curriculum map opens the native discovery view", () => {
   assert.equal(getLearningItemUrl(item), "/curriculum-map");
 });
 
+test("eviction intake scenario opens its Brightspace topic", () => {
+  const item = getLearningItemById("eviction-intake-scenario");
+
+  assert.ok(item);
+  assert.equal(
+    getLearningItemUrl(item),
+    "https://mlri.brightspace.com/content/enforced/6703-course.outline/intake-scenario.html?ou=6703&d2l_body_type=3",
+  );
+});
+
+test("eviction intake scenario is a module of the eviction course", () => {
+  const item = getLearningItemById("eviction-intake-scenario");
+
+  assert.ok(item);
+  assert.equal(item.type, "MODULE");
+  assert.equal(item.type === "MODULE" && item.courseId, "eviction-defense-48h");
+});
+
 test("curriculum-generated offerings open their Learning Hub page", () => {
   const generated = getLearningItems().find((item) => item.availability === "planned");
 

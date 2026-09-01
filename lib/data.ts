@@ -240,6 +240,25 @@ const builtModules: Module[] = [
     brightspaceModuleUrl:
       "https://mlri.brightspace.com/content/enforced/6703-course.outline/housing-court.html?ou=6703&d2l_body_type=3",
   },
+  {
+    id: "eviction-intake-scenario",
+    title: "Intake Scenario: The First Call",
+    description:
+      "Take the intake call yourself: read the notice, check the lease, and choose what to tell the client before the deadline runs.",
+    contentStatus: "New",
+    courseId: "eviction-defense-48h",
+    parentCourseTitle: "Eviction Defense: The First 48 Hours",
+    practiceArea: "Housing",
+    level: "Foundations",
+    tags: ["housing", "eviction defense", "intake", "scenario", "practice"],
+    brightspaceCourseUrl: "https://mlri.brightspace.com/d2l/home/6703",
+    // The scenario ships as a Brightspace topic in the 6703-course.outline
+    // package (brightspace-courses/Course-Template/intake-scenario.html), so
+    // this is an ordinary handoff like its five siblings. The React prototype
+    // at /demo/scenario is kept as the design source, not as the live target.
+    brightspaceModuleUrl:
+      "https://mlri.brightspace.com/content/enforced/6703-course.outline/intake-scenario.html?ou=6703&d2l_body_type=3",
+  },
 ];
 
 const builtPaths: Path[] = [
