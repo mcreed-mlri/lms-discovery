@@ -5,10 +5,18 @@ import {
   getBrightspaceAuthorizationUrl,
   STATE_COOKIE,
 } from "@/lib/brightspace/oauth";
+import { rateLimitRequest } from "@/lib/rate-limit";
 import { RETURN_TO_COOKIE } from "@/lib/return-to-cookie";
 import { sanitizeReturnTo } from "@/lib/safe-return-to";
 
 export async function GET(request: NextRequest) {
+  const limited = rateLimitRequest(request, {
+    name: "brightspace-oauth-start",
+    limit: 10,
+    windowMs: 60 * 1000,
+  });
+  if (limited) return limited;
+
   try {
     const state = createBrightspaceOAuthState();
     const response = NextResponse.redirect(getBrightspaceAuthorizationUrl(state));

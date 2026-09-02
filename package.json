@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "next dev -p 3000 --webpack --experimental-https",
-    "build": "next build --webpack",
-    "start": "next start -p 3000",
+    "build": "node scripts/validate-security-env.mjs && next build --webpack",
+    "start": "node scripts/validate-security-env.mjs && next start -p 3000",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

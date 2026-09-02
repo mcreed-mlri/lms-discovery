@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { SESSION_COOKIE } from "@/lib/session-constants";
 import { verifySessionTokenEdge } from "@/lib/session-edge";
+import { isProductionDeployment } from "@/lib/security";
 
 /**
  * Server-side route gating.
@@ -52,6 +53,12 @@ export async function proxy(request: NextRequest) {
 
   const secret = process.env.SESSION_SECRET;
   if (!secret) {
+    if (isProductionDeployment()) {
+      return new NextResponse("Login is unavailable because SESSION_SECRET is not configured.", {
+        status: 503,
+      });
+    }
+
     // Fail open, loudly. Without a secret the OAuth callback cannot mint a
     // session either, so nobody could get past a closed gate — a misconfigured
     // deploy would be a total lockout rather than a degraded one. Data access

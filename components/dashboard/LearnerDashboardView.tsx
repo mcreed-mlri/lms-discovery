@@ -305,6 +305,490 @@ function activityIcon(label: string): ComponentType<{ className?: string }> {
   return PlayIcon;
 }
 
+type FeedbackPrompts = ReturnType<typeof useFeedbackPrompts>;
+type LearningBookmark = ReturnType<typeof getLearningItems>[number];
+
+function RequiredCoursesSection({ courses }: { courses: LearnerCourse[] }) {
+  if (courses.length === 0) return null;
+
+  return (
+    <section aria-label="Required this quarter">
+      <SectionHeading eyebrow="Required" title="Due this quarter" />
+      <div className="editorial-card overflow-hidden rounded-[var(--radius-card)] p-0">
+        {courses.map((course, index) => {
+          const days = daysUntil(course.dueDate as string);
+          const urgency =
+            days <= 20
+              ? "var(--status-changed)"
+              : days <= 40
+                ? "var(--status-next)"
+                : "var(--status-progress)";
+          return (
+            <div
+              key={course.offeringId}
+              className={`flex flex-wrap items-center gap-4 px-5 py-3.5 ${
+                index > 0 ? "border-t border-[color:var(--line)]" : ""
+              }`}
+            >
+              <span className="h-9 w-1.5 shrink-0 rounded-full" style={{ background: urgency }} />
+              <div className="min-w-[10rem] flex-1">
+                <h3 className="section-title text-[16px] text-[color:var(--ink)]">
+                  {course.title}
+                </h3>
+                <div className="mt-1.5">
+                  <AreaPill area={course.trainingArea} />
+                </div>
+              </div>
+              <div className="text-right">
+                <p
+                  className="font-mono text-sm font-bold"
+                  style={{ color: days <= 20 ? "var(--status-changed)" : "var(--ink)" }}
+                >
+                  {new Date(course.dueDate as string).toLocaleDateString(undefined, {
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </p>
+                <p className="metadata text-[color:var(--ink-soft)]">{days} days</p>
+              </div>
+              <a
+                href={getLearningUrlForDashboardCourse(course)}
+                className="inline-flex h-8 items-center rounded-[10px] bg-[color:var(--ink)] px-3.5 text-xs font-bold text-[color:var(--surface)] transition hover:opacity-90 focus-ring"
+              >
+                {course.completionPct > 0 ? "Resume" : "Start"}
+              </a>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function NotStartedSection({ courses }: { courses: LearnerCourse[] }) {
+  if (courses.length === 0) return null;
+
+  return (
+    <section aria-label="Not started">
+      <SectionHeading
+        eyebrow="Up next"
+        title="Not started yet"
+        action={{ label: "Browse library", href: "/" }}
+      />
+      <div className="grid gap-3 2xl:grid-cols-2">
+        {courses.map((course) => {
+          const tone = toneForArea(course.trainingArea);
+          return (
+            <article
+              key={course.offeringId}
+              className="editorial-card flex flex-col gap-2 rounded-[var(--radius-card)] p-4"
+              style={{ borderTop: `3px solid ${tone.stripe}` }}
+            >
+              <AreaPill area={course.trainingArea} />
+              <h3 className="section-title text-[16px] text-[color:var(--ink)]">{course.title}</h3>
+              <a
+                href={getLearningUrlForDashboardCourse(course)}
+                className="mt-1 inline-flex h-9 w-fit items-center gap-2 rounded-[10px] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3.5 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--line-strong)] focus-ring"
+              >
+                <PlayIcon className="h-3.5 w-3.5" /> Start course
+              </a>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function RecentActivitySection({
+  activity,
+}: {
+  activity: LearnerDashboardPayload["recentActivity"];
+}) {
+  if (!activity || activity.length === 0) return null;
+
+  return (
+    <section aria-label="Recent activity">
+      <SectionHeading eyebrow="Recent activity" title="What you've been doing" />
+      <div className="editorial-card rounded-[var(--radius-card)] p-2">
+        {activity.map((entry, index) => {
+          const Icon = activityIcon(entry.label);
+          return (
+            <div
+              key={`${entry.label}-${index}`}
+              className={`flex items-center gap-3.5 px-3 py-3 ${
+                index > 0 ? "border-t border-[color:var(--line)]" : ""
+              }`}
+            >
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color:var(--surface-sunken)] text-[color:var(--brand-ink)]">
+                <Icon className="h-3.5 w-3.5" />
+              </span>
+              <div className="min-w-0">
+                <p className="metadata text-[color:var(--ink-soft)]">
+                  {formatRelativeDate(entry.at)}
+                </p>
+                <p className="section-title text-[15px] leading-snug text-[color:var(--ink)]">
+                  {entry.label}
+                </p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function LearningPlanColumn({
+  requiredCourses,
+  notStarted,
+  recentActivity,
+}: {
+  requiredCourses: LearnerCourse[];
+  notStarted: LearnerCourse[];
+  recentActivity: LearnerDashboardPayload["recentActivity"];
+}) {
+  return (
+    <div className="flex min-w-0 flex-col gap-9">
+      <RequiredCoursesSection courses={requiredCourses} />
+      <NotStartedSection courses={notStarted} />
+      <RecentActivitySection activity={recentActivity} />
+    </div>
+  );
+}
+
+function LearningSidebarColumn({
+  summary,
+  heatmap,
+  sparkline,
+  streakDays,
+  bookmarks,
+  certificates,
+}: {
+  summary: LearnerDashboardPayload["summary"];
+  heatmap: number[];
+  sparkline: number[];
+  streakDays: number;
+  bookmarks: LearningBookmark[];
+  certificates: LearnerDashboardPayload["certificates"];
+}) {
+  return (
+    <div className="flex min-w-0 flex-col gap-9">
+      <section aria-label="Consistency">
+        <SectionHeading eyebrow="Consistency" title="Your last 12 weeks" />
+        <div className="editorial-panel rounded-[var(--radius-card)] p-4">
+          <div className="mb-3.5 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <FlameIcon className="h-5 w-5 text-[color:var(--brand)]" />
+              <div>
+                <p className="hero-title text-[22px] leading-none text-[color:var(--ink)]">
+                  {streakDays} days
+                </p>
+                <p className="stat-label mt-1 text-[color:var(--ink-soft)]">
+                  {summary.weeklyHoursAvg ?? 0} hrs/week avg
+                </p>
+              </div>
+            </div>
+            {sparkline.length > 1 ? (
+              <span className="text-[color:var(--brand-fill)]">
+                <Sparkline values={sparkline} color="var(--brand-fill)" />
+              </span>
+            ) : null}
+          </div>
+          {heatmap.length > 0 ? <StreakHeatmap data={heatmap} /> : null}
+        </div>
+      </section>
+
+      <section aria-label="Bookmarks">
+        <SectionHeading eyebrow="Saved" title="Your bookmarks" />
+        {bookmarks.length > 0 ? (
+          <div className="flex flex-col gap-2.5">
+            {bookmarks.map((item) => (
+              <article
+                key={`${item.type}:${item.id}`}
+                className="editorial-card flex items-start gap-3 rounded-[var(--radius-card)] p-3.5"
+              >
+                <BookmarkFilledIcon className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--brand-fill)]" />
+                <div className="min-w-0">
+                  <h3 className="section-title text-[15px] leading-snug text-[color:var(--ink)]">
+                    {item.title}
+                  </h3>
+                  <p className="metadata mt-1 text-[color:var(--ink-soft)]">{item.type}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="editorial-panel rounded-[var(--radius-card)] p-5 text-center">
+            <p className="text-sm font-medium text-[color:var(--ink-muted)]">
+              Bookmark a course or module from the library and it will wait for you here.
+            </p>
+            <Link
+              href="/"
+              className="mt-3 inline-block metadata text-[color:var(--brand)] transition hover:text-[color:var(--ink)]"
+            >
+              Browse the library →
+            </Link>
+          </div>
+        )}
+      </section>
+
+      {certificates && certificates.length > 0 ? (
+        <section aria-label="Certificates">
+          <SectionHeading eyebrow="Earned" title="Certificates" />
+          <div className="flex flex-col gap-3">
+            {certificates.map((certificate) => (
+              <article
+                key={certificate.id}
+                className="editorial-card relative overflow-hidden rounded-[var(--radius-card)] p-4"
+              >
+                <span className="absolute -right-2 -top-2 h-16 w-16 rounded-full bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" />
+                <CertificateIcon className="h-5 w-5 text-[color:var(--brand)]" />
+                <h3 className="section-title mt-3 text-[16px] text-[color:var(--ink)]">
+                  {certificate.title}
+                </h3>
+                <p className="metadata mt-1.5 text-[color:var(--ink-soft)]">
+                  {certificate.earnedOn} {"\u00b7"} {certificate.credits}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
+    </div>
+  );
+}
+
+function DashboardMainColumns({
+  requiredCourses,
+  notStarted,
+  recentActivity,
+  summary,
+  heatmap,
+  sparkline,
+  streakDays,
+  bookmarks,
+  certificates,
+}: {
+  requiredCourses: LearnerCourse[];
+  notStarted: LearnerCourse[];
+  recentActivity: LearnerDashboardPayload["recentActivity"];
+  summary: LearnerDashboardPayload["summary"];
+  heatmap: number[];
+  sparkline: number[];
+  streakDays: number;
+  bookmarks: LearningBookmark[];
+  certificates: LearnerDashboardPayload["certificates"];
+}) {
+  return (
+    <div className="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(340px,1fr)]">
+      <LearningPlanColumn
+        requiredCourses={requiredCourses}
+        notStarted={notStarted}
+        recentActivity={recentActivity}
+      />
+      <LearningSidebarColumn
+        summary={summary}
+        heatmap={heatmap}
+        sparkline={sparkline}
+        streakDays={streakDays}
+        bookmarks={bookmarks}
+        certificates={certificates}
+      />
+    </div>
+  );
+}
+
+function LoadedLearnerDashboardBody({
+  data,
+  bookmarks,
+  feedbackPrompts,
+}: {
+  data: LearnerDashboardPayload;
+  bookmarks: LearningBookmark[];
+  feedbackPrompts: FeedbackPrompts;
+}) {
+  const { user, summary, courses, recentActivity, certificates } = data;
+
+  if (courses.length === 0) {
+    return (
+      <>
+        <DashboardPageHeader eyebrow="My learning" title={greetingForHour(user.displayName)} />
+        <div className="editorial-panel rounded-[var(--radius-card)] p-10 text-center">
+          <h2 className="section-title text-lg text-[color:var(--ink)]">No courses yet</h2>
+          <p className="mx-auto mt-2 max-w-md text-sm font-medium text-[color:var(--ink-muted)]">
+            When you are enrolled in Brightspace trainings, they will appear here with progress and
+            a link to continue.
+          </p>
+          <Link
+            href="/"
+            className="mt-6 inline-flex h-11 items-center rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-5 text-sm font-bold text-[color:var(--ink-muted)] shadow-sm transition hover:text-[color:var(--ink)] focus-ring"
+          >
+            Browse the discovery library
+          </Link>
+        </div>
+      </>
+    );
+  }
+
+  const inProgress = [...courses]
+    .filter((course) => course.status === "in_progress")
+    .sort((a, b) => new Date(b.lastAccessedAt).getTime() - new Date(a.lastAccessedAt).getTime());
+  const heroCourse = inProgress[0];
+  const secondaryCourses = inProgress.slice(1);
+  const requiredCourses = [...courses]
+    .filter((course) => course.dueDate)
+    .sort(
+      (a, b) => new Date(a.dueDate as string).getTime() - new Date(b.dueDate as string).getTime(),
+    );
+  const notStarted = courses.filter((course) => course.status === "not_started");
+
+  const ratingCandidate = feedbackPrompts.hydrated
+    ? courses.find(
+        (course) =>
+          course.status === "completed" && !feedbackPrompts.isResolved("rating", course.offeringId),
+      )
+    : undefined;
+  const stalledCandidate =
+    feedbackPrompts.hydrated && !ratingCandidate
+      ? courses.find(
+          (course) =>
+            course.status === "in_progress" &&
+            daysIdle(course.lastAccessedAt) >= STALLED_AFTER_DAYS &&
+            !feedbackPrompts.isResolved("stalled", course.offeringId),
+        )
+      : undefined;
+
+  const streakDays = summary.streakDays ?? 0;
+  const hasCle = summary.cleEarned != null && summary.cleRequired != null;
+  const clePct = hasCle
+    ? Math.round(((summary.cleEarned as number) / (summary.cleRequired as number)) * 100)
+    : 0;
+  const heatmap = data.activityHeatmap ?? [];
+  const sparkline = data.weeklySparkline ?? [];
+
+  const subtitleParts = [
+    streakDays > 0 ? `${streakDays}-day streak` : null,
+    requiredCourses.length > 0 ? `${requiredCourses.length} due this quarter` : null,
+    `${summary.enrolledCount} enrolled · ${summary.completedCount} completed`,
+  ].filter(Boolean);
+
+  return (
+    <>
+      <DashboardPageHeader
+        eyebrow="My learning"
+        title={greetingForHour(user.displayName)}
+        subtitle={subtitleParts.join(" · ")}
+        badge={
+          <Link
+            href="/"
+            className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-4 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus-ring"
+          >
+            <BookIcon className="h-4 w-4" /> Browse library
+          </Link>
+        }
+      />
+
+      {ratingCandidate ? (
+        <section aria-label="Course feedback" className="mb-6">
+          <RateCourseCard
+            course={ratingCandidate}
+            onResolved={(action) =>
+              feedbackPrompts.resolvePrompt("rating", ratingCandidate.offeringId, action)
+            }
+          />
+        </section>
+      ) : stalledCandidate ? (
+        <section aria-label="Checking in on a stalled course" className="mb-6">
+          <StalledCourseNudge
+            course={stalledCandidate}
+            onResolved={(action) =>
+              feedbackPrompts.resolvePrompt("stalled", stalledCandidate.offeringId, action)
+            }
+          />
+        </section>
+      ) : null}
+
+      <section
+        aria-label="Learning snapshot"
+        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]"
+      >
+        {hasCle ? (
+          <article className="editorial-panel flex items-center gap-4 rounded-[var(--radius-card)] p-4">
+            <ProgressRing
+              value={clePct}
+              size={74}
+              stroke={7}
+              color="var(--brand-fill)"
+              trackColor="var(--surface-sunken)"
+            >
+              <span className="hero-title block text-[19px] leading-none text-[color:var(--ink)]">
+                {clePct}%
+              </span>
+            </ProgressRing>
+            <div className="min-w-0">
+              <p className="stat-label text-[color:var(--ink-soft)]">Training hours</p>
+              <p className="hero-title mt-1 text-[22px] text-[color:var(--ink)]">
+                {summary.cleEarned} of {summary.cleRequired} hours
+              </p>
+              <p className="mt-1 text-[13px] font-medium text-[color:var(--ink-muted)]">
+                {summary.cleDueLabel ?? "On pace"} · on pace
+              </p>
+            </div>
+          </article>
+        ) : null}
+        <KpiTile
+          label="Streak"
+          value={String(streakDays)}
+          unit="days"
+          detail={summary.longestStreakNote ?? "Keep it going"}
+          accent="var(--brand-fill)"
+          icon={FlameIcon}
+        />
+        <KpiTile
+          label="In progress"
+          value={String(summary.inProgressCount)}
+          detail={`${summary.weeklyHoursAvg ?? 0} hrs/week average`}
+          accent="var(--brand-fill)"
+          icon={PlayIcon}
+        />
+        <KpiTile
+          label="Completed"
+          value={String(summary.completedCount)}
+          detail="Courses finished this term"
+          accent="var(--status-progress)"
+          icon={CheckIcon}
+          sparkline={sparkline.length > 1 ? sparkline : undefined}
+        />
+      </section>
+
+      {heroCourse ? (
+        <section aria-label="Continue learning" className="mt-10">
+          <SectionHeading eyebrow="Pick up where you left off" title="Continue learning" />
+          <div className="editorial-card overflow-hidden rounded-[var(--radius-card)] p-0">
+            <ContinueHeroRow course={heroCourse} />
+            {secondaryCourses.map((course) => (
+              <ContinueRow key={course.offeringId} course={course} />
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      <DashboardMainColumns
+        requiredCourses={requiredCourses}
+        notStarted={notStarted}
+        recentActivity={recentActivity}
+        summary={summary}
+        heatmap={heatmap}
+        sparkline={sparkline}
+        streakDays={streakDays}
+        bookmarks={bookmarks}
+        certificates={certificates}
+      />
+    </>
+  );
+}
+
 export function LearnerDashboardView() {
   const [data, setData] = useState<LearnerDashboardPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -384,387 +868,11 @@ export function LearnerDashboardView() {
   }
 
   if (!data) return null;
-
-  const { user, summary, courses, recentActivity, certificates } = data;
-
-  if (courses.length === 0) {
-    return (
-      <>
-        <DashboardPageHeader eyebrow="My learning" title={greetingForHour(user.displayName)} />
-        <div className="editorial-panel rounded-[var(--radius-card)] p-10 text-center">
-          <h2 className="section-title text-lg text-[color:var(--ink)]">No courses yet</h2>
-          <p className="mx-auto mt-2 max-w-md text-sm font-medium text-[color:var(--ink-muted)]">
-            When you are enrolled in Brightspace trainings, they will appear here with progress and
-            a link to continue.
-          </p>
-          <Link
-            href="/"
-            className="mt-6 inline-flex h-11 items-center rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-5 text-sm font-bold text-[color:var(--ink-muted)] shadow-sm transition hover:text-[color:var(--ink)] focus-ring"
-          >
-            Browse the discovery library
-          </Link>
-        </div>
-      </>
-    );
-  }
-
-  const inProgress = [...courses]
-    .filter((course) => course.status === "in_progress")
-    .sort((a, b) => new Date(b.lastAccessedAt).getTime() - new Date(a.lastAccessedAt).getTime());
-  const heroCourse = inProgress[0];
-  const secondaryCourses = inProgress.slice(1);
-  const requiredCourses = [...courses]
-    .filter((course) => course.dueDate)
-    .sort(
-      (a, b) => new Date(a.dueDate as string).getTime() - new Date(b.dueDate as string).getTime(),
-    );
-  const notStarted = courses.filter((course) => course.status === "not_started");
-
-  // Micro-survey prompts — at most ONE card per session, rating first. Both
-  // resolve permanently (submit/dismiss/resume) via lib/feedback-prompts.
-  const ratingCandidate = feedbackPrompts.hydrated
-    ? courses.find(
-        (course) =>
-          course.status === "completed" && !feedbackPrompts.isResolved("rating", course.offeringId),
-      )
-    : undefined;
-  const stalledCandidate =
-    feedbackPrompts.hydrated && !ratingCandidate
-      ? courses.find(
-          (course) =>
-            course.status === "in_progress" &&
-            daysIdle(course.lastAccessedAt) >= STALLED_AFTER_DAYS &&
-            !feedbackPrompts.isResolved("stalled", course.offeringId),
-        )
-      : undefined;
-
-  const streakDays = summary.streakDays ?? 0;
-  const hasCle = summary.cleEarned != null && summary.cleRequired != null;
-  const clePct = hasCle
-    ? Math.round(((summary.cleEarned as number) / (summary.cleRequired as number)) * 100)
-    : 0;
-  const heatmap = data.activityHeatmap ?? [];
-  const sparkline = data.weeklySparkline ?? [];
-
-  const subtitleParts = [
-    streakDays > 0 ? `${streakDays}-day streak` : null,
-    requiredCourses.length > 0 ? `${requiredCourses.length} due this quarter` : null,
-    `${summary.enrolledCount} enrolled · ${summary.completedCount} completed`,
-  ].filter(Boolean);
-
   return (
-    <>
-      <DashboardPageHeader
-        eyebrow="My learning"
-        title={greetingForHour(user.displayName)}
-        subtitle={subtitleParts.join(" · ")}
-        badge={
-          <Link
-            href="/"
-            className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-4 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus-ring"
-          >
-            <BookIcon className="h-4 w-4" /> Browse library
-          </Link>
-        }
-      />
-
-      {/* Micro-survey prompt — never more than one, inline, dismiss = forever */}
-      {ratingCandidate ? (
-        <section aria-label="Course feedback" className="mb-6">
-          <RateCourseCard
-            course={ratingCandidate}
-            onResolved={(action) =>
-              feedbackPrompts.resolvePrompt("rating", ratingCandidate.offeringId, action)
-            }
-          />
-        </section>
-      ) : stalledCandidate ? (
-        <section aria-label="Checking in on a stalled course" className="mb-6">
-          <StalledCourseNudge
-            course={stalledCandidate}
-            onResolved={(action) =>
-              feedbackPrompts.resolvePrompt("stalled", stalledCandidate.offeringId, action)
-            }
-          />
-        </section>
-      ) : null}
-
-      {/* KPI tiles — consistency + training hours at a glance */}
-      <section
-        aria-label="Learning snapshot"
-        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]"
-      >
-        {hasCle ? (
-          <article className="editorial-panel flex items-center gap-4 rounded-[var(--radius-card)] p-4">
-            <ProgressRing
-              value={clePct}
-              size={74}
-              stroke={7}
-              color="var(--brand-fill)"
-              trackColor="var(--surface-sunken)"
-            >
-              <span className="hero-title block text-[19px] leading-none text-[color:var(--ink)]">
-                {clePct}%
-              </span>
-            </ProgressRing>
-            <div className="min-w-0">
-              <p className="stat-label text-[color:var(--ink-soft)]">Training hours</p>
-              <p className="hero-title mt-1 text-[22px] text-[color:var(--ink)]">
-                {summary.cleEarned} of {summary.cleRequired} hours
-              </p>
-              <p className="mt-1 text-[13px] font-medium text-[color:var(--ink-muted)]">
-                {summary.cleDueLabel ?? "On pace"} · on pace
-              </p>
-            </div>
-          </article>
-        ) : null}
-        <KpiTile
-          label="Streak"
-          value={String(streakDays)}
-          unit="days"
-          detail={summary.longestStreakNote ?? "Keep it going"}
-          accent="var(--brand-fill)"
-          icon={FlameIcon}
-        />
-        <KpiTile
-          label="In progress"
-          value={String(summary.inProgressCount)}
-          detail={`${summary.weeklyHoursAvg ?? 0} hrs/week average`}
-          accent="var(--brand-fill)"
-          icon={PlayIcon}
-        />
-        <KpiTile
-          label="Completed"
-          value={String(summary.completedCount)}
-          detail="Courses finished this term"
-          accent="var(--status-progress)"
-          icon={CheckIcon}
-          sparkline={sparkline.length > 1 ? sparkline : undefined}
-        />
-      </section>
-
-      {/* Continue learning — one hero course, then a compact list */}
-      {heroCourse ? (
-        <section aria-label="Continue learning" className="mt-10">
-          <SectionHeading eyebrow="Pick up where you left off" title="Continue learning" />
-          <div className="editorial-card overflow-hidden rounded-[var(--radius-card)] p-0">
-            <ContinueHeroRow course={heroCourse} />
-            {secondaryCourses.map((course) => (
-              <ContinueRow key={course.offeringId} course={course} />
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      <div className="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(340px,1fr)]">
-        {/* Left column — required + not started */}
-        <div className="flex min-w-0 flex-col gap-9">
-          {requiredCourses.length > 0 ? (
-            <section aria-label="Required this quarter">
-              <SectionHeading eyebrow="Required" title="Due this quarter" />
-              <div className="editorial-card overflow-hidden rounded-[var(--radius-card)] p-0">
-                {requiredCourses.map((course, index) => {
-                  const days = daysUntil(course.dueDate as string);
-                  const urgency =
-                    days <= 20
-                      ? "var(--status-changed)"
-                      : days <= 40
-                        ? "var(--status-next)"
-                        : "var(--status-progress)";
-                  return (
-                    <div
-                      key={course.offeringId}
-                      className={`flex flex-wrap items-center gap-4 px-5 py-3.5 ${
-                        index > 0 ? "border-t border-[color:var(--line)]" : ""
-                      }`}
-                    >
-                      <span
-                        className="h-9 w-1.5 shrink-0 rounded-full"
-                        style={{ background: urgency }}
-                      />
-                      <div className="min-w-[10rem] flex-1">
-                        <h3 className="section-title text-[16px] text-[color:var(--ink)]">
-                          {course.title}
-                        </h3>
-                        <div className="mt-1.5">
-                          <AreaPill area={course.trainingArea} />
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p
-                          className="font-mono text-sm font-bold"
-                          style={{ color: days <= 20 ? "var(--status-changed)" : "var(--ink)" }}
-                        >
-                          {new Date(course.dueDate as string).toLocaleDateString(undefined, {
-                            month: "short",
-                            day: "numeric",
-                          })}
-                        </p>
-                        <p className="metadata text-[color:var(--ink-soft)]">{days} days</p>
-                      </div>
-                      <a
-                        href={getLearningUrlForDashboardCourse(course)}
-                        className="inline-flex h-8 items-center rounded-[10px] bg-[color:var(--ink)] px-3.5 text-xs font-bold text-[color:var(--surface)] transition hover:opacity-90 focus-ring"
-                      >
-                        {course.completionPct > 0 ? "Resume" : "Start"}
-                      </a>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          ) : null}
-
-          {notStarted.length > 0 ? (
-            <section aria-label="Not started">
-              <SectionHeading
-                eyebrow="Up next"
-                title="Not started yet"
-                action={{ label: "Browse library", href: "/" }}
-              />
-              <div className="grid gap-3 2xl:grid-cols-2">
-                {notStarted.map((course) => {
-                  const tone = toneForArea(course.trainingArea);
-                  return (
-                    <article
-                      key={course.offeringId}
-                      className="editorial-card flex flex-col gap-2 rounded-[var(--radius-card)] p-4"
-                      style={{ borderTop: `3px solid ${tone.stripe}` }}
-                    >
-                      <AreaPill area={course.trainingArea} />
-                      <h3 className="section-title text-[16px] text-[color:var(--ink)]">
-                        {course.title}
-                      </h3>
-                      <a
-                        href={getLearningUrlForDashboardCourse(course)}
-                        className="mt-1 inline-flex h-9 w-fit items-center gap-2 rounded-[10px] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3.5 text-xs font-bold text-[color:var(--ink)] transition hover:border-[color:var(--line-strong)] focus-ring"
-                      >
-                        <PlayIcon className="h-3.5 w-3.5" /> Start course
-                      </a>
-                    </article>
-                  );
-                })}
-              </div>
-            </section>
-          ) : null}
-
-          {recentActivity && recentActivity.length > 0 ? (
-            <section aria-label="Recent activity">
-              <SectionHeading eyebrow="Recent activity" title="What you've been doing" />
-              <div className="editorial-card rounded-[var(--radius-card)] p-2">
-                {recentActivity.map((entry, index) => {
-                  const Icon = activityIcon(entry.label);
-                  return (
-                    <div
-                      key={`${entry.label}-${index}`}
-                      className={`flex items-center gap-3.5 px-3 py-3 ${
-                        index > 0 ? "border-t border-[color:var(--line)]" : ""
-                      }`}
-                    >
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color:var(--surface-sunken)] text-[color:var(--brand-ink)]">
-                        <Icon className="h-3.5 w-3.5" />
-                      </span>
-                      <div className="min-w-0">
-                        <p className="metadata text-[color:var(--ink-soft)]">
-                          {formatRelativeDate(entry.at)}
-                        </p>
-                        <p className="section-title text-[15px] leading-snug text-[color:var(--ink)]">
-                          {entry.label}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          ) : null}
-        </div>
-
-        {/* Right column — consistency + bookmarks */}
-        <div className="flex min-w-0 flex-col gap-9">
-          <section aria-label="Consistency">
-            <SectionHeading eyebrow="Consistency" title="Your last 12 weeks" />
-            <div className="editorial-panel rounded-[var(--radius-card)] p-4">
-              <div className="mb-3.5 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <FlameIcon className="h-5 w-5 text-[color:var(--brand)]" />
-                  <div>
-                    <p className="hero-title text-[22px] leading-none text-[color:var(--ink)]">
-                      {streakDays} days
-                    </p>
-                    <p className="stat-label mt-1 text-[color:var(--ink-soft)]">
-                      {summary.weeklyHoursAvg ?? 0} hrs/week avg
-                    </p>
-                  </div>
-                </div>
-                {sparkline.length > 1 ? (
-                  <span className="text-[color:var(--brand-fill)]">
-                    <Sparkline values={sparkline} color="var(--brand-fill)" />
-                  </span>
-                ) : null}
-              </div>
-              {heatmap.length > 0 ? <StreakHeatmap data={heatmap} /> : null}
-            </div>
-          </section>
-
-          <section aria-label="Bookmarks">
-            <SectionHeading eyebrow="Saved" title="Your bookmarks" />
-            {bookmarks.length > 0 ? (
-              <div className="flex flex-col gap-2.5">
-                {bookmarks.map((item) => (
-                  <article
-                    key={`${item.type}:${item.id}`}
-                    className="editorial-card flex items-start gap-3 rounded-[var(--radius-card)] p-3.5"
-                  >
-                    <BookmarkFilledIcon className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--brand-fill)]" />
-                    <div className="min-w-0">
-                      <h3 className="section-title text-[15px] leading-snug text-[color:var(--ink)]">
-                        {item.title}
-                      </h3>
-                      <p className="metadata mt-1 text-[color:var(--ink-soft)]">{item.type}</p>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            ) : (
-              <div className="editorial-panel rounded-[var(--radius-card)] p-5 text-center">
-                <p className="text-sm font-medium text-[color:var(--ink-muted)]">
-                  Bookmark a course or module from the library and it will wait for you here.
-                </p>
-                <Link
-                  href="/"
-                  className="mt-3 inline-block metadata text-[color:var(--brand)] transition hover:text-[color:var(--ink)]"
-                >
-                  Browse the library →
-                </Link>
-              </div>
-            )}
-          </section>
-
-          {certificates && certificates.length > 0 ? (
-            <section aria-label="Certificates">
-              <SectionHeading eyebrow="Earned" title="Certificates" />
-              <div className="flex flex-col gap-3">
-                {certificates.map((certificate) => (
-                  <article
-                    key={certificate.id}
-                    className="editorial-card relative overflow-hidden rounded-[var(--radius-card)] p-4"
-                  >
-                    <span className="absolute -right-2 -top-2 h-16 w-16 rounded-full bg-[color-mix(in_srgb,var(--brand)_8%,transparent)]" />
-                    <CertificateIcon className="h-5 w-5 text-[color:var(--brand)]" />
-                    <h3 className="section-title mt-3 text-[16px] text-[color:var(--ink)]">
-                      {certificate.title}
-                    </h3>
-                    <p className="metadata mt-1.5 text-[color:var(--ink-soft)]">
-                      {certificate.earnedOn} {"\u00b7"} {certificate.credits}
-                    </p>
-                  </article>
-                ))}
-              </div>
-            </section>
-          ) : null}
-        </div>
-      </div>
-    </>
+    <LoadedLearnerDashboardBody
+      data={data}
+      bookmarks={bookmarks}
+      feedbackPrompts={feedbackPrompts}
+    />
   );
 }

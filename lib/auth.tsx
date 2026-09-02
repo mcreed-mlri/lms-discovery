@@ -85,21 +85,31 @@ export const facultyUser: User = {
 
 export const demoUsers = [demoUser, kevinSmithUser, mlriAdminUser, facultyUser];
 
+export type AuthFlags = {
+  isDemoMode: boolean;
+  showDemoUsers: boolean;
+  canUseDemoLogin: boolean;
+};
+
 /**
- * Demo mode keeps the localStorage persona picker as the only login path.
- * Demo users can also be shown alongside Brightspace for stakeholder demos;
- * set NEXT_PUBLIC_SHOW_DEMO_USERS=true to opt in.
- *
- * This flag MUST stay opt-in. The AuthProvider effect below reads a persona
- * from localStorage and returns early, before /api/me is ever called — so
- * while it is on, anyone can write {"userType":"admin","accessStatus":
- * "approved"} to the `mlri-demo-user` key and hold a client-side admin session.
- * Real Brightspace logins are correctly capped server-side in /api/me, and this
- * path bypasses that cap. It previously defaulted to ON (`!== "false"`), which
- * meant any deployment that did not explicitly disable it was exposed.
+ * Demo mode is the only configuration that may trust the localStorage persona
+ * picker as an authenticated session. Stakeholder preview cards can be shown
+ * beside Brightspace, but they must not bypass /api/me unless the whole app is
+ * explicitly running as a demo environment.
  */
-export const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
-export const showDemoUsers = isDemoMode || process.env.NEXT_PUBLIC_SHOW_DEMO_USERS === "true";
+export function resolveAuthFlags(
+  env?: Partial<Record<"NEXT_PUBLIC_DEMO_MODE" | "NEXT_PUBLIC_SHOW_DEMO_USERS", string>>,
+): AuthFlags {
+  const source = env ?? process.env;
+  const isDemoMode = source.NEXT_PUBLIC_DEMO_MODE === "true";
+  return {
+    isDemoMode,
+    showDemoUsers: isDemoMode || source.NEXT_PUBLIC_SHOW_DEMO_USERS === "true",
+    canUseDemoLogin: isDemoMode,
+  };
+}
+
+export const { isDemoMode, showDemoUsers, canUseDemoLogin } = resolveAuthFlags();
 
 type AuthState = {
   user: User | null;
@@ -117,7 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (showDemoUsers) {
+    if (canUseDemoLogin) {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
@@ -158,7 +168,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   function login(userId?: string) {
-    if (showDemoUsers && (isDemoMode || userId)) {
+    if (canUseDemoLogin) {
       const nextUser =
         demoUsers.find((candidate) => candidate.id === (userId ?? demoUser.id)) ?? demoUser;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
@@ -173,7 +183,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   function logout() {
-    if (showDemoUsers) {
+    if (canUseDemoLogin || showDemoUsers) {
       localStorage.removeItem(STORAGE_KEY);
     }
 

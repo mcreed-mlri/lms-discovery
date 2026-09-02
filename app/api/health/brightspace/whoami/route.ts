@@ -6,8 +6,12 @@ import {
   type BrightspaceApiResult,
 } from "@/lib/brightspace/api";
 import { applyBrightspaceTokenCookies } from "@/lib/brightspace/tokens";
+import { requireAdminSecret } from "@/lib/admin-auth";
 
 export async function GET(request: NextRequest) {
+  const denied = requireAdminSecret(request);
+  if (denied) return denied;
+
   let result: BrightspaceApiResult;
 
   try {

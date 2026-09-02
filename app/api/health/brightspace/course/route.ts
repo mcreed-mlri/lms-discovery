@@ -7,8 +7,12 @@ import {
   type BrightspaceApiResult,
 } from "@/lib/brightspace/api";
 import { applyBrightspaceTokenCookies } from "@/lib/brightspace/tokens";
+import { requireAdminSecret } from "@/lib/admin-auth";
 
 export async function GET(request: NextRequest) {
+  const denied = requireAdminSecret(request);
+  if (denied) return denied;
+
   const url = new URL(request.url);
   const orgUnitId = url.searchParams.get("orgUnitId");
   const version = url.searchParams.get("version") || getBrightspaceLpVersion();

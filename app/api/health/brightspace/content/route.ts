@@ -6,6 +6,7 @@ import {
   getBrightspaceLeVersion,
   type BrightspaceApiResult,
 } from "@/lib/brightspace/api";
+import { requireAdminSecret } from "@/lib/admin-auth";
 import {
   summarizeBrightspaceToc,
   type BrightspaceTableOfContents,
@@ -13,6 +14,9 @@ import {
 import { applyBrightspaceTokenCookies } from "@/lib/brightspace/tokens";
 
 export async function GET(request: NextRequest) {
+  const denied = requireAdminSecret(request);
+  if (denied) return denied;
+
   const url = new URL(request.url);
   const orgUnitId = url.searchParams.get("orgUnitId") || "6703";
   const version = url.searchParams.get("version") || getBrightspaceLeVersion();

@@ -4,7 +4,14 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowIcon } from "@/components/icons";
 import { SiteFooter } from "@/components/site-footer";
-import { demoUsers, isDemoMode, showDemoUsers, useAuth, type User } from "@/lib/auth";
+import {
+  canUseDemoLogin,
+  demoUsers,
+  isDemoMode,
+  showDemoUsers,
+  useAuth,
+  type User,
+} from "@/lib/auth";
 import { sanitizeReturnTo } from "@/lib/safe-return-to";
 
 const LOGIN_ERROR_MESSAGES: Record<string, string> = {
@@ -70,7 +77,7 @@ export default function LoginPage() {
               <p className="mt-2 text-sm font-medium text-[color:var(--ink-muted)]">
                 {isDemoMode
                   ? "Choose a demo user to preview access-controlled discovery."
-                  : "Use Brightspace for real access, or choose a demo user for walkthroughs."}
+                  : "Use Brightspace for access to this pre-pilot sandbox."}
               </p>
             </div>
 
@@ -105,39 +112,51 @@ export default function LoginPage() {
                   </div>
                 ) : null}
 
-                {demoUsers.map((candidate) => (
-                  <button
-                    key={candidate.id}
-                    type="button"
-                    onClick={() => handleDemoLogin(candidate)}
-                    className="group rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] p-4 text-left shadow-[var(--shadow-sm)] transition hover:border-[color:var(--ink)] focus-ring"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[color:var(--ink)] text-lg font-bold text-[color:var(--surface)]">
-                        {candidate.initials}
+                {demoUsers.map((candidate) => {
+                  const CardElement = canUseDemoLogin ? "button" : "article";
+                  return (
+                    <CardElement
+                      key={candidate.id}
+                      {...(canUseDemoLogin
+                        ? { type: "button" as const, onClick: () => handleDemoLogin(candidate) }
+                        : {})}
+                      className="group rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] p-4 text-left shadow-[var(--shadow-sm)] transition hover:border-[color:var(--ink)] focus-ring"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[color:var(--ink)] text-lg font-bold text-[color:var(--surface)]">
+                          {candidate.initials}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="font-bold text-[color:var(--ink-muted)]">
+                            {candidate.name}
+                          </p>
+                          <p className="text-sm font-medium text-[color:var(--ink-muted)]">
+                            {candidate.title} - {candidate.unit}
+                          </p>
+                          <p className="truncate text-sm text-[color:var(--ink-soft)]">
+                            {candidate.organization}
+                          </p>
+                        </div>
+                        {canUseDemoLogin ? (
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] text-[color:var(--ink-soft)] transition group-hover:border-[color:var(--ink)] group-hover:text-[color:var(--ink)]">
+                            <ArrowIcon className="h-4 w-4" />
+                          </span>
+                        ) : (
+                          <span className="metadata shrink-0 rounded-full border border-[color:var(--line)] px-2 py-1 text-[color:var(--ink-soft)]">
+                            Preview
+                          </span>
+                        )}
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="font-bold text-[color:var(--ink-muted)]">{candidate.name}</p>
-                        <p className="text-sm font-medium text-[color:var(--ink-muted)]">
-                          {candidate.title} - {candidate.unit}
-                        </p>
-                        <p className="truncate text-sm text-[color:var(--ink-soft)]">
-                          {candidate.organization}
-                        </p>
-                      </div>
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] text-[color:var(--ink-soft)] transition group-hover:border-[color:var(--ink)] group-hover:text-[color:var(--ink)]">
-                        <ArrowIcon className="h-4 w-4" />
-                      </span>
-                    </div>
-                  </button>
-                ))}
+                    </CardElement>
+                  );
+                })}
               </div>
             ) : null}
 
             <p className="mt-5 text-center text-xs font-medium leading-5 text-[color:var(--ink-soft)]">
               {isDemoMode
                 ? "No real credentials required. This is a demonstration environment."
-                : "Brightspace sign-in is secure. Demo users are only for previewing access levels."}
+                : "Persona cards are previews only unless the app is running in demo mode."}
             </p>
           </div>
         </div>
