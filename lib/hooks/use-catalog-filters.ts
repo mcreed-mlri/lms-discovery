@@ -2,15 +2,8 @@
 
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
 
-import { getEligibleLearningItems, type AccessProfile } from "@/lib/access";
-import {
-  getLearningItems,
-  getModuleSkillId,
-  skills,
-  type LearningItem,
-  type Level,
-  type SkillId,
-} from "@/lib/data";
+import type { AccessProfile } from "@/lib/access";
+import { getModuleSkillId, skills, type LearningItem, type Level, type SkillId } from "@/lib/data";
 import { scrollToBrowse } from "@/lib/home-helpers";
 import {
   getSearchFacetOptions,
@@ -21,6 +14,7 @@ import {
 } from "@/lib/search";
 import { recordSearchAnalytics } from "@/lib/search-analytics";
 import type { ContentLifecycleStatus, SearchAudience } from "@/lib/search-metadata";
+import { useLearningCatalog } from "@/lib/hooks/use-learning-catalog";
 
 export type Filter = "All" | "Paths" | "Courses" | "Modules";
 export type ViewMode = "grid" | "list";
@@ -77,6 +71,7 @@ export function useCatalogFilters(
   const [audienceFilter, setAudienceFilter] = useState<SelectValue<SearchAudience>>("All");
   const [statusFilter, setStatusFilter] = useState<SelectValue<ContentLifecycleStatus>>("All");
   const [durationFilter, setDurationFilter] = useState<SelectValue<DurationFacet>>("All");
+  const { allItems, allowMockData, catalogError, catalogLoading } = useLearningCatalog(user);
 
   /**
    * Scoring is ~99% of a query's cost (the index itself is cached per item in
@@ -91,7 +86,6 @@ export function useCatalogFilters(
    */
   const deferredQuery = useDeferredValue(query);
 
-  const allItems = useMemo(() => getEligibleLearningItems(getLearningItems(), user), [user]);
   const facetOptions = useMemo(() => getSearchFacetOptions(allItems), [allItems]);
   const activeSearchFilters = useMemo<SearchFacetFilters>(
     () => ({
@@ -243,6 +237,9 @@ export function useCatalogFilters(
     catalogTotal,
     hasMoreThanPreview,
     advancedFilterCount,
+    catalogError,
+    catalogLoading,
+    allowMockData,
     selectSkill,
     resetAllFilters,
   };

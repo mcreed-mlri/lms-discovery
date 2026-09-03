@@ -29,6 +29,7 @@ that is expected locally.
 You do **not** need Brightspace credentials to develop. Set:
 
 ```
+LACE_DATA_MODE=mock
 NEXT_PUBLIC_DEMO_MODE=true
 LACE_DEPLOYMENT_KIND=demo
 ```
@@ -49,10 +50,10 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
 For pilot or production, set `LACE_DEPLOYMENT_KIND=pilot` or
-`LACE_DEPLOYMENT_KIND=production`. `npm run build` and `npm run start` fail if
-that deployment is missing `SESSION_SECRET` or `BRIGHTSPACE_OAUTH_SCOPE`, or if
-`NEXT_PUBLIC_DEMO_MODE=true` enables persona auth outside an explicitly marked
-demo deployment.
+`LACE_DEPLOYMENT_KIND=production` and `LACE_DATA_MODE=live`. `npm run build` and
+`npm run start` fail if that deployment is missing `SESSION_SECRET`,
+`BRIGHTSPACE_OAUTH_SCOPE`, or live data mode, or if `NEXT_PUBLIC_DEMO_MODE=true`
+enables persona auth outside an explicitly marked demo deployment.
 
 ## Checks
 
@@ -160,6 +161,7 @@ Before a deploy that real users will see, confirm:
 
 - `NEXT_PUBLIC_SHOW_DEMO_USERS` and `NEXT_PUBLIC_DEMO_MODE` are unset or `false`
 - `LACE_DEPLOYMENT_KIND` is `pilot` or `production`
+- `LACE_DATA_MODE` is `live`
 - `SESSION_SECRET` is set
 - `BRIGHTSPACE_OAUTH_SCOPE` is set to the minimum confirmed scope list
 - `ADMIN_SYNC_SECRET` is set

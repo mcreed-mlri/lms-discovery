@@ -18,6 +18,14 @@ function isExplicitDemoDeployment(env) {
 
 const issues = [];
 
+if (isProductionDeployment(process.env) && process.env.LACE_DATA_MODE !== "live") {
+  issues.push("LACE_DATA_MODE=live is required for pilot/production deployments.");
+}
+
+if (process.env.LACE_DATA_MODE === "live" && process.env.NEXT_PUBLIC_DEMO_MODE === "true") {
+  issues.push("NEXT_PUBLIC_DEMO_MODE=true is not allowed when LACE_DATA_MODE=live.");
+}
+
 if (
   isProductionDeployment(process.env) &&
   process.env.NEXT_PUBLIC_DEMO_MODE === "true" &&

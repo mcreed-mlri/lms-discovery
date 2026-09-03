@@ -1,6 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+import { resolveDataMode } from "@/lib/data-mode";
+
 type SecurityEnv = {
+  LACE_DATA_MODE?: string;
   LACE_DEPLOYMENT_KIND?: string;
   LACE_ALLOW_DEMO_AUTH?: string;
   BRIGHTSPACE_OAUTH_SCOPE?: string;
@@ -17,12 +20,19 @@ function getProcessSecurityEnv(): SecurityEnv {
 }
 
 export type SecurityEnvironmentIssue = {
-  code: "demo_auth_in_production" | "missing_brightspace_scope" | "missing_session_secret";
+  code:
+    | "demo_auth_in_live_mode"
+    | "demo_auth_in_production"
+    | "missing_brightspace_scope"
+    | "missing_data_mode"
+    | "missing_session_secret"
+    | "mock_data_in_production";
   message: string;
 };
 
 export function isProductionDeployment(env: SecurityEnv = getProcessSecurityEnv()) {
   const deploymentKind = env.LACE_DEPLOYMENT_KIND?.toLowerCase();
+  if (deploymentKind && DEMO_DEPLOYMENT_KINDS.has(deploymentKind)) return false;
   return (
     env.VERCEL_ENV === "production" ||
     (deploymentKind ? PRODUCTION_DEPLOYMENT_KINDS.has(deploymentKind) : false)
@@ -42,6 +52,21 @@ export function getSecurityEnvironmentIssues(
 ): SecurityEnvironmentIssue[] {
   const issues: SecurityEnvironmentIssue[] = [];
   const production = isProductionDeployment(env);
+  const dataMode = resolveDataMode(env);
+
+  if (production && env.LACE_DATA_MODE !== "live") {
+    issues.push({
+      code: env.LACE_DATA_MODE ? "mock_data_in_production" : "missing_data_mode",
+      message: "LACE_DATA_MODE=live is required for pilot/production deployments.",
+    });
+  }
+
+  if (dataMode.dataMode === "live" && env.NEXT_PUBLIC_DEMO_MODE === "true") {
+    issues.push({
+      code: "demo_auth_in_live_mode",
+      message: "NEXT_PUBLIC_DEMO_MODE=true is not allowed when LACE_DATA_MODE=live.",
+    });
+  }
 
   if (production && env.NEXT_PUBLIC_DEMO_MODE === "true" && !isExplicitDemoDeployment(env)) {
     issues.push({

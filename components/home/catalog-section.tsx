@@ -88,6 +88,9 @@ export function CatalogSection({
     pathItems,
     catalogItems,
     catalogTotal,
+    catalogError,
+    catalogLoading,
+    allowMockData,
     advancedFilterCount,
     setQuery,
     resetAllFilters,
@@ -109,7 +112,7 @@ export function CatalogSection({
     >
       {!hideHeading && (
         <div className="mb-4 flex justify-end">
-          {seeAllHref && (
+          {seeAllHref && catalogTotal > 0 && (
             <Link
               href={seeAllHref}
               className="group inline-flex shrink-0 items-center gap-1.5 rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3.5 py-2 text-xs font-bold text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
@@ -262,7 +265,21 @@ export function CatalogSection({
       {/* ONE render tree, chosen in JS. Rendering both a mobile list and a
           desktop grid and hiding one in CSS doubled the DOM for a catalog that
           grows with the curriculum. */}
-      {showGrid ? (
+      {catalogLoading ? (
+        <div className="editorial-card rounded-xl border-dashed p-8 text-center">
+          <SearchIcon className="mx-auto h-9 w-9 text-[color:var(--ink-soft)]" />
+          <h2 className="mt-4 text-xl font-bold text-[color:var(--ink)]">Loading catalog</h2>
+          <p className="mt-2 text-base text-[color:var(--ink-muted)]">
+            Checking the active learning source.
+          </p>
+        </div>
+      ) : catalogError ? (
+        <div className="editorial-card rounded-xl border-dashed p-8 text-center" role="alert">
+          <SearchIcon className="mx-auto h-9 w-9 text-[color:var(--ink-soft)]" />
+          <h2 className="mt-4 text-xl font-bold text-[color:var(--ink)]">Could not load catalog</h2>
+          <p className="mt-2 text-base text-[color:var(--ink-muted)]">{catalogError}</p>
+        </div>
+      ) : showGrid ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {shownItems.map((item) =>
             item.type === "PATH" ? (
@@ -280,30 +297,34 @@ export function CatalogSection({
         </div>
       )}
 
-      {catalogItems.length === 0 && (
+      {!catalogLoading && !catalogError && catalogItems.length === 0 && (
         <div className="editorial-card rounded-xl border-dashed p-8 text-center">
           <SearchIcon className="mx-auto h-9 w-9 text-[color:var(--ink-soft)]" />
           <h2 className="mt-4 text-xl font-bold text-[color:var(--ink)]">
-            No matching learning content
+            {allowMockData ? "No matching learning content" : "No live learning content yet"}
           </h2>
           <p className="mt-2 text-base text-[color:var(--ink-muted)]">
-            Try a suggested topic or clear one of the active filters.
+            {allowMockData
+              ? "Try a suggested topic or clear one of the active filters."
+              : "When active Brightspace catalog rows are synced, they will appear here."}
           </p>
-          <div className="mt-5 flex flex-wrap justify-center gap-2">
-            {noResultSuggestions.map((suggestion) => (
-              <button
-                key={suggestion}
-                className="rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-sm font-semibold text-[color:var(--ink-muted)] shadow-sm transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
-                type="button"
-                onClick={() => {
-                  setQuery(suggestion);
-                  resetAllFilters();
-                }}
-              >
-                {suggestion}
-              </button>
-            ))}
-          </div>
+          {allowMockData ? (
+            <div className="mt-5 flex flex-wrap justify-center gap-2">
+              {noResultSuggestions.map((suggestion) => (
+                <button
+                  key={suggestion}
+                  className="rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-sm font-semibold text-[color:var(--ink-muted)] shadow-sm transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
+                  type="button"
+                  onClick={() => {
+                    setQuery(suggestion);
+                    resetAllFilters();
+                  }}
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+          ) : null}
         </div>
       )}
     </SectionBand>

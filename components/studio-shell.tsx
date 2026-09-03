@@ -8,11 +8,11 @@ import { SearchBox } from "@/components/search-box";
 import { SiteFooter } from "@/components/site-footer";
 import { StudioContentBar } from "@/components/studio-content-bar";
 import { StudioRail } from "@/components/studio-rail";
-import { getEffectiveDashboardRole, getEligibleLearningItems } from "@/lib/access";
+import { getEffectiveDashboardRole } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
-import { getLearningItems } from "@/lib/data";
 import { useFocusTrap } from "@/lib/hooks/use-focus-trap";
+import { useLearningCatalog } from "@/lib/hooks/use-learning-catalog";
 import { useScrollLock } from "@/lib/hooks/use-scroll-lock";
 import { searchLearningItems, type SearchResult } from "@/lib/search";
 import { recordSearchAnalytics } from "@/lib/search-analytics";
@@ -43,7 +43,7 @@ export function StudioShell({
   const drawerRef = useFocusTrap<HTMLDivElement>(mobileOpen);
   useScrollLock(mobileOpen || searchOpen);
 
-  const allItems = useMemo(() => getEligibleLearningItems(getLearningItems(), user), [user]);
+  const { allItems, allowMockData } = useLearningCatalog(user);
   const globalResults = useMemo(
     () => searchLearningItems(allItems, globalQuery).slice(0, 6),
     [allItems, globalQuery],
@@ -147,7 +147,12 @@ export function StudioShell({
 
       {/* Desktop rail */}
       <div className="sticky top-0 hidden h-screen shrink-0 lg:flex">
-        <StudioRail collapsed={collapsed} onToggle={toggleCollapsed} onSearch={openGlobalSearch} />
+        <StudioRail
+          collapsed={collapsed}
+          onToggle={toggleCollapsed}
+          onSearch={openGlobalSearch}
+          showSkillAreas={allowMockData}
+        />
       </div>
 
       {/* Mobile rail drawer */}
@@ -173,6 +178,7 @@ export function StudioShell({
               onToggle={() => setMobileOpen(false)}
               onSearch={openGlobalSearch}
               onNavigate={() => setMobileOpen(false)}
+              showSkillAreas={allowMockData}
             />
           </div>
         </div>

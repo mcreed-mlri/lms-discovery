@@ -108,12 +108,15 @@ export function StudioRail({
   onToggle,
   onSearch,
   onNavigate,
+  showSkillAreas = true,
 }: {
   collapsed: boolean;
   onToggle: () => void;
   onSearch?: () => void;
   /** Fires when any link is clicked — used to close the mobile drawer. */
   onNavigate?: () => void;
+  /** Static skill-area links are mock/catalog-planning affordances. */
+  showSkillAreas?: boolean;
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -215,54 +218,56 @@ export function StudioRail({
       </nav>
 
       {/* Skill areas — the Legal Skills curriculum areas (each a course) */}
-      <div className="mt-[26px]">
-        {collapsed ? (
-          <div className="mx-1.5 mb-[14px] mt-1 h-px bg-[color:var(--line-soft)]" />
-        ) : (
-          <div className="mb-3 px-[11px] font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-[color:var(--ink-soft)]">
-            Skill areas
-          </div>
-        )}
-        <div className={`flex flex-col ${collapsed ? "gap-1.5" : "gap-0.5"}`}>
-          {visibleSkillAreas.map((area) => {
-            const hue = getHue(area.hueIndex);
-            return (
-              <Link
-                key={area.id}
-                href={area.href}
-                onClick={onNavigate}
-                title={collapsed ? `${area.name} · ${area.count}` : undefined}
-                className={`flex items-center gap-[11px] overflow-hidden whitespace-nowrap rounded-[8px] text-[13px] text-[color:var(--ink-muted)] transition hover:bg-[color:var(--surface-sunken)] focus-ring ${
-                  collapsed ? "justify-center px-0 py-[7px]" : "px-[11px] py-[7px]"
-                }`}
-              >
-                <span
-                  className="h-[9px] w-[9px] shrink-0 rounded-[3px]"
-                  style={{ background: hue.solid }}
-                />
-                {!collapsed && (
-                  <>
-                    <span className="flex-1">{area.name}</span>
-                    <span className="text-[12px] font-medium text-[color:var(--ink-soft)]">
-                      {area.count}
-                    </span>
-                  </>
-                )}
-              </Link>
-            );
-          })}
-          {!collapsed && skillAreas.length > RAIL_AREA_LIMIT && (
-            <button
-              type="button"
-              onClick={() => setShowAllAreas((value) => !value)}
-              aria-expanded={showAllAreas}
-              className="mt-0.5 flex items-center gap-[11px] rounded-[8px] px-[11px] py-[7px] text-left text-[13px] font-semibold text-[color:var(--brand)] transition hover:bg-[color:var(--surface-sunken)] focus-ring"
-            >
-              {showAllAreas ? "Show fewer" : `Show ${skillAreas.length - RAIL_AREA_LIMIT} more`}
-            </button>
+      {showSkillAreas ? (
+        <div className="mt-[26px]">
+          {collapsed ? (
+            <div className="mx-1.5 mb-[14px] mt-1 h-px bg-[color:var(--line-soft)]" />
+          ) : (
+            <div className="mb-3 px-[11px] font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-[color:var(--ink-soft)]">
+              Skill areas
+            </div>
           )}
+          <div className={`flex flex-col ${collapsed ? "gap-1.5" : "gap-0.5"}`}>
+            {visibleSkillAreas.map((area) => {
+              const hue = getHue(area.hueIndex);
+              return (
+                <Link
+                  key={area.id}
+                  href={area.href}
+                  onClick={onNavigate}
+                  title={collapsed ? `${area.name} · ${area.count}` : undefined}
+                  className={`flex items-center gap-[11px] overflow-hidden whitespace-nowrap rounded-[8px] text-[13px] text-[color:var(--ink-muted)] transition hover:bg-[color:var(--surface-sunken)] focus-ring ${
+                    collapsed ? "justify-center px-0 py-[7px]" : "px-[11px] py-[7px]"
+                  }`}
+                >
+                  <span
+                    className="h-[9px] w-[9px] shrink-0 rounded-[3px]"
+                    style={{ background: hue.solid }}
+                  />
+                  {!collapsed && (
+                    <>
+                      <span className="flex-1">{area.name}</span>
+                      <span className="text-[12px] font-medium text-[color:var(--ink-soft)]">
+                        {area.count}
+                      </span>
+                    </>
+                  )}
+                </Link>
+              );
+            })}
+            {!collapsed && skillAreas.length > RAIL_AREA_LIMIT && (
+              <button
+                type="button"
+                onClick={() => setShowAllAreas((value) => !value)}
+                aria-expanded={showAllAreas}
+                className="mt-0.5 flex items-center gap-[11px] rounded-[8px] px-[11px] py-[7px] text-left text-[13px] font-semibold text-[color:var(--brand)] transition hover:bg-[color:var(--surface-sunken)] focus-ring"
+              >
+                {showAllAreas ? "Show fewer" : `Show ${skillAreas.length - RAIL_AREA_LIMIT} more`}
+              </button>
+            )}
+          </div>
         </div>
-      </div>
+      ) : null}
 
       {/* Footer: collapse toggle + user */}
       <div className="mt-auto border-t border-[color:var(--line-soft)] pt-4">

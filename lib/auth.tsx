@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
+import { resolveDataMode, type DataModeConfig } from "@/lib/data-mode";
+
 export type User = {
   id: string;
   name: string;
@@ -98,14 +100,22 @@ export type AuthFlags = {
  * explicitly running as a demo environment.
  */
 export function resolveAuthFlags(
-  env?: Partial<Record<"NEXT_PUBLIC_DEMO_MODE" | "NEXT_PUBLIC_SHOW_DEMO_USERS", string>>,
+  env?: Partial<
+    Record<"LACE_DATA_MODE" | "NEXT_PUBLIC_DEMO_MODE" | "NEXT_PUBLIC_SHOW_DEMO_USERS", string>
+  >,
 ): AuthFlags {
-  const source = env ?? process.env;
-  const isDemoMode = source.NEXT_PUBLIC_DEMO_MODE === "true";
+  const source =
+    env ??
+    (process.env as unknown as Partial<
+      Record<"LACE_DATA_MODE" | "NEXT_PUBLIC_DEMO_MODE" | "NEXT_PUBLIC_SHOW_DEMO_USERS", string>
+    >);
+  const dataMode = resolveDataMode(source);
+  const isDemoMode = dataMode.allowDemoAccounts;
   return {
     isDemoMode,
-    showDemoUsers: isDemoMode || source.NEXT_PUBLIC_SHOW_DEMO_USERS === "true",
-    canUseDemoLogin: isDemoMode,
+    showDemoUsers:
+      dataMode.allowMockData && (isDemoMode || source.NEXT_PUBLIC_SHOW_DEMO_USERS === "true"),
+    canUseDemoLogin: dataMode.allowDemoAccounts,
   };
 }
 
@@ -114,6 +124,7 @@ export const { isDemoMode, showDemoUsers, canUseDemoLogin } = resolveAuthFlags()
 type AuthState = {
   user: User | null;
   ready: boolean;
+  flags: AuthFlags;
   login: (userId?: string) => void;
   logout: () => void;
 };
@@ -125,42 +136,76 @@ const STORAGE_KEY = "mlri-demo-user";
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
+  const [flags, setFlags] = useState<AuthFlags>({
+    isDemoMode: false,
+    showDemoUsers: false,
+    canUseDemoLogin: false,
+  });
 
   useEffect(() => {
-    if (canUseDemoLogin) {
-      try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-          setUser(JSON.parse(stored));
-          setReady(true);
-          return;
-        }
-      } catch {
-        // ignore malformed storage
-      }
-    }
-
-    if (isDemoMode) {
-      setReady(true);
-      return;
-    }
-
     let cancelled = false;
 
-    fetch("/api/me", { cache: "no-store" })
-      .then(async (response) => {
-        if (cancelled) return;
-        if (response.ok) {
-          const payload = (await response.json()) as { ok: boolean; user?: User };
-          if (payload.ok && payload.user) setUser(payload.user);
+    async function loadAuth() {
+      let runtimeFlags: AuthFlags;
+      try {
+        const response = await fetch("/api/app-config", { cache: "no-store" });
+        const config = (await response.json()) as { ok: boolean } & DataModeConfig;
+        if (!response.ok || !config.ok) throw new Error("Could not load app config.");
+        runtimeFlags = {
+          isDemoMode: config.allowDemoAccounts,
+          showDemoUsers:
+            config.allowMockData &&
+            (config.allowDemoAccounts || process.env.NEXT_PUBLIC_SHOW_DEMO_USERS === "true"),
+          canUseDemoLogin: config.allowDemoAccounts,
+        };
+      } catch {
+        runtimeFlags = resolveAuthFlags();
+      }
+
+      if (cancelled) return;
+      setFlags(runtimeFlags);
+
+      if (runtimeFlags.canUseDemoLogin) {
+        try {
+          const stored = localStorage.getItem(STORAGE_KEY);
+          if (stored) {
+            setUser(JSON.parse(stored));
+            setReady(true);
+            return;
+          }
+        } catch {
+          // ignore malformed storage
         }
-      })
-      .catch(() => {
-        // Signed-out state; login page handles the rest.
-      })
-      .finally(() => {
-        if (!cancelled) setReady(true);
-      });
+      } else {
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+        } catch {
+          // ignore storage errors
+        }
+      }
+
+      if (runtimeFlags.isDemoMode) {
+        setReady(true);
+        return;
+      }
+
+      fetch("/api/me", { cache: "no-store" })
+        .then(async (response) => {
+          if (cancelled) return;
+          if (response.ok) {
+            const payload = (await response.json()) as { ok: boolean; user?: User };
+            if (payload.ok && payload.user) setUser(payload.user);
+          }
+        })
+        .catch(() => {
+          // Signed-out state; login page handles the rest.
+        })
+        .finally(() => {
+          if (!cancelled) setReady(true);
+        });
+    }
+
+    void loadAuth();
 
     return () => {
       cancelled = true;
@@ -168,7 +213,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   function login(userId?: string) {
-    if (canUseDemoLogin) {
+    if (flags.canUseDemoLogin) {
       const nextUser =
         demoUsers.find((candidate) => candidate.id === (userId ?? demoUser.id)) ?? demoUser;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
@@ -176,18 +221,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    if (!isDemoMode) {
+    if (!flags.isDemoMode) {
       window.location.assign("/api/auth/brightspace/start");
       return;
     }
   }
 
   function logout() {
-    if (canUseDemoLogin || showDemoUsers) {
+    if (flags.canUseDemoLogin || flags.showDemoUsers) {
       localStorage.removeItem(STORAGE_KEY);
     }
 
-    if (!isDemoMode) {
+    if (!flags.isDemoMode) {
       void fetch("/api/auth/logout", { method: "POST" }).finally(() => {
         window.location.assign("/login");
       });
@@ -197,7 +242,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }
 
-  return <AuthCtx.Provider value={{ user, ready, login, logout }}>{children}</AuthCtx.Provider>;
+  return (
+    <AuthCtx.Provider value={{ user, ready, flags, login, logout }}>{children}</AuthCtx.Provider>
+  );
 }
 
 export function useAuth() {

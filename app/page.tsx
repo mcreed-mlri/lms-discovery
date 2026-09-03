@@ -17,7 +17,7 @@ import type { SearchResult } from "@/lib/search";
 import { useSavedLearning } from "@/lib/saved-learning";
 
 export default function Home() {
-  const { user, ready, login } = useAuth();
+  const { user, ready, flags, login } = useAuth();
   const router = useRouter();
   const isAdmin = getEffectiveDashboardRole(user) === "super_admin";
 
@@ -96,13 +96,15 @@ export default function Home() {
           <p className="mt-3 text-base leading-7 text-[color:var(--ink-muted)]">
             Continue into focused training for Massachusetts legal aid practice.
           </p>
-          <button
-            className="mt-7 inline-flex h-11 items-center justify-center rounded-full bg-[color:var(--ink)] px-6 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus-ring"
-            type="button"
-            onClick={() => login()}
-          >
-            Continue as {demoUser.firstName}
-          </button>
+          {flags.canUseDemoLogin ? (
+            <button
+              className="mt-7 inline-flex h-11 items-center justify-center rounded-full bg-[color:var(--ink)] px-6 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus-ring"
+              type="button"
+              onClick={() => login()}
+            >
+              Continue as {demoUser.firstName}
+            </button>
+          ) : null}
           <a
             className="mt-4 block text-sm font-bold text-[color:var(--ink-soft)] hover:text-[color:var(--ink)]"
             href="/login"
@@ -124,6 +126,7 @@ export default function Home() {
         suggestions={catalog.searchSuggestions}
         onSelectResult={openSearchResult}
         allItems={allItems}
+        allowMockData={catalog.allowMockData}
       />
 
       <SkillsSection tiles={catalog.skillTiles} onSelect={catalog.selectSkill} />

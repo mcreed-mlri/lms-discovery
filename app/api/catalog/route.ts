@@ -28,7 +28,7 @@ export async function GET() {
           ok: false,
           error: error.message,
           nextStep: needsMigration
-            ? "Apply docs/planning/supabase-rls-learning-items.sql to grant read access to the anon role."
+            ? "Apply supabase/migrations/202609020002_learning_items_rls.sql to grant read access to the anon role."
             : undefined,
         },
         { status: needsMigration ? 503 : 500 },

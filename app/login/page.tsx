@@ -4,14 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowIcon } from "@/components/icons";
 import { SiteFooter } from "@/components/site-footer";
-import {
-  canUseDemoLogin,
-  demoUsers,
-  isDemoMode,
-  showDemoUsers,
-  useAuth,
-  type User,
-} from "@/lib/auth";
+import { demoUsers, useAuth, type User } from "@/lib/auth";
 import { sanitizeReturnTo } from "@/lib/safe-return-to";
 
 const LOGIN_ERROR_MESSAGES: Record<string, string> = {
@@ -24,7 +17,8 @@ const LOGIN_ERROR_MESSAGES: Record<string, string> = {
 };
 
 export default function LoginPage() {
-  const { user, ready, login } = useAuth();
+  const { user, ready, flags, login } = useAuth();
+  const { canUseDemoLogin, isDemoMode, showDemoUsers } = flags;
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   // Where middleware wanted to send them before the gate intervened. Sanitized

@@ -37,6 +37,7 @@ export default defineConfig({
       NEXT_PUBLIC_DEMO_MODE: "true",
       NEXT_PUBLIC_SHOW_DEMO_USERS: "true",
       LACE_DEPLOYMENT_KIND: "demo",
+      LACE_DATA_MODE: "mock",
       SESSION_SECRET: "e2e-only-session-secret-not-used-in-any-real-deployment",
     },
   },
