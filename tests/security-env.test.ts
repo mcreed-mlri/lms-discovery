@@ -30,12 +30,7 @@ test("blocks demo auth and missing session secret in production", () => {
 
   assert.deepEqual(
     issues.map((issue) => issue.code),
-    [
-      "missing_data_mode",
-      "demo_auth_in_production",
-      "missing_session_secret",
-      "missing_brightspace_scope",
-    ],
+    ["demo_auth_in_production", "missing_session_secret", "missing_brightspace_scope"],
   );
 });
 
@@ -44,25 +39,11 @@ test("allows demo auth only for explicitly marked demo deployments", () => {
     VERCEL_ENV: "production",
     LACE_DEPLOYMENT_KIND: "demo",
     BRIGHTSPACE_OAUTH_SCOPE: "content:toc:read",
-    LACE_DATA_MODE: "mock",
     NEXT_PUBLIC_DEMO_MODE: "true",
     SESSION_SECRET: "test-secret",
   });
 
   assert.deepEqual(issues, []);
-});
-
-test("requires live data mode for pilot deployments", () => {
-  const issues = getSecurityEnvironmentIssues({
-    LACE_DEPLOYMENT_KIND: "pilot",
-    BRIGHTSPACE_OAUTH_SCOPE: "content:toc:read",
-    SESSION_SECRET: "test-secret",
-  });
-
-  assert.deepEqual(
-    issues.map((issue) => issue.code),
-    ["missing_data_mode"],
-  );
 });
 
 test("rejects cross-origin state-changing requests", async () => {

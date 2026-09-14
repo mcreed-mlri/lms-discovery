@@ -60,7 +60,6 @@ export function HeroSection({
   suggestions,
   onSelectResult,
   allItems,
-  allowMockData,
 }: {
   user: User;
   isAdmin: boolean;
@@ -69,11 +68,9 @@ export function HeroSection({
   suggestions: SearchResult[];
   onSelectResult: (result: SearchResult) => void;
   allItems: LearningItem[];
-  allowMockData: boolean;
 }) {
   const { resumeItem, resumeUrl, resumeEyebrow, resumeProgressLabel } = useResumeCard(allItems);
   const clePct = Math.round((learnerProgress.cleEarned / learnerProgress.cleRequired) * 100);
-  const showMockProgress = allowMockData && allItems.length > 0;
 
   return (
     <section className="overflow-x-clip border-b border-[color:var(--line)]">
@@ -103,7 +100,7 @@ export function HeroSection({
 
           {/* Mobile: text-only training hours — no ring. Hidden for the
               headless admin account, which tracks no personal progress. */}
-          {!isAdmin && showMockProgress && (
+          {!isAdmin && (
             <p className="shrink-0 pt-0.5 text-right font-mono text-[11px] leading-tight tabular-nums sm:hidden">
               <span className="block font-semibold uppercase tracking-[0.04em] text-[color:var(--ink-soft)]">
                 Training
@@ -114,7 +111,7 @@ export function HeroSection({
             </p>
           )}
 
-          {!isAdmin && showMockProgress && (
+          {!isAdmin && (
             <div className="hidden items-center gap-4 sm:flex sm:pt-1.5">
               <div className="flex items-center gap-2.5">
                 <ProgressRing
@@ -186,7 +183,7 @@ export function HeroSection({
                 Course operations, sync checks, and Brightspace setup now live there.
               </p>
             </aside>
-          ) : showMockProgress ? (
+          ) : (
             <aside
               className="order-1 min-w-0 rounded-[12px] bg-[color:var(--feature-surface)] px-3 py-2.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-3 lg:order-2 lg:self-start"
               aria-label="Resume learning"
@@ -222,21 +219,6 @@ export function HeroSection({
                   {resumeProgressLabel}
                 </span>
               </div>
-            </aside>
-          ) : (
-            <aside
-              className="order-1 min-w-0 rounded-[12px] bg-[color:var(--feature-surface)] px-3 py-2.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-3 lg:order-2 lg:self-start"
-              aria-label="Assigned learning"
-            >
-              <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.04em] text-[color:var(--feature-muted)] sm:text-[10px]">
-                Pilot mode
-              </p>
-              <h2 className="mt-0.5 text-[14px] font-bold leading-snug tracking-[-0.01em] text-[color:var(--feature-ink)] sm:text-[15px]">
-                Assigned courses will appear here
-              </h2>
-              <p className="mt-1.5 text-[11px] leading-snug text-[color:var(--feature-muted)] sm:mt-2">
-                Live Brightspace data is active; no demo progress is shown.
-              </p>
             </aside>
           )}
 
