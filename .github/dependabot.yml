@@ -52,6 +52,15 @@ updates:
     #
     # When the runtime moves to Node 26, raise @types/node in the same change
     # as .nvmrc and engines, and drop this rule for that cycle.
+    #
+    # vitest and @vitest/coverage-v8 joined the list after PRs #33 and #34
+    # (2026-09-14): Dependabot proposed each as its own major-bump PR, but
+    # @vitest/coverage-v8's peer range pins the exact vitest version it ships
+    # against (peer vitest@"4.1.11" from @vitest/coverage-v8@4.1.11), so
+    # bumping either one alone makes `npm ci` fail with ERESOLVE — neither PR
+    # can merge on its own, and the dev-tooling group doesn't help because it
+    # only bundles minor/patch updates, not majors. If vitest 5 is worth
+    # taking, bump both together by hand in one change.
     ignore:
       - dependency-name: next
         update-types: ["version-update:semver-major"]
@@ -66,6 +75,10 @@ updates:
       - dependency-name: typescript
         update-types: ["version-update:semver-major"]
       - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: vitest
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@vitest/coverage-v8"
         update-types: ["version-update:semver-major"]
       - dependency-name: tailwindcss
         update-types: ["version-update:semver-major"]
