@@ -48,7 +48,6 @@ export default function LoginPage() {
 
   function handleDemoLogin(nextUser: User) {
     login(nextUser.id);
-    router.push(returnTo ?? "/");
   }
 
   const brightspaceStartHref = returnTo

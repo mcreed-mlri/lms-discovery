@@ -31,3 +31,20 @@ test("production defaults use Brightspace-backed auth", () => {
   assert.equal(flags.showDemoUsers, false);
   assert.equal(flags.canUseDemoLogin, false);
 });
+
+test("omitted env reads the inlinable process.env members", () => {
+  const previousDemo = process.env.NEXT_PUBLIC_DEMO_MODE;
+  const previousShow = process.env.NEXT_PUBLIC_SHOW_DEMO_USERS;
+  process.env.NEXT_PUBLIC_DEMO_MODE = "true";
+  process.env.NEXT_PUBLIC_SHOW_DEMO_USERS = "false";
+
+  try {
+    const flags = resolveAuthFlags();
+    assert.equal(flags.isDemoMode, true);
+    assert.equal(flags.showDemoUsers, true);
+    assert.equal(flags.canUseDemoLogin, true);
+  } finally {
+    process.env.NEXT_PUBLIC_DEMO_MODE = previousDemo;
+    process.env.NEXT_PUBLIC_SHOW_DEMO_USERS = previousShow;
+  }
+});

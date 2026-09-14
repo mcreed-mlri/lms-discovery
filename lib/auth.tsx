@@ -96,20 +96,29 @@ export type AuthFlags = {
  * picker as an authenticated session. Stakeholder preview cards can be shown
  * beside Brightspace, but they must not bypass /api/me unless the whole app is
  * explicitly running as a demo environment.
+ *
+ * NEXT_PUBLIC_* values are inlined into the client bundle only when written as
+ * `process.env.NEXT_PUBLIC_*`. Copying `process.env` and reading a property off
+ * the copy leaves the browser with `undefined`, so the login cards SSR as
+ * buttons and hydrate as dead markup.
  */
 export function resolveAuthFlags(
   env?: Partial<Record<"NEXT_PUBLIC_DEMO_MODE" | "NEXT_PUBLIC_SHOW_DEMO_USERS", string>>,
 ): AuthFlags {
-  const source = env ?? process.env;
-  const isDemoMode = source.NEXT_PUBLIC_DEMO_MODE === "true";
+  const isDemoMode =
+    (env ? env.NEXT_PUBLIC_DEMO_MODE : process.env.NEXT_PUBLIC_DEMO_MODE) === "true";
+  const showPreview =
+    (env ? env.NEXT_PUBLIC_SHOW_DEMO_USERS : process.env.NEXT_PUBLIC_SHOW_DEMO_USERS) === "true";
   return {
     isDemoMode,
-    showDemoUsers: isDemoMode || source.NEXT_PUBLIC_SHOW_DEMO_USERS === "true",
+    showDemoUsers: isDemoMode || showPreview,
     canUseDemoLogin: isDemoMode,
   };
 }
 
-export const { isDemoMode, showDemoUsers, canUseDemoLogin } = resolveAuthFlags();
+export const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+export const showDemoUsers = isDemoMode || process.env.NEXT_PUBLIC_SHOW_DEMO_USERS === "true";
+export const canUseDemoLogin = isDemoMode;
 
 type AuthState = {
   user: User | null;
