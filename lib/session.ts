@@ -17,12 +17,20 @@ export { SESSION_COOKIE, SESSION_TTL_SECONDS } from "@/lib/session-constants";
 import { SESSION_TTL_SECONDS as TTL_SECONDS } from "@/lib/session-constants";
 
 export type SessionUser = {
-  /** Brightspace user Identifier from whoami. */
+  /** Brightspace user Identifier from whoami, or `google:<sub>` for a Google-gated session. */
   brightspaceUserId: string;
-  /** Brightspace login name (UniqueName). */
+  /** Brightspace login name (UniqueName), or the signed-in Google email. */
   uniqueName: string;
   firstName: string;
   lastName: string;
+  /**
+   * Which OAuth flow minted this session. Omitted (undefined) means
+   * Brightspace, for backward compatibility with tokens issued before this
+   * field existed. See docs/adr/0012-temporary-google-gated-demo-login.md.
+   */
+  provider?: "brightspace" | "google";
+  /** The real MLRI Google account used to sign in, kept for audit logging only — never used for access decisions. */
+  googleEmail?: string;
 };
 
 type SessionPayload = {
@@ -44,11 +52,12 @@ export function createSessionToken(
   user: SessionUser,
   secret: string,
   nowSeconds = Math.floor(Date.now() / 1000),
+  ttlSeconds = TTL_SECONDS,
 ) {
   const payload: SessionPayload = {
     user,
     iat: nowSeconds,
-    exp: nowSeconds + TTL_SECONDS,
+    exp: nowSeconds + ttlSeconds,
   };
   const encoded = Buffer.from(JSON.stringify(payload)).toString("base64url");
   return `${encoded}.${sign(encoded, secret)}`;

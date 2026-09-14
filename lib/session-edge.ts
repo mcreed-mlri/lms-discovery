@@ -55,6 +55,8 @@ export type EdgeSessionUser = {
   uniqueName: string;
   firstName: string;
   lastName: string;
+  provider?: "brightspace" | "google";
+  googleEmail?: string;
 };
 
 export async function verifySessionTokenEdge(
