@@ -11,8 +11,10 @@ cp .env.example .env.local   # then fill in values
 npm run dev                  # https://localhost:3000
 ```
 
-Node version is pinned in `.nvmrc` (24.20.0) and enforced by `engines`. On Windows
-without a global Node, prefix any script with the bundled binary:
+Node version is pinned in `.nvmrc` (24.20.0) and enforced by `engines`. Use the
+regular `npm` commands when Node/npm are available on PATH. On Windows machines
+where npm is unavailable or blocked by policy, prefix any script with the
+bundled binary:
 
 ```bash
 ./tools/node-v24.15.0-win-x64/npm.cmd run dev
@@ -27,20 +29,30 @@ that is expected locally.
 You do **not** need Brightspace credentials to develop. Set:
 
 ```
-NEXT_PUBLIC_SHOW_DEMO_USERS=true
+NEXT_PUBLIC_DEMO_MODE=true
+LACE_DEPLOYMENT_KIND=demo
 ```
 
-and sign in with a demo persona. See ADR 0007 for why this is opt-in — and why it
-must never be set on a deployment real advocates can reach.
+and sign in with a demo persona. `NEXT_PUBLIC_SHOW_DEMO_USERS=true` only shows
+persona preview cards beside Brightspace; it does not authenticate them unless
+demo mode is also enabled. See ADR 0007 for why this is opt-in — and why it must
+never be set on a deployment real advocates can reach.
 
 ### The minimum for real login
 
-`SESSION_SECRET`, `BRIGHTSPACE_CLIENT_ID`, `BRIGHTSPACE_CLIENT_SECRET`, and
-`BRIGHTSPACE_REDIRECT_URI`. Generate the session secret with:
+`SESSION_SECRET`, `BRIGHTSPACE_CLIENT_ID`, `BRIGHTSPACE_CLIENT_SECRET`,
+`BRIGHTSPACE_REDIRECT_URI`, and `BRIGHTSPACE_OAUTH_SCOPE`. Generate the session
+secret with:
 
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
+
+For pilot or production, set `LACE_DEPLOYMENT_KIND=pilot` or
+`LACE_DEPLOYMENT_KIND=production`. `npm run build` and `npm run start` fail if
+that deployment is missing `SESSION_SECRET` or `BRIGHTSPACE_OAUTH_SCOPE`, or if
+`NEXT_PUBLIC_DEMO_MODE=true` enables persona auth outside an explicitly marked
+demo deployment.
 
 ## Checks
 
@@ -118,22 +130,25 @@ than showing a learner an error for offering feedback. Apply the schema (below).
 
 ## Database schema
 
-Draft DDL lives in `docs/planning/*.sql` and is **not** yet managed by a migration
-tool — it is applied by hand in the Supabase SQL editor. Files:
+Deployable DDL lives in versioned migration files. The older
+`docs/planning/*.sql` files are planning references only.
 
-| File                              | Purpose                       |
-| --------------------------------- | ----------------------------- |
-| `supabase-learning-items.sql`     | Catalog table                 |
-| `supabase-rls-learning-items.sql` | Row Level Security policies   |
-| `supabase-analytics.sql`          | Feedback and analytics tables |
+| File                                                      | Purpose                       |
+| --------------------------------------------------------- | ----------------------------- |
+| `supabase/migrations/202609020001_learning_items.sql`     | Catalog table                 |
+| `supabase/migrations/202609020002_learning_items_rls.sql` | Row Level Security policies   |
+| `supabase/migrations/202609020003_analytics.sql`          | Feedback and analytics tables |
+
+After applying the migrations, run `supabase/tests/learning_items_rls.sql` in a
+transaction to verify the anon role can read only active catalog rows and cannot
+write.
 
 Apply the RLS policies whenever you apply the table — `app/api/catalog/route.ts`
 relies on RLS for scoping, so an unprotected table is a data-exposure bug, not
 just an incomplete setup.
 
-**This is the weakest part of the setup.** Moving to `supabase/migrations/` with
-the Supabase CLI is the intended fix; until then, schema changes are not
-versioned and there is no record of what has been applied to which environment.
+Use the Supabase CLI for repeatable environment promotion when the project
+graduates from the SQL editor workflow.
 
 ## Deployment
 
@@ -144,7 +159,9 @@ Settings → Environment Variables, **not** in the repo.
 Before a deploy that real users will see, confirm:
 
 - `NEXT_PUBLIC_SHOW_DEMO_USERS` and `NEXT_PUBLIC_DEMO_MODE` are unset or `false`
+- `LACE_DEPLOYMENT_KIND` is `pilot` or `production`
 - `SESSION_SECRET` is set
+- `BRIGHTSPACE_OAUTH_SCOPE` is set to the minimum confirmed scope list
 - `ADMIN_SYNC_SECRET` is set
 - `BRIGHTSPACE_REDIRECT_URI` matches the deployed URL
 

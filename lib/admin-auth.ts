@@ -1,6 +1,8 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 
+import { requireSameOriginRequest } from "@/lib/security";
+
 const ADMIN_SECRET_HEADER = "x-admin-secret";
 
 /**
@@ -13,6 +15,9 @@ const ADMIN_SECRET_HEADER = "x-admin-secret";
  *   if (denied) return denied;
  */
 export function requireAdminSecret(request: NextRequest): NextResponse | null {
+  const blocked = requireSameOriginRequest(request);
+  if (blocked) return blocked;
+
   const expected = process.env.ADMIN_SYNC_SECRET;
 
   if (!expected) {

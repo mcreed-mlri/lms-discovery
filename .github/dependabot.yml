@@ -18,9 +18,9 @@ updates:
       runtime-patches:
         dependency-type: production
         update-types: ["patch"]
-    # Majors for the framework, React, the linter, the compiler, and the CSS
-    # engine are deliberate migrations, not dependency bumps — raise them as
-    # their own piece of work.
+    # Majors for the framework, React, the linter, the compiler, the CSS
+    # engine, and the runtime type definitions are deliberate migrations, not
+    # dependency bumps — raise them as their own piece of work.
     #
     # eslint is here because of a concrete failure: Dependabot proposed
     # eslint 10.8.0 and CI failed. eslint-config-next declares its peer range as
@@ -38,6 +38,20 @@ updates:
     #     @tailwindcss/postcss, and the v3 `content` + `theme.extend` config
     #     would have to become CSS-first `@theme`. That regenerates the locked
     #     colour tokens, so it needs a full axe sweep (ADR 0008), not a bump.
+    #
+    # @types/node is different from the rest, and worse. The others fail loudly:
+    # CI goes red and the PR cannot merge. This one fails silently. The types
+    # must track the pinned runtime major — Node 24 in .nvmrc — because types
+    # describing Node 26 let tsc accept calls to APIs that do not exist at
+    # runtime. Types do not affect existing code, only new code written against
+    # them, so every check passes green and the mistake surfaces later, in
+    # production, in whatever was written next. Dependabot proposed 26.2.0 in
+    # PR #17 (declined in "Move to TypeScript 6.0.3 and align @types/node with
+    # the pinned runtime") and 26.4.0 again in #29. Without this rule it will
+    # keep proposing, and the green checkmark will keep arguing for it.
+    #
+    # When the runtime moves to Node 26, raise @types/node in the same change
+    # as .nvmrc and engines, and drop this rule for that cycle.
     ignore:
       - dependency-name: next
         update-types: ["version-update:semver-major"]
@@ -50,6 +64,8 @@ updates:
       - dependency-name: eslint-config-next
         update-types: ["version-update:semver-major"]
       - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
       - dependency-name: tailwindcss
         update-types: ["version-update:semver-major"]

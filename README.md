@@ -6,43 +6,20 @@ A Next.js App Router MVP for discovering MLRI learning content and navigating in
 
 Brightspace remains the system of record for courses, users, enrollment, and progress. This app handles discovery UI, search, browsing, learning paths, learner progress surfaces, and handoff links. Course operations, sync checks, and Brightspace setup live in Brightspace Manager.
 
+Current delivery status, pilot timing, and sandbox constraints are summarized in
+[`PILOT_STATUS.md`](PILOT_STATUS.md).
+
 ## Run locally
 
-### Windows (no global Node/npm)
-
-This repo keeps a local Node copy in `tools/` (gitignored). Use it when `npm` is not on your PATH or is blocked by policy.
-
-**First time only** — if `tools/node-v24.15.0-win-x64/` is missing, download the [Node.js v24.15.0 Windows x64 zip](https://nodejs.org/dist/v24.15.0/node-v24.15.0-win-x64.zip), extract it to `tools/node-v24.15.0-win-x64/`, then install dependencies:
-
-```powershell
-.\tools\node-v24.15.0-win-x64\npm.cmd install
-```
-
-Start the dev server (any npm script works the same way through the bundled npm):
-
-```powershell
-.\tools\node-v24.15.0-win-x64\npm.cmd run dev
-```
-
-Then open `http://localhost:3000`.
-
-**If `npm.cmd run dev` fails with `'"node"' is not recognized...`**: the bundled `npm.cmd`/`next.cmd` shims fall back to a bare `node` command when they can't resolve their own path, and that only works if the bundled Node folder is on `PATH`. Fix by adding it for the current terminal session before running npm:
-
-```powershell
-$env:PATH = "C:\dev\LACE\learning-hub\tools\node-v24.15.0-win-x64;" + $env:PATH
-.\tools\node-v24.15.0-win-x64\npm.cmd run dev
-```
-
-This only affects the current PowerShell window — re-run it in each new terminal, or add it to your PowerShell profile to make it permanent.
-
-### macOS / Linux (or when Node/npm is already installed)
+Use the standard npm workflow:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Then open `http://localhost:3000`.
+Then open `https://localhost:3000`. Your browser will warn about the local
+self-signed certificate; that is expected.
 
 ## Environment variables
 
@@ -50,8 +27,8 @@ Copy `.env.example` to `.env.local` and fill in real values. Never commit `.env`
 
 - **Supabase** (`NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`): database access, prepared for the dashboard phase. The service role key is server-only — keep it secret.
 - **Brightspace Manager** (`NEXT_PUBLIC_BRIGHTSPACE_MANAGER_URL`): public handoff URL for the operations console. Defaults to `https://brightspace-manager.vercel.app`; set `http://localhost:3001` when running BSM locally.
-- **Brightspace** (`BRIGHTSPACE_*`): OAuth and API credentials for the LMS integration. Without these, the app still runs — the discovery UI and mock dashboard work fine; only the `/api/auth/brightspace/*`, `/api/health/*`, and `/api/admin/sync/*` routes need them.
-- **Demo users** (`NEXT_PUBLIC_SHOW_DEMO_USERS`): persona cards show on `/login` beside Brightspace by default for demos. Set to `false` to hide them.
+- **Brightspace** (`BRIGHTSPACE_*`): OAuth and API credentials for the LMS integration. The current pre-pilot target is the Brightspace sandbox while the production site, branding, and final name are pending.
+- **Demo users** (`NEXT_PUBLIC_DEMO_MODE`, `NEXT_PUBLIC_SHOW_DEMO_USERS`): `NEXT_PUBLIC_DEMO_MODE=true` enables local persona sign-in for demos. `NEXT_PUBLIC_SHOW_DEMO_USERS=true` only shows preview persona cards beside Brightspace; it does not create an authenticated client-side session.
 - **`ADMIN_SYNC_SECRET`**: shared secret that callers must send in the `x-admin-secret` header to use `/api/admin/*` routes. Admin routes return 503 if it is not configured (fail closed).
 
 For production, set the same variables in the Vercel dashboard (Settings → Environment Variables).
@@ -66,9 +43,9 @@ npm run typecheck
 npm run build
 ```
 
-## LACE Hub dashboard (Phase 1 mock)
+## LACE Hub dashboard (pre-pilot seed data)
 
-Unified role-based dashboard at **`/my-learning`** (aliases `/dashboard` and `/me` redirect here). Uses the same LACE hub shell and editorial theme as the discovery library. **Mock data only** — no Brightspace OAuth or Supabase yet.
+Unified role-based dashboard at **`/my-learning`** (aliases `/dashboard` and `/me` redirect here). Uses the same LACE hub shell and editorial theme as the discovery library. The dashboard currently uses representative pilot seed data because the production Brightspace content source is not available yet.
 
 - **Learner** (`/my-learning`): full My Learning UI with course progress cards
 - **Manager** (`/my-learning/team`), **Program** (`/my-learning/program`): Phase 3 scaffolds
@@ -85,7 +62,41 @@ Expected dashboard lenses:
 
 Use the **dev role switcher** (bottom-left on dashboard routes) to preview nav for `learner`, `manager`, `program`, or `super_admin`. Choice persists in `localStorage` key `lace-dev-role`.
 
-Data layer: `lib/services/dashboardService.ts` — today returns mocks from `mocks/dashboard.ts`. **Replace mocks with `fetch('/api/me/dashboard')` in Phase 1** when the server route ships. Types live in `types/dashboard.ts`.
+Data layer: `lib/services/dashboardService.ts` — today returns pilot seed data from `mocks/dashboard.ts`. Swap this adapter to `fetch('/api/me/dashboard')` when the production content source and dashboard route are ready. Types live in `types/dashboard.ts`.
+
+## Troubleshooting
+
+### Portable Node fallback
+
+This repo can use a local Node copy in `tools/` (gitignored) when `npm` is not on
+your PATH or is blocked by policy.
+
+**First time only** — if `tools/node-v24.15.0-win-x64/` is missing, download the
+[Node.js v24.15.0 Windows x64 zip](https://nodejs.org/dist/v24.15.0/node-v24.15.0-win-x64.zip),
+extract it to `tools/node-v24.15.0-win-x64/`, then install dependencies:
+
+```powershell
+.\tools\node-v24.15.0-win-x64\npm.cmd install
+```
+
+Start the dev server through the bundled npm:
+
+```powershell
+.\tools\node-v24.15.0-win-x64\npm.cmd run dev
+```
+
+**If `npm.cmd run dev` fails with `'"node"' is not recognized...`**: the bundled
+`npm.cmd`/`next.cmd` shims fall back to a bare `node` command when they can't
+resolve their own path, and that only works if the bundled Node folder is on
+`PATH`. Fix by adding it for the current terminal session before running npm:
+
+```powershell
+$env:PATH = "C:\dev\LACE\learning-hub\tools\node-v24.15.0-win-x64;" + $env:PATH
+.\tools\node-v24.15.0-win-x64\npm.cmd run dev
+```
+
+This only affects the current PowerShell window — re-run it in each new
+terminal, or add it to your PowerShell profile to make it permanent.
 
 ## Project structure
 

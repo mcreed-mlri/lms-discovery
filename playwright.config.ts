@@ -9,11 +9,9 @@ const BASE_URL = `http://localhost:${PORT}`;
  * Runs against a production build rather than `next dev`, so what is asserted is
  * what actually ships — dev mode differs in hydration timing and error overlays.
  *
- * Demo personas are enabled for the run. They are the only login path available
- * without live Brightspace credentials, and NEXT_PUBLIC_* values are inlined at
- * build time, so one build can only have one setting. The consequence worth
- * knowing: proxy.ts short-circuits while personas are on, so the auth gate is
- * NOT exercised here — it is covered separately and deliberately.
+ * The suite runs in explicit demo mode. Persona localStorage is intentionally
+ * trusted only under NEXT_PUBLIC_DEMO_MODE=true; showing stakeholder preview
+ * cards beside Brightspace is not enough to authenticate a test user.
  */
 export default defineConfig({
   testDir: "./e2e",
@@ -36,8 +34,9 @@ export default defineConfig({
     // A cold production build plus 130 static pages needs real headroom.
     timeout: 240_000,
     env: {
-      NEXT_PUBLIC_DEMO_MODE: "false",
+      NEXT_PUBLIC_DEMO_MODE: "true",
       NEXT_PUBLIC_SHOW_DEMO_USERS: "true",
+      LACE_DEPLOYMENT_KIND: "demo",
       SESSION_SECRET: "e2e-only-session-secret-not-used-in-any-real-deployment",
     },
   },

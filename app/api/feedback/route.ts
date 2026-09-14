@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { rateLimitRequest } from "@/lib/rate-limit";
+import { requireSameOriginRequest } from "@/lib/security";
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
 
 /**
@@ -39,6 +41,16 @@ function accepted(reason: string) {
 }
 
 export async function POST(request: Request) {
+  const blocked = requireSameOriginRequest(request);
+  if (blocked) return blocked;
+
+  const limited = rateLimitRequest(request, {
+    name: "feedback",
+    limit: 20,
+    windowMs: 60 * 1000,
+  });
+  if (limited) return limited;
+
   let body: FeedbackBody;
   try {
     body = await request.json();
