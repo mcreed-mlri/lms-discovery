@@ -61,6 +61,17 @@ function ThemeProvider({ children }: { children: ReactNode }) {
 }
 
 export function Providers({ children }: { children: ReactNode }) {
+  // WebKit applies :active to a tap only while the document carries at least
+  // one touch listener. Without this the pressed states in globals.css render
+  // correctly in every desktop browser and never appear on an iPhone, which is
+  // the one place they exist for. Passive, empty, and never removed while the
+  // app is mounted: it is registered to be counted, not to run.
+  useEffect(() => {
+    const noop = () => {};
+    document.addEventListener("touchstart", noop, { passive: true });
+    return () => document.removeEventListener("touchstart", noop);
+  }, []);
+
   useEffect(() => {
     if (typeof window !== "undefined" && "serviceWorker" in navigator) {
       window.addEventListener("load", () => {

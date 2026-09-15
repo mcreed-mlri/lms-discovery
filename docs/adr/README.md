@@ -32,3 +32,4 @@ editing history.
 | [0010](0010-lf-line-endings.md)                   | Line endings are normalized to LF                       | Accepted |
 | [0011](0011-coverage-is-a-ratchet.md)             | Coverage thresholds are a ratchet, not a target         | Accepted |
 | [0012](0012-temporary-google-gated-demo-login.md) | Temporary Google-gated demo login for the staff meeting | Accepted |
+| [0013](0013-touch-only-rules.md)                  | Two touch-only rules that look like mistakes            | Accepted |

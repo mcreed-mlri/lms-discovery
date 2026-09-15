@@ -84,6 +84,15 @@
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 
+  /* Pressed-state strength, applied by the `hover: none` block further down.
+     A brightness step rather than a colour, because it has to read on every
+     surface the app puts a control on. Light surfaces darken; the dark theme
+     redefines this to lighten instead. --press-inverse is for the controls on
+     the near-black feature panel, which are white in BOTH themes and so can
+     only ever go down. */
+  --press: brightness(0.92);
+  --press-inverse: brightness(0.86);
+
   /* ── Brand — steel blue, drawn from the MLRI blue family. Institutional, not
         electric, and firmly on the blue side of the wheel (no violet cast).
         Blue means *interactive*: links, active icons, progress, resume. ────── */
@@ -209,6 +218,8 @@
   --panel: #1a1d24;
   --surface: #1c1f26;
   --surface-raised: #22262e;
+  /* Up, not down: these surfaces are already near-black. */
+  --press: brightness(1.25);
   --surface-sunken: #262a33;
   --hover-tint: #20242b;
   --chrome-bg: rgba(28, 31, 38, 0.86);
@@ -500,6 +511,111 @@ a {
   width: max(100%, 44px);
   height: max(100%, 44px);
   transform: translate(-50%, -50%);
+}
+
+/* ── Sideways scrollers ───────────────────────────────────────────────────
+   Four tracks scroll horizontally on purpose: the popular searches under the
+   home search box, the catalog's filter pills, a path's stage journey, and the
+   curriculum map's columns — the last of which is 3020px of content in a 351px
+   viewport, nearly nine screens. All four used to end at a hard edge, cutting
+   the item there mid-word with the scrollbar hidden or absent, which reads as a
+   layout that broke rather than one that continues.
+
+   A mask fades the edge the content actually carries on past. It is driven by
+   `data-continues` from useScrollEdges rather than parked on one side, because
+   a permanent fade is wrong half the time: on the right it veils the last item
+   once you reach the end, on both sides it veils a first item that nothing
+   precedes. Being a mask and not a gradient overlay, it needs to know nothing
+   about the colour behind the track — these sit on four different surfaces.
+
+   `scroll-padding-inline` is the counterpart: Tab through a track and the
+   browser scrolls the focused child in by that much, so a focus ring never
+   lands under the fade. Snapping is `proximity`, not `mandatory` — the
+   curriculum map is long enough that fighting a flick would be worse than a
+   column resting off-alignment.
+
+   `overscroll-behavior-x: contain` stops a flick that runs out of track from
+   continuing into the browser's own back-swipe. */
+.edge-scroller {
+  min-width: 0;
+}
+
+/* The ring belongs to the frame precisely because the frame is not masked.
+   Only `focusable` tracks have a tabbable track element to match here. */
+.edge-scroller:has(> .edge-scroller-track:focus-visible) {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: var(--radius-control);
+}
+
+.edge-scroller-track {
+  --edge-fade: 2.5rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--edge-fade);
+}
+
+.edge-scroller-track > * {
+  scroll-snap-align: start;
+}
+
+.edge-scroller[data-continues="end"] > .edge-scroller-track {
+  mask-image: linear-gradient(to right, #000 calc(100% - var(--edge-fade)), transparent);
+}
+
+.edge-scroller[data-continues="start"] > .edge-scroller-track {
+  mask-image: linear-gradient(to right, transparent, #000 var(--edge-fade));
+}
+
+.edge-scroller[data-continues="both"] > .edge-scroller-track {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--edge-fade),
+    #000 calc(100% - var(--edge-fade)),
+    transparent
+  );
+}
+
+/* ── Pressed states ───────────────────────────────────────────────────────
+   Everything interactive in this app announces itself on :hover, and a
+   touchscreen never fires hover. With the tap highlight turned off below for
+   a cleaner press, that left a tap producing nothing at all between
+   finger-down and the route changing — the single biggest reason the app felt
+   unfinished on a phone. :active does the job hover does on a pointer.
+
+   This is a filter and not a background because it has to land on every
+   surface a control sits on: white cards, the near-black feature panel, the
+   brand-blue avatar, sunken chips. It is also not movement, so it survives
+   the reduced-motion block at the bottom of this file untouched — "state
+   feedback survives; movement does not" cuts both ways.
+
+   Scoped to `hover: none`. A mouse already has hover feedback; giving a
+   desktop press its own treatment is a design change rather than a fix.
+
+   Two exclusions. The full-screen buttons behind the drawer, the search
+   dialog and the detail sheet are tap-to-dismiss scrims, so dimming one
+   flashes the whole backdrop; they are already marked `data-focus-skip` for
+   the focus traps. `:where()` keeps that exclusion at zero specificity so the
+   feature-panel rule below still wins.
+
+   The CSS alone is not enough on an iPhone: WebKit only applies :active to a
+   tap when the document carries a touch listener, which is why Providers
+   registers a passive no-op one. */
+@media (hover: none) {
+  a:active,
+  button:not(:where([data-focus-skip])):active,
+  select:active,
+  summary:active,
+  [role="button"]:active,
+  [role="option"]:active {
+    filter: var(--press);
+  }
+
+  .focus-ring-inverse:active {
+    filter: var(--press-inverse);
+  }
 }
 
 button,

@@ -180,7 +180,7 @@ export function StudioShell({
 
       {/* Content column */}
       <div className="flex min-w-0 flex-1 flex-col overflow-x-clip pb-[calc(5rem+var(--safe-bottom))] lg:pb-0">
-        <StudioContentBar onMenu={() => setMobileOpen(true)} onSearch={openGlobalSearch} />
+        <StudioContentBar onMenu={() => setMobileOpen(true)} />
         <main id="main-content" className="min-w-0 flex-1 overflow-x-clip">
           {padded ? (
             <div className="mx-auto max-w-[1120px] px-4 py-8 sm:px-6 lg:px-10">{children}</div>
@@ -224,6 +224,7 @@ export function StudioShell({
                 href="/updates"
                 label="Updates"
                 active={pathname.startsWith("/updates")}
+                badge
                 icon={<BellIcon className="h-5 w-5" />}
               />
             </>
@@ -309,11 +310,14 @@ function BottomNavLink({
   label,
   active,
   icon,
+  badge = false,
 }: {
   href: string;
   label: string;
   active: boolean;
   icon: ReactNode;
+  /** The unread dot, which followed the bell down from the header on phones. */
+  badge?: boolean;
 }) {
   return (
     <Link
@@ -323,7 +327,15 @@ function BottomNavLink({
       }`}
       aria-current={active ? "page" : undefined}
     >
-      {icon}
+      <span className="relative">
+        {icon}
+        {badge ? (
+          <span
+            aria-hidden="true"
+            className="absolute -right-[3px] -top-[2px] h-[7px] w-[7px] rounded-full border-2 border-[color:var(--surface)] bg-[color:var(--status-changed)]"
+          />
+        ) : null}
+      </span>
       {label}
     </Link>
   );
