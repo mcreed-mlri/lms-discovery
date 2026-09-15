@@ -425,6 +425,10 @@ input::placeholder {
 
 .hub-shell {
   background: var(--paper);
+  /* StudioContentBar height (padding + 38px controls + bottom border). The
+     homepage hero pins under it via top: var(--studio-chrome). Keep these in
+     lockstep if the bar's padding or control size changes. */
+  --studio-chrome: calc(3.5rem + 1px + env(safe-area-inset-top, 0px));
 }
 
 .dashboard-command {
@@ -438,8 +442,18 @@ input::placeholder {
 }
 
 @media (min-width: 640px) {
+  .hub-shell {
+    --studio-chrome: calc(3.75rem + 1px + env(safe-area-inset-top, 0px));
+  }
+
   .sticky-filter {
     top: 5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hub-shell {
+    --studio-chrome: calc(4.375rem + 1px);
   }
 }
 
@@ -468,11 +482,6 @@ input::placeholder {
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-card);
   background: var(--surface-raised);
-}
-
-/* Section rhythm — spacing and a divider, not a nested box. */
-.section-panel {
-  border-top: 1px solid var(--line);
 }
 
 .section-label {

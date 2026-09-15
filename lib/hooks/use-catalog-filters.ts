@@ -220,6 +220,7 @@ export function useCatalogFilters(
     viewMode,
     setViewMode,
     skillFilter,
+    setSkillFilter,
     showRefine,
     setShowRefine,
     practiceAreaFilter,

@@ -261,6 +261,14 @@ export function CheckIcon({ className }: IconProps) {
   );
 }
 
+export function StarIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M12 3.4 14.6 9l6 .5-4.6 4 1.5 5.9L12 16.6 6.5 19.4 8 13.5 3.4 9.5 9.4 9z" />
+    </svg>
+  );
+}
+
 export function CertificateIcon({ className }: IconProps) {
   return (
     <svg {...baseProps} className={className} aria-hidden="true">

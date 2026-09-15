@@ -1,12 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { AccountMenu } from "@/components/account-menu";
 import { BellIcon, MenuIcon, SearchIcon } from "@/components/icons";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 /* Slim sticky header inside the content column. On desktop it carries the
-   "what is this product" eyebrow + a notifications bell; on mobile it also
-   holds the hamburger that opens the rail drawer, search, and the LACE wordmark. */
+   "what is this product" eyebrow + notifications and the account bubble; on
+   mobile it also holds the hamburger that opens the rail drawer, search, and
+   the LACE wordmark. Height is `--studio-chrome` in globals.css — the homepage
+   hero pins under it. */
 export function StudioContentBar({
   onMenu,
   onSearch,
@@ -57,6 +60,8 @@ export function StudioContentBar({
         <BellIcon className="h-[18px] w-[18px]" />
         <span className="absolute right-[9px] top-[8px] h-[7px] w-[7px] rounded-full border-2 border-[color:var(--surface)] bg-[color:var(--status-changed)]" />
       </Link>
+
+      <AccountMenu />
     </div>
   );
 }

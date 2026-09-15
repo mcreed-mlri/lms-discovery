@@ -1,20 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { DetailModal } from "@/components/detail-modal";
-import { CatalogSection } from "@/components/home/catalog-section";
 import { HeroSection } from "@/components/home/hero-section";
-import { SkillsSection } from "@/components/home/skills-section";
+import { HomeOverview } from "@/components/home/home-overview";
 import { StudioShell } from "@/components/studio-shell";
 import { getEffectiveDashboardRole } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
-import type { LearningItem } from "@/lib/data";
+import { browseHref } from "@/lib/home-helpers";
 import { useCatalogFilters } from "@/lib/hooks/use-catalog-filters";
 import { recordSearchAnalytics } from "@/lib/search-analytics";
 import type { SearchResult } from "@/lib/search";
-import { useSavedLearning } from "@/lib/saved-learning";
 
 export default function Home() {
   const { user, ready, login } = useAuth();
@@ -25,14 +22,10 @@ export default function Home() {
     if (ready && !user) router.replace("/login");
   }, [ready, user, router]);
 
-  const [selectedItem, setSelectedItem] = useState<LearningItem | null>(null);
-  const savedLearning = useSavedLearning();
-  const catalog = useCatalogFilters(user, { previewLimit: 12 });
+  const catalog = useCatalogFilters(user);
   const { allItems, setQuery } = catalog;
 
   function openSearchResult(result: SearchResult) {
-    setQuery(result.item.title);
-    setSelectedItem(result.item);
     recordSearchAnalytics({
       type: "search_result_selected",
       query: catalog.query,
@@ -40,34 +33,28 @@ export default function Home() {
       resultType: result.item.type,
       resultTitle: result.item.title,
     });
+    router.push(
+      browseHref({
+        q: result.item.title,
+        open: `${result.item.type}-${result.item.id}`,
+      }),
+    );
   }
 
   /**
-   * Practice-area rows in the rail and results from the global search dialog both
-   * navigate to /?q=<term>&open=<id>#browse. Reading those params through
-   * useSearchParams makes this react to the URL changing.
-   *
-   * It used to read window.location.search once in a mount effect, which meant a
-   * push from an already-mounted page had no effect — the effect had already run.
-   * StudioShell worked around that by *also* dispatching a
-   * "lace-open-learning-item" CustomEvent, so the app carried a DOM event bus in
-   * parallel with its own router, and neither half worked alone: the push was
-   * needed to survive the navigation, the event to be heard after it. Making the
-   * params reactive removes the need for the event entirely.
+   * Older links pointed at /?q=&open=#browse when the catalog lived on home.
+   * The library is /browse now; send those params there so shared URLs still
+   * open the same item.
    */
   const searchParams = useSearchParams();
-  const seededQuery = searchParams.get("q");
-  const openId = searchParams.get("open");
-
   useEffect(() => {
-    if (seededQuery) setQuery(seededQuery);
-  }, [seededQuery, setQuery]);
-
-  useEffect(() => {
-    if (!openId) return;
-    const match = allItems.find((item) => `${item.type}-${item.id}` === openId);
-    if (match) setSelectedItem(match);
-  }, [openId, allItems]);
+    if (!user) return;
+    const q = searchParams.get("q");
+    const open = searchParams.get("open");
+    const skill = searchParams.get("skill");
+    if (!q && !open && !skill) return;
+    router.replace(browseHref({ q, open, skill }));
+  }, [user, searchParams, router]);
 
   if (!ready) {
     return (
@@ -123,19 +110,11 @@ export default function Home() {
         onQueryChange={setQuery}
         suggestions={catalog.searchSuggestions}
         onSelectResult={openSearchResult}
+        onSearchLibrary={(term) => router.push(browseHref({ q: term }))}
         allItems={allItems}
       />
 
-      <SkillsSection tiles={catalog.skillTiles} onSelect={catalog.selectSkill} />
-
-      <CatalogSection catalog={catalog} onOpenItem={setSelectedItem} seeAllHref="/browse" />
-
-      <DetailModal
-        item={selectedItem}
-        onClose={() => setSelectedItem(null)}
-        isSaved={selectedItem ? savedLearning.isSaved(selectedItem) : false}
-        onToggleSaved={savedLearning.toggleSaved}
-      />
+      <HomeOverview catalogTotal={catalog.catalogTotal} />
     </StudioShell>
   );
 }

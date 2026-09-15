@@ -41,6 +41,7 @@ export async function signIn(page: Page) {
 export const SIGNED_IN_ROUTES = [
   { path: "/", name: "home" },
   { path: "/browse/", name: "browse" },
+  { path: "/browse/paths/intake-to-verdict/", name: "intake to verdict path" },
   { path: "/curriculum-map/", name: "curriculum map" },
   { path: "/updates/", name: "updates" },
   { path: "/my-learning/", name: "my learning" },

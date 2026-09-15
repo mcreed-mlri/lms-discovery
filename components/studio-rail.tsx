@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   BellIcon,
   BookIcon,
   ChevronLeftIcon,
   GridIcon,
   HomeIcon,
-  SearchIcon,
+  PathIcon,
 } from "@/components/icons";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { getEffectiveDashboardRole } from "@/lib/access";
@@ -21,6 +21,13 @@ import { useState, type ComponentType } from "react";
 // How many skill areas to show in the rail before the "Show more" toggle.
 const RAIL_AREA_LIMIT = 7;
 
+type NavChild = {
+  label: string;
+  href: string;
+  icon: ComponentType<{ className?: string }>;
+  match?: (pathname: string) => boolean;
+};
+
 type NavItem = {
   label: string;
   href: string;
@@ -31,11 +38,25 @@ type NavItem = {
   adminOnly?: boolean;
   /** Hidden for the headless admin account — these are learner-only surfaces. */
   learnerOnly?: boolean;
+  children?: NavChild[];
 };
 
 const primaryNav: NavItem[] = [
   { label: "Home", href: "/", icon: HomeIcon, match: (p) => p === "/" },
-  { label: "Browse", href: "/browse", icon: GridIcon, match: (p) => p === "/browse" },
+  {
+    label: "Browse",
+    href: "/browse",
+    icon: GridIcon,
+    match: (p) => p === "/browse",
+    children: [
+      {
+        label: "Paths",
+        href: "/browse/paths/intake-to-verdict",
+        icon: PathIcon,
+        match: (p) => p.startsWith("/browse/paths"),
+      },
+    ],
+  },
   {
     label: "My Learning",
     href: "/my-learning",
@@ -106,18 +127,15 @@ function RailItem({
 export function StudioRail({
   collapsed,
   onToggle,
-  onSearch,
   onNavigate,
 }: {
   collapsed: boolean;
   onToggle: () => void;
-  onSearch?: () => void;
   /** Fires when any link is clicked — used to close the mobile drawer. */
   onNavigate?: () => void;
 }) {
   const pathname = usePathname();
-  const router = useRouter();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const effectiveRole = getEffectiveDashboardRole(user);
   const isAdmin = effectiveRole === "super_admin";
 
@@ -130,12 +148,6 @@ export function StudioRail({
   // The headless admin account is an ops/data login — hide learner surfaces.
   const visiblePrimaryNav = primaryNav.filter((item) => !item.learnerOnly || !isAdmin);
   const visibleRoleNav = roleNav.filter((item) => !item.adminOnly || isAdmin);
-
-  function handleLogout() {
-    logout();
-    onNavigate?.();
-    router.push("/login");
-  }
 
   return (
     <div
@@ -168,41 +180,52 @@ export function StudioRail({
         )}
       </div>
 
-      {/* Search */}
-      {collapsed ? (
-        <button
-          type="button"
-          onClick={onSearch}
-          title="Search - Ctrl K"
-          className="mx-auto mb-4 flex h-10 w-11 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--paper)] text-[color:var(--ink-soft)] transition hover:border-[color:var(--line-strong)] focus-ring"
-        >
-          <SearchIcon className="h-[18px] w-[18px]" />
-        </button>
-      ) : (
-        <button
-          type="button"
-          onClick={onSearch}
-          className="mb-4 flex items-center gap-[9px] rounded-[9px] border border-[color:var(--line-soft)] bg-[color:var(--surface)] px-3 py-[9px] text-left shadow-[var(--shadow-xs)] transition hover:border-[color:var(--line-strong)] focus-ring"
-        >
-          <SearchIcon className="h-4 w-4 text-[color:var(--ink-soft)]" />
-          <span className="flex-1 text-[13px] text-[color:var(--ink-soft)]">Search</span>
-          <span className="rounded-[7px] bg-[color:var(--surface-sunken)] px-[7px] py-1 font-mono text-[11px] font-semibold text-[color:var(--ink-soft)]">
-            Ctrl K
-          </span>
-        </button>
-      )}
-
       {/* Primary nav */}
       <nav className="flex flex-col gap-[3px]" aria-label="Primary">
-        {visiblePrimaryNav.map((item) => (
-          <RailItem
-            key={item.label}
-            item={item}
-            active={item.match ? item.match(pathname) : pathname === item.href}
-            collapsed={collapsed}
-            onNavigate={onNavigate}
-          />
-        ))}
+        {visiblePrimaryNav.map((item) => {
+          const childActive = item.children?.some((child) =>
+            child.match ? child.match(pathname) : pathname === child.href,
+          );
+          return (
+            <div key={item.label}>
+              <RailItem
+                item={item}
+                active={
+                  (item.match ? item.match(pathname) : pathname === item.href) && !childActive
+                }
+                collapsed={collapsed}
+                onNavigate={onNavigate}
+              />
+              {item.children?.map((child) => {
+                const active = child.match ? child.match(pathname) : pathname === child.href;
+                const Icon = child.icon;
+                return (
+                  <Link
+                    key={child.href}
+                    href={child.href}
+                    onClick={onNavigate}
+                    title={collapsed ? child.label : undefined}
+                    aria-current={active ? "page" : undefined}
+                    className={`group relative flex items-center overflow-hidden whitespace-nowrap rounded-[9px] text-[13px] transition focus-ring ${
+                      collapsed
+                        ? "mx-auto justify-center px-0 py-2"
+                        : "mt-0.5 gap-3 px-[11px] py-[7px]"
+                    } ${
+                      active
+                        ? "nav-link-active font-[650] text-[color:var(--ink)]"
+                        : "font-medium text-[color:var(--ink-muted)] hover:bg-[color:var(--surface-sunken)]"
+                    }`}
+                  >
+                    <Icon
+                      className={`h-[17px] w-[17px] shrink-0 ${active ? "text-[color:var(--brand)]" : "text-[color:var(--ink-soft)]"}`}
+                    />
+                    {!collapsed && <span className="flex-1">{child.label}</span>}
+                  </Link>
+                );
+              })}
+            </div>
+          );
+        })}
         {visibleRoleNav.map((item) => (
           <RailItem
             key={item.label}
@@ -264,14 +287,14 @@ export function StudioRail({
         </div>
       </div>
 
-      {/* Footer: collapse toggle + user */}
+      {/* Footer: theme + collapse. Account lives in the top-right bubble. */}
       <div className="mt-auto border-t border-[color:var(--line-soft)] pt-4">
         <ThemeToggle collapsed={collapsed} className={collapsed ? "mx-auto mb-1.5" : "mb-1.5"} />
         <button
           type="button"
           onClick={onToggle}
           title={collapsed ? "Expand" : "Collapse"}
-          className={`mb-1.5 flex w-full items-center gap-[11px] rounded-[8px] text-[13px] font-medium text-[color:var(--ink-soft)] transition hover:bg-[color:var(--surface-sunken)] focus-ring ${
+          className={`flex w-full items-center gap-[11px] rounded-[8px] text-[13px] font-medium text-[color:var(--ink-soft)] transition hover:bg-[color:var(--surface-sunken)] focus-ring ${
             collapsed ? "justify-center px-0 py-[9px]" : "px-[11px] py-[9px]"
           }`}
         >
@@ -280,33 +303,6 @@ export function StudioRail({
           />
           {!collapsed && <span>Collapse</span>}
         </button>
-        <div
-          className={`flex items-center gap-2.5 ${collapsed ? "justify-center px-0 py-1" : "px-[7px] py-1"}`}
-        >
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color:var(--brand)] text-[12px] font-[650] text-[color:var(--brand-on)]">
-            {user?.initials ?? "—"}
-          </span>
-          {!collapsed && user && (
-            <div className="min-w-0 leading-tight">
-              <div className="truncate text-[13px] font-semibold text-[color:var(--ink)]">
-                {user.name}
-              </div>
-              <div className="truncate text-[11px] text-[color:var(--ink-soft)]">{user.title}</div>
-            </div>
-          )}
-        </div>
-        {user && (
-          <button
-            type="button"
-            onClick={handleLogout}
-            title={collapsed ? "Log out / switch user" : undefined}
-            className={`mt-2 flex w-full items-center rounded-[8px] text-[13px] font-semibold text-[color:var(--ink-soft)] transition hover:bg-[color:var(--surface-sunken)] hover:text-[color:var(--ink)] focus-ring ${
-              collapsed ? "justify-center px-0 py-2" : "px-[11px] py-2"
-            }`}
-          >
-            {collapsed ? "Out" : "Log out / switch user"}
-          </button>
-        )}
       </div>
     </div>
   );
