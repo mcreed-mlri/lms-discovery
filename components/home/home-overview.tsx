@@ -117,7 +117,7 @@ export function HomeOverview({ catalogTotal }: { catalogTotal: number }) {
   return (
     <section
       id="skills"
-      className="mx-auto max-w-[1120px] scroll-mt-[calc(5rem+env(safe-area-inset-top,0px))] px-4 py-6 sm:px-6 sm:py-8 lg:px-10 lg:py-9"
+      className="mx-auto max-w-[1120px] scroll-mt-[calc(5rem+var(--safe-top))] px-4 py-6 sm:px-6 sm:py-8 lg:px-10 lg:py-9"
     >
       <p className="section-label text-[color:var(--ink-soft)]">Core skills</p>
       <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4">

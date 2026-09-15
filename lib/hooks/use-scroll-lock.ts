@@ -11,19 +11,26 @@ import { useEffect } from "react";
    modal is still up, because the search's cleanup cleared the modal's lock.
 
    Counting locks instead means the body only unlocks when the last overlay
-   closes. The original overflow value is captured once, when the count goes
-   0 -> 1, so we restore whatever the page actually had rather than assuming "".
+   closes. The original value is captured once, when the count goes 0 -> 1, so
+   we restore whatever the page actually had rather than assuming "".
+
+   Only the vertical axis is touched. The `overflow` shorthand would set both,
+   overwriting the `overflow-x: clip` globals.css puts on the body with
+   `hidden` — and unlike `clip`, `hidden` makes the body a horizontal scroll
+   container, so anything overhanging the viewport behind the overlay becomes
+   scrollable instead of staying cut off. Locking the page was never meant to
+   unlock an axis.
 
    Module scope is correct here: there is one <body>, so the count is global,
    not per-component. */
 
 let lockCount = 0;
-let previousOverflow: string | null = null;
+let previousOverflowY: string | null = null;
 
 function acquire() {
   if (lockCount === 0) {
-    previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    previousOverflowY = document.body.style.overflowY;
+    document.body.style.overflowY = "hidden";
   }
   lockCount += 1;
 }
@@ -31,8 +38,8 @@ function acquire() {
 function release() {
   lockCount = Math.max(0, lockCount - 1);
   if (lockCount === 0) {
-    document.body.style.overflow = previousOverflow ?? "";
-    previousOverflow = null;
+    document.body.style.overflowY = previousOverflowY ?? "";
+    previousOverflowY = null;
   }
 }
 

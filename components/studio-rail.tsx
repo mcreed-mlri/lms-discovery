@@ -151,7 +151,7 @@ export function StudioRail({
 
   return (
     <div
-      className={`flex h-full max-h-screen flex-col overflow-y-auto overflow-x-hidden border-r border-[color:var(--line)] bg-[color:var(--surface)] transition-[width,padding] duration-200 ease-[cubic-bezier(.4,0,.2,1)] ${
+      className={`flex h-full max-h-[100dvh] flex-col overflow-y-auto overscroll-contain overflow-x-hidden border-r border-[color:var(--line)] bg-[color:var(--surface)] transition-[width,padding] duration-200 ease-[cubic-bezier(.4,0,.2,1)] ${
         collapsed ? "w-[68px] px-3 py-5" : "w-[240px] px-3.5 py-5"
       }`}
     >

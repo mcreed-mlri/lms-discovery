@@ -168,7 +168,7 @@ export function StudioShell({
             tabIndex={-1}
             onClick={() => setMobileOpen(false)}
           />
-          <div className="absolute inset-y-0 left-0 flex max-h-screen overflow-y-auto pt-[env(safe-area-inset-top,0px)] shadow-[var(--shadow-lg)]">
+          <div className="absolute inset-y-0 left-0 flex max-h-[100dvh] overflow-y-auto overscroll-contain pt-[var(--safe-top)] shadow-[var(--shadow-lg)]">
             <StudioRail
               collapsed={false}
               onToggle={() => setMobileOpen(false)}
@@ -179,7 +179,7 @@ export function StudioShell({
       )}
 
       {/* Content column */}
-      <div className="flex min-w-0 flex-1 flex-col overflow-x-clip pb-20 lg:pb-0">
+      <div className="flex min-w-0 flex-1 flex-col overflow-x-clip pb-[calc(5rem+var(--safe-bottom))] lg:pb-0">
         <StudioContentBar onMenu={() => setMobileOpen(true)} onSearch={openGlobalSearch} />
         <main id="main-content" className="min-w-0 flex-1 overflow-x-clip">
           {padded ? (
@@ -192,7 +192,7 @@ export function StudioShell({
       </div>
 
       {/* Mobile bottom nav */}
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--line)] bg-[color:var(--surface)] px-5 pb-[calc(0.5rem+env(safe-area-inset-bottom))] pt-2 lg:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--line)] bg-[color:var(--surface)] px-5 pb-[calc(0.5rem+var(--safe-bottom))] pt-2 lg:hidden">
         <div className={`mx-auto grid max-w-md ${isAdmin ? "grid-cols-3" : "grid-cols-4"}`}>
           <BottomNavLink
             href="/"
@@ -260,10 +260,15 @@ function GlobalSearchDialog({
   // The trap moves focus to the first control, which is the search input.
   const dialogRef = useFocusTrap<HTMLDivElement>(true);
 
+  // The top offset is the phone case, not a scaled-down desktop one: focusing
+  // the input opens the software keyboard, which covers the bottom half of the
+  // screen, so the panel sits just under the safe-area inset and leaves the
+  // suggestions above it. The roomier drop is for pointer widths, where
+  // nothing is covering anything.
   return (
     <div
       ref={dialogRef}
-      className="fixed inset-0 z-[80] flex items-start justify-center bg-[rgba(20,22,27,0.34)] px-4 pt-[calc(5rem+env(safe-area-inset-top,0px))] backdrop-blur-sm sm:pt-[calc(7rem+env(safe-area-inset-top,0px))]"
+      className="fixed inset-0 z-[80] flex items-start justify-center overflow-x-clip overscroll-contain bg-[rgba(20,22,27,0.34)] px-4 pt-[calc(1rem+var(--safe-top))] backdrop-blur-sm sm:pt-[calc(7rem+var(--safe-top))]"
       role="dialog"
       aria-modal="true"
       aria-label="Search learning library"

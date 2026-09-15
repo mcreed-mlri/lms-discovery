@@ -70,11 +70,19 @@
   --shadow-md: 0 1px 2px rgba(32, 27, 19, 0.04), 0 6px 18px rgba(32, 27, 19, 0.05);
   --shadow-lg: 0 8px 24px rgba(32, 27, 19, 0.1), 0 2px 6px rgba(32, 27, 19, 0.06);
 
-  /* The device's top inset, behind a variable so a test can simulate a notched
+  /* The device's insets, behind variables so a test can simulate a notched
      phone. No headless browser reports a non-zero env(safe-area-inset-*), which
      is how the skip-link bug below reached production past a suite that runs
-     axe on every route in both themes. */
+     axe on every route in both themes.
+
+     Anything that reserves room for a fixed edge of the app reads these rather
+     than env() directly, so that the reserved space and the thing it makes
+     room for cannot drift apart: the mobile bottom nav grows by --safe-bottom,
+     and the content column's own bottom padding grows by exactly the same
+     amount. Reserving a flat 5rem against a nav that is 5rem *plus the home
+     indicator* put the last 27px of every page underneath it. */
   --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 
   /* ── Brand — steel blue, drawn from the MLRI blue family. Institutional, not
         electric, and firmly on the blue side of the wheel (no violet cast).
@@ -343,7 +351,13 @@ html {
 
 body {
   margin: 0;
+  /* `svh` is the viewport with the browser's chrome showing — the height that
+     is always visible. `vh` is the chrome-hidden height, so it makes the page
+     marginally taller than the screen on a phone and leaves every route with a
+     few pixels of scroll it has no content for. Declared twice so a browser
+     without `svh` keeps the old behaviour rather than no minimum at all. */
   min-height: 100vh;
+  min-height: 100svh;
   overflow-x: clip;
   font-family: var(--font-sans);
   font-weight: 400;
@@ -361,6 +375,37 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* ── The 16px rule ────────────────────────────────────────────────────────
+   iOS Safari zooms the page in when a text control smaller than 16px takes
+   focus. The zoom is not undone on blur, and a zoomed page is wider than the
+   visual viewport, so the whole app can be panned sideways from then on —
+   which is how "tap Search and now the page scrolls horizontally" happened
+   with a 14px search field. `overflow-x: clip` above cannot help: panning a
+   zoomed visual viewport is not document scroll.
+
+   Suppressing it with `maximum-scale=1` on the viewport meta is the other way
+   out and is not available to us — that blocks pinch-zoom and fails WCAG
+   1.4.4. So the controls stay at 16px instead.
+
+   Scoped by pointer rather than by width, because that is what the behaviour
+   actually keys off: a phone held in landscape is 800-odd CSS px wide and
+   still zooms, so a `max-width` floor aligned to any breakpoint would leave
+   the exact case open. On a mouse, nothing zooms and components size their own
+   text — including the `sm:` sizes they drop to, which simply never apply on a
+   touchscreen.
+
+   `!important` is load-bearing: every size in this app is set by a Tailwind
+   utility, a single class that outranks any selector that could be written
+   here. Components still declare 16px themselves (see SearchBox) — this is
+   the floor that catches the next one that forgets. */
+@media (pointer: coarse) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
 }
 
 /**

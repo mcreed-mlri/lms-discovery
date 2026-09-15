@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 import { SIGNED_IN_ROUTES, signIn } from "./support";
 
@@ -99,16 +99,100 @@ test.describe("on a phone", () => {
     }
   });
 
-  for (const route of SIGNED_IN_ROUTES) {
-    test(`${route.name} does not scroll sideways`, async ({ page }) => {
-      await page.goto(route.path);
+  /**
+   * The mobile bottom nav is fixed, so the content column reserves its height
+   * as bottom padding. The nav grows by the device's home-indicator inset and
+   * the reservation did not: a flat 5rem against a nav that is 5rem plus ~34px
+   * left the bottom of every page underneath it, on every iPhone with a home
+   * indicator and on no headless browser. Both now read `--safe-bottom`, which
+   * is what this simulates.
+   */
+  for (const inset of INSETS) {
+    test(`the bottom nav clears the content column at a ${inset}px bottom inset`, async ({
+      page,
+    }) => {
+      await page.goto("/my-learning/");
+      await page.evaluate((px) => {
+        document.documentElement.style.setProperty("--safe-bottom", `${px}px`);
+      }, inset);
 
-      // Only deliberate scrollers may exceed the viewport, and they clip
-      // themselves — the page itself must never scroll horizontally.
-      const overflow = await page.evaluate(
-        () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      const { navHeight, reserved } = await page.evaluate(() => {
+        const nav = document.querySelector("nav.fixed.bottom-0")!;
+        const column = nav.previousElementSibling!;
+        return {
+          navHeight: nav.getBoundingClientRect().height,
+          reserved: parseFloat(getComputedStyle(column).paddingBottom),
+        };
+      });
+
+      expect(reserved, `reserved vs ${Math.round(navHeight)}px nav`).toBeGreaterThanOrEqual(
+        navHeight,
       );
-      expect(overflow).toBe(0);
+    });
+  }
+
+  for (const route of SIGNED_IN_ROUTES) {
+    test(`${route.name} keeps its content inside the viewport`, async ({ page }) => {
+      await page.goto(route.path);
+      expect(await overhangingElements(page)).toEqual([]);
+    });
+  }
+
+  test("the search dialog keeps its content inside the viewport", async ({ page }) => {
+    await page.goto("/");
+    await openSearch(page);
+    expect(await overhangingElements(page), "empty dialog").toEqual([]);
+
+    await page.locator("input[type=search]").last().fill("housing eviction");
+    await expect(page.getByRole("option").first()).toBeVisible();
+    expect(await overhangingElements(page), "dialog showing suggestions").toEqual([]);
+  });
+
+  /**
+   * Every text control renders at 16px or larger on a phone.
+   *
+   * Below 16px, iOS Safari zooms the page in when the control takes focus, and
+   * does not zoom back out on blur. A zoomed page is wider than the visual
+   * viewport, so from that tap onwards the whole app pans sideways — the
+   * `overflow-x: clip` in globals.css cannot prevent it, because panning a
+   * zoomed visual viewport is not document scroll. Tapping the 14px search
+   * field was the way most people met this.
+   *
+   * No headless browser applies that zoom, so this asserts the input that
+   * triggers it rather than the symptom.
+   */
+  for (const route of [...SIGNED_IN_ROUTES, { path: "/login/", name: "login" }]) {
+    test(`${route.name} has no control iOS would zoom into`, async ({ page }) => {
+      await page.goto(route.path);
+      expect(await undersizedControls(page)).toEqual([]);
+    });
+  }
+
+  test("the search dialog has no control iOS would zoom into", async ({ page }) => {
+    await page.goto("/");
+    await openSearch(page);
+    expect(await undersizedControls(page)).toEqual([]);
+  });
+
+  /**
+   * The catalog's filter selects, which only exist once Refine is open, and
+   * which declare `sm:text-sm` — 14px. They are checked in both orientations
+   * because the floor in globals.css is scoped by pointer rather than width:
+   * a phone held sideways is wider than every breakpoint and still zooms, so a
+   * `max-width` guard would have let 14px back in at exactly that size.
+   */
+  for (const orientation of [
+    { name: "upright", width: 375, height: 629 },
+    { name: "sideways", width: 812, height: 375 },
+  ]) {
+    test(`the catalog filters have no control iOS would zoom into, ${orientation.name}`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: orientation.width, height: orientation.height });
+      await page.goto("/browse/");
+      await page.getByRole("button", { name: "Refine" }).click();
+      await expect(page.getByLabel("Practice area")).toBeVisible();
+      expect(await undersizedControls(page)).toEqual([]);
     });
   }
 
@@ -118,3 +202,72 @@ test.describe("on a phone", () => {
     expect(violations.map((v) => `${v.id} x${v.nodes.length}`)).toEqual([]);
   });
 });
+
+/** Opens the global search dialog from the mobile bottom nav. */
+async function openSearch(page: Page) {
+  await page.getByRole("button", { name: "Search" }).first().click();
+  await expect(page.getByRole("dialog", { name: "Search learning library" })).toBeVisible();
+}
+
+/**
+ * Elements sticking out past the right edge of the viewport, or off its left.
+ *
+ * Deliberate horizontal scrollers — the popular-search chips, the path journey
+ * stepper, the curriculum map columns — are `overflow-x: auto`, and anything
+ * inside one is meant to be wider than the screen, so those are skipped along
+ * with their descendants. Only the outermost offender in a chain is reported,
+ * so one wide element is one failure rather than forty.
+ *
+ * Why not `documentElement.scrollWidth - clientWidth`, the obvious check: the
+ * shell sets `overflow-x: clip` on <html>, the body, and <main>, which erases
+ * scrollable overflow. Append a 2000px-wide div to <main> and that difference
+ * is still 0 — verified. The assertion it replaces could not fail.
+ */
+async function overhangingElements(page: Page) {
+  return page.evaluate(() => {
+    const viewportWidth = document.documentElement.clientWidth;
+
+    const insideAScroller = (element: Element) => {
+      for (let parent = element.parentElement; parent; parent = parent.parentElement) {
+        const overflowX = getComputedStyle(parent).overflowX;
+        if (overflowX === "auto" || overflowX === "scroll") return true;
+      }
+      return false;
+    };
+
+    const overhangs = (element: Element) => {
+      const box = element.getBoundingClientRect();
+      if (box.width === 0 || box.height === 0) return false;
+      return box.right + window.scrollX > viewportWidth + 1 || box.left + window.scrollX < -1;
+    };
+
+    return [...document.querySelectorAll("body *")]
+      .filter(
+        (element) =>
+          overhangs(element) &&
+          getComputedStyle(element).position !== "fixed" &&
+          !insideAScroller(element) &&
+          !(element.parentElement && overhangs(element.parentElement)),
+      )
+      .map((element) => {
+        const box = element.getBoundingClientRect();
+        return `${element.tagName.toLowerCase()} runs to ${Math.round(box.right)}px of ${viewportWidth}px: ${String(element.className).slice(0, 80)}`;
+      });
+  });
+}
+
+/** Text controls rendering below the 16px floor iOS Safari zooms in on. */
+async function undersizedControls(page: Page) {
+  return page.evaluate(() =>
+    [...document.querySelectorAll("input, select, textarea")]
+      .filter((control) => {
+        const type = control.getAttribute("type");
+        if (type === "checkbox" || type === "radio") return false;
+        return parseFloat(getComputedStyle(control).fontSize) < 16;
+      })
+      .map(
+        (control) =>
+          `${control.tagName.toLowerCase()} at ${getComputedStyle(control).fontSize}: ${String(control.className).slice(0, 80)}`,
+      ),
+  );
+}

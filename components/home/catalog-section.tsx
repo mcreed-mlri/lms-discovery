@@ -29,7 +29,7 @@ function RefineSelect({
         id={id}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-11 w-full rounded-[var(--radius-control)] border border-[color:var(--line-control)] bg-[color:var(--surface-raised)] px-3 text-sm font-bold text-[color:var(--ink-muted)] shadow-sm outline-none transition hover:border-[color:var(--ink-soft)] focus:border-[color:var(--brand)] focus-ring"
+        className="h-11 w-full rounded-[var(--radius-control)] border border-[color:var(--line-control)] bg-[color:var(--surface-raised)] px-3 text-base font-bold sm:text-sm text-[color:var(--ink-muted)] shadow-sm outline-none transition hover:border-[color:var(--ink-soft)] focus:border-[color:var(--brand)] focus-ring"
       >
         <option value="All">{allLabel}</option>
         {options.map((option) => (

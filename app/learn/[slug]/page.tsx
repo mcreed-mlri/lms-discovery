@@ -126,7 +126,7 @@ export default async function LearnPage({ params }: LearnPageProps) {
   const sections = getLessonSections(item);
 
   return (
-    <main className="hub-shell min-h-screen px-4 py-[calc(1.25rem+env(safe-area-inset-top,0px))] sm:px-6 sm:py-8 lg:px-10">
+    <main className="hub-shell min-h-screen px-4 pb-[calc(1.25rem+var(--safe-bottom))] pt-[calc(1.25rem+var(--safe-top))] sm:px-6 sm:py-8 lg:px-10">
       <div className="mx-auto max-w-5xl">
         <Link
           href="/"
