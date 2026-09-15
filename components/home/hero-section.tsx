@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { ArrowIcon, PlayIcon } from "@/components/icons";
 import { ProgressRing } from "@/components/progress-ring";
+import { EdgeScroller } from "@/components/edge-scroller";
 import { SearchBox } from "@/components/search-box";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
 import {
@@ -231,7 +232,10 @@ export function HeroSection({
               onSelect={onSelectResult}
               prominent
             />
-            <div className="-mx-4 mt-2 flex min-w-0 gap-2 overflow-x-auto px-4 pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:mt-2.5 sm:hidden sm:px-0 [&::-webkit-scrollbar]:hidden">
+            <EdgeScroller
+              frameClassName="mt-2 sm:hidden"
+              className="-mx-4 flex min-w-0 gap-2 px-4 pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
               {popularSearches.map((q) => (
                 <button
                   key={q}
@@ -242,7 +246,7 @@ export function HeroSection({
                   {q}
                 </button>
               ))}
-            </div>
+            </EdgeScroller>
             <div className="mt-2.5 hidden flex-wrap items-center gap-2 sm:flex">
               <span className="text-[13px] font-medium text-[color:var(--ink-soft)]">Popular:</span>
               {popularSearches.map((q) => (

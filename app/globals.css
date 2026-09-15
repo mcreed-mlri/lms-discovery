@@ -513,6 +513,71 @@ a {
   transform: translate(-50%, -50%);
 }
 
+/* ── Sideways scrollers ───────────────────────────────────────────────────
+   Four tracks scroll horizontally on purpose: the popular searches under the
+   home search box, the catalog's filter pills, a path's stage journey, and the
+   curriculum map's columns — the last of which is 3020px of content in a 351px
+   viewport, nearly nine screens. All four used to end at a hard edge, cutting
+   the item there mid-word with the scrollbar hidden or absent, which reads as a
+   layout that broke rather than one that continues.
+
+   A mask fades the edge the content actually carries on past. It is driven by
+   `data-continues` from useScrollEdges rather than parked on one side, because
+   a permanent fade is wrong half the time: on the right it veils the last item
+   once you reach the end, on both sides it veils a first item that nothing
+   precedes. Being a mask and not a gradient overlay, it needs to know nothing
+   about the colour behind the track — these sit on four different surfaces.
+
+   `scroll-padding-inline` is the counterpart: Tab through a track and the
+   browser scrolls the focused child in by that much, so a focus ring never
+   lands under the fade. Snapping is `proximity`, not `mandatory` — the
+   curriculum map is long enough that fighting a flick would be worse than a
+   column resting off-alignment.
+
+   `overscroll-behavior-x: contain` stops a flick that runs out of track from
+   continuing into the browser's own back-swipe. */
+.edge-scroller {
+  min-width: 0;
+}
+
+/* The ring belongs to the frame precisely because the frame is not masked.
+   Only `focusable` tracks have a tabbable track element to match here. */
+.edge-scroller:has(> .edge-scroller-track:focus-visible) {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: var(--radius-control);
+}
+
+.edge-scroller-track {
+  --edge-fade: 2.5rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--edge-fade);
+}
+
+.edge-scroller-track > * {
+  scroll-snap-align: start;
+}
+
+.edge-scroller[data-continues="end"] > .edge-scroller-track {
+  mask-image: linear-gradient(to right, #000 calc(100% - var(--edge-fade)), transparent);
+}
+
+.edge-scroller[data-continues="start"] > .edge-scroller-track {
+  mask-image: linear-gradient(to right, transparent, #000 var(--edge-fade));
+}
+
+.edge-scroller[data-continues="both"] > .edge-scroller-track {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--edge-fade),
+    #000 calc(100% - var(--edge-fade)),
+    transparent
+  );
+}
+
 /* ── Pressed states ───────────────────────────────────────────────────────
    Everything interactive in this app announces itself on :hover, and a
    touchscreen never fires hover. With the tap highlight turned off below for

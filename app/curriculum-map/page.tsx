@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { EdgeScroller } from "@/components/edge-scroller";
 
 import { SectionHead } from "@/components/home/section-head";
 import { StudioShell } from "@/components/studio-shell";
@@ -95,20 +96,20 @@ function Branch({ branch }: { branch: CurriculumBranch }) {
       {branch.type === "columns" ? (
         /* This region scrolls horizontally and its children are static text, so
            there is nothing inside for the keyboard to land on — a keyboard-only
-           user could not scroll it at all. Making the region itself focusable is
-           what axe's scrollable-region-focusable rule (WCAG 2.1.1) asks for, and
-           focus-ring is required alongside it: a focusable element with no
-           visible focus indicator trades one failure for another (2.4.7). */
-        <div
-          className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-3 focus-ring"
-          tabIndex={0}
-          role="group"
-          aria-label={`${branch.title}: scrollable columns`}
+           user could not scroll it at all. `focusable` is what axe's
+           scrollable-region-focusable rule (WCAG 2.1.1) asks for; EdgeScroller
+           draws the matching focus ring on its unmasked frame, since a
+           focusable element with no visible focus indicator trades one failure
+           for another (2.4.7). */
+        <EdgeScroller
+          className="-mx-1 flex gap-3 px-1 pb-3"
+          focusable
+          label={`${branch.title}: scrollable columns`}
         >
           {branch.columns.map((column) => (
             <Column key={column.id} column={column} />
           ))}
-        </div>
+        </EdgeScroller>
       ) : (
         <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
           {branch.tiles.map((tile) => (

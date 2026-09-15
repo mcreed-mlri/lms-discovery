@@ -1,6 +1,7 @@
 "use client";
 
 import { ContentCard, ContentListRow, PathCard } from "@/components/content-card";
+import { EdgeScroller } from "@/components/edge-scroller";
 import { SectionBand } from "@/components/home/section-band";
 import { CloseIcon, FilterIcon, GridIcon, ListIcon, SearchIcon } from "@/components/icons";
 import { getSkill, type LearningItem } from "@/lib/data";
@@ -113,7 +114,10 @@ export function CatalogSection({
             </span>
           )}
         </button>
-        <div className="-mx-4 flex max-w-full shrink-0 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
+        <EdgeScroller
+          frameClassName="max-w-full shrink-0"
+          className="-mx-4 flex px-4 pb-1 sm:mx-0 sm:px-0"
+        >
           <div className="inline-flex shrink-0 rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface-sunken)] p-1">
             {filters.map((entry) => (
               <button
@@ -131,7 +135,7 @@ export function CatalogSection({
               </button>
             ))}
           </div>
-        </div>
+        </EdgeScroller>
         {skillFilter && (
           <button
             type="button"
