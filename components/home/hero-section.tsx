@@ -88,10 +88,14 @@ export function HeroSection({
               <span className="font-semibold tracking-[-0.01em] text-[color:var(--ink-soft)]">
                 {user.organization ?? "MLRI"}
               </span>
-              <span className="text-[color:var(--ink-soft)]/45" aria-hidden="true">
-                ·
-              </span>
-              <span>{user.unit}</span>
+              {user.unit ? (
+                <>
+                  <span className="text-[color:var(--ink-soft)]/45" aria-hidden="true">
+                    ·
+                  </span>
+                  <span>{user.unit}</span>
+                </>
+              ) : null}
             </p>
           </div>
 

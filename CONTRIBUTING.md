@@ -55,6 +55,7 @@ the gitignored `tools/` Node.
 | Search + ranking       | `lib/search.ts`, `lib/search-metadata.ts`     |
 | Access control         | `lib/access.ts`                               |
 | Auth (client)          | `lib/auth.tsx`                                |
+| Auth (shared)          | `lib/auth-constants.ts`                       |
 | Auth (server)          | `lib/session.ts`, `proxy.ts`, `app/api/auth/` |
 | Design tokens          | `app/globals.css`, `tailwind.config.ts`       |
 | Dashboard (mocked)     | `lib/services/dashboardService.ts`, `mocks/`  |
