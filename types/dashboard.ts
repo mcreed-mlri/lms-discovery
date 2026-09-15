@@ -37,9 +37,9 @@ export interface LearnerDashboardPayload {
      *  definitions: Brightspace-Manager/docs/planning/metrics-framework.md. */
     streakDays?: number;
     longestStreakNote?: string;
-    cleEarned?: number;
-    cleRequired?: number;
-    cleDueLabel?: string;
+    hoursEarned?: number;
+    hoursRequired?: number;
+    hoursDueLabel?: string;
     weeklyHoursAvg?: number;
   };
   courses: LearnerCourse[];
