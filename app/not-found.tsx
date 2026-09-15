@@ -12,15 +12,15 @@ export default function NotFound() {
     >
       <Link
         className="inline-flex h-11 items-center justify-center rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus-ring"
-        href="/"
+        href="/browse"
       >
         Back to the library
       </Link>
       <Link
         className="text-sm font-bold text-[color:var(--ink-soft)] hover:text-[color:var(--ink)] focus-ring"
-        href="/browse"
+        href="/"
       >
-        Browse all training
+        Back to home
       </Link>
     </RouteStatePanel>
   );

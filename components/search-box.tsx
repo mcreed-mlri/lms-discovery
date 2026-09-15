@@ -100,7 +100,7 @@ export function SearchBox({
             : `rounded-[var(--radius-control)] pl-10 pr-4 text-base shadow-[var(--shadow-xs)] ${compact ? "h-9 text-sm" : "h-12"}`
         }`}
         id={inputId}
-        placeholder="Search the library - ethics, intake, first appearance..."
+        placeholder="Search the library"
         role="combobox"
         type="search"
       />

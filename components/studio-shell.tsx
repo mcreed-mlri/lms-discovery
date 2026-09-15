@@ -12,6 +12,7 @@ import { getEffectiveDashboardRole, getEligibleLearningItems } from "@/lib/acces
 import { useAuth } from "@/lib/auth";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
 import { getLearningItems } from "@/lib/data";
+import { browseHref } from "@/lib/home-helpers";
 import { useFocusTrap } from "@/lib/hooks/use-focus-trap";
 import { useScrollLock } from "@/lib/hooks/use-scroll-lock";
 import { searchLearningItems, type SearchResult } from "@/lib/search";
@@ -69,11 +70,11 @@ export function StudioShell({
       });
       setSearchOpen(false);
       setGlobalQuery("");
-      // The home page reads q/open via useSearchParams, so this push is the whole
-      // mechanism. It used to be accompanied by a CustomEvent because the home
-      // page only read the URL once on mount.
       router.push(
-        `/?q=${encodeURIComponent(result.item.title)}&open=${encodeURIComponent(`${result.item.type}-${result.item.id}`)}#browse`,
+        browseHref({
+          q: result.item.title,
+          open: `${result.item.type}-${result.item.id}`,
+        }),
       );
     },
     [globalQuery, router],
@@ -147,7 +148,7 @@ export function StudioShell({
 
       {/* Desktop rail */}
       <div className="sticky top-0 hidden h-screen shrink-0 lg:flex">
-        <StudioRail collapsed={collapsed} onToggle={toggleCollapsed} onSearch={openGlobalSearch} />
+        <StudioRail collapsed={collapsed} onToggle={toggleCollapsed} />
       </div>
 
       {/* Mobile rail drawer */}
@@ -171,7 +172,6 @@ export function StudioShell({
             <StudioRail
               collapsed={false}
               onToggle={() => setMobileOpen(false)}
-              onSearch={openGlobalSearch}
               onNavigate={() => setMobileOpen(false)}
             />
           </div>

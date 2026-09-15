@@ -55,9 +55,9 @@ test.describe("signed in", () => {
     // This is the flow that used to need a CustomEvent bus *and* a router.push,
     // because the home page read q/open only once on mount. It is now driven by
     // useSearchParams alone, so this test is what proves the event was redundant
-    // rather than load-bearing. Starting from /browse makes it a real
-    // cross-navigation.
-    await page.goto("/browse/");
+    // rather than load-bearing. Starting from home makes it a real
+    // cross-navigation onto /browse, where the catalog now lives.
+    await page.goto("/");
     await expect(page.getByRole("main")).toBeVisible();
 
     await page.keyboard.press("ControlOrMeta+k");
@@ -67,7 +67,8 @@ test.describe("signed in", () => {
     await expect(firstOption).toBeVisible();
     await firstOption.click();
 
-    // Landed on home with both params, and the detail dialog opened from them.
+    // Landed on browse with both params, and the detail dialog opened from them.
+    await expect(page).toHaveURL(/\/browse/);
     await expect(page).toHaveURL(/[?&]q=/);
     await expect(page).toHaveURL(/[?&]open=/);
     await expect(page.getByRole("dialog", { name: /.+/ })).toBeVisible();
@@ -77,6 +78,7 @@ test.describe("signed in", () => {
     // The corollary: because the params drive state, such a URL is now genuinely
     // shareable rather than only working in-session.
     await page.goto("/?q=housing&open=COURSE-housing-law-fundamentals");
+    await expect(page).toHaveURL(/\/browse/);
     await expect(page.getByRole("main")).toBeVisible();
 
     // role="combobox" is set explicitly on the input, which overrides the

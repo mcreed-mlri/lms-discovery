@@ -6,7 +6,6 @@ import Link from "next/link";
 import { ArrowIcon, PlayIcon } from "@/components/icons";
 import { ProgressRing } from "@/components/progress-ring";
 import { SearchBox } from "@/components/search-box";
-import { getAccessLabel } from "@/lib/access";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
 import {
   continueLearning,
@@ -15,7 +14,7 @@ import {
   learnerProgress,
   type LearningItem,
 } from "@/lib/data";
-import { resumeMinutesLeftLabel, scrollToBrowse } from "@/lib/home-helpers";
+import { resumeMinutesLeftLabel } from "@/lib/home-helpers";
 import type { SearchResult } from "@/lib/search";
 import type { User } from "@/lib/auth";
 
@@ -52,6 +51,8 @@ function useResumeCard(allItems: LearningItem[]) {
 }
 
 // HERO — compact personalized greeting, search, and resume card.
+// Pinned under the studio content bar (`--studio-chrome` is set on the shell)
+// so search stays in reach while the page scrolls.
 export function HeroSection({
   user,
   isAdmin,
@@ -59,6 +60,7 @@ export function HeroSection({
   onQueryChange,
   suggestions,
   onSelectResult,
+  onSearchLibrary,
   allItems,
 }: {
   user: User;
@@ -67,13 +69,14 @@ export function HeroSection({
   onQueryChange: (value: string) => void;
   suggestions: SearchResult[];
   onSelectResult: (result: SearchResult) => void;
+  onSearchLibrary: (term: string) => void;
   allItems: LearningItem[];
 }) {
   const { resumeItem, resumeUrl, resumeEyebrow, resumeProgressLabel } = useResumeCard(allItems);
   const clePct = Math.round((learnerProgress.cleEarned / learnerProgress.cleRequired) * 100);
 
   return (
-    <section className="overflow-x-clip border-b border-[color:var(--line)]">
+    <section className="sticky top-[var(--studio-chrome)] z-10 overflow-x-clip border-b border-[color:var(--line)] bg-[color:var(--chrome-bg)] backdrop-blur-[10px]">
       <div className="mx-auto min-w-0 max-w-[1120px] px-4 py-4 sm:px-6 sm:py-5 lg:px-10 lg:py-6">
         {/* Top row: headline + training hours / this-week streak */}
         <div className="flex min-w-0 items-center justify-between gap-3 sm:gap-6">
@@ -89,12 +92,6 @@ export function HeroSection({
                 ·
               </span>
               <span>{user.unit}</span>
-              <span className="text-[color:var(--ink-soft)]/45" aria-hidden="true">
-                ·
-              </span>
-              <span className="font-semibold text-[color:var(--ink)]">
-                {getAccessLabel(user.userType)} access: {user.accessStatus}
-              </span>
             </p>
           </div>
 
@@ -235,10 +232,7 @@ export function HeroSection({
                 <button
                   key={q}
                   type="button"
-                  onClick={() => {
-                    onQueryChange(q);
-                    scrollToBrowse();
-                  }}
+                  onClick={() => onSearchLibrary(q)}
                   className="shrink-0 rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-[12px] font-medium text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
                 >
                   {q}
@@ -251,10 +245,7 @@ export function HeroSection({
                 <button
                   key={q}
                   type="button"
-                  onClick={() => {
-                    onQueryChange(q);
-                    scrollToBrowse();
-                  }}
+                  onClick={() => onSearchLibrary(q)}
                   className="rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-[13px] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
                 >
                   {q}
@@ -269,7 +260,7 @@ export function HeroSection({
               <a href="#skills" className="font-semibold text-[color:var(--brand)]">
                 Skills
               </a>
-              <a href="#browse" className="font-semibold text-[color:var(--brand)]">
+              <a href="/browse" className="font-semibold text-[color:var(--brand)]">
                 Library
               </a>
             </nav>

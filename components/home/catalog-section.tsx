@@ -1,17 +1,8 @@
 "use client";
 
-import Link from "next/link";
-
 import { ContentCard, ContentListRow, PathCard } from "@/components/content-card";
 import { SectionBand } from "@/components/home/section-band";
-import {
-  ArrowIcon,
-  CloseIcon,
-  FilterIcon,
-  GridIcon,
-  ListIcon,
-  SearchIcon,
-} from "@/components/icons";
+import { CloseIcon, FilterIcon, GridIcon, ListIcon, SearchIcon } from "@/components/icons";
 import { getSkill, type LearningItem } from "@/lib/data";
 import { filters, type CatalogFilters } from "@/lib/hooks/use-catalog-filters";
 import { useIsDesktop } from "@/lib/hooks/use-media-query";
@@ -55,13 +46,10 @@ function RefineSelect({
 export function CatalogSection({
   catalog,
   onOpenItem,
-  seeAllHref,
   hideHeading = false,
 }: {
   catalog: CatalogFilters;
   onOpenItem: (item: LearningItem) => void;
-  /** When set, render a "See all" link (used on the homepage preview). */
-  seeAllHref?: string;
   /** Hide the built-in "Library" heading (the page provides its own). */
   hideHeading?: boolean;
 }) {
@@ -87,7 +75,6 @@ export function CatalogSection({
     noResultSuggestions,
     pathItems,
     catalogItems,
-    catalogTotal,
     advancedFilterCount,
     setQuery,
     resetAllFilters,
@@ -104,22 +91,9 @@ export function CatalogSection({
       id="browse"
       label="Learning Library"
       helper="Courses, modules, and learning paths."
-      className="order-2 lg:order-3"
+      showIntro={!hideHeading}
       tabIndex={-1}
     >
-      {!hideHeading && (
-        <div className="mb-4 flex justify-end">
-          {seeAllHref && (
-            <Link
-              href={seeAllHref}
-              className="group inline-flex shrink-0 items-center gap-1.5 rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-3.5 py-2 text-xs font-bold text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
-            >
-              See all {catalogTotal}
-              <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-            </Link>
-          )}
-        </div>
-      )}
       <div className="mb-6 flex flex-wrap items-center gap-3">
         <button
           type="button"
