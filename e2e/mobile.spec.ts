@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 import { SIGNED_IN_ROUTES, signIn } from "./support";
 
@@ -196,6 +196,78 @@ test.describe("on a phone", () => {
     });
   }
 
+  /**
+   * A tap has to look like it landed.
+   *
+   * The app signals "interactive" with :hover, which a touchscreen never
+   * fires, and the tap highlight is transparent by design — so before the
+   * :active rules in globals.css, nothing at all happened between finger-down
+   * and the route changing. These press a real control on each surface and
+   * read the filter back, rather than asserting a class is present.
+   *
+   * The wait is not decoration: most of these controls carry Tailwind's
+   * `transition`, whose property list includes `filter`, so a style read
+   * immediately after mousedown catches the animation at its start and reports
+   * the resting value.
+   */
+  const PRESSABLE = [
+    {
+      name: "a bottom-nav item",
+      path: "/",
+      find: (page: Page) => page.getByRole("link", { name: "Home" }),
+    },
+    {
+      name: "a filter pill",
+      path: "/browse/",
+      find: (page: Page) => page.getByRole("button", { name: "Refine" }),
+    },
+    {
+      name: "a catalog card",
+      path: "/browse/",
+      find: (page: Page) => page.getByRole("button", { name: /Welcome to the Learning Hub/ }),
+    },
+    {
+      name: "a header icon",
+      path: "/",
+      find: (page: Page) => page.getByRole("link", { name: "Updates and notifications" }),
+    },
+  ];
+
+  for (const surface of PRESSABLE) {
+    test(`${surface.name} looks pressed while held`, async ({ page }) => {
+      await page.goto(surface.path);
+      const target = surface.find(page);
+      await expect(target).toBeVisible();
+
+      expect(await filterOf(target), "at rest").toBe("none");
+      const box = (await target.boundingBox())!;
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      await page.waitForTimeout(250); // outlast the transition before reading
+      const held = await filterOf(target);
+      await page.mouse.up();
+
+      expect(held, "while held").toMatch(/brightness|matrix/);
+      expect(held).not.toBe("none");
+    });
+  }
+
+  test("dismiss scrims stay clear while pressed", async ({ page }) => {
+    // The search dialog's backdrop is a full-screen button. Dimming it would
+    // flash the entire overlay, so it is excluded by `data-focus-skip`.
+    await page.goto("/");
+    await openSearch(page);
+    const scrim = page.locator('[aria-label="Close search"]');
+    const box = (await scrim.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height - 8);
+    await page.mouse.down();
+    await page.waitForTimeout(250);
+    const held = await filterOf(scrim);
+    await page.mouse.up();
+
+    expect(held).toBe("none");
+  });
+
   test("home has no accessibility violations at phone width", async ({ page }) => {
     await page.goto("/");
     const { violations } = await new AxeBuilder({ page }).withTags(WCAG).analyze();
@@ -270,4 +342,9 @@ async function undersizedControls(page: Page) {
           `${control.tagName.toLowerCase()} at ${getComputedStyle(control).fontSize}: ${String(control.className).slice(0, 80)}`,
       ),
   );
+}
+
+/** The computed filter on a locator, which is how a pressed state reads back. */
+async function filterOf(target: Locator) {
+  return target.evaluate((element) => getComputedStyle(element).filter);
 }
