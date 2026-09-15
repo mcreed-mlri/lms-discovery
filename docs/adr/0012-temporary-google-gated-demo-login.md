@@ -71,3 +71,8 @@ unchanged.
   `lib/auth.tsx` re-exports the personas so client call sites are unchanged, and
   `tests/server-client-boundary.test.ts` keeps server entry points off the
   client module.
+- The client `login()` in `lib/auth.tsx` now navigates to `/login` rather than a
+  hardcoded `/api/auth/brightspace/start`. It could not honour
+  `HUB_LOGIN_PROVIDER`, which is server-only by design (above), so on a Google
+  deployment the signed-out panel on `/` sent people to the wrong provider.
+  `/login` is the one place that already resolves the provider.

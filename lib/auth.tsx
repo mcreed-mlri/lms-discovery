@@ -122,8 +122,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
+    // Hand off to /login rather than a provider start route: HUB_LOGIN_PROVIDER
+    // is deliberately server-only (ADR 0012, app/login/page.tsx), so the client
+    // cannot know whether Brightspace or Google is the active provider. /login
+    // is the one place that already resolves it.
     if (!isDemoMode) {
-      window.location.assign("/api/auth/brightspace/start");
+      window.location.assign("/login");
       return;
     }
   }
