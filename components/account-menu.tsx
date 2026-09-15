@@ -3,7 +3,7 @@
 import { useEffect, useId, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { useAuth } from "@/lib/auth";
+import { showDemoUsers, useAuth } from "@/lib/auth";
 import { useFocusTrap } from "@/lib/hooks/use-focus-trap";
 import { useScrollLock } from "@/lib/hooks/use-scroll-lock";
 
@@ -58,7 +58,7 @@ export function AccountMenu() {
         aria-haspopup="dialog"
         aria-label={`Account menu for ${user.name}`}
         onClick={() => setOpen((current) => !current)}
-        className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-[color:var(--brand)] text-[12px] font-[650] text-[color:var(--brand-on)] transition hover:opacity-90 focus-ring"
+        className="touch-target flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-[color:var(--brand)] text-[12px] font-[650] text-[color:var(--brand-on)] transition hover:opacity-90 focus-ring"
       >
         {user.initials}
       </button>
@@ -86,7 +86,7 @@ export function AccountMenu() {
             onClick={handleLogout}
             className="mt-0.5 flex w-full items-center rounded-[8px] px-[11px] py-2 text-left text-[13px] font-semibold text-[color:var(--ink-soft)] transition hover:bg-[color:var(--surface-sunken)] hover:text-[color:var(--ink)] focus-ring"
           >
-            Log out / switch user
+            {showDemoUsers ? "Log out / switch user" : "Log out"}
           </button>
         </div>
       ) : null}
