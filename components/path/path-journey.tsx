@@ -114,8 +114,7 @@ export function PathJourney({ path }: { path: MockLearningPath }) {
         {path.description}
       </p>
       <p className="mt-3 text-[13px] text-[color:var(--ink-soft)]">
-        {path.stagesComplete} of {path.stageCount} stages complete · {path.hoursLabel} ·{" "}
-        {path.cleLabel}
+        {path.stagesComplete} of {path.stageCount} stages complete · {path.hoursLabel}
       </p>
 
       <div className="mt-10">

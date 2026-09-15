@@ -37,7 +37,7 @@ export function StudioContentBar({ onMenu }: { onMenu?: () => void }) {
 
       {/* Desktop eyebrow */}
       <p className="hidden font-mono text-[12px] font-semibold uppercase tracking-[0.06em] text-[color:var(--ink-soft)] lg:block">
-        Mass. legal aid · continuing education
+        Mass. legal aid education
       </p>
 
       <div className="flex-1" />

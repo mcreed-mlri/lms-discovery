@@ -32,9 +32,9 @@ export const learnerDashboardMock: LearnerDashboardPayload = {
     completedCount: 2,
     streakDays: 12,
     longestStreakNote: "Longest streak in the Housing area",
-    cleEarned: 8.5,
-    cleRequired: 12,
-    cleDueLabel: "Due Jun 30",
+    hoursEarned: 8.5,
+    hoursRequired: 12,
+    hoursDueLabel: "Due Jun 30",
     weeklyHoursAvg: 4.2,
   },
   courses: [

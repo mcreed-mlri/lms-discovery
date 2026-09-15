@@ -663,9 +663,9 @@ function LoadedLearnerDashboardBody({
       : undefined;
 
   const streakDays = summary.streakDays ?? 0;
-  const hasCle = summary.cleEarned != null && summary.cleRequired != null;
-  const clePct = hasCle
-    ? Math.round(((summary.cleEarned as number) / (summary.cleRequired as number)) * 100)
+  const hasHoursGoal = summary.hoursEarned != null && summary.hoursRequired != null;
+  const hoursPct = hasHoursGoal
+    ? Math.round(((summary.hoursEarned as number) / (summary.hoursRequired as number)) * 100)
     : 0;
   const heatmap = data.activityHeatmap ?? [];
   const sparkline = data.weeklySparkline ?? [];
@@ -716,26 +716,26 @@ function LoadedLearnerDashboardBody({
         aria-label="Learning snapshot"
         className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]"
       >
-        {hasCle ? (
+        {hasHoursGoal ? (
           <article className="editorial-panel flex items-center gap-4 rounded-[var(--radius-card)] p-4">
             <ProgressRing
-              value={clePct}
+              value={hoursPct}
               size={74}
               stroke={7}
               color="var(--brand-fill)"
               trackColor="var(--surface-sunken)"
             >
               <span className="hero-title block text-[19px] leading-none text-[color:var(--ink)]">
-                {clePct}%
+                {hoursPct}%
               </span>
             </ProgressRing>
             <div className="min-w-0">
               <p className="stat-label text-[color:var(--ink-soft)]">Training hours</p>
               <p className="hero-title mt-1 text-[22px] text-[color:var(--ink)]">
-                {summary.cleEarned} of {summary.cleRequired} hours
+                {summary.hoursEarned} of {summary.hoursRequired} hours
               </p>
               <p className="mt-1 text-[13px] font-medium text-[color:var(--ink-muted)]">
-                {summary.cleDueLabel ?? "On pace"} · on pace
+                {summary.hoursDueLabel ?? "On pace"} · on pace
               </p>
             </div>
           </article>

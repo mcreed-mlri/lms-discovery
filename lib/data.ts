@@ -344,8 +344,8 @@ export const continueLearning: ContinueLearningItem[] = [
 export type WeekDayActivity = "done" | "today" | "upcoming";
 
 export const learnerProgress = {
-  cleEarned: 8.5,
-  cleRequired: 12,
+  hoursEarned: 8.5,
+  hoursRequired: 12,
   // Mon–Sun: completed a module, the current day, or still to come.
   weeklyActivity: [
     "done",

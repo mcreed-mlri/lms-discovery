@@ -41,7 +41,6 @@ export type MockLearningPath = {
   stagesComplete: number;
   stageCount: number;
   hoursLabel: string;
-  cleLabel: string;
   phases: PathPhase[];
   upNext: {
     kicker: string;
@@ -109,7 +108,6 @@ export const intakeToVerdictPath: MockLearningPath = {
   stagesComplete: 4,
   stageCount: 14,
   hoursLabel: "about 38 hours",
-  cleLabel: "14 CLE credits",
   phases: [
     {
       id: "before-trial",
