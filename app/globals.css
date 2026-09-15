@@ -70,6 +70,12 @@
   --shadow-md: 0 1px 2px rgba(32, 27, 19, 0.04), 0 6px 18px rgba(32, 27, 19, 0.05);
   --shadow-lg: 0 8px 24px rgba(32, 27, 19, 0.1), 0 2px 6px rgba(32, 27, 19, 0.06);
 
+  /* The device's top inset, behind a variable so a test can simulate a notched
+     phone. No headless browser reports a non-zero env(safe-area-inset-*), which
+     is how the skip-link bug below reached production past a suite that runs
+     axe on every route in both themes. */
+  --safe-top: env(safe-area-inset-top, 0px);
+
   /* ── Brand — steel blue, drawn from the MLRI blue family. Institutional, not
         electric, and firmly on the blue side of the wheel (no violet cast).
         Blue means *interactive*: links, active icons, progress, resume. ────── */
@@ -357,12 +363,24 @@ a {
   text-decoration: none;
 }
 
+/**
+ * Parked at top: 0 and hidden by exactly one full height, so it clears itself
+ * whatever it measures and whatever the device inset is. The visible offset is
+ * defined once, on :focus.
+ *
+ * It used to sit at `top: calc(1rem + env(safe-area-inset-top))` and hide with
+ * `translateY(-150%)`. That moves 1.5x its own height (72px), but to clear the
+ * viewport it has to travel `top + height` — 114px on a notched iPhone, where
+ * the inset is ~50px. So 42px of it stayed on screen, over the status bar, on
+ * every device with an inset above 8px. The hidden state must not depend on
+ * the inset at all, which is why the offset moved to :focus.
+ */
 .skip-link {
   position: fixed;
   left: 1rem;
-  top: calc(1rem + env(safe-area-inset-top, 0px));
+  top: 0;
   z-index: 100;
-  transform: translateY(-150%);
+  transform: translateY(-100%);
   border-radius: 0.75rem;
   background: var(--surface-raised);
   padding: 0.75rem 1rem;
@@ -373,7 +391,7 @@ a {
 }
 
 .skip-link:focus {
-  transform: translateY(0);
+  transform: translateY(calc(1rem + var(--safe-top)));
   outline: 3px solid var(--brand);
   outline-offset: 3px;
 }
