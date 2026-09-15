@@ -75,6 +75,20 @@ test("edge verifier accepts a token just before expiry", async () => {
   assert.deepEqual(await bothAgree(token, SECRET, justBefore), user);
 });
 
+test("edge verifier agrees on a token carrying the Google-login fields", async () => {
+  const googleUser: SessionUser = {
+    brightspaceUserId: "google:sub-123",
+    uniqueName: "staffer@mlri.org",
+    firstName: "Staffer",
+    lastName: "",
+    provider: "google",
+    googleEmail: "staffer@mlri.org",
+  };
+  const token = createSessionToken(googleUser, SECRET);
+  const result = await bothAgree(token, SECRET);
+  assert.deepEqual(result, googleUser);
+});
+
 test("edge verifier rejects malformed and missing tokens", async () => {
   for (const bad of [undefined, "", "no-separator", ".leading-dot", "a.b.c"]) {
     assert.equal(await bothAgree(bad, SECRET), null, `expected rejection for ${String(bad)}`);

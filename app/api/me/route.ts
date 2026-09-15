@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { demoUser } from "@/lib/auth";
 import { getSessionSecret, SESSION_COOKIE, verifySessionToken } from "@/lib/session";
 
 /**
@@ -35,6 +36,13 @@ export async function GET(request: NextRequest) {
 
   if (!sessionUser) {
     return NextResponse.json({ ok: false, error: "Not signed in." }, { status: 401 });
+  }
+
+  // Temporary staff-meeting demo window: every Google-gated login shares one
+  // identity so the demo is consistent regardless of which MLRI Google
+  // account signed in. See docs/adr/0012-temporary-google-gated-demo-login.md.
+  if (sessionUser.provider === "google") {
+    return NextResponse.json({ ok: true, user: demoUser });
   }
 
   const firstName = sessionUser.firstName || sessionUser.uniqueName || "Learner";

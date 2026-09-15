@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE, STATE_COOKIE } from "@/lib/brightspace/oauth";
+import { STATE_COOKIE as GOOGLE_STATE_COOKIE } from "@/lib/google/oauth";
 import { RETURN_TO_COOKIE } from "@/lib/return-to-cookie";
 import { requireSameOriginRequest } from "@/lib/security";
 import { SESSION_COOKIE } from "@/lib/session";
@@ -16,6 +17,7 @@ export async function POST(request: Request) {
     ACCESS_TOKEN_COOKIE,
     REFRESH_TOKEN_COOKIE,
     STATE_COOKIE,
+    GOOGLE_STATE_COOKIE,
     RETURN_TO_COOKIE,
   ]) {
     response.cookies.delete(cookie);
