@@ -143,7 +143,9 @@ export function LoginForm({ loginProvider }: LoginFormProps) {
                             {candidate.name}
                           </p>
                           <p className="text-sm font-medium text-[color:var(--ink-muted)]">
-                            {candidate.title} - {candidate.unit}
+                            {candidate.unit
+                              ? `${candidate.title} - ${candidate.unit}`
+                              : candidate.title}
                           </p>
                           <p className="truncate text-sm text-[color:var(--ink-soft)]">
                             {candidate.organization}
@@ -165,11 +167,15 @@ export function LoginForm({ loginProvider }: LoginFormProps) {
               </div>
             ) : null}
 
-            <p className="mt-5 text-center text-xs font-medium leading-5 text-[color:var(--ink-soft)]">
-              {isDemoMode
-                ? "No real credentials required. This is a demonstration environment."
-                : "Persona cards are previews only unless the app is running in demo mode."}
-            </p>
+            {isDemoMode ? (
+              <p className="mt-5 text-center text-xs font-medium leading-5 text-[color:var(--ink-soft)]">
+                No real credentials required. This is a demonstration environment.
+              </p>
+            ) : showDemoUsers ? (
+              <p className="mt-5 text-center text-xs font-medium leading-5 text-[color:var(--ink-soft)]">
+                Persona cards are previews only unless the app is running in demo mode.
+              </p>
+            ) : null}
           </div>
         </div>
       </div>

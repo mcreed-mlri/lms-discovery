@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "vitest";
 
-import { resolveAuthFlags } from "@/lib/auth";
+import { resolveAuthFlags, isLoginPathname } from "@/lib/auth";
 
 test("demo mode allows local persona sign-in", () => {
   const flags = resolveAuthFlags({
@@ -47,4 +47,11 @@ test("omitted env reads the inlinable process.env members", () => {
     process.env.NEXT_PUBLIC_DEMO_MODE = previousDemo;
     process.env.NEXT_PUBLIC_SHOW_DEMO_USERS = previousShow;
   }
+});
+
+test("login path detection ignores a trailing slash", () => {
+  assert.equal(isLoginPathname("/login"), true);
+  assert.equal(isLoginPathname("/login/"), true);
+  assert.equal(isLoginPathname("/"), false);
+  assert.equal(isLoginPathname("/browse/"), false);
 });
