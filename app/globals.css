@@ -363,6 +363,37 @@ a {
   text-decoration: none;
 }
 
+/* ── The 16px rule ────────────────────────────────────────────────────────
+   iOS Safari zooms the page in when a text control smaller than 16px takes
+   focus. The zoom is not undone on blur, and a zoomed page is wider than the
+   visual viewport, so the whole app can be panned sideways from then on —
+   which is how "tap Search and now the page scrolls horizontally" happened
+   with a 14px search field. `overflow-x: clip` above cannot help: panning a
+   zoomed visual viewport is not document scroll.
+
+   Suppressing it with `maximum-scale=1` on the viewport meta is the other way
+   out and is not available to us — that blocks pinch-zoom and fails WCAG
+   1.4.4. So the controls stay at 16px instead.
+
+   Scoped by pointer rather than by width, because that is what the behaviour
+   actually keys off: a phone held in landscape is 800-odd CSS px wide and
+   still zooms, so a `max-width` floor aligned to any breakpoint would leave
+   the exact case open. On a mouse, nothing zooms and components size their own
+   text — including the `sm:` sizes they drop to, which simply never apply on a
+   touchscreen.
+
+   `!important` is load-bearing: every size in this app is set by a Tailwind
+   utility, a single class that outranks any selector that could be written
+   here. Components still declare 16px themselves (see SearchBox) — this is
+   the floor that catches the next one that forgets. */
+@media (pointer: coarse) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
 /**
  * Parked at top: 0 and hidden by exactly one full height, so it clears itself
  * whatever it measures and whatever the device inset is. The visible offset is

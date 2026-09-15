@@ -98,7 +98,7 @@ export function RateCourseCard({
       {rating > 0 ? (
         <div className="mt-3 flex flex-wrap items-end gap-3">
           <textarea
-            className="min-h-[2.5rem] flex-1 resize-y rounded-[10px] border border-[color:var(--line-control)] bg-[color:var(--surface-raised)] px-3 py-2 text-sm text-[color:var(--ink)] placeholder:text-[color:var(--ink-soft)] focus-ring"
+            className="min-h-[2.5rem] flex-1 resize-y rounded-[10px] border border-[color:var(--line-control)] bg-[color:var(--surface-raised)] px-3 py-2 text-base text-[color:var(--ink)] sm:text-sm placeholder:text-[color:var(--ink-soft)] focus-ring"
             rows={1}
             maxLength={600}
             placeholder="Anything we should change? (optional)"

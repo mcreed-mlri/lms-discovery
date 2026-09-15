@@ -260,10 +260,15 @@ function GlobalSearchDialog({
   // The trap moves focus to the first control, which is the search input.
   const dialogRef = useFocusTrap<HTMLDivElement>(true);
 
+  // The top offset is the phone case, not a scaled-down desktop one: focusing
+  // the input opens the software keyboard, which covers the bottom half of the
+  // screen, so the panel sits just under the safe-area inset and leaves the
+  // suggestions above it. The roomier drop is for pointer widths, where
+  // nothing is covering anything.
   return (
     <div
       ref={dialogRef}
-      className="fixed inset-0 z-[80] flex items-start justify-center bg-[rgba(20,22,27,0.34)] px-4 pt-[calc(5rem+env(safe-area-inset-top,0px))] backdrop-blur-sm sm:pt-[calc(7rem+env(safe-area-inset-top,0px))]"
+      className="fixed inset-0 z-[80] flex items-start justify-center overflow-x-clip bg-[rgba(20,22,27,0.34)] px-4 pt-[calc(1rem+env(safe-area-inset-top,0px))] backdrop-blur-sm sm:pt-[calc(7rem+env(safe-area-inset-top,0px))]"
       role="dialog"
       aria-modal="true"
       aria-label="Search learning library"

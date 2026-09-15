@@ -175,7 +175,7 @@ function ComposePanel({
           value={body}
           onChange={(event) => setBody(event.target.value)}
           placeholder={placeholder}
-          className="min-h-[220px] w-full resize-y border-none py-3 text-[14px] leading-relaxed outline-none placeholder:text-[#767676]"
+          className="min-h-[220px] w-full resize-y border-none py-3 text-[16px] leading-relaxed outline-none sm:text-[14px] placeholder:text-[#767676]"
         />
         <div className="flex items-center gap-2 pb-4">
           <button
