@@ -229,7 +229,7 @@ test.describe("on a phone", () => {
     {
       name: "a header icon",
       path: "/",
-      find: (page: Page) => page.getByRole("link", { name: "Updates and notifications" }),
+      find: (page: Page) => page.getByRole("button", { name: "Open navigation" }),
     },
   ];
 
@@ -317,6 +317,48 @@ test.describe("on a phone", () => {
     await expect(track).toBeFocused();
     expect(await frame.evaluate((element) => getComputedStyle(element).outlineStyle)).toBe("solid");
     expect(await maskOf(frame), "the frame stays unmasked").toBe("none");
+  });
+
+  /**
+   * The phone header is the hamburger, the wordmark and the account bubble.
+   *
+   * It used to carry search, notifications and the theme toggle as well: five
+   * controls across 375px, every one of them a second route to something the
+   * bottom nav or the rail drawer already offered within thumb reach. What is
+   * asserted is the absence, because the duplication is what crept in.
+   */
+  test("the phone header carries no duplicate of the bottom nav", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.getByRole("button", { name: "Open navigation" })).toBeVisible();
+    await expect(page.getByRole("button", { name: /Account menu for/ })).toBeVisible();
+
+    await expect(page.getByRole("link", { name: "Updates and notifications" })).toBeHidden();
+    await expect(page.getByRole("button", { name: /Switch to (dark|light) mode/ })).toBeHidden();
+    await expect(page.getByRole("button", { name: "Search learning library" })).toHaveCount(0);
+
+    // Each of them still reachable, one thumb-length down.
+    const nav = page.getByRole("navigation").last();
+    await expect(nav.getByRole("button", { name: "Search" })).toBeVisible();
+    await expect(nav.getByRole("link", { name: "Updates" })).toBeVisible();
+  });
+
+  test("the unread dot came down with the bell", async ({ page }) => {
+    await page.goto("/");
+    const updates = page.getByRole("navigation").last().getByRole("link", { name: "Updates" });
+    await expect(updates.locator("span[aria-hidden='true']")).toHaveCount(1);
+  });
+
+  test("the desktop header keeps all four controls", async ({ page }) => {
+    // The subtraction is a phone decision; a pointer has the room and no
+    // bottom nav to duplicate.
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/");
+
+    await expect(page.getByRole("link", { name: "Updates and notifications" })).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: /Switch to (dark|light) mode/ }).last(),
+    ).toBeVisible();
+    await expect(page.getByRole("button", { name: /Account menu for/ })).toBeVisible();
   });
 
   test("home has no accessibility violations at phone width", async ({ page }) => {
