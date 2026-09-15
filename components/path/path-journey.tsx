@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { EdgeScrollerList } from "@/components/edge-scroller";
+
 import { CheckIcon, StarIcon } from "@/components/icons";
 import {
   type MockLearningPath,
@@ -51,7 +53,10 @@ function PhaseRow({ label, range, stages }: { label: string; range: string; stag
         <h2 className="section-label text-[color:var(--ink-soft)]">{label}</h2>
         <p className="text-[12px] font-medium text-[color:var(--ink-soft)]">{range}</p>
       </div>
-      <ol className="-mx-4 mt-5 flex items-start overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
+      <EdgeScrollerList
+        frameClassName="mt-5"
+        className="-mx-4 flex items-start px-4 pb-1 sm:mx-0 sm:px-0"
+      >
         {stages.map((stage, index) => {
           const isLast = index === stages.length - 1;
           return (
@@ -80,7 +85,7 @@ function PhaseRow({ label, range, stages }: { label: string; range: string; stag
             </li>
           );
         })}
-      </ol>
+      </EdgeScrollerList>
     </section>
   );
 }
