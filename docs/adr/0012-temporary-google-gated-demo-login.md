@@ -61,3 +61,18 @@ unchanged.
 - If `GOOGLE_DEMO_ACCESS_EXPIRES_AT` is unset, the Google login path is
   effectively disabled (`isPastGoogleDemoExpiry` treats "no expiry configured"
   as expired) rather than left open indefinitely by omission.
+- The shared demo identity lives in `lib/auth-constants.ts`, not `lib/auth.tsx`.
+  As first shipped, `/api/me` imported `demoUser` from `lib/auth.tsx`, a
+  `"use client"` module. A route handler compiles in the server layer, where a
+  client module's exports are client-reference stubs rather than data, so the
+  route answered `200` with the `user` key missing and every Google login
+  bounced straight back to `/login` with no error in any log. Same boundary
+  problem, and the same remedy, as `lib/session-constants.ts` in ADR 0003:
+  `lib/auth.tsx` re-exports the personas so client call sites are unchanged, and
+  `tests/server-client-boundary.test.ts` keeps server entry points off the
+  client module.
+- The client `login()` in `lib/auth.tsx` now navigates to `/login` rather than a
+  hardcoded `/api/auth/brightspace/start`. It could not honour
+  `HUB_LOGIN_PROVIDER`, which is server-only by design (above), so on a Google
+  deployment the signed-out panel on `/` sent people to the wrong provider.
+  `/login` is the one place that already resolves the provider.

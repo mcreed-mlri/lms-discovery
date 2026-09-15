@@ -18,9 +18,9 @@ export default defineConfig([
       // Off because both call sites in lib/auth.tsx genuinely need a full
       // document navigation, and the rule cannot tell the difference:
       //
-      //   · login() navigates to /api/auth/brightspace/start, an API route that
-      //     302s to auth.brightspace.com. Client-side routing cannot follow a
-      //     redirect off-origin, so router.push() would break OAuth.
+      //   · login() navigates to /login *in order to* leave the SPA behind for a
+      //     server-rendered page that resolves the OAuth provider. A soft push
+      //     would keep the stale client auth state that sent them there.
       //   · logout() navigates to /login *in order to* discard client state.
       //     A soft push keeps the SPA alive with a stale user in memory, which
       //     is the exact thing logging out is supposed to prevent.

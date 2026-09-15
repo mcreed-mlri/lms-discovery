@@ -110,6 +110,30 @@ identical to the value used when the cookie was issued — changing it invalidat
 every existing session (ADR 0002). If it is unset entirely the gate fails open
 with a `console.warn` rather than locking anyone out (ADR 0004).
 
+### Sign-in succeeds, then lands back on /login with no error
+
+The server gate and the client gate disagree. `proxy.ts` verified the
+`lace_session` cookie and let the request through; then `AuthProvider` in
+`lib/auth.tsx` called `/api/me`, got no usable `user`, and `app/page.tsx`
+redirected. There is no banner because there is no `?error=` on the URL, and
+`lib/auth.tsx` swallows a failed `/api/me` into a plain signed-out state — so
+this can be completely silent, including a `200` with the `user` key missing.
+
+Check `/api/me` directly rather than reading the UI. Mint a session cookie with
+`createSessionToken` from `lib/session.ts` and call the route against a
+production build (note `trailingSlash: true`, so use `/api/me/`):
+
+```bash
+npm run build
+SESSION_SECRET=$SECRET npx next start -p 3100 &
+curl -sS -H "Cookie: lace_session=$TOKEN" http://localhost:3100/api/me/
+```
+
+A `401` means the cookie is wrong or `SESSION_SECRET` differs from the one that
+issued it. A `200` with no `user` means the route resolved a value it could not
+serialize — this is what a `"use client"` import inside a route handler does
+(see `lib/auth-constants.ts` and `tests/server-client-boundary.test.ts`).
+
 ### Brightspace calls start failing after a while
 
 Brightspace **rotates refresh tokens**: every refresh returns a new one, and the
