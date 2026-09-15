@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { demoUser } from "@/lib/auth";
+import { demoUser, type User } from "@/lib/auth-constants";
 import { getSessionSecret, SESSION_COOKIE, verifySessionToken } from "@/lib/session";
 
 /**
@@ -51,23 +51,23 @@ export async function GET(request: NextRequest) {
   const initials =
     `${firstName.charAt(0)}${lastName.charAt(0) || firstName.charAt(1) || ""}`.toUpperCase();
 
-  // Matches the client User shape in lib/auth.tsx. Role/attribute fields are
-  // pilot defaults until Brightspace user attributes drive real mapping.
-  return NextResponse.json({
-    ok: true,
-    user: {
-      id: `brightspace-${sessionUser.brightspaceUserId}`,
-      name,
-      firstName,
-      email: "",
-      title: "Learner",
-      organization: "LACE",
-      unit: "",
-      initials,
-      userType: getDefaultUserType(),
-      accessStatus: "approved",
-      jurisdiction: ["MA"],
-      practiceArea: [],
-    },
-  });
+  // Role/attribute fields are pilot defaults until Brightspace user attributes
+  // drive real mapping. Annotated as User so the shape is checked against the
+  // one the client consumes, rather than asserted by a comment.
+  const user: User = {
+    id: `brightspace-${sessionUser.brightspaceUserId}`,
+    name,
+    firstName,
+    email: "",
+    title: "Learner",
+    organization: "LACE",
+    unit: "",
+    initials,
+    userType: getDefaultUserType(),
+    accessStatus: "approved",
+    jurisdiction: ["MA"],
+    practiceArea: [],
+  };
+
+  return NextResponse.json({ ok: true, user });
 }

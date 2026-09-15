@@ -2,88 +2,25 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
-export type User = {
-  id: string;
-  name: string;
-  firstName: string;
-  email: string;
-  title: string;
-  organization: string;
-  unit: string;
-  initials: string;
-  userType: "attorney" | "non_lawyer_advocate" | "paralegal" | "admin" | "faculty";
-  accessStatus: "approved" | "pending" | "suspended" | "inactive";
-  jurisdiction: string[];
-  practiceArea: string[];
-  uplAcknowledgedDate?: string;
-  barNumber?: string;
-  barJurisdiction?: string[];
-};
+/**
+ * The User type and the demo personas live in lib/auth-constants.ts, not here.
+ * This module is "use client", and a server-layer importer (a route handler,
+ * proxy.ts) gets client-reference stubs instead of the data — see the header
+ * comment there. Re-exported so client call sites keep a single import site,
+ * exactly as lib/session.ts:15 re-exports lib/session-constants.ts.
+ *
+ * Server code must import from "@/lib/auth-constants" directly.
+ */
+export type { User } from "@/lib/auth-constants";
+export {
+  demoUser,
+  kevinSmithUser,
+  mlriAdminUser,
+  facultyUser,
+  demoUsers,
+} from "@/lib/auth-constants";
 
-export const demoUser: User = {
-  id: "sarah-chen",
-  name: "Sarah Chen",
-  firstName: "Sarah",
-  email: "s.chen@mlri.org",
-  title: "Staff Attorney",
-  organization: "MLRI",
-  unit: "Housing Unit",
-  initials: "SC",
-  userType: "attorney",
-  accessStatus: "approved",
-  jurisdiction: ["MA"],
-  practiceArea: ["housing", "client-services", "ethics"],
-  barNumber: "BBO-123456",
-  barJurisdiction: ["MA"],
-};
-
-export const kevinSmithUser: User = {
-  id: "kevin-smith",
-  name: "Kevin Smith",
-  firstName: "Kevin",
-  email: "k.smith@partnerlegalaid.example",
-  title: "Non-Practicing Advocate",
-  organization: "Demo Legal Aid Partner",
-  unit: "Client Services",
-  initials: "KS",
-  userType: "non_lawyer_advocate",
-  accessStatus: "approved",
-  jurisdiction: ["MA"],
-  practiceArea: ["client-services", "ethics", "practice-skills"],
-  uplAcknowledgedDate: "2026-06-01",
-};
-
-export const mlriAdminUser: User = {
-  id: "mlri-admin",
-  name: "MLRI Admin",
-  firstName: "MLRI",
-  email: "admin@mlri.example",
-  title: "Platform Administrator",
-  organization: "MLRI",
-  unit: "Learning Platform",
-  initials: "MA",
-  userType: "admin",
-  accessStatus: "approved",
-  jurisdiction: ["MA"],
-  practiceArea: ["all"],
-};
-
-export const facultyUser: User = {
-  id: "faculty-demo",
-  name: "Faculty",
-  firstName: "Faculty",
-  email: "faculty@mlri.example",
-  title: "Content Creator",
-  organization: "MLRI",
-  unit: "Curriculum & Content",
-  initials: "F",
-  userType: "faculty",
-  accessStatus: "approved",
-  jurisdiction: ["MA"],
-  practiceArea: ["all"],
-};
-
-export const demoUsers = [demoUser, kevinSmithUser, mlriAdminUser, facultyUser];
+import { demoUser, demoUsers, type User } from "@/lib/auth-constants";
 
 export type AuthFlags = {
   isDemoMode: boolean;
