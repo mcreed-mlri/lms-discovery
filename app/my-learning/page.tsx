@@ -17,5 +17,5 @@ export default function MyLearningPage() {
 
   if (isAdmin) return null;
 
-  return <LearnerDashboardView />;
+  return <LearnerDashboardView displayNameOverride={user?.firstName} />;
 }
