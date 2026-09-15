@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { devices, expect, test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 import { SIGNED_IN_ROUTES, signIn } from "./support";
 
@@ -21,7 +21,25 @@ import { SIGNED_IN_ROUTES, signIn } from "./support";
  * hardware. Keep that override, or this stops testing anything.
  */
 
-test.use({ ...devices["iPhone 12 Mini"] });
+/**
+ * iPhone 12 mini geometry, spelled out rather than spread from
+ * `devices["iPhone 12 Mini"]`. That descriptor carries
+ * `defaultBrowserType: "webkit"`, which silently switches these tests to a
+ * browser CI does not install — the workflow runs
+ * `npx playwright install --with-deps chromium`. Spreading it turns every test
+ * here into "Executable doesn't exist at .../webkit-2336/pw_run.sh".
+ *
+ * `userAgent` is omitted deliberately: the descriptor's is a Safari string, and
+ * claiming it while running Chromium would be a lie to anything that sniffs it.
+ */
+test.use({
+  // 375x629 is the descriptor's own viewport: a 375x812 device minus Safari's
+  // chrome. Only the width matters to anything asserted here.
+  viewport: { width: 375, height: 629 },
+  deviceScaleFactor: 3,
+  isMobile: true,
+  hasTouch: true,
+});
 
 const WCAG = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 
