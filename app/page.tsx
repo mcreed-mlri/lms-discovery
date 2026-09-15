@@ -103,6 +103,13 @@ export default function Home() {
 
   return (
     <StudioShell padded={false}>
+      <div className="border-b border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-4 py-1.5 text-center sm:px-6 lg:px-10">
+        <p className="text-[11px] font-medium leading-snug text-[color:var(--ink-muted)] sm:text-[12px]">
+          Internal use only, for MLRI staff. This is a work-in-progress prototype, and nearly all
+          course content is placeholder, not reviewed legal material.
+        </p>
+      </div>
+
       <HeroSection
         user={user}
         isAdmin={isAdmin}

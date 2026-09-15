@@ -74,7 +74,7 @@ export function HeroSection({
   allItems: LearningItem[];
 }) {
   const { resumeItem, resumeUrl, resumeEyebrow, resumeProgressLabel } = useResumeCard(allItems);
-  const clePct = Math.round((learnerProgress.cleEarned / learnerProgress.cleRequired) * 100);
+  const hoursPct = Math.round((learnerProgress.hoursEarned / learnerProgress.hoursRequired) * 100);
 
   return (
     <section className="sticky top-[var(--studio-chrome)] z-10 overflow-x-clip border-b border-[color:var(--line)] bg-[color:var(--chrome-bg)] backdrop-blur-[10px]">
@@ -108,7 +108,7 @@ export function HeroSection({
                 Training
               </span>
               <span className="font-semibold text-[color:var(--ink)]">
-                {learnerProgress.cleEarned}/{learnerProgress.cleRequired} hrs
+                {learnerProgress.hoursEarned}/{learnerProgress.hoursRequired} hrs
               </span>
             </p>
           )}
@@ -117,20 +117,20 @@ export function HeroSection({
             <div className="hidden items-center gap-4 sm:flex sm:pt-1.5">
               <div className="flex items-center gap-2.5">
                 <ProgressRing
-                  value={clePct}
+                  value={hoursPct}
                   size={44}
                   stroke={4}
                   color="var(--brand-fill)"
                   trackColor="var(--surface-sunken)"
-                  label={`${clePct}% of training hours goal`}
+                  label={`${hoursPct}% of training hours goal`}
                 >
                   <span className="text-[10px] font-bold tabular-nums text-[color:var(--ink)]">
-                    {clePct}%
+                    {hoursPct}%
                   </span>
                 </ProgressRing>
                 <p className="text-[13px] leading-tight text-[color:var(--ink-soft)]">
                   <span className="font-semibold text-[color:var(--ink)]">
-                    {learnerProgress.cleEarned}/{learnerProgress.cleRequired} hrs
+                    {learnerProgress.hoursEarned}/{learnerProgress.hoursRequired} hrs
                   </span>{" "}
                   to goal
                 </p>
