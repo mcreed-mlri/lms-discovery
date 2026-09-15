@@ -21,7 +21,7 @@ export function SectionBand({
   return (
     <section
       id={id}
-      className={`scroll-mt-[calc(5rem+env(safe-area-inset-top,0px))] ${className}`}
+      className={`scroll-mt-[calc(5rem+var(--safe-top))] ${className}`}
       aria-labelledby={id && showIntro ? `${id}-heading` : undefined}
       aria-label={!showIntro ? label : undefined}
       tabIndex={tabIndex}

@@ -150,7 +150,7 @@ export function DetailModal({
         tabIndex={-1}
         onClick={onClose}
       />
-      <section className="editorial-panel animate-slide-up sm:animate-fade-in-scale relative w-full max-w-4xl bg-[color:var(--surface-raised)] p-5 text-[color:var(--ink)] sm:p-8 rounded-t-2xl rounded-b-none sm:rounded-b-2xl sm:rounded-2xl max-sm:max-h-[88vh] max-sm:overflow-y-auto pb-[calc(1.25rem+env(safe-area-inset-bottom))]">
+      <section className="editorial-panel animate-slide-up sm:animate-fade-in-scale relative w-full max-w-4xl bg-[color:var(--surface-raised)] p-5 text-[color:var(--ink)] sm:p-8 rounded-t-2xl rounded-b-none sm:rounded-b-2xl sm:rounded-2xl max-sm:max-h-[88dvh] max-sm:overflow-y-auto max-sm:overscroll-contain pb-[calc(1.25rem+var(--safe-bottom))]">
         {/* Pull handle for mobile drawer */}
         <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-[color:var(--line-strong)] sm:hidden" />
         <button

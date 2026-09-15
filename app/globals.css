@@ -70,11 +70,19 @@
   --shadow-md: 0 1px 2px rgba(32, 27, 19, 0.04), 0 6px 18px rgba(32, 27, 19, 0.05);
   --shadow-lg: 0 8px 24px rgba(32, 27, 19, 0.1), 0 2px 6px rgba(32, 27, 19, 0.06);
 
-  /* The device's top inset, behind a variable so a test can simulate a notched
+  /* The device's insets, behind variables so a test can simulate a notched
      phone. No headless browser reports a non-zero env(safe-area-inset-*), which
      is how the skip-link bug below reached production past a suite that runs
-     axe on every route in both themes. */
+     axe on every route in both themes.
+
+     Anything that reserves room for a fixed edge of the app reads these rather
+     than env() directly, so that the reserved space and the thing it makes
+     room for cannot drift apart: the mobile bottom nav grows by --safe-bottom,
+     and the content column's own bottom padding grows by exactly the same
+     amount. Reserving a flat 5rem against a nav that is 5rem *plus the home
+     indicator* put the last 27px of every page underneath it. */
   --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 
   /* ── Brand — steel blue, drawn from the MLRI blue family. Institutional, not
         electric, and firmly on the blue side of the wheel (no violet cast).
@@ -343,7 +351,13 @@ html {
 
 body {
   margin: 0;
+  /* `svh` is the viewport with the browser's chrome showing — the height that
+     is always visible. `vh` is the chrome-hidden height, so it makes the page
+     marginally taller than the screen on a phone and leaves every route with a
+     few pixels of scroll it has no content for. Declared twice so a browser
+     without `svh` keeps the old behaviour rather than no minimum at all. */
   min-height: 100vh;
+  min-height: 100svh;
   overflow-x: clip;
   font-family: var(--font-sans);
   font-weight: 400;

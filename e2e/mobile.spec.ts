@@ -99,6 +99,38 @@ test.describe("on a phone", () => {
     }
   });
 
+  /**
+   * The mobile bottom nav is fixed, so the content column reserves its height
+   * as bottom padding. The nav grows by the device's home-indicator inset and
+   * the reservation did not: a flat 5rem against a nav that is 5rem plus ~34px
+   * left the bottom of every page underneath it, on every iPhone with a home
+   * indicator and on no headless browser. Both now read `--safe-bottom`, which
+   * is what this simulates.
+   */
+  for (const inset of INSETS) {
+    test(`the bottom nav clears the content column at a ${inset}px bottom inset`, async ({
+      page,
+    }) => {
+      await page.goto("/my-learning/");
+      await page.evaluate((px) => {
+        document.documentElement.style.setProperty("--safe-bottom", `${px}px`);
+      }, inset);
+
+      const { navHeight, reserved } = await page.evaluate(() => {
+        const nav = document.querySelector("nav.fixed.bottom-0")!;
+        const column = nav.previousElementSibling!;
+        return {
+          navHeight: nav.getBoundingClientRect().height,
+          reserved: parseFloat(getComputedStyle(column).paddingBottom),
+        };
+      });
+
+      expect(reserved, `reserved vs ${Math.round(navHeight)}px nav`).toBeGreaterThanOrEqual(
+        navHeight,
+      );
+    });
+  }
+
   for (const route of SIGNED_IN_ROUTES) {
     test(`${route.name} keeps its content inside the viewport`, async ({ page }) => {
       await page.goto(route.path);
