@@ -1,22 +1,5 @@
+import { demoUser } from "../lib/auth-constants";
 import type { Page } from "@playwright/test";
-
-/** Mirrors `demoUser` in lib/auth.tsx — the approved attorney persona. */
-const DEMO_USER = {
-  id: "sarah-chen",
-  name: "Sarah Chen",
-  firstName: "Sarah",
-  email: "s.chen@mlri.org",
-  title: "Staff Attorney",
-  organization: "MLRI",
-  unit: "Housing Unit",
-  initials: "SC",
-  userType: "attorney",
-  accessStatus: "approved",
-  jurisdiction: ["MA"],
-  practiceArea: ["housing", "client-services", "ethics"],
-  barNumber: "BBO-123456",
-  barJurisdiction: ["MA"],
-};
 
 /** localStorage key read by AuthProvider in lib/auth.tsx. */
 const STORAGE_KEY = "mlri-demo-user";
@@ -33,7 +16,7 @@ export async function signIn(page: Page) {
     ([key, user]) => {
       window.localStorage.setItem(key as string, JSON.stringify(user));
     },
-    [STORAGE_KEY, DEMO_USER] as const,
+    [STORAGE_KEY, demoUser] as const,
   );
 }
 

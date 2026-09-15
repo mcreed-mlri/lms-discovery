@@ -68,6 +68,11 @@ const AuthCtx = createContext<AuthState | null>(null);
 
 const STORAGE_KEY = "mlri-demo-user";
 
+/** True for `/login` and `/login/`. Used so demo auto-sign-in does not trap the persona picker. */
+export function isLoginPathname(pathname: string) {
+  return pathname.replace(/\/+$/, "") === "/login";
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
@@ -77,16 +82,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
-          setUser(JSON.parse(stored));
+          const parsed = JSON.parse(stored) as User;
+          const canonical = demoUsers.find((candidate) => candidate.id === parsed.id);
+          const nextUser = canonical ?? parsed;
+          if (canonical) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(canonical));
+          }
+          setUser(nextUser);
           setReady(true);
           return;
         }
       } catch {
         // ignore malformed storage
       }
-    }
 
-    if (isDemoMode) {
+      // Skip the login screen in local/demo: Google/Brightspace are not
+      // required to view the hub. Leave /login alone so "switch user" still
+      // works and the e2e login test can drive the persona cards.
+      if (!isLoginPathname(window.location.pathname)) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(demoUser));
+        setUser(demoUser);
+      }
       setReady(true);
       return;
     }

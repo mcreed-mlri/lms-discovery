@@ -143,7 +143,9 @@ export function LoginForm({ loginProvider }: LoginFormProps) {
                             {candidate.name}
                           </p>
                           <p className="text-sm font-medium text-[color:var(--ink-muted)]">
-                            {candidate.title} - {candidate.unit}
+                            {candidate.unit
+                              ? `${candidate.title} - ${candidate.unit}`
+                              : candidate.title}
                           </p>
                           <p className="truncate text-sm text-[color:var(--ink-soft)]">
                             {candidate.organization}

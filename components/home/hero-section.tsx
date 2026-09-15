@@ -86,7 +86,7 @@ export function HeroSection({
             </h1>
             <p className="mt-1 flex flex-wrap items-center gap-x-1.5 text-[13px] text-[color:var(--ink-muted)] sm:mt-1.5 sm:text-[14px]">
               <span className="font-semibold tracking-[-0.01em] text-[color:var(--ink-soft)]">
-                {user.organization ?? "MLRI"}
+                {user.title}
               </span>
               {user.unit ? (
                 <>

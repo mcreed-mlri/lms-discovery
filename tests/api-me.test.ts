@@ -85,8 +85,8 @@ test("a Google session keeps the staffer's own name and the persona's entitlemen
   assert.equal(payload.user?.name, "Staffer");
   assert.equal(payload.user?.firstName, "Staffer");
   assert.equal(payload.user?.initials, "ST");
-  assert.equal(payload.user?.title, "MLRI Staff");
-  assert.equal(payload.user?.unit, "");
+  assert.equal(payload.user?.title, demoUser.title);
+  assert.equal(payload.user?.unit, demoUser.unit);
   assert.equal(payload.user?.accessLabel, "Demo access: full catalog");
 
   // uniqueName is the email on a Google session; it must never become the name.
@@ -143,6 +143,8 @@ test("a Brightspace session maps to the client User shape", async () => {
   assert.equal(payload.user?.id, "brightspace-12345");
   assert.equal(payload.user?.name, "Sarah Chen");
   assert.equal(payload.user?.initials, "SC");
+  assert.equal(payload.user?.title, "MLRI Staff Attorney");
+  assert.equal(payload.user?.organization, "MLRI");
   // Most-restricted type by default until the UPL access matrix drives mapping.
   assert.equal(payload.user?.userType, "non_lawyer_advocate");
   // The demo label must never leak onto a real login.

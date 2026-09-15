@@ -44,9 +44,11 @@ export const demoUser: User = {
   name: "Sarah Chen",
   firstName: "Sarah",
   email: "s.chen@mlri.org",
-  title: "Staff Attorney",
+  // Same display a Google-gated MLRI staff login gets: mock title, no invented
+  // unit. Entitlements (userType, catalog, jurisdiction) are the staff preview.
+  title: "MLRI Staff Attorney",
   organization: "MLRI",
-  unit: "Housing Unit",
+  unit: "",
   initials: "SC",
   userType: "attorney",
   accessStatus: "approved",

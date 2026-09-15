@@ -68,9 +68,8 @@ export async function GET(request: NextRequest) {
     const user: User = {
       ...demoUser,
       ...displayIdentity(sessionUser.firstName, sessionUser.lastName),
-      // No invented credential sits next to a real person's name.
-      title: "MLRI Staff",
-      unit: "",
+      // Name is the signer's; everything else is the Sarah staff-preview
+      // persona. Email stays blank (googleEmail is audit-only).
       email: "",
       accessLabel: "Demo access: full catalog",
     };
@@ -90,8 +89,10 @@ export async function GET(request: NextRequest) {
     id: `brightspace-${sessionUser.brightspaceUserId}`,
     ...identity,
     email: "",
-    title: "Learner",
-    organization: "LACE",
+    // Display-only mock for the current demo experience. Access still comes
+    // from userType (HUB_DEFAULT_USER_TYPE / the restricted default), not this.
+    title: "MLRI Staff Attorney",
+    organization: "MLRI",
     unit: "",
     userType: getDefaultUserType(),
     accessStatus: "approved",

@@ -33,7 +33,8 @@ NEXT_PUBLIC_DEMO_MODE=true
 LACE_DEPLOYMENT_KIND=demo
 ```
 
-and sign in with a demo persona. `NEXT_PUBLIC_SHOW_DEMO_USERS=true` only shows
+and the hub opens as Sarah Chen without a login screen. Visit `/login` to
+switch personas. `NEXT_PUBLIC_SHOW_DEMO_USERS=true` only shows
 persona preview cards beside Brightspace; it does not authenticate them unless
 demo mode is also enabled. See ADR 0007 for why this is opt-in — and why it must
 never be set on a deployment real advocates can reach.

@@ -34,6 +34,7 @@ const { default: LoginPage } = await import("@/app/login/page");
 
 beforeEach(() => {
   localStorage.clear();
+  window.history.replaceState({}, "", "/login/");
 });
 
 test("demo persona cards are buttons that persist the chosen user", async () => {
@@ -49,5 +50,9 @@ test("demo persona cards are buttons that persist the chosen user", async () => 
   expect(JSON.parse(localStorage.getItem("mlri-demo-user") ?? "{}")).toMatchObject({
     id: "sarah-chen",
     name: "Sarah Chen",
+    title: "MLRI Staff Attorney",
+    unit: "",
   });
+  expect(screen.getByRole("button", { name: /Sarah Chen/i })).not.toHaveTextContent("Housing Unit");
+  expect(screen.getByRole("button", { name: /Sarah Chen/i })).not.toHaveTextContent("Attorney -");
 });

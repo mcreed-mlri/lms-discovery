@@ -37,7 +37,7 @@ test("the account bubble opens a menu with identity and logout", async () => {
   expect(trigger).toHaveAttribute("aria-expanded", "true");
   const dialog = screen.getByRole("dialog", { name: /Sarah Chen/i });
   expect(dialog).toBeVisible();
-  expect(screen.getByText("Staff Attorney")).toBeVisible();
+  expect(screen.getByText("MLRI Staff Attorney")).toBeVisible();
   expect(screen.getByRole("button", { name: /Log out \/ switch user/i })).toBeVisible();
 });
 
