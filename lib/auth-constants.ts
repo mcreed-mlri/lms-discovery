@@ -27,6 +27,13 @@ export type User = {
   accessStatus: "approved" | "pending" | "suspended" | "inactive";
   jurisdiction: string[];
   practiceArea: string[];
+  /**
+   * Overrides the rendered access line. Display only, and deliberately absent
+   * from AccessProfile in lib/access.ts, so it can never become an input to an
+   * access decision. Set for the Google demo window, where the persona's
+   * attorney entitlements should not read as a claim about the real signer.
+   */
+  accessLabel?: string;
   uplAcknowledgedDate?: string;
   barNumber?: string;
   barJurisdiction?: string[];

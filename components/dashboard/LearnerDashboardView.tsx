@@ -603,17 +603,20 @@ function LoadedLearnerDashboardBody({
   data,
   bookmarks,
   feedbackPrompts,
+  displayNameOverride,
 }: {
   data: LearnerDashboardPayload;
   bookmarks: LearningBookmark[];
   feedbackPrompts: FeedbackPrompts;
+  displayNameOverride?: string;
 }) {
   const { user, summary, courses, recentActivity, certificates } = data;
+  const greetingName = displayNameOverride || user.displayName;
 
   if (courses.length === 0) {
     return (
       <>
-        <DashboardPageHeader eyebrow="My learning" title={greetingForHour(user.displayName)} />
+        <DashboardPageHeader eyebrow="My learning" title={greetingForHour(greetingName)} />
         <div className="editorial-panel rounded-[var(--radius-card)] p-10 text-center">
           <h2 className="section-title text-lg text-[color:var(--ink)]">No courses yet</h2>
           <p className="mx-auto mt-2 max-w-md text-sm font-medium text-[color:var(--ink-muted)]">
@@ -677,7 +680,7 @@ function LoadedLearnerDashboardBody({
     <>
       <DashboardPageHeader
         eyebrow="My learning"
-        title={greetingForHour(user.displayName)}
+        title={greetingForHour(greetingName)}
         subtitle={subtitleParts.join(" · ")}
         badge={
           <Link
@@ -789,7 +792,19 @@ function LoadedLearnerDashboardBody({
   );
 }
 
-export function LearnerDashboardView() {
+/**
+ * `displayNameOverride` personalizes the greeting during the Google-gated staff
+ * demo (ADR 0012). The dashboard payload is still mocked, and its `user` is the
+ * demo persona, so without this the home hero greets the real staffer by name
+ * while this page one click away still says "Sarah Chen".
+ *
+ * Deliberately a prop rather than an argument to `dashboardService`: that service
+ * is the swap point for a real `fetch('/api/me/dashboard')`, where identity comes
+ * from the session cookie server-side. A client handing a server endpoint its own
+ * display name is the shape that would have to be unwound at the swap. When the
+ * real payload ships, delete the prop and `user.displayName` takes over again.
+ */
+export function LearnerDashboardView({ displayNameOverride }: { displayNameOverride?: string }) {
   const [data, setData] = useState<LearnerDashboardPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -873,6 +888,7 @@ export function LearnerDashboardView() {
       data={data}
       bookmarks={bookmarks}
       feedbackPrompts={feedbackPrompts}
+      displayNameOverride={displayNameOverride}
     />
   );
 }

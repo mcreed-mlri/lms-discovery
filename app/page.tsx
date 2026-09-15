@@ -9,7 +9,7 @@ import { HeroSection } from "@/components/home/hero-section";
 import { SkillsSection } from "@/components/home/skills-section";
 import { StudioShell } from "@/components/studio-shell";
 import { getEffectiveDashboardRole } from "@/lib/access";
-import { demoUser, useAuth } from "@/lib/auth";
+import { useAuth } from "@/lib/auth";
 import type { LearningItem } from "@/lib/data";
 import { useCatalogFilters } from "@/lib/hooks/use-catalog-filters";
 import { recordSearchAnalytics } from "@/lib/search-analytics";
@@ -96,19 +96,19 @@ export default function Home() {
           <p className="mt-3 text-base leading-7 text-[color:var(--ink-muted)]">
             Continue into focused training for Massachusetts legal aid practice.
           </p>
+          {/*
+            One destination. login() now resolves the provider via /login, so the
+            button and the old "Use the full sign-in page" link below it went to
+            the same place; the button also greeted people as the demo persona,
+            which is wrong on a deployment where they sign in as themselves.
+          */}
           <button
             className="mt-7 inline-flex h-11 items-center justify-center rounded-full bg-[color:var(--ink)] px-6 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus-ring"
             type="button"
             onClick={() => login()}
           >
-            Continue as {demoUser.firstName}
+            Sign in to continue
           </button>
-          <a
-            className="mt-4 block text-sm font-bold text-[color:var(--ink-soft)] hover:text-[color:var(--ink)]"
-            href="/login"
-          >
-            Use the full sign-in page
-          </a>
         </div>
       </div>
     );

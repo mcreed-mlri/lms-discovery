@@ -22,6 +22,25 @@ function getDefaultUserType(): AssignableUserType {
   return "non_lawyer_advocate";
 }
 
+/**
+ * Display name and avatar initials from the session's name fields.
+ *
+ * Deliberately does NOT fall back to `uniqueName`: for a Google session that is
+ * the signed-in email address, and rendering someone's email as their display
+ * name is worse than a generic fallback. The Brightspace branch keeps its own
+ * `uniqueName` fallback, where a login name is a reasonable thing to show.
+ */
+function displayIdentity(rawFirst: string, rawLast: string) {
+  const firstName = rawFirst || "Learner";
+  const lastName = rawLast || "";
+  return {
+    firstName,
+    name: [firstName, lastName].filter(Boolean).join(" "),
+    initials:
+      `${firstName.charAt(0)}${lastName.charAt(0) || firstName.charAt(1) || ""}`.toUpperCase(),
+  };
+}
+
 export async function GET(request: NextRequest) {
   const secret = getSessionSecret();
 
@@ -38,31 +57,42 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ ok: false, error: "Not signed in." }, { status: 401 });
   }
 
-  // Temporary staff-meeting demo window: every Google-gated login shares one
-  // identity so the demo is consistent regardless of which MLRI Google
-  // account signed in. See docs/adr/0012-temporary-google-gated-demo-login.md.
+  // Temporary staff-meeting demo window: every Google-gated login gets the demo
+  // persona's entitlements, so the walkthrough shows the same full catalog to
+  // everyone, but under the signer's own name so it reads as their hub rather
+  // than someone else's. Only display fields are personalized; every field
+  // lib/access.ts consults stays the persona's. The name comes from the ID
+  // token's given_name/family_name, never from googleEmail, which stays
+  // audit-only. See docs/adr/0012-temporary-google-gated-demo-login.md.
   if (sessionUser.provider === "google") {
-    return NextResponse.json({ ok: true, user: demoUser });
+    const user: User = {
+      ...demoUser,
+      ...displayIdentity(sessionUser.firstName, sessionUser.lastName),
+      // No invented credential sits next to a real person's name.
+      title: "MLRI Staff",
+      unit: "",
+      email: "",
+      accessLabel: "Demo access: full catalog",
+    };
+
+    return NextResponse.json({ ok: true, user });
   }
 
-  const firstName = sessionUser.firstName || sessionUser.uniqueName || "Learner";
-  const lastName = sessionUser.lastName || "";
-  const name = [firstName, lastName].filter(Boolean).join(" ");
-  const initials =
-    `${firstName.charAt(0)}${lastName.charAt(0) || firstName.charAt(1) || ""}`.toUpperCase();
+  const identity = displayIdentity(
+    sessionUser.firstName || sessionUser.uniqueName,
+    sessionUser.lastName,
+  );
 
   // Role/attribute fields are pilot defaults until Brightspace user attributes
   // drive real mapping. Annotated as User so the shape is checked against the
   // one the client consumes, rather than asserted by a comment.
   const user: User = {
     id: `brightspace-${sessionUser.brightspaceUserId}`,
-    name,
-    firstName,
+    ...identity,
     email: "",
     title: "Learner",
     organization: "LACE",
     unit: "",
-    initials,
     userType: getDefaultUserType(),
     accessStatus: "approved",
     jurisdiction: ["MA"],
