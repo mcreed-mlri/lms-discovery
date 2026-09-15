@@ -84,7 +84,7 @@ test("the login page has no accessibility violations", async ({ page }) => {
 
 test("a learning detail page has no accessibility violations", async ({ page }) => {
   // Public by design — a shareable deep link, reachable without signing in.
-  await page.goto("/learn/path-trial-readiness/");
+  await page.goto("/learn/path-at-trial/");
   const { violations } = await scan(page);
   expect(violations, `\n${describe(violations)}`).toEqual([]);
 });

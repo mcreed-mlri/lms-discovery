@@ -158,7 +158,7 @@ test.describe("signed in", () => {
   });
 
   test("a learning item links out to Brightspace rather than nowhere", async ({ page }) => {
-    await page.goto("/learn/path-trial-readiness/");
+    await page.goto("/learn/path-at-trial/");
     await expect(page.getByRole("main")).toBeVisible();
 
     // The handoff into the LMS is the whole point of the Hub; a broken or empty

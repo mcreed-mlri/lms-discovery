@@ -957,6 +957,25 @@ input::placeholder {
   animation: fadeInScale 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* The "you are here" stage on a path journey — a slow breathing halo so the
+   current stage finds the eye first among a row of otherwise static nodes.
+   Reduced motion already caps `animation-iteration-count` to 1 globally
+   (see the block at the end of this file), so this simply settles on its
+   first frame — glow present, no motion — rather than needing its own guard. */
+@keyframes stagePulseHalo {
+  0%,
+  100% {
+    box-shadow: 0 0 0 4px var(--stage-halo, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 7px var(--stage-halo, transparent);
+  }
+}
+
+.stage-node-current {
+  animation: stagePulseHalo 2.4s ease-in-out infinite;
+}
+
 /* Standalone PWA Optimizations */
 @media (display-mode: standalone) {
   body {

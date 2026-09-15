@@ -21,7 +21,7 @@ test("accepts ordinary in-app destinations", () => {
   for (const value of [
     "/browse/",
     "/my-learning/",
-    "/learn/path-trial-readiness/",
+    "/learn/path-at-trial/",
     "/browse/?q=housing",
     "/browse/?q=housing#results",
     "/",
