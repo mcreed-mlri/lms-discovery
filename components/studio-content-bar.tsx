@@ -23,7 +23,7 @@ export function StudioContentBar({
       <button
         type="button"
         onClick={onMenu}
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)] lg:hidden"
+        className="touch-target flex h-9 w-9 shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)] lg:hidden"
         aria-label="Open navigation"
       >
         <MenuIcon className="h-5 w-5" />
@@ -43,7 +43,7 @@ export function StudioContentBar({
         <button
           type="button"
           onClick={onSearch}
-          className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring lg:hidden"
+          className="touch-target flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring lg:hidden"
           aria-label="Search learning library"
         >
           <SearchIcon className="h-[18px] w-[18px]" />
@@ -54,7 +54,7 @@ export function StudioContentBar({
 
       <Link
         href="/updates"
-        className="relative flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
+        className="touch-target relative flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[9px] border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
         aria-label="Updates and notifications"
       >
         <BellIcon className="h-[18px] w-[18px]" />

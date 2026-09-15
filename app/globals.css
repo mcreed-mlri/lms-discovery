@@ -427,6 +427,36 @@ a {
   border-radius: inherit;
 }
 
+/* ── Touch targets ────────────────────────────────────────────────────────
+   Grows a control's tappable area to the 44x44 Apple HIG minimum WITHOUT
+   changing how big it looks. The icon buttons in the header are 36-38px by
+   design, and the header's height is a token (--studio-chrome) that sticky
+   offsets are measured against, so resizing them would ripple through the
+   layout to fix a problem that is only about thumbs.
+
+   A transparent overlay centred on the control does the whole job: a
+   pseudo-element is part of its host for hit testing, so taps in the grown
+   area activate the button.
+
+   Only safe where neighbours are far enough apart. The header gap is 12px and
+   this adds 3-4px per side, so two expanded targets still leave daylight
+   between them. Do NOT put this on tightly packed controls — the star rating
+   in RateCourseCard sits 4px apart, and expanding those would overlap, so a
+   tap meant for one star would land on its neighbour. */
+.touch-target {
+  position: relative;
+}
+
+.touch-target::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  transform: translate(-50%, -50%);
+}
+
 button,
 input {
   font: inherit;

@@ -174,7 +174,7 @@ export function HeroSection({
                 <Link
                   href={getBrightspaceManagerUrl()}
                   aria-label="Open Brightspace Manager"
-                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--feature-action-border)] bg-[color:var(--feature-action-bg)] text-[color:var(--feature-action-ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:opacity-90 focus-ring-inverse sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
+                  className="touch-target inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--feature-action-border)] bg-[color:var(--feature-action-bg)] text-[color:var(--feature-action-ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:opacity-90 focus-ring-inverse sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
                 >
                   <ArrowIcon className="h-[14px] w-[14px]" />
                   <span className="hidden sm:inline">Manager</span>
@@ -203,7 +203,7 @@ export function HeroSection({
                 <a
                   href={resumeUrl}
                   aria-label={`Resume ${resumeItem.title}. Up next: ${resumeItem.detail}. ${resumeProgressLabel}.`}
-                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--feature-action-border)] bg-[color:var(--feature-action-bg)] text-[color:var(--feature-action-ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:opacity-90 focus-ring-inverse sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
+                  className="touch-target inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--feature-action-border)] bg-[color:var(--feature-action-bg)] text-[color:var(--feature-action-ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:opacity-90 focus-ring-inverse sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
                 >
                   <PlayIcon className="h-[14px] w-[14px]" />
                   <span className="hidden sm:inline">Resume</span>
