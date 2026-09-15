@@ -21,3 +21,20 @@ afterEach(() => {
   // No-op when a suite runs in the node environment and never mounted anything.
   cleanup();
 });
+
+/**
+ * jsdom does not implement ResizeObserver (it does no layout, so there is
+ * nothing to observe). lib/hooks/use-scroll-edges.ts constructs one on mount,
+ * which throws in every jsdom suite that renders a horizontally-scrolling
+ * track — a jsdom gap, not a bug in that hook, so the fix belongs here rather
+ * than in each test file.
+ */
+class ResizeObserverStub implements ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+if (typeof globalThis.ResizeObserver === "undefined") {
+  globalThis.ResizeObserver = ResizeObserverStub;
+}
