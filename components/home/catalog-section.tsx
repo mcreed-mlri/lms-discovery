@@ -131,7 +131,14 @@ export function CatalogSection({
                 onClick={() => setFilter(entry)}
                 aria-pressed={filter === entry}
               >
-                {entry}
+                {entry === "Paths" ? (
+                  <>
+                    <span className="sm:hidden">Paths</span>
+                    <span className="hidden sm:inline">Learning paths</span>
+                  </>
+                ) : (
+                  entry
+                )}
               </button>
             ))}
           </div>
