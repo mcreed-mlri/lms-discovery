@@ -1,6 +1,6 @@
 # Legal Skills: Hearsay Prototype
 
-Standalone Brightspace-ready LACE course package for the stakeholder demo.
+Standalone Brightspace-ready LACE course package for the demo.
 
 This folder was copied from `Course-Template` so the reusable template stays
 untouched. It uses the same static architecture:

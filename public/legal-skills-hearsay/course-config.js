@@ -1,7 +1,7 @@
 /**
  * Legal Skills: Hearsay prototype configuration.
  *
- * This package is a stakeholder demo built from the reusable LACE course
+ * This package is a demo built from the reusable LACE course
  * template. It intentionally keeps the same static Brightspace architecture:
  * course-config.js is the single source of truth for outline, drawer,
  * breadcrumb, prev/next, and local progress.
