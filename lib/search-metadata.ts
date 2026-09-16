@@ -182,6 +182,11 @@ export const searchMetadataById: Record<string, SearchMetadata> = {
       jurisdictions: ["MA"],
     },
   },
+  "intake-to-verdict": {
+    ...defaultSearchMetadata,
+    audience: ["New attorneys"],
+    synonyms: ["learning path", "guided learning", "legal skills", "intake to verdict"],
+  },
   "path-new-attorney": {
     audience: ["New attorneys"],
     status: "Core",

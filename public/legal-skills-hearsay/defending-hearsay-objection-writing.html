@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Defending against a hearsay objection in writing</title>
+  <meta name="course-slug" content="defending-hearsay-objection-writing">
+
+  <link rel="stylesheet" href="course-style.css">
+  <script src="course-config.js"></script>
+  <script>document.documentElement.dataset.topic = (window.COURSE_CONFIG || {}).topic || "foundations";</script>
+  <script src="course-nav.js" defer></script>
+  <script src="course-beacon.js" defer></script>
+
+  <style>
+    .hs-toolbar { margin-top: 22px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .scn-h { margin: 20px 0 0; font-family: var(--font-display); font-size: 24px; line-height: 1.18; letter-spacing: -.02em; color: var(--ink); }
+    .hs-btn {
+      min-height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      border: 1px solid var(--hair); border-radius: var(--radius-control); background: var(--paper);
+      color: var(--ink); font: inherit; font-size: 14px; font-weight: 650; padding: 0 14px; cursor: pointer;
+      box-shadow: var(--shadow-card);
+    }
+    .hs-btn:hover { border-color: var(--hair-strong); background: var(--ivory); }
+    .hs-btn.primary { background: var(--brand-fill); color: #fff; border-color: var(--brand-fill); }
+    .hs-btn.ghost { box-shadow: none; background: transparent; }
+
+    .hs-flow { margin-top: 22px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+    .hs-flow span {
+      min-height: 54px; padding: 10px; border: 1px solid var(--hair); border-radius: 10px;
+      background: var(--surface); color: var(--muted); font-size: 12px; line-height: 1.25;
+    }
+    .hs-flow strong { display: block; color: var(--brand); font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
+
+    .hs-panel-scrim { position: fixed; inset: 0; background: rgba(20, 22, 27, .32); z-index: 60; display: none; }
+    .hs-panel-scrim.open { display: block; }
+    .hs-panel {
+      position: fixed; top: 0; right: 0; z-index: 61; width: min(480px, 100vw); height: 100vh;
+      background: var(--paper); border-left: 1px solid var(--hair); box-shadow: var(--shadow-lift);
+      transform: translateX(100%); transition: transform .22s ease; padding: 24px; overflow: auto;
+      visibility: hidden; pointer-events: none;
+    }
+    .hs-panel.open { transform: translateX(0); visibility: visible; pointer-events: auto; }
+    .hs-panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+    .hs-panel h2 { margin: 4px 0 0; font-size: 24px; line-height: 1.15; letter-spacing: -.02em; }
+    .hs-panel section { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--hair); }
+    .hs-panel h3 { margin: 0 0 8px; font-size: 15px; color: var(--ink); }
+    .hs-panel p, .hs-panel li { color: var(--ink-soft); font-size: 14.5px; line-height: 1.55; }
+    .hs-panel ul { margin: 8px 0 0; padding-left: 20px; }
+
+    .hs-video { margin-top: 22px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(260px, .9fr); gap: 18px; align-items: stretch; }
+    .hs-video-frame {
+      min-height: 280px; border-radius: var(--radius-card); overflow: hidden; position: relative;
+      background: linear-gradient(145deg, #20242d 0%, #12151b 72%);
+      border: 1px solid var(--hair); box-shadow: var(--shadow-soft); color: #fff;
+    }
+    .hs-video-frame::before {
+      content: ""; position: absolute; inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 38px 38px; opacity: .45;
+    }
+    .hs-video-content { position: absolute; inset: 0; padding: 28px; display: flex; flex-direction: column; justify-content: space-between; }
+    .hs-play {
+      width: 68px; height: 68px; border-radius: 999px; border: 1px solid rgba(255,255,255,.4);
+      background: rgba(255,255,255,.16); color: #fff; display: grid; place-items: center;
+      box-shadow: 0 16px 40px rgba(0,0,0,.24);
+    }
+    .hs-video-title { max-width: 16rem; font-size: 24px; font-weight: 720; line-height: 1.15; letter-spacing: -.02em; }
+    .hs-runtime { align-self: flex-start; border-radius: 999px; background: rgba(0,0,0,.42); padding: 6px 10px; font-size: 12px; }
+    .hs-takeaways { border: 1px solid var(--hair); border-radius: var(--radius-card); background: var(--surface); padding: 18px; box-shadow: var(--shadow-card); }
+    .hs-takeaways ol { margin: 10px 0 0; padding-left: 20px; color: var(--ink-soft); line-height: 1.55; }
+
+    .hs-scenario { margin-top: 20px; display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 18px; align-items: start; }
+    .hs-factbox, .hs-check-card, .hs-draft-card {
+      border: 1px solid var(--hair); border-radius: var(--radius-card); background: var(--surface);
+      padding: 18px; box-shadow: var(--shadow-card);
+    }
+    .hs-highlight { background: var(--brand-tint); color: var(--ink); border-radius: 6px; padding: 1px 4px; }
+    .hs-check-card { position: sticky; top: 88px; }
+    .hs-check-card ul, .hs-review ul { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+    .hs-check-card li, .hs-review li { display: grid; grid-template-columns: 22px 1fr; gap: 9px; font-size: 13.5px; color: var(--ink-soft); }
+    .hs-dot { width: 18px; height: 18px; border-radius: 999px; background: var(--brand-tint); color: var(--brand); display: grid; place-items: center; font-size: 11px; font-weight: 700; }
+    .hs-hint { margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--brand-tint); color: var(--brand-ink); font-size: 14px; line-height: 1.5; display: none; }
+    .hs-hint.open { display: block; }
+
+    .hs-rapid { margin-top: 20px; border: 1px solid var(--hair); border-radius: var(--radius-card); background: var(--surface); padding: 22px; box-shadow: var(--shadow-soft); }
+    .hs-rapid-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 16px; }
+    .hs-rapid-card { padding: 18px; border-radius: 12px; background: var(--bg); border: 1px solid var(--hair); }
+    .hs-rapid-options { margin-top: 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .hs-rapid-option {
+      min-height: 54px; padding: 12px; border: 1px solid var(--hair); border-radius: 10px;
+      background: var(--paper); color: var(--ink); text-align: left; font: inherit; font-size: 14px; cursor: pointer;
+    }
+    .hs-rapid-option:hover { border-color: var(--hair-strong); background: var(--ivory); }
+    .hs-rapid-option.correct { border-color: var(--status-progress); background: var(--status-progress-soft); color: var(--status-progress-ink); }
+    .hs-rapid-option.wrong { border-color: var(--status-changed); background: var(--status-changed-soft); color: var(--status-changed-ink); }
+    .hs-rapid-feedback { margin-top: 14px; font-size: 14.5px; color: var(--ink-soft); min-height: 44px; }
+
+    .hs-framework { margin-top: 20px; display: grid; gap: 12px; }
+    .hs-framework li { padding: 14px 16px; border: 1px solid var(--hair); border-radius: 12px; background: var(--surface); box-shadow: var(--shadow-card); }
+    .hs-draft-line {
+      margin-top: 18px; padding: 18px; border-left: 3px solid var(--brand-fill); border-radius: 0 12px 12px 0;
+      background: var(--brand-tint); color: var(--brand-ink); font-size: 16px; line-height: 1.6;
+    }
+
+    .hs-draft-grid { margin-top: 20px; display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 18px; align-items: start; }
+    .hs-timer { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; background: var(--warm); color: var(--muted); padding: 6px 10px; font-family: var(--font-mono); font-size: 11px; font-weight: 700; }
+    .hs-textarea {
+      width: 100%; min-height: 180px; resize: vertical; margin-top: 14px; border: 1px solid var(--hair-strong);
+      border-radius: 12px; background: var(--paper); color: var(--ink); padding: 14px; font: inherit; line-height: 1.55;
+    }
+    .hs-review { display: none; margin-top: 18px; }
+    .hs-review.open { display: block; }
+
+    @media (max-width: 860px) {
+      .hs-flow, .hs-rapid-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hs-video, .hs-scenario, .hs-draft-grid { grid-template-columns: minmax(0, 1fr); }
+      .hs-check-card { position: static; }
+    }
+    @media (max-width: 620px) {
+      .hs-flow, .hs-rapid-options { grid-template-columns: minmax(0, 1fr); }
+      .hs-panel { padding: 18px; }
+      .hs-video-frame { min-height: 240px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <div id="lace-nav-container"></div>
+
+  <main class="page-body topic-body">
+    <p class="eyebrow">Subskill 2 of 5 - Practice - 12 min</p>
+    <h1 class="display topic-title">Defending Against a Hearsay Objection in Writing</h1>
+    <p class="topic-standfirst">
+      Recognizing hearsay exceptions and exclusions, then explaining the basis
+      for admission in a focused written response.
+    </p>
+    <div class="topic-progress">
+      <div class="topic-progress-track"><div data-lace="course-progress-bar"></div></div>
+      <span class="topic-progress-label"><span data-lace="course-progress">0%</span> through this module</span>
+    </div>
+
+    <div class="hs-toolbar" aria-label="Persistent learning resources">
+      <button class="hs-btn primary" type="button" data-open-resource="concepts">Key Concepts</button>
+      <button class="hs-btn" type="button" data-open-resource="procedure">Procedure Reference</button>
+      <a class="hs-btn ghost" href="Home.html">Return to module outline</a>
+    </div>
+
+    <div class="hs-flow" aria-label="Subskill sequence">
+      <span><strong>1 Review</strong> Key concepts</span>
+      <span><strong>2 Observe</strong> Expert model</span>
+      <span><strong>3 Support</strong> Guided scenario</span>
+      <span><strong>4 Fluency</strong> Rapid examples</span>
+      <span><strong>5 Process</strong> Written framework</span>
+      <span><strong>6 Perform</strong> Independent draft</span>
+    </div>
+
+    <section class="section">
+      <div class="section-rule">
+        <span class="sr-num">1</span>
+        <span class="sr-line"></span>
+        <span class="sr-label">Review Key Concepts</span>
+      </div>
+      <h2 class="scn-h">Before You Begin</h2>
+      <p class="prose">
+        Review the key concepts you will use to analyze and respond to a hearsay
+        objection. You can reopen this resource at any point during the lesson.
+      </p>
+      <div class="hs-toolbar">
+        <button class="hs-btn primary" type="button" data-open-resource="concepts">Review Key Concepts</button>
+      </div>
+      <div class="rule-box">
+        <div class="eyebrow">Learning objectives</div>
+        <ol>
+          <li>Identify why a statement has been challenged as hearsay.</li>
+          <li>Determine whether an exclusion or exception may apply.</li>
+          <li>Explain the basis for admitting the evidence in writing.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-rule">
+        <span class="sr-num">2</span>
+        <span class="sr-line"></span>
+        <span class="sr-label">Watch an Expert Model</span>
+      </div>
+      <h2 class="scn-h">Watch an Attorney Work Through the Evidence</h2>
+      <p class="prose">
+        Observe how an experienced attorney identifies the hearsay issue,
+        evaluates possible exclusions and exceptions, and explains why the
+        evidence should be admitted.
+      </p>
+      <div class="hs-video">
+        <div class="hs-video-frame" aria-label="Video player mockup">
+          <div class="hs-video-content">
+            <span class="hs-runtime">Mock video - 03:40</span>
+            <button class="hs-play" type="button" aria-label="Play video mockup">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <div>
+              <div class="hs-video-title">Attorney reviews a client record and marks the response strategy.</div>
+              <p style="margin:8px 0 0;color:rgba(255,255,255,.78);font-size:14px;">Neutral placeholder media for demo only.</p>
+            </div>
+          </div>
+        </div>
+        <div class="hs-takeaways">
+          <p class="eyebrow">Illustrative reasoning sequence</p>
+          <ol>
+            <li>Identify the statement being offered.</li>
+            <li>Determine why the opposing party considers it hearsay.</li>
+            <li>Identify the purpose for which the statement is offered.</li>
+            <li>Evaluate possible exclusions or exceptions.</li>
+            <li>Explain the legal basis for admission.</li>
+          </ol>
+          <div class="callout callout-rust">
+            <div class="callout-title">Sample content</div>
+            <div class="callout-body">This sequence is instructional scaffolding and requires legal subject-matter review before production use.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-rule">
+        <span class="sr-num">3</span>
+        <span class="sr-line"></span>
+        <span class="sr-label">Supported Practice</span>
+      </div>
+      <h2 class="scn-h">Guided Written Scenario</h2>
+      <p class="prose">
+        Work through the response one decision at a time. Use the hint and
+        checklist when you need them.
+      </p>
+
+      <div class="hs-scenario">
+        <div>
+          <div class="hs-factbox">
+            <p class="eyebrow">Fact pattern</p>
+            <p>
+              In a benefits hearing brief, the attorney wants to attach a case
+              manager note. The note says the client reported receiving a notice
+              from the agency on March 4. Opposing counsel objects that the note
+              repeats an out-of-court statement.
+            </p>
+            <p>
+              <span class="hs-highlight">Challenged statement:</span>
+              "Client reported receiving the agency notice on March 4."
+            </p>
+            <p>
+              <span class="hs-highlight">Objection:</span>
+              "The statement is inadmissible hearsay and cannot be relied on."
+            </p>
+          </div>
+
+          <div class="tryit-box" data-feedback-box>
+            <div class="eyebrow">Question 1</div>
+            <p class="tryit-q">What statement is being challenged?</p>
+            <div class="tryit-options">
+              <button class="tryit-option" type="button" data-correct="true" data-feedback="Correct. The objection targets the client report embedded in the case manager note."><span class="tryit-radio"></span><span>The client's report that the notice was received on March 4.</span></button>
+              <button class="tryit-option" type="button" data-correct="false" data-feedback="Not quite. The whole document may matter, but the objection is aimed at the statement inside it."><span class="tryit-radio"></span><span>The entire case manager note.</span></button>
+              <button class="tryit-option" type="button" data-correct="false" data-feedback="Not quite. The agency notice is background; the challenged statement is about receipt."><span class="tryit-radio"></span><span>The agency's notice itself.</span></button>
+            </div>
+            <div class="answer-banner hidden"><span></span></div>
+          </div>
+
+          <div class="tryit-box" data-feedback-box>
+            <div class="eyebrow">Question 2</div>
+            <p class="tryit-q">For what purpose might the statement be offered?</p>
+            <div class="tryit-options">
+              <button class="tryit-option" type="button" data-correct="false" data-feedback="That purpose would likely invite a hearsay problem because it asks the decision-maker to accept the truth of receipt."><span class="tryit-radio"></span><span>To prove conclusively that the notice was received on March 4.</span></button>
+              <button class="tryit-option" type="button" data-correct="true" data-feedback="Stronger. If the statement is offered to show notice, timeline, or why the case manager acted, the hearsay analysis may change."><span class="tryit-radio"></span><span>To explain timeline, notice, or the basis for the case manager's next action.</span></button>
+              <button class="tryit-option" type="button" data-correct="false" data-feedback="Not enough. A written response should name the purpose, not only say the statement is useful."><span class="tryit-radio"></span><span>To show the statement is relevant.</span></button>
+            </div>
+            <div class="answer-banner hidden"><span></span></div>
+          </div>
+
+          <div class="tryit-box" data-feedback-box>
+            <div class="eyebrow">Question 3</div>
+            <p class="tryit-q">Which response is strongest for a prototype draft?</p>
+            <div class="tryit-options">
+              <button class="tryit-option" type="button" data-correct="true" data-feedback="Good. It names the purpose and preserves an alternative route without inventing jurisdiction-specific authority."><span class="tryit-radio"></span><span>Argue it is not offered for the truth, and alternatively identify a possible exclusion or exception for SME review.</span></button>
+              <button class="tryit-option" type="button" data-correct="false" data-feedback="Too broad. A response should identify the specific statement and purpose."><span class="tryit-radio"></span><span>Say all case manager notes are admissible.</span></button>
+              <button class="tryit-option" type="button" data-correct="false" data-feedback="Too narrow. You may still have a response if the purpose or an exception supports admission."><span class="tryit-radio"></span><span>Withdraw the evidence whenever hearsay is objected to.</span></button>
+            </div>
+            <div class="answer-banner hidden"><span></span></div>
+          </div>
+
+          <div class="tryit-box" data-feedback-box>
+            <div class="eyebrow">Question 4</div>
+            <p class="tryit-q">What additional explanation should the attorney include?</p>
+            <div class="tryit-options">
+              <button class="tryit-option" type="button" data-correct="true" data-feedback="Yes. The written response should connect the relevant facts to the theory of admissibility."><span class="tryit-radio"></span><span>Connect the date, document context, and offered purpose to the admissibility theory.</span></button>
+              <button class="tryit-option" type="button" data-correct="false" data-feedback="Not enough. A citation placeholder alone does not explain why this evidence fits."><span class="tryit-radio"></span><span>Add a legal citation placeholder and stop there.</span></button>
+              <button class="tryit-option" type="button" data-correct="false" data-feedback="Avoid overstating. This prototype should not invent definitive legal doctrine."><span class="tryit-radio"></span><span>Declare that the evidence is automatically admissible.</span></button>
+            </div>
+            <div class="answer-banner hidden"><span></span></div>
+          </div>
+        </div>
+
+        <aside class="hs-check-card">
+          <p class="eyebrow">Analysis checklist</p>
+          <ul>
+            <li><span class="hs-dot">1</span><span>Name the challenged statement.</span></li>
+            <li><span class="hs-dot">2</span><span>State the purpose for which it is offered.</span></li>
+            <li><span class="hs-dot">3</span><span>Consider non-hearsay, exclusion, or exception routes.</span></li>
+            <li><span class="hs-dot">4</span><span>Connect the facts to the chosen route.</span></li>
+          </ul>
+          <button class="hs-btn" type="button" data-hint-toggle style="margin-top:14px;width:100%;">Need a hint?</button>
+          <div class="hs-hint" id="supported-hint">Start with purpose. If the statement is not offered to prove the truth of what it asserts, the response may begin outside hearsay.</div>
+          <button class="hs-btn ghost" type="button" data-open-resource="concepts" style="margin-top:10px;width:100%;">Reopen Key Concepts</button>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-rule">
+        <span class="sr-num">4</span>
+        <span class="sr-line"></span>
+        <span class="sr-label">Rapid Practice</span>
+      </div>
+      <h2 class="scn-h">Classify the Best Response</h2>
+      <p class="prose">Move quickly. Choose the best first classification for each example.</p>
+      <div class="hs-rapid" id="rapid-practice">
+        <div class="hs-rapid-top">
+          <span class="eyebrow" id="rapid-count">Example 1 of 3</span>
+          <button class="hs-btn ghost" type="button" id="rapid-next">Next example</button>
+        </div>
+        <div class="hs-rapid-card">
+          <p id="rapid-prompt"></p>
+          <div class="hs-rapid-options" id="rapid-options"></div>
+          <div class="hs-rapid-feedback" id="rapid-feedback" role="status"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-rule">
+        <span class="sr-num">5</span>
+        <span class="sr-line"></span>
+        <span class="sr-label">Review the Procedure</span>
+      </div>
+      <h2 class="scn-h">Build the Written Response</h2>
+      <ol class="hs-framework">
+        <li><strong>Identify the challenged statement.</strong> Quote or describe it precisely.</li>
+        <li><strong>State the purpose for which the evidence is offered.</strong> Do not skip this step.</li>
+        <li><strong>Identify the applicable exclusion or exception.</strong> Use reviewed authority in a production course.</li>
+        <li><strong>Connect the relevant facts to the rule.</strong> Show why this record fits.</li>
+        <li><strong>State clearly why the evidence should be admitted.</strong> End with the request.</li>
+      </ol>
+      <div class="hs-draft-line">
+        "The challenged statement is offered to ________. It is not hearsay because ________.
+        Alternatively, it is admissible under ________ because ________."
+      </div>
+      <div class="callout callout-rust">
+        <div class="callout-title">Drafting framework only</div>
+        <div class="callout-body">This sample structure requires legal subject-matter review and jurisdiction-specific authority before production use.</div>
+      </div>
+      <button class="hs-btn" type="button" data-open-resource="procedure">Keep Procedure Reference Open</button>
+    </section>
+
+    <section class="section">
+      <div class="section-rule">
+        <span class="sr-num">6</span>
+        <span class="sr-line"></span>
+        <span class="sr-label">Independent Practice</span>
+      </div>
+      <h2 class="scn-h">Draft the Written Response</h2>
+      <p class="prose">
+        Complete the response without hints. After you submit, use the checklist
+        to review your own work.
+      </p>
+      <div class="hs-draft-grid">
+        <div class="hs-draft-card">
+          <div class="hs-timer">Suggested timer: 8:00</div>
+          <p><strong>Fact pattern:</strong> A supervisor declaration quotes an intake worker's note that a client called to report a missed deadline notice. The declaration is attached to a written request to admit the timeline evidence.</p>
+          <p><strong>Challenged excerpt:</strong> "The intake worker documented that the client said no notice was received before April 12."</p>
+          <p><strong>Objection:</strong> "This is layered hearsay and should be excluded."</p>
+          <label for="draft-response" class="eyebrow">Draft response</label>
+          <textarea class="hs-textarea" id="draft-response" placeholder="Draft the response here..."></textarea>
+          <div class="hs-toolbar">
+            <button class="hs-btn primary" type="button" id="submit-draft">Submit for self-review</button>
+            <button class="hs-btn" type="button" data-open-resource="procedure">Procedure Reference</button>
+          </div>
+        </div>
+        <aside class="hs-check-card">
+          <p class="eyebrow">Independent practice mode</p>
+          <p style="margin:8px 0 0;color:var(--muted);font-size:14px;">No hints are shown here. Use the procedure reference only if needed.</p>
+        </aside>
+      </div>
+
+      <div class="hs-review" id="draft-review">
+        <div class="answer-banner">
+          <span><strong>Self-review, not grading:</strong> Open-ended legal writing is not automatically scored in this prototype.</span>
+        </div>
+        <div class="hs-scenario" style="margin-top:18px;">
+          <div class="hs-factbox">
+            <p class="eyebrow">Self-review checklist</p>
+            <ul class="checklist">
+              <li><span class="checkmark">1</span><span>Did the response identify the challenged statement?</span></li>
+              <li><span class="checkmark">2</span><span>Did it explain the purpose for which the statement is offered?</span></li>
+              <li><span class="checkmark">3</span><span>Did it identify a possible exclusion or exception?</span></li>
+              <li><span class="checkmark">4</span><span>Did it connect the facts to the legal rule?</span></li>
+              <li><span class="checkmark">5</span><span>Did it clearly request admission of the evidence?</span></li>
+            </ul>
+          </div>
+          <div class="hs-factbox">
+            <p class="eyebrow">View Sample Analysis</p>
+            <p>
+              Sample analysis: A strong response would identify the layered
+              statement, explain the purpose for offering it, and then address
+              each layer through a non-hearsay theory, exclusion, or exception
+              after legal authority is reviewed by a subject-matter expert.
+            </p>
+            <p><em>Content to be reviewed by a legal subject-matter expert.</em></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="next-up">
+      <p class="eyebrow eyebrow-muted">Up next - Subskill 3 of 5</p>
+      <a class="next-up-card" href="#" data-lace="next-link">
+        <span class="nu-body">
+          <span class="pill pill-later">Planned</span>
+          <span class="nu-title">Objecting to hearsay during oral advocacy</span>
+          <span class="nu-sub">Preview the planned oral advocacy subskill.</span>
+        </span>
+        <span class="next-up-go">Continue</span>
+      </a>
+    </section>
+  </main>
+</div>
+
+<div class="hs-panel-scrim" id="hs-panel-scrim"></div>
+<aside class="hs-panel" id="concepts-panel" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Key Concepts">
+  <div class="hs-panel-head">
+    <div><p class="eyebrow">Reference</p><h2>Key Concepts</h2></div>
+    <button class="hs-btn ghost" type="button" data-close-resource>Close</button>
+  </div>
+  <section>
+    <h3>What hearsay is</h3>
+    <p>Hearsay generally involves an out-of-court statement offered to prove the truth of what the statement asserts.</p>
+  </section>
+  <section>
+    <h3>Hearsay vs. non-hearsay</h3>
+    <p>The same words may be hearsay for one purpose and non-hearsay for another. The written response should name the purpose clearly.</p>
+  </section>
+  <section>
+    <h3>Why the distinction matters</h3>
+    <p>If the statement is not offered for its truth, the objection may fail at the threshold. If it is hearsay, the response may need an exclusion or exception.</p>
+  </section>
+  <section>
+    <h3>Exclusions and exceptions</h3>
+    <p>Exclusions and exceptions are rule-specific routes to admission. This prototype names the analysis move without supplying jurisdiction-specific doctrine.</p>
+  </section>
+  <section>
+    <h3>Key legal authorities</h3>
+    <p><strong>Content to be reviewed by a legal subject-matter expert.</strong> Add controlling rules, cases, practice notes, and jurisdiction-specific authorities here.</p>
+  </section>
+</aside>
+
+<aside class="hs-panel" id="procedure-panel" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Procedure Reference">
+  <div class="hs-panel-head">
+    <div><p class="eyebrow">Reference</p><h2>Procedure Reference</h2></div>
+    <button class="hs-btn ghost" type="button" data-close-resource>Close</button>
+  </div>
+  <section>
+    <h3>Five-step written response</h3>
+    <ul>
+      <li>Identify the challenged statement.</li>
+      <li>State the purpose for which the evidence is offered.</li>
+      <li>Identify the applicable exclusion or exception.</li>
+      <li>Connect the facts to the rule.</li>
+      <li>Request admission clearly.</li>
+    </ul>
+  </section>
+  <section>
+    <h3>Drafting structure</h3>
+    <p>"The challenged statement is offered to ________. It is not hearsay because ________. Alternatively, it is admissible under ________ because ________."</p>
+    <p><em>Drafting framework only. Requires legal subject-matter review.</em></p>
+  </section>
+</aside>
+
+<script>
+(function () {
+  "use strict";
+
+  var scrim = document.getElementById("hs-panel-scrim");
+  var panels = {
+    concepts: document.getElementById("concepts-panel"),
+    procedure: document.getElementById("procedure-panel")
+  };
+
+  function closePanels() {
+    scrim.classList.remove("open");
+    Object.keys(panels).forEach(function (k) {
+      panels[k].classList.remove("open");
+      panels[k].setAttribute("aria-hidden", "true");
+    });
+  }
+
+  document.querySelectorAll("[data-open-resource]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      closePanels();
+      var target = panels[btn.getAttribute("data-open-resource")];
+      if (!target) return;
+      scrim.classList.add("open");
+      target.classList.add("open");
+      target.setAttribute("aria-hidden", "false");
+      var close = target.querySelector("[data-close-resource]");
+      if (close) close.focus();
+    });
+  });
+  document.querySelectorAll("[data-close-resource]").forEach(function (btn) {
+    btn.addEventListener("click", closePanels);
+  });
+  scrim.addEventListener("click", closePanels);
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape") closePanels();
+  });
+
+  var hintToggle = document.querySelector("[data-hint-toggle]");
+  if (hintToggle) {
+    hintToggle.addEventListener("click", function () {
+      document.getElementById("supported-hint").classList.toggle("open");
+    });
+  }
+
+  document.querySelectorAll("[data-feedback-box]").forEach(function (box) {
+    box.addEventListener("click", function (ev) {
+      var opt = ev.target.closest ? ev.target.closest(".tryit-option") : null;
+      if (!opt) return;
+      var banner = box.querySelector(".answer-banner span");
+      if (banner) banner.innerHTML = "<strong>" + (opt.getAttribute("data-correct") === "true" ? "Good choice." : "Try again.") + "</strong> " + opt.getAttribute("data-feedback");
+    });
+  });
+
+  var examples = [
+    {
+      prompt: "The evidence is offered to show the listener had notice, not that the assertion was true.",
+      answer: "Not hearsay",
+      feedback: "Best first response: explain the non-truth purpose clearly."
+    },
+    {
+      prompt: "The statement appears in a record created as part of routine office practice, but the legal authority has not been checked.",
+      answer: "Hearsay exception may apply",
+      feedback: "An exception may apply, but production content needs authority review."
+    },
+    {
+      prompt: "The record quotes a client, then quotes a third party inside the client's statement.",
+      answer: "More information is needed",
+      feedback: "Layered statements require analysis of each layer."
+    }
+  ];
+  var labels = ["Not hearsay", "Hearsay exclusion may apply", "Hearsay exception may apply", "More information is needed"];
+  var rapidIndex = 0;
+  var rapidPrompt = document.getElementById("rapid-prompt");
+  var rapidOptions = document.getElementById("rapid-options");
+  var rapidFeedback = document.getElementById("rapid-feedback");
+  var rapidCount = document.getElementById("rapid-count");
+
+  function renderRapid() {
+    var ex = examples[rapidIndex];
+    rapidCount.textContent = "Example " + (rapidIndex + 1) + " of " + examples.length;
+    rapidPrompt.textContent = ex.prompt;
+    rapidFeedback.textContent = "";
+    rapidOptions.innerHTML = labels.map(function (label) {
+      return '<button class="hs-rapid-option" type="button" data-choice="' + label + '">' + label + "</button>";
+    }).join("");
+  }
+
+  rapidOptions.addEventListener("click", function (ev) {
+    var btn = ev.target.closest ? ev.target.closest(".hs-rapid-option") : null;
+    if (!btn) return;
+    var ex = examples[rapidIndex];
+    rapidOptions.querySelectorAll(".hs-rapid-option").forEach(function (b) {
+      b.classList.remove("correct", "wrong");
+      if (b.getAttribute("data-choice") === ex.answer) b.classList.add("correct");
+    });
+    if (btn.getAttribute("data-choice") !== ex.answer) btn.classList.add("wrong");
+    rapidFeedback.textContent = ex.feedback;
+  });
+
+  document.getElementById("rapid-next").addEventListener("click", function () {
+    rapidIndex = (rapidIndex + 1) % examples.length;
+    renderRapid();
+  });
+  renderRapid();
+
+  document.getElementById("submit-draft").addEventListener("click", function () {
+    document.getElementById("draft-review").classList.add("open");
+  });
+})();
+</script>
+
+</body>
+</html>

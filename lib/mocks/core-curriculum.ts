@@ -1,4 +1,5 @@
 import type { SkillGlyphKind } from "@/lib/data";
+import { featuredLearningPath, featuredLearningPathUrl } from "@/lib/demo-discovery";
 
 export type CoreSkillProgress = "complete" | "in-progress" | "not-started";
 
@@ -98,12 +99,11 @@ export const coreSkillCards: CoreSkillCard[] = [
 
 export const intakeToVerdictPath: MockLearningPath = {
   slug: "intake-to-verdict",
-  href: "/browse/paths/intake-to-verdict",
-  kicker: "Attorney journey",
-  title: "The Attorney Journey: New Attorney to Verdict",
-  shortTitle: "New attorney to verdict",
-  description:
-    "Twenty-five stages in the order a legal aid career moves: onboarding, access to counsel, the bridge into practice, and the full litigation arc from pre-trial to the verdict.",
+  href: featuredLearningPathUrl,
+  kicker: "Example learning path",
+  title: featuredLearningPath.title,
+  shortTitle: featuredLearningPath.title,
+  description: featuredLearningPath.description,
   summary: "25 stages across 6 phases · 11 complete",
   stagesComplete: 11,
   stageCount: 25,

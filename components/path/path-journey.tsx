@@ -237,7 +237,7 @@ export function PathJourney({ path }: { path: MockLearningPath }) {
         href="/browse/paths"
         className="metadata inline-flex items-center gap-1.5 rounded-sm text-[color:var(--ink-soft)] transition hover:text-[color:var(--ink)] focus-ring"
       >
-        <span aria-hidden="true">←</span> Back to paths
+        <span aria-hidden="true">←</span> Back to learning paths
       </Link>
 
       <p className="mt-4 flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-[color:var(--brand)]">
@@ -251,7 +251,10 @@ export function PathJourney({ path }: { path: MockLearningPath }) {
         {path.description}
       </p>
 
-      <div className="mt-6 flex items-center gap-4">
+      <p className="mt-5 text-xs text-[color:var(--ink-muted)]">
+        Sample progress shown for this demo.
+      </p>
+      <div className="mt-3 flex items-center gap-4">
         <ProgressRing
           value={overallPct}
           size={52}
