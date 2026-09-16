@@ -99,20 +99,69 @@ export const coreSkillCards: CoreSkillCard[] = [
 export const intakeToVerdictPath: MockLearningPath = {
   slug: "intake-to-verdict",
   href: "/browse/paths/intake-to-verdict",
-  kicker: "Trial skills",
-  title: "Trial Skills: intake to verdict",
-  shortTitle: "Intake to verdict",
+  kicker: "Attorney journey",
+  title: "The Attorney Journey: New Attorney to Verdict",
+  shortTitle: "New attorney to verdict",
   description:
-    "Fourteen stages in the order a case moves. Take them in sequence, or drop into any stage you need before a hearing.",
-  summary: "14 stages in the order a case moves · 4 complete",
-  stagesComplete: 4,
-  stageCount: 14,
-  hoursLabel: "about 38 hours",
+    "Twenty-five stages in the order a legal aid career moves: onboarding, access to counsel, the bridge into practice, and the full litigation arc from pre-trial to the verdict.",
+  summary: "25 stages across 6 phases · 11 complete",
+  stagesComplete: 11,
+  stageCount: 25,
+  hoursLabel: "about 52 hours",
   phases: [
     {
+      id: "new-attorney",
+      label: "New Attorney",
+      range: "Stages 1–3",
+      stages: [
+        { id: "case-lifecycle", title: "Case Lifecycle", detail: "1h", status: "complete" },
+        {
+          id: "history-of-legal-aid",
+          title: "History of Legal Aid",
+          detail: "1h",
+          status: "complete",
+        },
+        {
+          id: "prof-conduct",
+          title: "MA Rules of Professional Conduct",
+          detail: "2h",
+          status: "complete",
+        },
+      ],
+    },
+    {
+      id: "access-to-counsel",
+      label: "Access to Counsel",
+      range: "Stages 4–5",
+      stages: [
+        { id: "referral-intake", title: "Referral & Intake", detail: "1h", status: "complete" },
+        { id: "conflict-checks", title: "Conflict Checks", detail: "1h", status: "complete" },
+      ],
+    },
+    {
+      id: "bridge-to-practice",
+      label: "Bridge to Practice",
+      range: "Stages 6–8",
+      stages: [
+        {
+          id: "legal-writing-basics",
+          title: "Legal Writing Basics",
+          detail: "2h",
+          status: "complete",
+        },
+        {
+          id: "legal-research-planning",
+          title: "Legal Research Planning",
+          detail: "2h",
+          status: "complete",
+        },
+        { id: "case-theory", title: "Case Theory", detail: "1h", status: "complete" },
+      ],
+    },
+    {
       id: "before-trial",
-      label: "Before trial",
-      range: "Stages 1–6",
+      label: "Before Trial",
+      range: "Stages 9–14",
       stages: [
         {
           id: "litigation-planning",
@@ -134,8 +183,8 @@ export const intakeToVerdictPath: MockLearningPath = {
     },
     {
       id: "at-trial",
-      label: "At trial",
-      range: "Stages 7–13",
+      label: "At Trial",
+      range: "Stages 15–21",
       stages: [
         { id: "exhibits", title: "Exhibits", detail: "2h", status: "upcoming" },
         { id: "opening", title: "Opening Statements", detail: "2h", status: "upcoming" },
@@ -148,22 +197,22 @@ export const intakeToVerdictPath: MockLearningPath = {
     },
     {
       id: "after-verdict",
-      label: "After the verdict",
-      range: "Stage 14",
+      label: "After the Verdict",
+      range: "Stages 22–25",
       stages: [
-        { id: "oral-argument", title: "Oral Argument", detail: "2h", status: "upcoming" },
         { id: "verdicts", title: "Verdicts", detail: "1h", status: "upcoming" },
         { id: "post-trial-motions", title: "Post-Trial Motions", detail: "2h", status: "upcoming" },
         { id: "preserving", title: "Preserving Issues", detail: "1h", status: "upcoming" },
+        { id: "oral-argument", title: "Oral Argument", detail: "2h", status: "upcoming" },
       ],
     },
   ],
   upNext: {
     kicker: "Up next",
-    title: "Stage 10 · Objections",
-    body: "Four modules: foundation and form objections, hearsay, privilege, and preserving the record. Hearsay is the one built out so far.",
-    ctaLabel: "Open the Hearsay module",
-    ctaHref: "/browse?q=hearsay",
+    title: "Stage 12 · Motions",
+    body: "Draft and argue the motions that shape a case before trial — for the record and for the judge.",
+    ctaLabel: "Open the Motions modules",
+    ctaHref: "/browse?q=motions",
   },
 };
 

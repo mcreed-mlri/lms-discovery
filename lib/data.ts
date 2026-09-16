@@ -4,6 +4,7 @@ import {
   plannedModules,
   plannedPaths,
 } from "@/lib/curriculum-catalog";
+import { curriculumMap } from "@/lib/curriculum-map";
 
 export type Level = "Foundations" | "Intermediate" | "Advanced";
 
@@ -299,6 +300,22 @@ export const skillAreas: SkillArea[] = plannedCourses.map((course) => ({
   href: `/learn/${course.id}`,
 }));
 
+// Subject areas for the left rail — the Substantive Law curriculum areas,
+// beside Legal Skills. Unlike skillAreas these aren't generated into real
+// courses yet (lib/curriculum-catalog.ts deliberately skips that branch), so
+// each row links to its column on the curriculum map instead of a course page.
+export const subjectAreas: SkillArea[] = (() => {
+  const branch = curriculumMap.branches.find((b) => b.id === "substantive-law");
+  if (!branch || branch.type !== "columns") return [];
+  return branch.columns.map((column, index) => ({
+    id: column.id,
+    name: column.title,
+    hueIndex: index,
+    count: column.notes.length,
+    href: `/curriculum-map#column-${column.id}`,
+  }));
+})();
+
 export type LearningStatus = "Not started" | "In progress" | "Completed";
 
 export type ContinueLearningItem =
@@ -357,26 +374,6 @@ export const learnerProgress = {
     "upcoming",
   ] as WeekDayActivity[],
 };
-
-export const popularTopics = [
-  "Notice to Quit",
-  "First Appearance",
-  "Client Intake",
-  "Confidentiality",
-  "Safety Screening",
-  "Court Preparation",
-];
-
-// Quick searches surfaced under the command bar — the things a busy advocate
-// reaches for most. Short, scannable, thumb-friendly on mobile.
-export const quickSearches = [
-  "notice to quit",
-  "first appearance",
-  "client intake",
-  "confidentiality",
-  "safety screening",
-  "court preparation",
-];
 
 // ── Microlearning metadata ────────────────────────────────────────────────
 // Estimated minutes + the legal skill each module practices. Keyed by module
@@ -581,6 +578,39 @@ export type ContentUpdate = {
 };
 
 export const contentUpdates: ContentUpdate[] = [
+  {
+    id: "u-eviction-sealing",
+    title: "New: eviction records can be sealed under G.L. c. 239, §16",
+    summary:
+      "Dismissed or tenant-favorable cases can be sealed once the 10-day appeal window closes, and screening or credit agencies must then treat the case as no record. Worth raising before a client accepts a stipulated judgment instead of a dismissal.",
+    courseId: "eviction-defense-48h",
+    moduleId: "drafting-answer",
+    when: "Today",
+    severity: "high",
+    tag: "Law changed",
+  },
+  {
+    id: "u-housing-court-standing-order-1-26",
+    title: "Housing Court Standing Order 1-26 sets new hearing rules",
+    summary:
+      "Effective June 1, 2026, the order governs when hearings run in person vs. remote and bars recording a hearing without the judge's or clerk-magistrate's permission. Confirm the format before you prep a client for their court date.",
+    courseId: "eviction-defense-48h",
+    moduleId: "walking-into-housing-court",
+    when: "This week",
+    severity: "standard",
+    tag: "Updated",
+  },
+  {
+    id: "u-raft-funding-held",
+    title: "RAFT stays at $7,000 per 12 months in the FY26 budget",
+    summary:
+      "The Legislature rejected the Governor's proposal to stretch the cap to a 24-month cycle, so the 12-month RAFT limit attorneys know stays in place. Useful leverage when asking for a continuance pending a rental assistance application.",
+    courseId: "eviction-defense-48h",
+    moduleId: "eviction-intake-scenario",
+    when: "This week",
+    severity: "standard",
+    tag: "Updated",
+  },
   {
     id: "u-drafting-answer",
     title: "The Answer deadline changed under c.239 §5",

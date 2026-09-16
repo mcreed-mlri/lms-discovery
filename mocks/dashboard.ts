@@ -50,8 +50,8 @@ export const learnerDashboardMock: LearnerDashboardPayload = {
     },
     {
       offeringId: "7102",
-      title: "UPL Boundaries for Advocates",
-      trainingArea: "Ethics",
+      title: "Hearsay & Exceptions",
+      trainingArea: "Practice skills",
       completionPct: 100,
       status: "completed",
       lastAccessedAt: daysAgo(5),
@@ -99,15 +99,15 @@ export const learnerDashboardMock: LearnerDashboardPayload = {
   ],
   recentActivity: [
     { label: "Completed module: Reasonable Accommodation Requests", at: daysAgo(1) },
-    { label: "Started Self Check: UPL scenarios", at: daysAgo(4) },
+    { label: "Started Self Check: Hearsay scenarios", at: daysAgo(4) },
     { label: "Bookmarked: Working with court interpreters", at: daysAgo(4) },
-    { label: "Earned 2.0 training hrs: UPL Boundaries for Advocates", at: daysAgo(5) },
+    { label: "Earned 2.0 training hrs: Hearsay & Exceptions", at: daysAgo(5) },
   ],
   notices: [
     {
-      id: "notice-upl-2026",
-      title: "Annual ethics refresh available",
-      body: "All advocates must complete UPL Boundaries recertification by June 30. Your prior completion counts toward partial credit.",
+      id: "notice-hearsay-2026",
+      title: "Trial skills refresher available",
+      body: "Brush up on Hearsay & Exceptions before your next trial assignment. Your prior completion counts toward partial credit.",
       severity: "info",
     },
   ],
@@ -121,8 +121,8 @@ export const learnerDashboardMock: LearnerDashboardPayload = {
   weeklySparkline: [2, 4, 3, 6, 4, 7, 5, 8],
   certificates: [
     {
-      id: "cert-upl",
-      title: "UPL Boundaries for Advocates",
+      id: "cert-hearsay",
+      title: "Hearsay & Exceptions",
       earnedOn: "May 20, 2026",
       credits: "2.0 hrs",
     },

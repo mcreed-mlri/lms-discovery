@@ -1,6 +1,12 @@
 import type { LearningItem } from "@/lib/data";
 
-export type SearchAudience = "New attorneys" | "All staff" | "Supervisors" | "Program staff";
+export type SearchAudience =
+  | "New attorneys"
+  | "Experienced attorneys"
+  | "Non-attorney staff"
+  | "All staff"
+  | "Supervisors"
+  | "Program staff";
 export type ContentLifecycleStatus = "Recommended" | "New" | "Updated" | "Core";
 export type AccessUserType = "attorney" | "non_lawyer_advocate" | "paralegal" | "admin" | "faculty";
 
@@ -174,6 +180,70 @@ export const searchMetadataById: Record<string, SearchMetadata> = {
       allowedUserTypes: ["attorney", "admin"],
       attorneyOnly: true,
       jurisdictions: ["MA"],
+    },
+  },
+  "path-new-attorney": {
+    audience: ["New attorneys"],
+    status: "Core",
+    reviewedAt: "2026-09-16",
+    access: {
+      allowedUserTypes: ["attorney", "non_lawyer_advocate", "paralegal", "admin"],
+    },
+  },
+  "path-access-to-counsel": {
+    audience: ["New attorneys"],
+    status: "Core",
+    reviewedAt: "2026-09-16",
+    access: {
+      allowedUserTypes: ["attorney", "non_lawyer_advocate", "paralegal", "admin"],
+    },
+  },
+  "path-bridge-to-practice": {
+    audience: ["New attorneys"],
+    status: "Core",
+    reviewedAt: "2026-09-16",
+    access: {
+      allowedUserTypes: ["attorney", "non_lawyer_advocate", "paralegal", "admin"],
+    },
+  },
+  "path-before-trial": {
+    audience: ["New attorneys"],
+    status: "Core",
+    reviewedAt: "2026-09-16",
+    access: {
+      allowedUserTypes: ["attorney", "non_lawyer_advocate", "paralegal", "admin"],
+    },
+  },
+  "path-at-trial": {
+    audience: ["New attorneys"],
+    status: "Core",
+    reviewedAt: "2026-09-16",
+    access: {
+      allowedUserTypes: ["attorney", "non_lawyer_advocate", "paralegal", "admin"],
+    },
+  },
+  "path-after-the-verdict": {
+    audience: ["New attorneys"],
+    status: "Core",
+    reviewedAt: "2026-09-16",
+    access: {
+      allowedUserTypes: ["attorney", "non_lawyer_advocate", "paralegal", "admin"],
+    },
+  },
+  "path-experienced-attorney": {
+    audience: ["Experienced attorneys"],
+    status: "New",
+    reviewedAt: "2026-09-16",
+    access: {
+      allowedUserTypes: ["attorney", "admin"],
+    },
+  },
+  "path-non-attorney-staff": {
+    audience: ["Non-attorney staff"],
+    status: "New",
+    reviewedAt: "2026-09-16",
+    access: {
+      allowedUserTypes: ["non_lawyer_advocate", "paralegal", "admin"],
     },
   },
 };

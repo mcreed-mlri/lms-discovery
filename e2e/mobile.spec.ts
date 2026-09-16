@@ -112,6 +112,10 @@ test.describe("on a phone", () => {
       page,
     }) => {
       await page.goto("/my-learning/");
+      // /my-learning is client-rendered behind an auth check plus an async
+      // dashboard fetch; without this, the evaluate below can run before the
+      // nav has hydrated into the DOM, racing intermittently.
+      await expect(page.locator("nav.fixed.bottom-0")).toBeVisible();
       await page.evaluate((px) => {
         document.documentElement.style.setProperty("--safe-bottom", `${px}px`);
       }, inset);
@@ -368,9 +372,16 @@ test.describe("on a phone", () => {
   });
 });
 
-/** Opens the global search dialog from the mobile bottom nav. */
+/**
+ * Opens the global search dialog from the mobile bottom nav.
+ *
+ * Scoped to the nav landmark rather than `getByRole("button", { name:
+ * "Search" }).first()`: Playwright's name matching is a substring match, and
+ * the hero's popular-search chips can legitimately contain the word "search"
+ * (e.g. "legal research") and sit earlier in the DOM than the nav button.
+ */
 async function openSearch(page: Page) {
-  await page.getByRole("button", { name: "Search" }).first().click();
+  await page.getByRole("navigation").last().getByRole("button", { name: "Search" }).click();
   await expect(page.getByRole("dialog", { name: "Search learning library" })).toBeVisible();
 }
 

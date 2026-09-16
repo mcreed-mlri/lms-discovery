@@ -1,8 +1,9 @@
 import Link from "next/link";
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 import { ArrowIcon } from "@/components/icons";
 import { SkillGlyph } from "@/components/skill-glyph";
+import { getLearningItemUrl, paths } from "@/lib/data";
 import {
   coreSkillCards,
   intakeToVerdictPath,
@@ -75,13 +76,22 @@ function CoreSkillTile({ skill }: { skill: CoreSkillCard }) {
   );
 }
 
-function PathPreviewCard() {
-  const path = intakeToVerdictPath;
-  const dots = Array.from({ length: path.stageCount }, (_, index) => index < path.stagesComplete);
-
+function PathRow({
+  href,
+  kicker,
+  title,
+  summary,
+  right,
+}: {
+  href: string;
+  kicker: string;
+  title: string;
+  summary: string;
+  right: ReactNode;
+}) {
   return (
     <Link
-      href={path.href}
+      href={href}
       className="interactive-tile group flex flex-col gap-4 p-4 focus-ring sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:px-5 sm:py-4"
     >
       <div className="min-w-0">
@@ -90,26 +100,62 @@ function PathPreviewCard() {
             className="h-1.5 w-1.5 rounded-full bg-[color:var(--brand-fill)]"
             aria-hidden="true"
           />
-          {path.kicker}
+          {kicker}
         </p>
         <h3 className="section-title mt-1.5 text-[16px] text-[color:var(--ink)] sm:text-[18px]">
-          {path.shortTitle}
+          {title}
         </h3>
-        <p className="mt-1 text-[13px] text-[color:var(--ink-muted)]">{path.summary}</p>
+        <p className="mt-1 text-[13px] text-[color:var(--ink-muted)]">{summary}</p>
       </div>
-      <div
-        className="flex shrink-0 gap-1"
-        role="img"
-        aria-label={`${path.stagesComplete} of ${path.stageCount} stages complete`}
-      >
-        {dots.map((done, index) => (
-          <span
-            key={index}
-            className={`h-2 w-2 rounded-full ${done ? "bg-[color:var(--brand-fill)]" : "bg-[color:var(--surface-sunken)]"}`}
-          />
-        ))}
-      </div>
+      <div className="shrink-0">{right}</div>
     </Link>
+  );
+}
+
+function JourneyPathRow() {
+  const path = intakeToVerdictPath;
+  const dots = Array.from({ length: path.stageCount }, (_, index) => index < path.stagesComplete);
+
+  return (
+    <PathRow
+      href={path.href}
+      kicker={path.kicker}
+      title={path.shortTitle}
+      summary={path.summary}
+      right={
+        <div
+          className="flex gap-1"
+          role="img"
+          aria-label={`${path.stagesComplete} of ${path.stageCount} stages complete`}
+        >
+          {dots.map((done, index) => (
+            <span
+              key={index}
+              className={`h-2 w-2 rounded-full ${done ? "bg-[color:var(--brand-fill)]" : "bg-[color:var(--surface-sunken)]"}`}
+            />
+          ))}
+        </div>
+      }
+    />
+  );
+}
+
+function PlannedPathRow({ id, kicker }: { id: string; kicker: string }) {
+  const path = paths.find((candidate) => candidate.id === id);
+  if (!path) return null;
+
+  return (
+    <PathRow
+      href={getLearningItemUrl({ ...path, type: "PATH" })}
+      kicker={kicker}
+      title={path.title}
+      summary={path.description}
+      right={
+        <span className="metadata text-[color:var(--ink-soft)]">
+          {path.level} · {path.totalDuration}
+        </span>
+      }
+    />
   );
 }
 
@@ -136,9 +182,20 @@ export function HomeOverview({ catalogTotal }: { catalogTotal: number }) {
       </p>
 
       <p className="section-label mt-10 text-[color:var(--ink-soft)] sm:mt-12">Paths</p>
-      <div className="mt-3">
-        <PathPreviewCard />
+      <div className="mt-3 grid gap-3">
+        <JourneyPathRow />
+        <PlannedPathRow id="path-experienced-attorney" kicker="For experienced attorneys" />
+        <PlannedPathRow id="path-non-attorney-staff" kicker="For non-attorney staff" />
       </div>
+      <p className="mt-4">
+        <Link
+          href="/browse/paths"
+          className="group inline-flex items-center gap-1.5 text-[14px] font-semibold text-[color:var(--brand)] transition hover:text-[color:var(--brand-ink)] focus-ring"
+        >
+          See all paths
+          <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+        </Link>
+      </p>
     </section>
   );
 }
