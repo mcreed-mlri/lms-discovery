@@ -41,6 +41,13 @@ test("faculty handbook opens the published handbook page", () => {
   assert.equal(getLearningItemUrl(item), "/tools-handbook/faculty-showcase.dc.html");
 });
 
+test("legal skills hearsay opens the standalone demo package", () => {
+  const item = getLearningItemById("legal-skills-hearsay");
+
+  assert.ok(item);
+  assert.equal(getLearningItemUrl(item), "/legal-skills-hearsay/Home.html");
+});
+
 test("curriculum map opens the native discovery view", () => {
   const item = getLearningItemById("curriculum-map");
 

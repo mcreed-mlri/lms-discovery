@@ -5,6 +5,11 @@ import {
   plannedPaths,
 } from "@/lib/curriculum-catalog";
 import { curriculumMap } from "@/lib/curriculum-map";
+import {
+  featuredLearningPath,
+  featuredLearningPathUrl,
+  isDemoDiscoverable,
+} from "@/lib/demo-discovery";
 
 export type Level = "Foundations" | "Intermediate" | "Advanced";
 
@@ -108,6 +113,15 @@ const builtCourses: Course[] = [
     practiceArea: "Faculty Support",
     duration: "Browse",
     brightspaceUrl: "/curriculum-map",
+  },
+  {
+    id: "legal-skills-hearsay",
+    title: "Legal Skills: Hearsay",
+    description: "Practice recognizing and responding to hearsay objections in written advocacy.",
+    level: "Foundations",
+    practiceArea: "Legal Skills",
+    duration: "~20 min",
+    brightspaceUrl: "/legal-skills-hearsay/Home.html",
   },
   {
     id: "eviction-defense-48h",
@@ -279,7 +293,7 @@ const builtPaths: Path[] = [
 // Supabase-backed catalog can replace.
 export const courses: Course[] = [...builtCourses, ...plannedCourses];
 export const modules: Module[] = [...builtModules, ...plannedModules];
-export const paths: Path[] = [...plannedPaths, ...builtPaths]; // curated journeys, then faculty-starter
+export const paths: Path[] = [featuredLearningPath, ...plannedPaths, ...builtPaths];
 
 // Skill areas for the left rail — the Legal Skills curriculum areas (each is a
 // course), coloured by the same hue as their course/module cards. Derived from
@@ -337,6 +351,14 @@ export type ContinueLearningItem =
     };
 
 export const continueLearning: ContinueLearningItem[] = [
+  {
+    id: "legal-skills-hearsay",
+    type: "COURSE",
+    title: "Legal Skills: Hearsay",
+    detail: "Defending against a hearsay objection in writing",
+    progress: 20,
+    progressLabel: "1/5",
+  },
   {
     id: "eviction-defense-48h",
     type: "COURSE",
@@ -648,7 +670,7 @@ export const contentUpdates: ContentUpdate[] = [
 
 export const modulesUpdatedThisWeek = modules.filter((module) => module.contentStatus).length;
 
-export function getLearningItems(): LearningItem[] {
+function getAllLearningItems(): LearningItem[] {
   return [
     ...paths.map((path) => ({ ...path, type: "PATH" as const })),
     ...courses.map((course) => ({ ...course, type: "COURSE" as const })),
@@ -656,8 +678,12 @@ export function getLearningItems(): LearningItem[] {
   ];
 }
 
+export function getLearningItems(): LearningItem[] {
+  return getAllLearningItems().filter(isDemoDiscoverable);
+}
+
 export function getLearningItemById(id: string): LearningItem | undefined {
-  return getLearningItems().find((item) => item.id === id);
+  return getAllLearningItems().find((item) => item.id === id);
 }
 
 export function getPathBrightspaceUrl(path: Path) {
@@ -670,6 +696,10 @@ export function getModuleBrightspaceUrl(module: Module) {
 }
 
 export function getLearningItemUrl(item: LearningItem) {
+  if (item.type === "PATH" && item.id === featuredLearningPath.id) {
+    return featuredLearningPathUrl;
+  }
+
   if (item.type === "COURSE" && item.id === "welcome-to-lace") {
     return item.brightspaceUrl;
   }
@@ -680,6 +710,10 @@ export function getLearningItemUrl(item: LearningItem) {
 
   if (item.type === "COURSE" && item.id === "curriculum-map") {
     return "/curriculum-map";
+  }
+
+  if (item.type === "COURSE" && item.id === "legal-skills-hearsay") {
+    return item.brightspaceUrl;
   }
 
   if (item.type === "MODULE" && item.courseId === "eviction-defense-48h") {

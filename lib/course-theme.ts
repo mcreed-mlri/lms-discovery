@@ -156,6 +156,7 @@ const courseTopic: Record<string, TopicFamily> = {
   "brightspace-wrapper-demo": "foundations",
   "faculty-handbook": "foundations",
   "curriculum-map": "foundations",
+  "legal-skills-hearsay": "drafting",
   "eviction-defense-48h": "court",
 };
 

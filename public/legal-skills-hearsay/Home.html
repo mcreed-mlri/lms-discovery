@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Legal Skills: Hearsay</title>
+  <meta name="course-slug" content="home">
+
+  <link rel="stylesheet" href="course-style.css">
+  <script src="course-config.js"></script>
+  <script>document.documentElement.dataset.topic = (window.COURSE_CONFIG || {}).topic || "foundations";</script>
+  <script src="course-nav.js" defer></script>
+  <script src="course-beacon.js" defer></script>
+</head>
+<body>
+
+<div class="page">
+  <div id="lace-nav-container"></div>
+
+  <main class="page-body">
+    <p class="eyebrow" id="outline-eyebrow">Course</p>
+    <h1 class="display outline-title" id="outline-title">Legal Skills: Hearsay</h1>
+    <p class="outline-lead" id="outline-lead"></p>
+
+    <a class="continue-card" id="continue-card" href="#">
+      <span class="continue-ring">
+        <svg width="56" height="56" viewBox="0 0 56 56">
+          <circle cx="28" cy="28" r="25.5" fill="none" stroke="rgba(255,250,240,0.18)" stroke-width="5"></circle>
+          <circle id="continue-ring-arc" cx="28" cy="28" r="25.5" fill="none" stroke="#b88a2d"
+                  stroke-width="5" stroke-linecap="round" stroke-dasharray="160.2" stroke-dashoffset="160.2"></circle>
+        </svg>
+        <span id="continue-ring-label">0%</span>
+      </span>
+      <span class="continue-meta">
+        <span class="continue-kicker" id="continue-kicker">Begin</span>
+        <span class="continue-topic" id="continue-topic">First topic</span>
+        <span class="continue-sub" id="continue-sub"></span>
+      </span>
+      <span class="continue-go" id="continue-go">Continue</span>
+    </a>
+
+    <section class="outline-section">
+      <div class="outline-section-head">
+        <h2>Learning pattern</h2>
+        <span class="eyebrow eyebrow-muted">Subskill 2 prototype</span>
+      </div>
+      <div class="compact-grid">
+        <div class="compact-card">
+          <p class="eyebrow">Review</p>
+          <h3>Key concepts</h3>
+          <p>Refresh the hearsay distinction before the practice begins.</p>
+        </div>
+        <div class="compact-card">
+          <p class="eyebrow">Observe</p>
+          <h3>Expert model</h3>
+          <p>Watch a realistic attorney reasoning sequence in a video mockup.</p>
+        </div>
+        <div class="compact-card">
+          <p class="eyebrow">Practice</p>
+          <h3>Support to independence</h3>
+          <p>Move from guided analysis to rapid classification and final drafting.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="outline-section">
+      <div class="outline-section-head">
+        <h2>Module outline</h2>
+        <span class="eyebrow eyebrow-muted" id="outline-count"></span>
+      </div>
+      <div class="outline-list" id="outline-list"></div>
+    </section>
+
+    <div class="footer-microcopy">
+      Prototype content uses sample legal framing and requires legal subject-matter review
+      <br>
+      <button type="button" onclick="resetLaceProgress()">Reset course progress</button>
+    </div>
+  </main>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var config = window.COURSE_CONFIG;
+  if (!config) return;
+  document.title = config.courseTitle;
+
+  var storageKey = "lace_progress_" + config.courseId;
+  var progress = { completed: [] };
+  try {
+    var stored = localStorage.getItem(storageKey);
+    if (stored) progress = JSON.parse(stored);
+  } catch (e) {}
+  var completedSet = {};
+  (progress.completed || []).forEach(function (s) { completedSet[s] = true; });
+
+  var isLms = config.deployMode === "lms";
+  function topicUrl(t) {
+    if (isLms && t.url && t.url !== "#") return t.url;
+    return t.file || t.url || "#";
+  }
+
+  var flat = [];
+  config.modules.forEach(function (mod) {
+    mod.topics.forEach(function (t) {
+      flat.push({
+        slug: t.slug, title: t.title, url: topicUrl(t),
+        kind: t.kind || "Topic", minutes: t.minutes || 0,
+        updated: t.updated || "", description: t.description || "",
+        moduleTitle: mod.title,
+      });
+    });
+  });
+
+  var total = flat.length;
+  var done = flat.filter(function (t) { return completedSet[t.slug]; }).length;
+  var pct = total ? Math.round((done / total) * 100) : 0;
+  var totalMinutes = flat.reduce(function (sum, t) { return sum + t.minutes; }, 0);
+  var minutesLeft = flat.filter(function (t) { return !completedSet[t.slug]; })
+    .reduce(function (sum, t) { return sum + t.minutes; }, 0);
+
+  var openSlugs = flat.filter(function (t) { return !completedSet[t.slug]; }).map(function (t) { return t.slug; });
+  function statusOf(slug) {
+    if (completedSet[slug]) return "done";
+    if (slug === openSlugs[0]) return "active";
+    if (slug === openSlugs[1]) return "next";
+    return "later";
+  }
+  var STATUS_LABEL = { done: "Done", active: "In progress", next: "Next up", later: "Later" };
+
+  document.getElementById("outline-eyebrow").textContent =
+    "Course" + (config.courseArea ? " - " + config.courseArea : "");
+  document.getElementById("outline-title").textContent = config.courseTitle;
+  document.getElementById("outline-lead").innerHTML = config.courseBlurb || config.courseSubtitle || "";
+  document.getElementById("outline-count").textContent =
+    total + " subskills - " + totalMinutes + " min demo path";
+
+  var resume = flat.find(function (t) { return !completedSet[t.slug]; });
+  var card = document.getElementById("continue-card");
+  var arc = document.getElementById("continue-ring-arc");
+  var C = 2 * Math.PI * 25.5;
+  arc.setAttribute("stroke-dasharray", C.toFixed(1));
+  arc.setAttribute("stroke-dashoffset", (C - (pct / 100) * C).toFixed(1));
+  document.getElementById("continue-ring-label").textContent = pct + "%";
+
+  if (resume) {
+    var resumeIndex = flat.indexOf(resume) + 1;
+    var verb = done > 0 ? "Continue" : "Begin";
+    document.getElementById("continue-kicker").textContent =
+      verb + " - Subskill " + resumeIndex + " of " + total;
+    document.getElementById("continue-topic").textContent = resume.title;
+    document.getElementById("continue-sub").textContent =
+      done + " of " + total + " subskills visited - " + minutesLeft + " min remaining";
+    document.getElementById("continue-go").textContent =
+      verb + (resume.minutes ? " - " + resume.minutes + " min" : "");
+    card.setAttribute("href", resume.url);
+  } else {
+    card.classList.add("is-complete");
+    document.getElementById("continue-kicker").textContent = "Demo complete";
+    document.getElementById("continue-topic").textContent = "You have visited every subskill";
+    document.getElementById("continue-sub").textContent = total + " of " + total + " subskills visited";
+    document.getElementById("continue-go").textContent = "Review outline";
+    card.setAttribute("href", config.courseHomeUrl);
+  }
+
+  var list = document.getElementById("outline-list");
+  var html = "";
+  config.modules.forEach(function (mod) {
+    mod.topics.forEach(function (t) {
+      var idxGlobal = flat.findIndex(function (f) { return f.slug === t.slug; });
+      var status = statusOf(t.slug);
+      var url = topicUrl(t);
+      var nodeClass = "node" + (status === "done" ? " done" : status === "active" ? " active" : "");
+      var nodeInner = status === "done"
+        ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>'
+        : (idxGlobal + 1);
+      var pillCls = t.kind === "Practice" ? "pill-progress" : "pill-later";
+      html +=
+        '<a class="outline-row ' + status + '" href="' + url + '">' +
+          '<span class="' + nodeClass + '">' + nodeInner + "</span>" +
+          "<span>" +
+            '<span class="outline-row-title">' + t.title + "</span>" +
+            '<span class="outline-row-meta">' +
+              '<span class="kind-tag">' + (t.kind || "Topic") + "</span>" +
+              '<span class="mins">' + (t.minutes || 0) + " min</span>" +
+              '<span class="pill ' + pillCls + '">' + (t.updated || "Demo") + "</span>" +
+            "</span>" +
+            '<span class="resource-meta">' + (t.description || "") + "</span>" +
+          "</span>" +
+          '<span class="outline-row-status">' + STATUS_LABEL[status] + "</span>" +
+          '<span class="outline-row-chevron">' +
+            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>' +
+          "</span>" +
+        "</a>";
+    });
+  });
+  list.innerHTML = html;
+});
+</script>
+</body>
+</html>

@@ -131,7 +131,14 @@ export function CatalogSection({
                 onClick={() => setFilter(entry)}
                 aria-pressed={filter === entry}
               >
-                {entry}
+                {entry === "Paths" ? (
+                  <>
+                    <span className="sm:hidden">Paths</span>
+                    <span className="hidden sm:inline">Learning paths</span>
+                  </>
+                ) : (
+                  entry
+                )}
               </button>
             ))}
           </div>
@@ -258,7 +265,7 @@ export function CatalogSection({
         </div>
       )}
 
-      {catalogItems.length === 0 && (
+      {shownItems.length === 0 && (
         <div className="editorial-card rounded-xl border-dashed p-8 text-center">
           <SearchIcon className="mx-auto h-9 w-9 text-[color:var(--ink-soft)]" />
           <h2 className="mt-4 text-xl font-bold text-[color:var(--ink)]">

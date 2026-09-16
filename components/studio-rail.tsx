@@ -50,7 +50,7 @@ const primaryNav: NavItem[] = [
     match: (p) => p === "/browse",
     children: [
       {
-        label: "Paths",
+        label: "Learning paths",
         href: "/browse/paths",
         icon: PathIcon,
         match: (p) => p.startsWith("/browse/paths"),
