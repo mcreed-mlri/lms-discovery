@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import type { ReactNode } from "react";
+import { Analytics } from "@vercel/analytics/next";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -60,6 +61,7 @@ export default function RootLayout({
       </head>
       <body className={geist.variable}>
         <Providers>{children}</Providers>
+        <Analytics />
       </body>
     </html>
   );
