@@ -2,6 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Keep the navigation scrollbar quiet without shifting content on hover. */
+.studio-rail {
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
+  scrollbar-color: transparent transparent;
+}
+
+.studio-rail:hover,
+.studio-rail:focus-within {
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+.studio-rail::-webkit-scrollbar {
+  width: 6px;
+}
+
+.studio-rail::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.studio-rail::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 999px;
+}
+
+.studio-rail:hover::-webkit-scrollbar-thumb,
+.studio-rail:focus-within::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+}
+
+@media (forced-colors: active) {
+  .studio-rail {
+    scrollbar-color: auto;
+  }
+}
+
 /* ============================================================================
    LACE Learning Hub — design tokens
    ----------------------------------------------------------------------------
