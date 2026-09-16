@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { recordDemoLogin } from "@/lib/google/login-tracking";
 
 import {
   getGoogleAllowedDomain,
@@ -139,5 +140,6 @@ export async function GET(request: NextRequest) {
 
   response.cookies.delete(STATE_COOKIE);
   response.cookies.delete(RETURN_TO_COOKIE);
+  await recordDemoLogin(info.sub, info.email);
   return response;
 }

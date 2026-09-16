@@ -8,6 +8,10 @@ import { verifySessionToken, SESSION_COOKIE } from "@/lib/session";
 
 const ORIGINAL_ENV = { ...process.env };
 const STATE = "matching-state-value";
+const { rpc, abortSignal } = vi.hoisted(() => ({ rpc: vi.fn(), abortSignal: vi.fn() }));
+vi.mock("@/lib/supabase/server", () => ({
+  createSupabaseAdminClient: () => ({ rpc }),
+}));
 
 function buildRequest(
   searchParams: Record<string, string>,
@@ -19,6 +23,8 @@ function buildRequest(
 }
 
 beforeEach(() => {
+  rpc.mockReset().mockReturnValue({ abortSignal });
+  abortSignal.mockReset().mockResolvedValue({ error: null });
   resetRateLimitForTests();
   process.env.SESSION_SECRET = "test-secret-not-for-production";
   process.env.GOOGLE_OAUTH_CLIENT_ID = "test-client-id";
@@ -35,6 +41,7 @@ afterEach(() => {
 test("rejects when the state cookie is missing or mismatched", async () => {
   const response = await GET(buildRequest({ code: "abc", state: "does-not-match" }));
   assert.equal(response.status, 307);
+  assert.equal(rpc.mock.calls.length, 0);
   assert.equal(
     new URL(response.headers.get("location")!).searchParams.get("error"),
     "invalid_state",
@@ -81,40 +88,55 @@ test("rejects a Google account outside the allowed domain", async () => {
     new URL(response.headers.get("location")!).searchParams.get("error"),
     "wrong_domain",
   );
+  assert.equal(rpc.mock.calls.length, 0);
 });
 
-test("signs in an mlri.org account and mints a session for the shared demo identity", async () => {
-  vi.stubGlobal(
-    "fetch",
-    vi.fn(async (input: string) => {
-      if (input.includes("tokeninfo")) {
-        return new Response(
-          JSON.stringify({
-            aud: "test-client-id",
-            sub: "google-sub-1",
-            email: "staffer@mlri.org",
-            email_verified: "true",
-            hd: "mlri.org",
-            given_name: "Staffer",
-          }),
-          { headers: { "content-type": "application/json" } },
-        );
-      }
-      return new Response(JSON.stringify({ id_token: "fake-id-token" }), {
-        headers: { "content-type": "application/json" },
-      });
-    }),
-  );
+test.each(["success", "database error", "network error"])(
+  "signs in and tracks the verified identity: %s",
+  async (outcome) => {
+    if (outcome === "database error")
+      abortSignal.mockResolvedValue({ error: { message: "unavailable" } });
+    if (outcome === "network error") abortSignal.mockRejectedValue(new Error("unavailable"));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: string) => {
+        if (input.includes("tokeninfo")) {
+          return new Response(
+            JSON.stringify({
+              aud: "test-client-id",
+              sub: "google-sub-1",
+              email: "staffer@mlri.org",
+              email_verified: "true",
+              hd: "mlri.org",
+              given_name: "Staffer",
+            }),
+            { headers: { "content-type": "application/json" } },
+          );
+        }
+        return new Response(JSON.stringify({ id_token: "fake-id-token" }), {
+          headers: { "content-type": "application/json" },
+        });
+      }),
+    );
 
-  const response = await GET(buildRequest({ code: "abc", state: STATE }));
+    const response = await GET(buildRequest({ code: "abc", state: STATE }));
 
-  assert.equal(response.status, 307);
-  assert.equal(response.headers.get("location"), "https://hub.example/");
+    assert.equal(response.status, 307);
+    assert.equal(response.headers.get("location"), "https://hub.example/");
 
-  const sessionCookie = response.cookies.get(SESSION_COOKIE)?.value;
-  assert.ok(sessionCookie);
-  const user = verifySessionToken(sessionCookie, process.env.SESSION_SECRET!);
-  assert.equal(user?.provider, "google");
-  assert.equal(user?.googleEmail, "staffer@mlri.org");
-  assert.equal(user?.brightspaceUserId, "google:google-sub-1");
-});
+    const sessionCookie = response.cookies.get(SESSION_COOKIE)?.value;
+    assert.ok(sessionCookie);
+    const user = verifySessionToken(sessionCookie, process.env.SESSION_SECRET!);
+    assert.equal(user?.provider, "google");
+    assert.equal(user?.googleEmail, "staffer@mlri.org");
+    assert.equal(user?.brightspaceUserId, "google:google-sub-1");
+    assert.equal(rpc.mock.calls.length, 1);
+    assert.deepEqual(rpc.mock.calls[0], [
+      "record_demo_login",
+      {
+        p_google_sub: "google-sub-1",
+        p_email: "staffer@mlri.org",
+      },
+    ]);
+  },
+);
