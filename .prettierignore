@@ -9,4 +9,7 @@ next-env.d.ts
 # lines of the HTML/JS, and reflowing inline elements can change how the page
 # renders — not worth it for a static asset nothing imports.
 public/tools-handbook/
+# Standalone Brightspace course prototype (Legal Skills: Hearsay), shipped
+# as-is from the source course package — same reasoning as tools-handbook/.
+public/legal-skills-hearsay/
 .impeccable/hook.cache.json
