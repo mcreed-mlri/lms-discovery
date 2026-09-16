@@ -14,7 +14,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { getEffectiveDashboardRole } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
-import { skillAreas } from "@/lib/data";
+import { skillAreas, subjectAreas, type SkillArea } from "@/lib/data";
 import { getHue } from "@/lib/skill-hue";
 import { useState, type ComponentType } from "react";
 
@@ -51,7 +51,7 @@ const primaryNav: NavItem[] = [
     children: [
       {
         label: "Paths",
-        href: "/browse/paths/intake-to-verdict",
+        href: "/browse/paths",
         icon: PathIcon,
         match: (p) => p.startsWith("/browse/paths"),
       },
@@ -124,6 +124,88 @@ function RailItem({
   );
 }
 
+// One rail group ("Skills training", "Subject-area training"): a header that
+// collapses the whole group, a capped list of coloured rows with its own
+// "Show more" toggle, and — when the rail itself is collapsed to icons, where
+// there's no header text left to click — a plain divider instead.
+function AreaList({
+  label,
+  areas,
+  collapsed,
+  onNavigate,
+}: {
+  label: string;
+  areas: SkillArea[];
+  collapsed: boolean;
+  onNavigate?: () => void;
+}) {
+  const [showAll, setShowAll] = useState(false);
+  const visibleAreas = collapsed || showAll ? areas : areas.slice(0, RAIL_AREA_LIMIT);
+
+  if (areas.length === 0) return null;
+
+  const rows = (
+    <div className={`flex flex-col ${collapsed ? "gap-1.5" : "gap-0.5"}`}>
+      {visibleAreas.map((area) => {
+        const hue = getHue(area.hueIndex);
+        return (
+          <Link
+            key={area.id}
+            href={area.href}
+            onClick={onNavigate}
+            title={collapsed ? `${area.name} · ${area.count}` : undefined}
+            className={`flex items-center gap-[11px] overflow-hidden whitespace-nowrap rounded-[8px] text-[13px] text-[color:var(--ink-muted)] transition hover:bg-[color:var(--surface-sunken)] focus-ring ${
+              collapsed ? "justify-center px-0 py-[7px]" : "px-[11px] py-[7px]"
+            }`}
+          >
+            <span
+              className="h-[9px] w-[9px] shrink-0 rounded-[3px]"
+              style={{ background: hue.solid }}
+            />
+            {!collapsed && (
+              <>
+                <span className="flex-1">{area.name}</span>
+                <span className="text-[12px] font-medium text-[color:var(--ink-soft)]">
+                  {area.count}
+                </span>
+              </>
+            )}
+          </Link>
+        );
+      })}
+      {!collapsed && areas.length > RAIL_AREA_LIMIT && (
+        <button
+          type="button"
+          onClick={() => setShowAll((value) => !value)}
+          aria-expanded={showAll}
+          className="mt-0.5 flex items-center gap-[11px] rounded-[8px] px-[11px] py-[7px] text-left text-[13px] font-semibold text-[color:var(--brand)] transition hover:bg-[color:var(--surface-sunken)] focus-ring"
+        >
+          {showAll ? "Show fewer" : `Show ${areas.length - RAIL_AREA_LIMIT} more`}
+        </button>
+      )}
+    </div>
+  );
+
+  if (collapsed) {
+    return (
+      <div className="mt-[26px]">
+        <div className="mx-1.5 mb-[14px] mt-1 h-px bg-[color:var(--line-soft)]" />
+        {rows}
+      </div>
+    );
+  }
+
+  return (
+    <details open className="group mt-[26px]">
+      <summary className="mb-3 flex cursor-pointer list-none items-center justify-between rounded-[8px] px-[11px] py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-[color:var(--ink-soft)] transition hover:bg-[color:var(--surface-sunken)] focus-ring marker:content-none [&::-webkit-details-marker]:hidden">
+        <span>{label}</span>
+        <ChevronLeftIcon className="h-3 w-3 shrink-0 -rotate-90 text-[color:var(--ink-soft)] transition-transform duration-200 group-open:rotate-90" />
+      </summary>
+      {rows}
+    </details>
+  );
+}
+
 export function StudioRail({
   collapsed,
   onToggle,
@@ -138,12 +220,6 @@ export function StudioRail({
   const { user } = useAuth();
   const effectiveRole = getEffectiveDashboardRole(user);
   const isAdmin = effectiveRole === "super_admin";
-
-  // The full list is long; show a core set with a "Show more" toggle. When the
-  // rail is collapsed to icons, the compact swatches all fit, so show them all.
-  const [showAllAreas, setShowAllAreas] = useState(false);
-  const visibleSkillAreas =
-    collapsed || showAllAreas ? skillAreas : skillAreas.slice(0, RAIL_AREA_LIMIT);
 
   // The headless admin account is an ops/data login — hide learner surfaces.
   const visiblePrimaryNav = primaryNav.filter((item) => !item.learnerOnly || !isAdmin);
@@ -238,54 +314,20 @@ export function StudioRail({
       </nav>
 
       {/* Skill areas — the Legal Skills curriculum areas (each a course) */}
-      <div className="mt-[26px]">
-        {collapsed ? (
-          <div className="mx-1.5 mb-[14px] mt-1 h-px bg-[color:var(--line-soft)]" />
-        ) : (
-          <div className="mb-3 px-[11px] font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-[color:var(--ink-soft)]">
-            Skill areas
-          </div>
-        )}
-        <div className={`flex flex-col ${collapsed ? "gap-1.5" : "gap-0.5"}`}>
-          {visibleSkillAreas.map((area) => {
-            const hue = getHue(area.hueIndex);
-            return (
-              <Link
-                key={area.id}
-                href={area.href}
-                onClick={onNavigate}
-                title={collapsed ? `${area.name} · ${area.count}` : undefined}
-                className={`flex items-center gap-[11px] overflow-hidden whitespace-nowrap rounded-[8px] text-[13px] text-[color:var(--ink-muted)] transition hover:bg-[color:var(--surface-sunken)] focus-ring ${
-                  collapsed ? "justify-center px-0 py-[7px]" : "px-[11px] py-[7px]"
-                }`}
-              >
-                <span
-                  className="h-[9px] w-[9px] shrink-0 rounded-[3px]"
-                  style={{ background: hue.solid }}
-                />
-                {!collapsed && (
-                  <>
-                    <span className="flex-1">{area.name}</span>
-                    <span className="text-[12px] font-medium text-[color:var(--ink-soft)]">
-                      {area.count}
-                    </span>
-                  </>
-                )}
-              </Link>
-            );
-          })}
-          {!collapsed && skillAreas.length > RAIL_AREA_LIMIT && (
-            <button
-              type="button"
-              onClick={() => setShowAllAreas((value) => !value)}
-              aria-expanded={showAllAreas}
-              className="mt-0.5 flex items-center gap-[11px] rounded-[8px] px-[11px] py-[7px] text-left text-[13px] font-semibold text-[color:var(--brand)] transition hover:bg-[color:var(--surface-sunken)] focus-ring"
-            >
-              {showAllAreas ? "Show fewer" : `Show ${skillAreas.length - RAIL_AREA_LIMIT} more`}
-            </button>
-          )}
-        </div>
-      </div>
+      <AreaList
+        label="Skills training"
+        areas={skillAreas}
+        collapsed={collapsed}
+        onNavigate={onNavigate}
+      />
+
+      {/* Subject areas — the Substantive Law curriculum areas beside them */}
+      <AreaList
+        label="Subject-area training"
+        areas={subjectAreas}
+        collapsed={collapsed}
+        onNavigate={onNavigate}
+      />
 
       {/* Footer: theme + collapse. Account lives in the top-right bubble. */}
       <div className="mt-auto border-t border-[color:var(--line-soft)] pt-4">

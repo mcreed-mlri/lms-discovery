@@ -174,4 +174,24 @@ export const plannedPaths: Path[] = [
     level: "Advanced",
     availability: "planned",
   },
+  {
+    id: "path-experienced-attorney",
+    title: "Experienced Attorney: Advanced Practice",
+    description:
+      "Past onboarding: ADR, legislative advocacy, and community/movement lawyering for attorneys building on core litigation skills.",
+    courseIds: ["course-adr", "course-legislative", "course-community"],
+    totalDuration: "Self-paced",
+    level: "Advanced",
+    availability: "planned",
+  },
+  {
+    id: "path-non-attorney-staff",
+    title: "Advocate & Paralegal Foundations",
+    description:
+      "Case lifecycle, client intake, and legal research for non-attorney advocates and paralegals.",
+    courseIds: ["course-foundations", "course-pre-engagement", "course-legal-research"],
+    totalDuration: "Self-paced",
+    level: "Foundations",
+    availability: "planned",
+  },
 ];

@@ -373,7 +373,7 @@ function NotStartedSection({ courses }: { courses: LearnerCourse[] }) {
       <SectionHeading
         eyebrow="Up next"
         title="Not started yet"
-        action={{ label: "Browse library", href: "/" }}
+        action={{ label: "Browse library", href: "/browse" }}
       />
       <div className="grid gap-3 2xl:grid-cols-2">
         {courses.map((course) => {
@@ -524,7 +524,7 @@ function LearningSidebarColumn({
               Bookmark a course or module from the library and it will wait for you here.
             </p>
             <Link
-              href="/"
+              href="/browse"
               className="mt-3 inline-block metadata text-[color:var(--brand)] transition hover:text-[color:var(--ink)]"
             >
               Browse the library →
@@ -624,7 +624,7 @@ function LoadedLearnerDashboardBody({
             a link to continue.
           </p>
           <Link
-            href="/"
+            href="/browse"
             className="mt-6 inline-flex h-11 items-center rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-5 text-sm font-bold text-[color:var(--ink-muted)] shadow-sm transition hover:text-[color:var(--ink)] focus-ring"
           >
             Browse the discovery library
@@ -684,7 +684,7 @@ function LoadedLearnerDashboardBody({
         subtitle={subtitleParts.join(" · ")}
         badge={
           <Link
-            href="/"
+            href="/browse"
             className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-4 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus-ring"
           >
             <BookIcon className="h-4 w-4" /> Browse library

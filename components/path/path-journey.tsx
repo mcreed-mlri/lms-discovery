@@ -234,13 +234,13 @@ export function PathJourney({ path }: { path: MockLearningPath }) {
   return (
     <div className="mx-auto max-w-[1120px] px-4 py-6 sm:px-6 sm:py-8 lg:px-10 lg:py-9">
       <Link
-        href="/browse"
-        className="metadata inline-flex items-center gap-1.5 text-[color:var(--ink-soft)] transition hover:text-[color:var(--ink)] focus-ring"
+        href="/browse/paths"
+        className="metadata inline-flex items-center gap-1.5 rounded-sm text-[color:var(--ink-soft)] transition hover:text-[color:var(--ink)] focus-ring"
       >
-        <span aria-hidden="true">←</span> Back to browse
+        <span aria-hidden="true">←</span> Back to paths
       </Link>
 
-      <p className="mt-6 flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-[color:var(--brand)]">
+      <p className="mt-4 flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-[color:var(--brand)]">
         <PathIcon className="h-3.5 w-3.5" />
         {path.kicker}
       </p>

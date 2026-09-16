@@ -4,6 +4,7 @@ import {
   plannedModules,
   plannedPaths,
 } from "@/lib/curriculum-catalog";
+import { curriculumMap } from "@/lib/curriculum-map";
 
 export type Level = "Foundations" | "Intermediate" | "Advanced";
 
@@ -299,6 +300,22 @@ export const skillAreas: SkillArea[] = plannedCourses.map((course) => ({
   href: `/learn/${course.id}`,
 }));
 
+// Subject areas for the left rail — the Substantive Law curriculum areas,
+// beside Legal Skills. Unlike skillAreas these aren't generated into real
+// courses yet (lib/curriculum-catalog.ts deliberately skips that branch), so
+// each row links to its column on the curriculum map instead of a course page.
+export const subjectAreas: SkillArea[] = (() => {
+  const branch = curriculumMap.branches.find((b) => b.id === "substantive-law");
+  if (!branch || branch.type !== "columns") return [];
+  return branch.columns.map((column, index) => ({
+    id: column.id,
+    name: column.title,
+    hueIndex: index,
+    count: column.notes.length,
+    href: `/curriculum-map#column-${column.id}`,
+  }));
+})();
+
 export type LearningStatus = "Not started" | "In progress" | "Completed";
 
 export type ContinueLearningItem =
@@ -357,26 +374,6 @@ export const learnerProgress = {
     "upcoming",
   ] as WeekDayActivity[],
 };
-
-export const popularTopics = [
-  "Notice to Quit",
-  "First Appearance",
-  "Client Intake",
-  "Confidentiality",
-  "Safety Screening",
-  "Court Preparation",
-];
-
-// Quick searches surfaced under the command bar — the things a busy advocate
-// reaches for most. Short, scannable, thumb-friendly on mobile.
-export const quickSearches = [
-  "notice to quit",
-  "first appearance",
-  "client intake",
-  "confidentiality",
-  "safety screening",
-  "court preparation",
-];
 
 // ── Microlearning metadata ────────────────────────────────────────────────
 // Estimated minutes + the legal skill each module practices. Keyed by module
