@@ -131,7 +131,7 @@ export function CatalogSection({
                 onClick={() => setFilter(entry)}
                 aria-pressed={filter === entry}
               >
-                {entry === "Paths" ? "Learning paths" : entry}
+                {entry}
               </button>
             ))}
           </div>
