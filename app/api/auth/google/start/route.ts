@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import {
   createGoogleOAuthState,
   getGoogleAuthorizationUrl,
+  isGoogleDemoExpiryActive,
   isPastGoogleDemoExpiry,
   STATE_COOKIE,
 } from "@/lib/google/oauth";
@@ -20,8 +21,9 @@ export async function GET(request: NextRequest) {
 
   // Checked before redirecting to Google at all, so a link kept around past
   // the demo window visibly stops working instead of failing later at the
-  // callback.
-  if (isPastGoogleDemoExpiry()) {
+  // callback. Skipped once GOOGLE_ALLOWED_EMAILS narrows login to named
+  // staff — see isGoogleDemoExpiryActive.
+  if (isGoogleDemoExpiryActive() && isPastGoogleDemoExpiry()) {
     const url = new URL("/login", request.url);
     url.searchParams.set("error", "demo_expired");
     return NextResponse.redirect(url);

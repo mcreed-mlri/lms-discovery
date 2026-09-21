@@ -17,6 +17,21 @@ export function getGoogleAllowedDomain() {
   return process.env.GOOGLE_ALLOWED_DOMAIN || DEFAULT_ALLOWED_DOMAIN;
 }
 
+/**
+ * Narrows the domain-wide demo login down to specific staff. Unset means no
+ * narrowing — every account in the allowed domain still gets in, matching the
+ * original ADR 0012 behavior. See docs/adr/0014-narrow-google-demo-login-to-named-staff.md.
+ */
+export function getGoogleAllowedEmails(): string[] | null {
+  const raw = process.env.GOOGLE_ALLOWED_EMAILS;
+  if (!raw) return null;
+  const emails = raw
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
+  return emails.length > 0 ? emails : null;
+}
+
 export function getGoogleAuthorizationUrl(state: string) {
   const clientId = process.env.GOOGLE_OAUTH_CLIENT_ID;
 
@@ -76,6 +91,17 @@ export function secondsUntilGoogleDemoExpiry(maxSeconds: number, now: Date = new
   if (!expiry) return maxSeconds;
   const remaining = Math.floor((expiry.getTime() - now.getTime()) / 1000);
   return Math.max(0, Math.min(maxSeconds, remaining));
+}
+
+/**
+ * The demo cutoff (GOOGLE_DEMO_ACCESS_EXPIRES_AT) existed to auto-close
+ * domain-wide access nobody was individually vetting. Once GOOGLE_ALLOWED_EMAILS
+ * names specific staff, that self-destruct no longer serves a purpose for
+ * them — access ends when they're removed from the list, not on a timer. See
+ * docs/adr/0014-narrow-google-demo-login-to-named-staff.md.
+ */
+export function isGoogleDemoExpiryActive(): boolean {
+  return getGoogleAllowedEmails() === null;
 }
 
 export { STATE_COOKIE };

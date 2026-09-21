@@ -91,6 +91,100 @@ test("rejects a Google account outside the allowed domain", async () => {
   assert.equal(rpc.mock.calls.length, 0);
 });
 
+test("rejects an in-domain account that isn't on the allowed email list", async () => {
+  process.env.GOOGLE_ALLOWED_EMAILS =
+    "csilva@mlri.org, mcreed@mlri.org, ocarini@mlri.org, anyce@mlri.org";
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (input: string) => {
+      if (input.includes("tokeninfo")) {
+        return new Response(
+          JSON.stringify({
+            aud: "test-client-id",
+            sub: "12345",
+            email: "someoneelse@mlri.org",
+            email_verified: "true",
+            hd: "mlri.org",
+          }),
+          { headers: { "content-type": "application/json" } },
+        );
+      }
+      return new Response(JSON.stringify({ id_token: "fake-id-token" }), {
+        headers: { "content-type": "application/json" },
+      });
+    }),
+  );
+
+  const response = await GET(buildRequest({ code: "abc", state: STATE }));
+  assert.equal(new URL(response.headers.get("location")!).searchParams.get("error"), "not_allowed");
+  assert.equal(rpc.mock.calls.length, 0);
+});
+
+test("allows a listed email through even when GOOGLE_ALLOWED_EMAILS is set", async () => {
+  process.env.GOOGLE_ALLOWED_EMAILS =
+    "csilva@mlri.org, mcreed@mlri.org, ocarini@mlri.org, anyce@mlri.org";
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (input: string) => {
+      if (input.includes("tokeninfo")) {
+        return new Response(
+          JSON.stringify({
+            aud: "test-client-id",
+            sub: "listed-sub",
+            email: "mcreed@mlri.org",
+            email_verified: "true",
+            hd: "mlri.org",
+            given_name: "M",
+          }),
+          { headers: { "content-type": "application/json" } },
+        );
+      }
+      return new Response(JSON.stringify({ id_token: "fake-id-token" }), {
+        headers: { "content-type": "application/json" },
+      });
+    }),
+  );
+
+  const response = await GET(buildRequest({ code: "abc", state: STATE }));
+  assert.equal(response.status, 307);
+  assert.equal(response.headers.get("location"), "https://hub.example/");
+});
+
+test("a listed email still signs in past the demo cutoff, with the normal session TTL", async () => {
+  process.env.GOOGLE_ALLOWED_EMAILS =
+    "csilva@mlri.org, mcreed@mlri.org, ocarini@mlri.org, anyce@mlri.org";
+  process.env.GOOGLE_DEMO_ACCESS_EXPIRES_AT = "2020-01-01T00:00:00Z";
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (input: string) => {
+      if (input.includes("tokeninfo")) {
+        return new Response(
+          JSON.stringify({
+            aud: "test-client-id",
+            sub: "listed-sub",
+            email: "mcreed@mlri.org",
+            email_verified: "true",
+            hd: "mlri.org",
+            given_name: "M",
+          }),
+          { headers: { "content-type": "application/json" } },
+        );
+      }
+      return new Response(JSON.stringify({ id_token: "fake-id-token" }), {
+        headers: { "content-type": "application/json" },
+      });
+    }),
+  );
+
+  const response = await GET(buildRequest({ code: "abc", state: STATE }));
+  assert.equal(response.status, 307);
+  assert.equal(response.headers.get("location"), "https://hub.example/");
+
+  const sessionCookie = response.cookies.get(SESSION_COOKIE)!;
+  assert.ok(sessionCookie.value);
+  assert.equal(sessionCookie.maxAge, 60 * 60 * 12);
+});
+
 test.each(["success", "database error", "network error"])(
   "signs in and tracks the verified identity: %s",
   async (outcome) => {

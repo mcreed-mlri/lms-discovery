@@ -4,6 +4,7 @@ import { afterEach, test } from "vitest";
 import {
   getGoogleAllowedDomain,
   getGoogleAuthorizationUrl,
+  isGoogleDemoExpiryActive,
   isPastGoogleDemoExpiry,
   secondsUntilGoogleDemoExpiry,
 } from "@/lib/google/oauth";
@@ -63,4 +64,14 @@ test("never returns a negative TTL for a cutoff already passed", () => {
   process.env.GOOGLE_DEMO_ACCESS_EXPIRES_AT = "2026-09-22T00:00:00Z";
   const now = new Date("2026-09-23T00:00:00Z");
   assert.equal(secondsUntilGoogleDemoExpiry(12 * 60 * 60, now), 0);
+});
+
+test("the demo cutoff is active without an allowed-emails list", () => {
+  delete process.env.GOOGLE_ALLOWED_EMAILS;
+  assert.equal(isGoogleDemoExpiryActive(), true);
+});
+
+test("the demo cutoff stops applying once GOOGLE_ALLOWED_EMAILS is set", () => {
+  process.env.GOOGLE_ALLOWED_EMAILS = "mcreed@mlri.org";
+  assert.equal(isGoogleDemoExpiryActive(), false);
 });
