@@ -18,6 +18,19 @@ updates:
       runtime-patches:
         dependency-type: production
         update-types: ["patch"]
+      # react and react-dom must be the exact same version — react-dom checks
+      # this at runtime, not just as a type constraint. PRs #59 and #60
+      # (2026-09-21) bumped them to 19.3.0 in two separate PRs, and each one's
+      # CI failed alone with "Incompatible React versions". Their @types
+      # packages ride along for the same reason. Majors for react/react-dom
+      # are still raised separately, via the ignore list below.
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+        update-types: ["minor", "patch"]
     # Majors for the framework, React, the linter, the compiler, the CSS
     # engine, and the runtime type definitions are deliberate migrations, not
     # dependency bumps — raise them as their own piece of work.
