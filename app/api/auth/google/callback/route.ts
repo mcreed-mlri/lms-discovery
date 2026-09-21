@@ -3,6 +3,8 @@ import { recordDemoLogin } from "@/lib/google/login-tracking";
 
 import {
   getGoogleAllowedDomain,
+  getGoogleAllowedEmails,
+  isGoogleDemoExpiryActive,
   isPastGoogleDemoExpiry,
   secondsUntilGoogleDemoExpiry,
   STATE_COOKIE,
@@ -61,7 +63,10 @@ export async function GET(request: NextRequest) {
   }
 
   // Re-checked here (not just at /start) in case the window closed mid-flow.
-  if (isPastGoogleDemoExpiry()) {
+  // Skipped once GOOGLE_ALLOWED_EMAILS narrows login to named staff — see
+  // isGoogleDemoExpiryActive.
+  const demoExpiryActive = isGoogleDemoExpiryActive();
+  if (demoExpiryActive && isPastGoogleDemoExpiry()) {
     return loginRedirect(request, "demo_expired");
   }
 
@@ -113,6 +118,18 @@ export async function GET(request: NextRequest) {
     return loginRedirect(request, "wrong_domain");
   }
 
+  const allowedEmails = getGoogleAllowedEmails();
+  if (allowedEmails && !allowedEmails.includes(info.email.toLowerCase())) {
+    console.error("Google login rejected: account is not on the allowed list");
+    return loginRedirect(request, "not_allowed");
+  }
+
+  // Named staff aren't subject to the demo cutoff (see above), so their
+  // sessions get the normal TTL instead of being capped to it.
+  const sessionTtl = demoExpiryActive
+    ? secondsUntilGoogleDemoExpiry(SESSION_TTL_SECONDS)
+    : SESSION_TTL_SECONDS;
+
   const sessionToken = createSessionToken(
     {
       brightspaceUserId: `google:${info.sub}`,
@@ -124,7 +141,7 @@ export async function GET(request: NextRequest) {
     },
     sessionSecret,
     Math.floor(Date.now() / 1000),
-    secondsUntilGoogleDemoExpiry(SESSION_TTL_SECONDS),
+    sessionTtl,
   );
 
   const returnTo = sanitizeReturnTo(request.cookies.get(RETURN_TO_COOKIE)?.value);
@@ -134,7 +151,7 @@ export async function GET(request: NextRequest) {
     httpOnly: true,
     sameSite: "lax",
     secure: true,
-    maxAge: secondsUntilGoogleDemoExpiry(SESSION_TTL_SECONDS),
+    maxAge: sessionTtl,
     path: "/",
   });
 

@@ -22,6 +22,7 @@ const LOGIN_ERROR_MESSAGES: Record<string, string> = {
   whoami_failed: "Signed in, but we couldn't confirm your account. Please try again.",
   misconfigured: "Sign-in isn't fully configured yet. Please contact the platform administrator.",
   wrong_domain: "Please sign in with your MLRI Google account (@mlri.org).",
+  not_allowed: "This account doesn't have access. Please contact the platform administrator.",
   demo_expired: "The staff preview period has ended. Please contact the platform administrator.",
 };
 
