@@ -38,6 +38,12 @@ jobs:
   # known about the code itself. Split out, a fresh advisory and a real type
   # error are two independent red marks instead of one.
   #
+  # `--omit=dev` scopes the gate to what ships to Vercel. braces <=3.0.3
+  # (GHSA-vfj7-8cjw-p6xm, 2026-09-18) has no patched release and reaches us only
+  # through tailwindcss 3 and eslint-config-next, both build-time tools; gating
+  # on it would keep this job red with nothing to fix. Dev-only advisories still
+  # get Dependabot PRs, and `npm audit` locally still reports them.
+  #
   # No `npm ci` here on purpose: `npm audit` resolves the tree from
   # package-lock.json alone, so installing would add ~40s and change nothing.
   audit:
@@ -51,7 +57,7 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Audit dependencies
-        run: npm audit --audit-level=high
+        run: npm audit --omit=dev --audit-level=high
 
   checks:
     runs-on: ubuntu-latest
