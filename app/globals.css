@@ -746,6 +746,20 @@ input::placeholder {
   }
 }
 
+/* Each binder's colour, used only as a non-text mark: the switcher swatch, the
+   open divider's edge and the section rule. Taken from the measured --tab-*
+   set. Any element can carry data-binder, so the switcher's list swatches
+   show their own binder's colour. */
+[data-binder="practice-foundations"] {
+  --binder: var(--brand-fill);
+}
+[data-binder="litigation"] {
+  --binder: var(--tab-home);
+}
+[data-binder="beyond-the-courtroom"] {
+  --binder: var(--tab-paths);
+}
+
 /* Binder colour as a tiny divider: the switcher's swatch. */
 .binder-swatch {
   display: inline-block;

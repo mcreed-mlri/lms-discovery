@@ -28,7 +28,13 @@ Secondary audiences already modeled in the app, served but not prioritized:
 - Law and rule changes
 - The advocate's own notes
 
-**Legal Skills is the first binder.** Substantive-law binders (Housing, Family, Immigration, and the rest) follow as their areas get content.
+**Legal Skills comes first, as three binders** that group the curriculum map's columns along the life of a case:
+
+- **Practice Foundations:** Foundations, Ethics, Intake, Research, Writing.
+- **Litigation:** Case Prep, Trial, Post-Trial, Appeals. The Hearsay pilot lives under Trial.
+- **Beyond the Courtroom:** ADR, Legislative, Community.
+
+Each column stays one tab and the curriculum map stays the source of truth, so every binder's dividers fit a laptop screen. Substantive-law binders (Housing, Family, Immigration, and the rest) follow as their areas get content.
 
 Success: an advocate with a live case question opens the first useful thing within 15 seconds or 2 clicks, without knowing which course, site or system it lives in.
 
@@ -41,7 +47,7 @@ Mockups and the flow diagram: https://claude.ai/artifact/MCQCHbvATG2m4KVNQiu3QW 
 **The binder:**
 
 - The Binders ▾ switcher opens a subject binder and remembers the last tab used.
-- A binder's divider tabs are its sections. For Legal Skills those are a Contents tab plus the 12 skill areas.
+- A binder's divider tabs are its sections: a Contents tab plus 3–5 curriculum areas. Home sits outside the binders; off binder pages the dividers show the binder you last opened.
 - A tab holds every kind of item for that section. Chips narrow it to Reference, Courses, New law, My notes or Coming.
 
 **Four ways in. All of them reach the same item:**
@@ -201,7 +207,7 @@ Explicitly undecided product facts:
 ## Evidence on Hand
 
 - **Real curriculum structure**: `lib/curriculum-map.ts` is the actual planned curriculum, not mock data.
-- **The pilot course is Legal Skills: Hearsay** (source in the sibling `brightspace-courses/Legal-Skills-Hearsay` repo). Design and build the Legal Skills binder around it first: its Trial tab, its reference pages, its notes, its law changes.
+- **The pilot course is Legal Skills: Hearsay** (source in the sibling `brightspace-courses/Legal-Skills-Hearsay` repo). Design and build the Litigation binder around it first: its Trial tab, its reference pages, its notes, its law changes.
 - **Genuinely built offerings** (a small set): Legal Skills: Hearsay (pilot), Welcome to the Learning Hub, Faculty Handbook: Interactive Elements, Curriculum Map, Eviction Defense: The First 48 Hours, and Brightspace Wrapper Demo.
 - **Planning research**: `docs/planning/brightspace-learning-hub-plan.md` (including cited D2L documentation on Discover's limits), plus D2L and outsourced-IT question lists and a search-governance checklist.
 - **Faculty-facing artifact**: `public/tools-handbook/faculty-showcase.dc.html`.

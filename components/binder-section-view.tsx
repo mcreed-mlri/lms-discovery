@@ -5,32 +5,43 @@ import Link from "next/link";
 import { StudioShell } from "@/components/studio-shell";
 import { getEligibleLearningItems } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
-import { filedItems, getPlannedTopics, getSectionTab, legalSkillsBinder } from "@/lib/binder";
+import {
+  filedItems,
+  getBinder,
+  getPlannedTopics,
+  getSectionTab,
+  getSectionTabs,
+} from "@/lib/binder";
 import { getLearningItemById, getLearningItemUrl, type LearningItem } from "@/lib/data";
 
 /**
- * One divider's page in the Legal Skills binder. First slice: what's open in
+ * One divider's page in a binder. First slice: what's open in
  * this section, then the planned topics as a quiet "Coming" list. Kind chips,
  * reference pages and notes come next (DESIGN.md, "Kind chips").
  */
-export function BinderSectionView({ tabId }: { tabId: string }) {
+export function BinderSectionView({ binderId, tabId }: { binderId: string; tabId: string }) {
   const { user } = useAuth();
-  const tab = getSectionTab(tabId);
+  const binder = getBinder(binderId);
+  const tab = binder ? getSectionTab(binder, tabId) : undefined;
   const filed = (filedItems[tabId] ?? [])
     .map((id) => getLearningItemById(id))
     .filter((item): item is LearningItem => item !== undefined);
   const items = getEligibleLearningItems(filed, user);
   const planned = getPlannedTopics(tabId);
-  const position = legalSkillsBinder.tabs.findIndex((t) => t.id === tabId);
+  const sections = binder ? getSectionTabs(binder) : [];
+  const position = sections.findIndex((t) => t.id === tabId) + 1;
 
-  if (!tab) return null;
+  if (!binder || !tab) return null;
 
   return (
     <StudioShell>
       <div className="flex flex-col gap-8">
         <div className="border-b-4 border-[color:var(--binder)] pb-6">
           <p className="text-sm font-semibold text-[color:var(--ink-muted)]">
-            {legalSkillsBinder.name} · tab {position} of {legalSkillsBinder.tabs.length - 1}
+            <Link href={binder.href} className="underline-offset-[3px] hover:underline focus-ring">
+              {binder.name}
+            </Link>{" "}
+            · tab {position} of {sections.length}
           </p>
           <h1 className="mt-1 text-[clamp(2rem,4vw,2.75rem)] font-extrabold leading-[1.05] tracking-[-0.025em] text-[color:var(--ink)]">
             {tab.title}

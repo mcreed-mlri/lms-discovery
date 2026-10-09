@@ -1,9 +1,11 @@
 /* The binders: subject collections an advocate opens, whose divider tabs are
-   its sections. Legal Skills is the first and, for now, only binder; its tabs
-   are the Legal Skills columns of the curriculum map, plus Contents (Home).
+   its sections. Legal Skills is split into three binders, each grouping
+   curriculum-map columns along the life of a case, so every binder's dividers
+   fit a laptop screen. Each column stays exactly one tab; the curriculum map
+   is still the source of truth for topics.
 
-   Pure data, no "use client": the tab pages are server components and read it
-   directly, and the client dividers import it the same way. See PRODUCT.md
+   Pure data, no "use client": the binder pages are server components and read
+   it directly, and the client dividers import it the same way. See PRODUCT.md
    ("Information Architecture") and DESIGN.md ("Binder dividers"). */
 
 import { curriculumMap, type CurriculumColumn } from "@/lib/curriculum-map";
@@ -20,68 +22,114 @@ export type BinderTab = {
 export type Binder = {
   id: string;
   name: string;
+  /** One line under the name in the switcher and on the Contents page. */
+  blurb: string;
+  href: string;
   /** Contents, then one tab per section. */
   tabs: BinderTab[];
 };
+
+export const BINDER_ROOT = "/binder";
 
 // Divider labels are short; the curriculum names are the page titles.
 const shortLabels: Record<string, string> = {
   foundations: "Foundations",
   ethics: "Ethics",
-  "pre-engagement": "Pre-Engagement",
-  "legal-writing": "Writing",
+  "pre-engagement": "Intake",
   "legal-research": "Research",
-  "pre-trial": "Pre-Trial",
+  "legal-writing": "Writing",
+  "pre-trial": "Case Prep",
   "trial-skills": "Trial",
   "post-trial": "Post-Trial",
-  appellate: "Appellate",
+  appellate: "Appeals",
   adr: "ADR",
   legislative: "Legislative",
   community: "Community",
 };
+
+const binderPlan: { id: string; name: string; blurb: string; columns: string[] }[] = [
+  {
+    id: "practice-foundations",
+    name: "Practice Foundations",
+    blurb: "What every legal aid lawyer uses on every case.",
+    columns: ["foundations", "ethics", "pre-engagement", "legal-research", "legal-writing"],
+  },
+  {
+    id: "litigation",
+    name: "Litigation",
+    blurb: "A case from the first interview to appeal.",
+    columns: ["pre-trial", "trial-skills", "post-trial", "appellate"],
+  },
+  {
+    id: "beyond-the-courtroom",
+    name: "Beyond the Courtroom",
+    blurb: "Advocacy that doesn’t run through a court.",
+    columns: ["adr", "legislative", "community"],
+  },
+];
 
 function legalSkillsColumns(): CurriculumColumn[] {
   const branch = curriculumMap.branches.find((b) => b.id === "legal-skills");
   return branch && branch.type === "columns" ? branch.columns : [];
 }
 
-export const BINDER_ROOT = "/binder/legal-skills";
+export const binders: Binder[] = binderPlan.map((plan) => {
+  const href = `${BINDER_ROOT}/${plan.id}`;
+  const columns = legalSkillsColumns();
+  return {
+    id: plan.id,
+    name: plan.name,
+    blurb: plan.blurb,
+    href,
+    tabs: [
+      { id: "contents", label: "Contents", title: "Contents", href },
+      ...plan.columns
+        .map((id) => columns.find((c) => c.id === id))
+        .filter((c): c is CurriculumColumn => c !== undefined)
+        .map((column) => ({
+          id: column.id,
+          label: shortLabels[column.id] ?? column.title,
+          title: column.title,
+          href: `${href}/${column.id}`,
+        })),
+    ],
+  };
+});
 
-export const legalSkillsBinder: Binder = {
-  id: "legal-skills",
-  name: "Legal Skills",
-  tabs: [
-    { id: "contents", label: "Contents", title: "Contents", href: "/" },
-    ...legalSkillsColumns().map((column) => ({
-      id: column.id,
-      label: shortLabels[column.id] ?? column.title,
-      title: column.title,
-      href: `${BINDER_ROOT}/${column.id}`,
-    })),
-  ],
-};
+/** The binder the pilot lives in, opened by default before the visitor picks one. */
+export const DEFAULT_BINDER_ID = "litigation";
 
-/** Binders named in the switcher before they have content. Shown as coming,
- *  never as an empty shell to click into. */
+/** Substantive-law binders named in the switcher before they have content.
+ *  Shown as coming, never as an empty shell to click into. */
 export const comingBinders = ["Housing", "Family", "Immigration", "Education"] as const;
 
-/** The section tabs only, without Contents. */
-export function getSectionTabs(): BinderTab[] {
-  return legalSkillsBinder.tabs.filter((tab) => tab.id !== "contents");
+export function getBinder(id: string): Binder | undefined {
+  return binders.find((binder) => binder.id === id);
 }
 
-export function getSectionTab(id: string): BinderTab | undefined {
-  return getSectionTabs().find((tab) => tab.id === id);
+export function getDefaultBinder(): Binder {
+  return getBinder(DEFAULT_BINDER_ID) ?? binders[0];
 }
 
-/** The divider that is open for a pathname. Contents is Home; anything outside
- *  the binder (My learning, Updates, the library) opens no divider. */
-export function openTabId(pathname: string): string | null {
-  if (pathname === "/") return "contents";
+/** A binder's section tabs, without Contents. */
+export function getSectionTabs(binder: Binder): BinderTab[] {
+  return binder.tabs.filter((tab) => tab.id !== "contents");
+}
+
+export function getSectionTab(binder: Binder, tabId: string): BinderTab | undefined {
+  return getSectionTabs(binder).find((tab) => tab.id === tabId);
+}
+
+/** Which binder and divider a pathname opens. Anything outside /binder (Home,
+ *  My learning, Updates, the library) opens neither. */
+export function locateInBinder(pathname: string): { binder: Binder; tabId: string } | null {
   const prefix = `${BINDER_ROOT}/`;
   if (!pathname.startsWith(prefix)) return null;
-  const id = pathname.slice(prefix.length).split("/")[0];
-  return getSectionTab(id) ? id : null;
+  const [binderId, tabId] = pathname.slice(prefix.length).split("/");
+  const binder = getBinder(binderId);
+  if (!binder) return null;
+  if (!tabId) return { binder, tabId: "contents" };
+  return getSectionTab(binder, tabId) ? { binder, tabId } : null;
 }
 
 /** Planned topics for a section, straight from the curriculum map. Sub-topics

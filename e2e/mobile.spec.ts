@@ -360,7 +360,7 @@ test.describe("on a phone", () => {
 
     const main = page.getByRole("navigation", { name: "Main" });
     await expect(main.getByRole("link", { name: /^Updates/ })).toBeVisible();
-    await expect(main.getByRole("button", { name: /Legal Skills binder/ })).toBeVisible();
+    await expect(main.getByRole("button", { name: /switch binder/ })).toBeVisible();
     await expect(
       page.getByRole("button", { name: /Switch to (dark|light) mode/ }).last(),
     ).toBeVisible();

@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 
 import { ChevronDownIcon } from "@/components/icons";
-import { comingBinders, legalSkillsBinder } from "@/lib/binder";
+import { binders, comingBinders } from "@/lib/binder";
+import { useOpenBinder } from "@/lib/hooks/use-open-binder";
 import { useFocusTrap } from "@/lib/hooks/use-focus-trap";
 import { useScrollLock } from "@/lib/hooks/use-scroll-lock";
 
@@ -20,13 +21,14 @@ export function isBinderRoute(pathname: string) {
 }
 
 /**
- * "Legal Skills binder ▾" in the header. Opens the list of binders (only Legal
- * Skills has content; the rest are named as coming) and the whole-library
- * routes that used to be their own tabs. An overlay, so it takes the focus trap
+ * "<Binder> ▾" in the header, naming the open binder. Opens the list of binders
+ * (the three Legal Skills binders; substantive-law binders are named as coming)
+ * and the whole-library routes that used to be their own tabs. An overlay, so it takes the focus trap
  * and scroll lock like the account menu.
  */
 export function BinderSwitcher() {
   const pathname = usePathname();
+  const { binder } = useOpenBinder();
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const headingId = useId();
@@ -74,7 +76,8 @@ export function BinderSwitcher() {
         }`}
       >
         <span aria-hidden="true" className="binder-swatch" />
-        {legalSkillsBinder.name} binder
+        {binder.name}
+        <span className="sr-only">, switch binder</span>
         <ChevronDownIcon className="h-4 w-4" />
       </button>
       {open ? (
@@ -91,15 +94,31 @@ export function BinderSwitcher() {
           >
             Binders
           </h2>
-          <Link
-            href="/"
-            className="flex min-h-11 items-center gap-2.5 rounded-[8px] px-2.5 text-[15px] font-bold text-[color:var(--ink)] hover:bg-[color:var(--hover-tint)] focus-ring"
-          >
-            <span aria-hidden="true" className="binder-swatch" />
-            {legalSkillsBinder.name}
-          </Link>
+          <ul>
+            {binders.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={item.href}
+                  aria-current={item.id === binder.id && current ? "page" : undefined}
+                  className="flex min-h-11 items-start gap-2.5 rounded-[8px] px-2.5 py-2 text-[color:var(--ink)] hover:bg-[color:var(--hover-tint)] focus-ring"
+                >
+                  <span aria-hidden="true" data-binder={item.id} className="binder-swatch mt-1" />
+                  <span>
+                    <span
+                      className={`block text-[15px] ${item.id === binder.id ? "font-extrabold" : "font-semibold"}`}
+                    >
+                      {item.name}
+                    </span>
+                    <span className="block text-[13px] leading-snug text-[color:var(--ink-muted)]">
+                      {item.blurb}
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
           <p className="px-2.5 py-2 text-[14px] leading-snug text-[color:var(--ink-soft)]">
-            Coming: {comingBinders.join(", ")} and more substantive-law binders.
+            Substantive law, coming: {comingBinders.join(", ")} and more.
           </p>
           <div className="my-1 border-t border-[color:var(--line)]" />
           <Link

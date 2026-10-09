@@ -12,7 +12,8 @@ import { StudioRail } from "@/components/studio-rail";
 import { getEffectiveDashboardRole, getEligibleLearningItems } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
-import { openTabId } from "@/lib/binder";
+import { locateInBinder } from "@/lib/binder";
+import { useOpenBinder } from "@/lib/hooks/use-open-binder";
 import { getLearningItems } from "@/lib/data";
 import { browseHref } from "@/lib/home-helpers";
 import { useFocusTrap } from "@/lib/hooks/use-focus-trap";
@@ -33,6 +34,7 @@ export function StudioShell({
   const router = useRouter();
   const pathname = usePathname();
   const isAdmin = getEffectiveDashboardRole(user) === "super_admin";
+  const { binder } = useOpenBinder();
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -122,9 +124,9 @@ export function StudioShell({
   // its right. Below lg the sheet is the whole screen, the drawer holds the full
   // navigation, binder pages get the tabs as a strip, and the bottom bar takes
   // the header's job.
-  const inBinder = openTabId(pathname) !== null;
+  const inBinder = locateInBinder(pathname) !== null;
   return (
-    <div className="hub-shell binder-board min-h-screen">
+    <div className="hub-shell binder-board min-h-screen" data-binder={binder.id}>
       <a className="skip-link" href="#main-content">
         Skip to main content
       </a>

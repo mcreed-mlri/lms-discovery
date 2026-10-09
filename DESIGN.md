@@ -175,7 +175,7 @@ components:
 
 **Creative North Star: "The Attorney's Binder"**
 
-The Learning Hub is the binder a legal aid attorney opens when they're stuck. A true-white page runs to the top, left and bottom edges of the screen, with three punched holes near its left edge. A warm-grey chipboard strip shows only on the right, behind the divider tabs. The header carries the app's own navigation (Home · Binders ▾ · My learning · Updates, with search). The divider tabs belong to the binder you have open: for Legal Skills, a Contents tab plus the 12 skill areas. The open divider turns white, joins the page, and wears the binder's colour on its free edge. The open page holds everything filed in that section: practice, reference, courses, new law, MassLegalServices resources and your own notes.
+The Learning Hub is the binder a legal aid attorney opens when they're stuck. A true-white page runs to the top, left and bottom edges of the screen, with three punched holes near its left edge. A warm-grey chipboard strip shows only on the right, behind the divider tabs. The header carries the app's own navigation (Home · Binders ▾ · My learning · Updates, with search). The divider tabs belong to the binder you have open: a Contents tab plus 3–5 curriculum areas (Legal Skills is three binders: Practice Foundations, Litigation, Beyond the Courtroom). The open divider turns white, joins the page, and wears the binder's colour on its free edge. The open page holds everything filed in that section: practice, reference, courses, new law, MassLegalServices resources and your own notes.
 
 The page is dense but quiet. Hierarchy comes from near-black ink, one workhorse family (Public Sans) on a steep size ramp, and ruled lists in place of cards. Colour is rationed: each hue means one thing (binder, state, or interactive) and is never decoration. There is one inverted near-black element per page, the resume card, and it carries the page's main way back into a course. Light mode is primary. Dark mode keeps the same structure.
 
@@ -267,7 +267,7 @@ A white-and-ink page on warm chipboard, with saturated binder colours rationed t
 
 ## Layout
 
-On desktop (1024px and up) the sheet runs to the top, left and bottom of the viewport, with no board margin. A chipboard strip about 50px wide on the right holds the divider column, sticky, with the first divider starting about 96px down so it clears the header. The sheet casts its shadow onto that strip. Below 1024px the sheet is the whole screen, and the open binder's dividers become a "Sections" menu at the top of the page (13 tabs don't fit a bottom bar).
+On desktop (1024px and up) the sheet runs to the top, left and bottom of the viewport, with no board margin. A chipboard strip about 50px wide on the right holds the divider column, sticky, with the first divider starting about 96px down so it clears the header. The sheet casts its shadow onto that strip. Below 1024px the sheet is the whole screen, and the open binder's dividers become a scrolling strip under the header on binder pages.
 
 Inside the sheet, content is centred in a 1180px column (cap it so a very wide monitor doesn't stretch lines), with gutters of 16px (phone), 24px (640px and up) and 44px (desktop). Pages use a flexible main column and a roughly 340px side column, separated by a 44–48px gap, stacking in reading order on phones.
 
@@ -300,7 +300,7 @@ The binder's silhouette is asymmetric. The sheet has 6px corners at the spine an
 
 ### Binder dividers (signature)
 
-The open binder's sections, in `<nav aria-label="Legal Skills tabs">` (named for the binder). For Legal Skills: Contents, then Foundations, Ethics, Pre-Engagement, Research, Writing, Pre-Trial, Trial, Post-Trial, Appellate, ADR, Legislative, Community. Labels are short forms of the skill-area names; the section title uses the full name.
+The open binder's sections, in `<nav aria-label="Litigation tabs">` (named for the binder). Litigation: Contents, Case Prep, Trial, Post-Trial, Appeals. Practice Foundations: Contents, Foundations, Ethics, Intake, Research, Writing. Beyond the Courtroom: Contents, ADR, Legislative, Community. Every divider shares the column evenly (at least 6.5rem, growing to fill a tall screen). Labels are short forms of the skill-area names; the section title uses the full name.
 
 - **Shape:** 40px wide at rest, height fitted to the label (at least 56px), 9px rounded free end, no left border. 3px gap between dividers.
 - **Colour:** manila fills alternating, tab-on ink at 13px / 600, set vertically.
@@ -317,7 +317,7 @@ The wordmark "Learning Hub" (17–19px / 800) at left, then the main nav: **Home
 
 ### Binder switcher
 
-A 44px outlined button showing the binder's colour swatch (10 × 14px, a tiny divider) and its name, "Legal Skills binder ▾". It opens a menu of binders. Binders without content yet are listed as "Coming", never hidden and never clickable into an empty shell. The switcher remembers the last tab per binder.
+A 44px outlined button showing the binder's colour swatch (10 × 14px, a tiny divider) and its name, for example "Litigation ▾". It opens a menu of binders, each with a one-line description. Each binder has its own colour from the measured tab set: Practice Foundations ultramarine, Litigation orange, Beyond the Courtroom green. Binders without content yet are listed as "Coming", never hidden and never clickable into an empty shell. The switcher remembers the last tab per binder.
 
 ### Kind chips
 
