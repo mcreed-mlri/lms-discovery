@@ -145,6 +145,30 @@ export const filedItems: Record<string, string[]> = {
   "trial-skills": ["legal-skills-hearsay"],
 };
 
+export type ReferencePage = {
+  title: string;
+  /** Kind and source, shown under the title. */
+  meta: string;
+  href: string;
+};
+
+/** Short reference an advocate keeps open at counsel table, filed by tab. The
+ *  Hearsay course's own panels open directly through their #anchors. */
+export const referencePages: Record<string, ReferencePage[]> = {
+  "trial-skills": [
+    {
+      title: "Hearsay: key concepts",
+      meta: "Reference · from Legal Skills: Hearsay",
+      href: "/legal-skills-hearsay/defending-hearsay-objection-writing.html#key-concepts",
+    },
+    {
+      title: "Procedure: answering a hearsay objection in writing",
+      meta: "Five steps and a drafting frame · from Legal Skills: Hearsay",
+      href: "/legal-skills-hearsay/defending-hearsay-objection-writing.html#procedure",
+    },
+  ],
+};
+
 export type PilotSkill = {
   title: string;
   /** Open in the hosted course package, or not built yet. */

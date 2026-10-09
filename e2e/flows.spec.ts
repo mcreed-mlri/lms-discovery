@@ -187,3 +187,13 @@ test("a note saved in a binder tab is still there after a reload", async ({ page
   await page.goto("/binder/litigation/post-trial/");
   await expect(page.getByText("Ask about remote testimony.")).toHaveCount(0);
 });
+
+test("a reference link opens its panel in the course without starting the lesson", async ({
+  page,
+}) => {
+  await signIn(page);
+  await page.goto("/binder/litigation/trial-skills/");
+  await page.getByRole("link", { name: /Procedure: answering a hearsay objection/ }).click();
+  await expect(page).toHaveURL(/#procedure$/);
+  await expect(page.getByRole("dialog", { name: "Procedure Reference" })).toBeVisible();
+});

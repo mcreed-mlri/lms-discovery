@@ -503,18 +503,33 @@
     });
   }
 
+  function openPanel(name) {
+    closePanels();
+    var target = panels[name];
+    if (!target) return;
+    scrim.classList.add("open");
+    target.classList.add("open");
+    target.setAttribute("aria-hidden", "false");
+    var close = target.querySelector("[data-close-resource]");
+    if (close) close.focus();
+  }
+
   document.querySelectorAll("[data-open-resource]").forEach(function (btn) {
     btn.addEventListener("click", function () {
-      closePanels();
-      var target = panels[btn.getAttribute("data-open-resource")];
-      if (!target) return;
-      scrim.classList.add("open");
-      target.classList.add("open");
-      target.setAttribute("aria-hidden", "false");
-      var close = target.querySelector("[data-close-resource]");
-      if (close) close.focus();
+      openPanel(btn.getAttribute("data-open-resource"));
     });
   });
+
+  // Deep links: the Learning Hub links straight to a reference panel with
+  // #key-concepts or #procedure, so an advocate can open it without starting
+  // the lesson.
+  var panelAnchors = { "#key-concepts": "concepts", "#procedure": "procedure" };
+  function openPanelFromHash() {
+    var name = panelAnchors[window.location.hash];
+    if (name) openPanel(name);
+  }
+  window.addEventListener("hashchange", openPanelFromHash);
+  openPanelFromHash();
   document.querySelectorAll("[data-close-resource]").forEach(function (btn) {
     btn.addEventListener("click", closePanels);
   });

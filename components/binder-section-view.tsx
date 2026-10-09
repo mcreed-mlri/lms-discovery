@@ -13,6 +13,7 @@ import {
   getPlannedTopics,
   getSectionTab,
   getSectionTabs,
+  referencePages,
 } from "@/lib/binder";
 import { getStatusTheme, resolveStatusKey } from "@/lib/course-theme";
 import {
@@ -40,6 +41,7 @@ export function BinderSectionView({ binderId, tabId }: { binderId: string; tabId
   // Law changes reach a tab through the courses filed under it.
   const filedIds = new Set(filed.map((item) => item.id));
   const changes = contentUpdates.filter((update) => filedIds.has(update.courseId));
+  const references = referencePages[tabId] ?? [];
   const sections = binder ? getSectionTabs(binder) : [];
   const position = sections.findIndex((t) => t.id === tabId) + 1;
 
@@ -101,6 +103,41 @@ export function BinderSectionView({ binderId, tabId }: { binderId: string; tabId
                 </p>
               )}
             </section>
+
+            {references.length > 0 ? (
+              <section aria-labelledby="keep-at-hand">
+                <h2
+                  id="keep-at-hand"
+                  className="text-[22px] font-extrabold tracking-[-0.015em] text-[color:var(--ink)]"
+                >
+                  Keep at hand
+                </h2>
+                <p className="mt-0.5 text-[13px] text-[color:var(--ink-soft)]">
+                  Reference you can open without starting the course. Prototype content, not yet
+                  reviewed.
+                </p>
+                <ul className="mt-3 border-t-[1.5px] border-[color:var(--ink)]">
+                  {references.map((page) => (
+                    <li key={page.href} className="border-b border-[color:var(--line)]">
+                      <a
+                        href={page.href}
+                        className="flex min-h-11 flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3.5 text-[color:var(--ink)] hover:bg-[color:var(--hover-tint)] focus-ring"
+                      >
+                        <span>
+                          <span className="block text-[16px] font-bold">{page.title}</span>
+                          <span className="mt-0.5 block text-[13px] text-[color:var(--ink-muted)]">
+                            {page.meta}
+                          </span>
+                        </span>
+                        <span className="text-[14px] font-bold text-[color:var(--brand-ink)]">
+                          Open
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
 
             {changes.length > 0 ? (
               <section aria-labelledby="new-law">
