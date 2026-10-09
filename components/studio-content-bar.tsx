@@ -35,11 +35,6 @@ export function StudioContentBar({ onMenu }: { onMenu?: () => void }) {
         LACE
       </span>
 
-      {/* Desktop eyebrow */}
-      <p className="hidden font-mono text-[12px] font-semibold uppercase tracking-[0.06em] text-[color:var(--ink-soft)] lg:block">
-        Mass. legal aid education
-      </p>
-
       <div className="flex-1" />
 
       <div className="hidden shrink-0 lg:block">

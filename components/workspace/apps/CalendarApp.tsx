@@ -25,10 +25,7 @@ export function CalendarApp({ host }: WorkspaceAppProps) {
   const c = copy[host.lang];
 
   return (
-    <div
-      className="flex h-full min-h-0 flex-1 flex-col bg-white text-[14px] text-[#3c4043]"
-      style={{ fontFamily: "Roboto, Arial, sans-serif" }}
-    >
+    <div className="flex h-full min-h-0 flex-1 flex-col bg-white text-[14px] text-[#3c4043]">
       <div className="flex items-center gap-3 px-3 py-2">
         <CalendarMark />
         <span className="w-[190px] shrink-0 text-[22px] font-normal text-[#5f6368]">
@@ -192,7 +189,7 @@ function MiniMonth({ labels }: { labels: readonly string[] }) {
 function CalendarMark() {
   return (
     <span className="flex h-8 w-8 flex-col overflow-hidden rounded-[6px] border border-[#dadce0] bg-white shadow-sm">
-      <span className="h-2 bg-[#ea4335]" />
+      <span className="h-2 bg-[color:var(--hue-8)]" />
       <span className="flex flex-1 items-center justify-center text-[13px] font-medium leading-none text-[#3c4043]">
         31
       </span>

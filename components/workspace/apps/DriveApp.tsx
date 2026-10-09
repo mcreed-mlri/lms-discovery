@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, type ReactNode } from "react";
-import { Folder, Home, Plus, Search, Users } from "lucide-react";
+import { Folder, FolderOpen, Home, Plus, Search, Users } from "lucide-react";
 import { driveFiles } from "../fixtures";
 import type { DriveFile, WorkspaceAppProps } from "../types";
 
@@ -28,10 +28,7 @@ export function DriveApp({ host }: WorkspaceAppProps) {
   };
 
   return (
-    <div
-      className="flex h-full min-h-0 flex-1 flex-col bg-white text-[14px] text-[#1f1f1f]"
-      style={{ fontFamily: "Roboto, Arial, sans-serif" }}
-    >
+    <div className="flex h-full min-h-0 flex-1 flex-col bg-white text-[14px] text-[#1f1f1f]">
       <div className="flex items-center gap-3 px-3 py-2">
         <DriveMark />
         <span className="w-[190px] shrink-0 text-[22px] font-normal text-[#5f6368]">Drive</span>
@@ -184,10 +181,11 @@ function ShareDialog({
 
 function FileType({ type }: { type: DriveFile["type"] }) {
   const label = type.toUpperCase();
-  const color = type === "pdf" ? "#ea4335" : type === "sheet" ? "#0f9d58" : "#4285f4";
+  const color =
+    type === "pdf" ? "var(--hue-8)" : type === "sheet" ? "var(--hue-5)" : "var(--hue-1)";
   return (
     <span
-      className="flex h-6 w-8 shrink-0 items-center justify-center rounded-[2px] text-[8px] font-bold text-white"
+      className="flex h-6 w-8 shrink-0 items-center justify-center rounded-[2px] text-[9px] font-bold text-white"
       style={{ background: color }}
     >
       {label}
@@ -217,14 +215,9 @@ function NavButton({
   );
 }
 
+// A plain folder, not a vendor's logo: the kit simulates a generic office suite.
 function DriveMark() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden>
-      <path fill="#0f9d58" d="M1.5 21 8.25 21 15.5 8 8.75 8z" />
-      <path fill="#4285f4" d="M15.5 8 22.5 21 15.75 21 8.75 8z" />
-      <path fill="#fbbc04" d="M8.25 21 15.75 21 12 14.5z" />
-    </svg>
-  );
+  return <FolderOpen size={26} className="text-[color:var(--hue-4)]" aria-hidden />;
 }
 
 const copy = {

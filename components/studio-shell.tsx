@@ -133,8 +133,7 @@ export function StudioShell({
     return (
       <div className="hub-shell flex min-h-screen items-center justify-center px-4">
         <div className="editorial-panel w-full max-w-sm rounded-xl p-6 text-center">
-          <p className="editorial-eyebrow">Learning Hub</p>
-          <h1 className="hero-title mt-3 text-3xl text-[color:var(--ink)]">Loading</h1>
+          <h1 className="hero-title text-3xl text-[color:var(--ink)]">Loading</h1>
         </div>
       </div>
     );

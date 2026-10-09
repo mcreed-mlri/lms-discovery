@@ -25,12 +25,14 @@ import type {
   WorkspaceHost,
 } from "./types";
 
+// App and calendar colours come from the eight-hue family in globals.css, not
+// a real vendor's brand palette: the kit simulates a generic office suite.
 export const workspaceApps: WorkspaceAppDefinition[] = [
   {
     key: "mail",
     label: "Mail",
     url: "mail.workplace.local",
-    color: "#ea4335",
+    color: "var(--hue-8)",
     icon: Mail,
     component: MailApp,
   },
@@ -38,7 +40,7 @@ export const workspaceApps: WorkspaceAppDefinition[] = [
     key: "drive",
     label: "Drive",
     url: "drive.workplace.local",
-    color: "#fbbc04",
+    color: "var(--hue-4)",
     icon: FolderOpen,
     component: DriveApp,
   },
@@ -46,7 +48,7 @@ export const workspaceApps: WorkspaceAppDefinition[] = [
     key: "calendar",
     label: "Calendar",
     url: "calendar.workplace.local",
-    color: "#34a853",
+    color: "var(--hue-5)",
     icon: CalendarDays,
     component: CalendarApp,
   },
@@ -54,7 +56,7 @@ export const workspaceApps: WorkspaceAppDefinition[] = [
     key: "portal",
     label: "Portal",
     url: "portal.workplace.local",
-    color: "#8430ce",
+    color: "var(--hue-7)",
     icon: Table2,
     component: PortalApp,
   },
@@ -62,7 +64,7 @@ export const workspaceApps: WorkspaceAppDefinition[] = [
     key: "pdf",
     label: "PDF Reader",
     url: "downloads.workplace.local",
-    color: "#ea4335",
+    color: "var(--hue-8)",
     icon: FileText,
     component: PdfReaderApp,
   },
@@ -161,7 +163,7 @@ export const calendarEvents: CalendarEvent[] = [
     day: 21,
     time: "7:00 AM",
     calendar: "work",
-    color: "#0b8043",
+    color: "var(--hue-5)",
   },
   {
     id: "shift-22",
@@ -169,7 +171,7 @@ export const calendarEvents: CalendarEvent[] = [
     day: 22,
     time: "8:00 AM",
     calendar: "work",
-    color: "#0b8043",
+    color: "var(--hue-5)",
   },
   {
     id: "lead-huddle",
@@ -177,7 +179,7 @@ export const calendarEvents: CalendarEvent[] = [
     day: 26,
     time: "9:00 AM",
     calendar: "company",
-    color: "#1a73e8",
+    color: "var(--hue-1)",
     description: "A short weekly check-in with the shift leads.",
   },
   {
@@ -186,7 +188,7 @@ export const calendarEvents: CalendarEvent[] = [
     day: 26,
     time: "8:45 AM",
     calendar: "personal",
-    color: "#d93025",
+    color: "var(--hue-8)",
   },
 ];
 
@@ -225,7 +227,7 @@ export const portalSections: PortalSection[] = [
     render: () => (
       <div className="max-w-[360px] rounded-xl border border-[#dadce0] bg-white p-5">
         <div className="text-[13px] text-[#5f6368]">Current shift</div>
-        <div className="mt-1 text-[28px] font-medium text-[#202124]">7:00 AM - 3:00 PM</div>
+        <div className="mt-1 text-[26px] font-medium text-[#202124]">7:00 AM - 3:00 PM</div>
         <button className="mt-5 h-10 rounded-full bg-[#1a73e8] px-5 text-[14px] font-medium text-white">
           Clock in
         </button>

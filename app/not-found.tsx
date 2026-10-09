@@ -6,7 +6,6 @@ import { RouteStatePanel } from "@/components/route-state-panel";
 export default function NotFound() {
   return (
     <RouteStatePanel
-      eyebrow="LACE Learning Hub"
       title="We could not find that page"
       description="The link may be out of date, or the training may have been renamed. The library is the fastest way back."
     >

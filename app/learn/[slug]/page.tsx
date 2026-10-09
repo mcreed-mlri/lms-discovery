@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
-import { ArrowIcon, BookIcon, CheckIcon, ClockIcon } from "@/components/icons";
+import { ArrowIcon, ClockIcon } from "@/components/icons";
 import { TypeBadge } from "@/components/type-badge";
 import {
   courses,
@@ -11,6 +11,7 @@ import {
   getModuleBrightspaceUrl,
   getModuleMinutes,
   getPathBrightspaceUrl,
+  isPlanned,
   modules,
   paths,
   type LearningItem,
@@ -38,6 +39,7 @@ function getBrightspaceSourceUrl(item: LearningItem) {
 }
 
 function getDuration(item: LearningItem) {
+  if (isPlanned(item)) return "Not set yet";
   if (item.type === "PATH") return item.totalDuration.replace(" total", "");
   if (item.type === "MODULE") return `${getModuleMinutes(item.id)} min`;
   return item.duration;
@@ -55,49 +57,6 @@ function getRelatedItems(item: LearningItem) {
   return modules
     .filter((module) => module.courseId === item.courseId && module.id !== item.id)
     .map((module) => ({ ...module, type: "MODULE" as const }));
-}
-
-function getLessonSections(item: LearningItem) {
-  if (item.type === "PATH") {
-    return [
-      {
-        title: "Start with the first course",
-        body: "This path is now represented as a Learning Hub route. As Brightspace sync comes online, this page can become the learner-facing path overview while Brightspace remains the source for enrollments and completion.",
-      },
-      {
-        title: "Follow the sequence",
-        body: "Each course below gets its own hub URL, so mobile learners can move through the curriculum without bouncing into Safari for every step.",
-      },
-    ];
-  }
-
-  if (item.type === "COURSE") {
-    return [
-      {
-        title: "Course overview",
-        body: item.description,
-      },
-      {
-        title: "What happens next",
-        body: "The modules below are the canonical Learning Hub destinations for this course. The Brightspace source link stays available as a fallback while the content sync matures.",
-      },
-    ];
-  }
-
-  return [
-    {
-      title: "Read",
-      body: item.description,
-    },
-    {
-      title: "Practice",
-      body: "Use this space for the short, mobile-first practice activity that belongs with the Brightspace topic. In the full integration, this block can render synced HTML, checks, or locally authored interactive content.",
-    },
-    {
-      title: "Complete",
-      body: "Completion can be written back to the learning record once the Brightspace progress integration is connected.",
-    },
-  ];
 }
 
 export function generateStaticParams() {
@@ -123,14 +82,17 @@ export default async function LearnPage({ params }: LearnPageProps) {
   const relatedItems = getRelatedItems(item);
   const sourceUrl = getBrightspaceSourceUrl(item);
   const accent = getItemAccent(item);
-  const sections = getLessonSections(item);
+  const planned = isPlanned(item);
+  const lessons = item.type === "MODULE" ? (item.lessons ?? []) : [];
+  const relatedHeading =
+    item.type === "PATH" ? "Courses" : item.type === "COURSE" ? "Modules" : "More in this course";
 
   return (
     <main className="hub-shell min-h-screen px-4 pb-[calc(1.25rem+var(--safe-bottom))] pt-[calc(1.25rem+var(--safe-top))] sm:px-6 sm:py-8 lg:px-10">
       <div className="mx-auto max-w-5xl">
         <Link
-          href="/"
-          className="metadata inline-flex items-center gap-1.5 text-[color:var(--ink-soft)] transition hover:text-[color:var(--ink)]"
+          href="/browse"
+          className="metadata inline-flex items-center gap-1.5 text-[color:var(--ink-soft)] transition hover:text-[color:var(--ink)] focus-ring"
         >
           <span aria-hidden="true">←</span> Back to library
         </Link>
@@ -142,30 +104,52 @@ export default async function LearnPage({ params }: LearnPageProps) {
           <div className="h-1.5 bg-[color:var(--accent)]" />
           <div className="grid gap-7 p-5 sm:p-7 lg:grid-cols-[minmax(0,1fr)_16rem] lg:p-9">
             <div>
-              <TypeBadge type={item.type} />
+              <div className="flex flex-wrap items-center gap-2">
+                <TypeBadge type={item.type} />
+                {planned ? (
+                  <span className="metadata rounded-[6px] border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-2.5 py-1 text-[color:var(--ink-soft)]">
+                    Planned, not built yet
+                  </span>
+                ) : null}
+              </div>
               <h1 className="hero-title mt-4 max-w-3xl text-3xl leading-tight text-[color:var(--ink)] sm:text-5xl">
                 {item.title}
               </h1>
               <p className="readable-copy mt-4 max-w-3xl text-base leading-7 sm:text-lg">
                 {item.description}
               </p>
+              {planned ? (
+                <p className="mt-4 max-w-2xl text-[14px] leading-relaxed text-[color:var(--ink-muted)]">
+                  This is part of the curriculum plan. There is nothing to open in Brightspace yet.
+                </p>
+              ) : null}
               <div className="mt-6 flex flex-wrap gap-3">
-                {relatedItems[0] ? (
+                {planned ? (
+                  <Link
+                    href="/curriculum-map"
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] transition hover:opacity-90 focus-ring"
+                  >
+                    See it on the curriculum map
+                    <ArrowIcon className="h-4 w-4" />
+                  </Link>
+                ) : (
+                  <a
+                    href={sourceUrl}
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] transition hover:opacity-90 focus-ring"
+                  >
+                    Open in Brightspace
+                    <ArrowIcon className="h-4 w-4" />
+                  </a>
+                )}
+                {!planned && relatedItems[0] ? (
                   <Link
                     href={getLearningItemUrl(relatedItems[0])}
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-control)] bg-[color:var(--ink)] px-5 text-sm font-bold text-[color:var(--surface)] shadow-[var(--shadow-md)] transition hover:opacity-90 focus-ring"
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface)] px-5 text-sm font-bold text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
                   >
-                    {item.type === "MODULE" ? "Next related module" : "Start in Learning Hub"}
+                    {item.type === "MODULE" ? "Next module" : `Start with ${relatedItems[0].title}`}
                     <ArrowIcon className="h-4 w-4" />
                   </Link>
                 ) : null}
-                <a
-                  href={sourceUrl}
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface)] px-5 text-sm font-bold text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
-                >
-                  Open source in Brightspace
-                  <ArrowIcon className="h-4 w-4" />
-                </a>
               </div>
             </div>
 
@@ -182,69 +166,41 @@ export default async function LearnPage({ params }: LearnPageProps) {
                 <p className="mt-1 text-sm font-bold text-[color:var(--ink)]">{item.level}</p>
               </div>
               <div>
-                <p className="section-kicker secondary">Source</p>
-                <p className="mt-1 text-sm font-bold text-[color:var(--ink)]">Brightspace synced</p>
+                <p className="section-kicker secondary">Status</p>
+                <p className="mt-1 text-sm font-bold text-[color:var(--ink)]">
+                  {planned ? "Planned" : "Available in Brightspace"}
+                </p>
               </div>
             </aside>
           </div>
         </section>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
-          <section className="editorial-card p-5 sm:p-7">
-            {item.type === "MODULE" && item.lessons && item.lessons.length > 0 && (
-              <div className="mb-6 border-b border-[color:var(--line)] pb-6">
-                <p className="section-kicker secondary">Lessons in this module</p>
-                <ol className="mt-3 grid gap-2">
-                  {item.lessons.map((lesson, index) => (
-                    <li
-                      key={`${item.id}-lesson-${index}`}
-                      style={accentVars(accent)}
-                      className="flex items-center gap-3 rounded-[10px] border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-2.5"
-                    >
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color:var(--accent-tint)] text-[12px] font-bold tabular-nums text-[color:var(--accent-ink)]">
-                        {index + 1}
-                      </span>
-                      <span className="text-sm font-semibold text-[color:var(--ink)]">
-                        {lesson}
-                      </span>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            )}
-            <p className="section-kicker primary">Learning Hub lesson</p>
-            <div className="mt-5 grid gap-5">
-              {sections.map((section, index) => (
-                <article
-                  key={section.title}
-                  className="border-t border-[color:var(--line)] pt-5 first:border-t-0 first:pt-0"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[color:var(--brand-tint)] text-[color:var(--brand)]">
-                      {index === sections.length - 1 ? (
-                        <CheckIcon className="h-4 w-4" />
-                      ) : (
-                        <BookIcon className="h-4 w-4" />
-                      )}
+        <div
+          className={`mt-6 grid gap-6 ${lessons.length > 0 ? "lg:grid-cols-[minmax(0,1fr)_18rem]" : ""}`}
+        >
+          {lessons.length > 0 ? (
+            <section className="editorial-card p-5 sm:p-7">
+              <h2 className="section-title text-xl text-[color:var(--ink)]">
+                Lessons in this module
+              </h2>
+              <ol className="mt-4 grid gap-2">
+                {lessons.map((lesson, index) => (
+                  <li
+                    key={`${item.id}-lesson-${index}`}
+                    className="flex items-center gap-3 rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-2.5"
+                  >
+                    <span className="w-5 shrink-0 text-right text-[13px] font-semibold tabular-nums text-[color:var(--ink-soft)]">
+                      {index + 1}
                     </span>
-                    <h2 className="section-title text-xl text-[color:var(--ink)]">
-                      {section.title}
-                    </h2>
-                  </div>
-                  <p className="readable-copy mt-3 leading-7">{section.body}</p>
-                </article>
-              ))}
-            </div>
-          </section>
+                    <span className="text-sm font-semibold text-[color:var(--ink)]">{lesson}</span>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          ) : null}
 
           <aside className="editorial-card p-5">
-            <p className="section-kicker secondary">
-              {item.type === "PATH"
-                ? "Courses"
-                : item.type === "COURSE"
-                  ? "Modules"
-                  : "More in this course"}
-            </p>
+            <h2 className="section-title text-[17px] text-[color:var(--ink)]">{relatedHeading}</h2>
             <div className="mt-4 grid gap-2">
               {relatedItems.length > 0 ? (
                 relatedItems.map((related) => {
@@ -258,7 +214,9 @@ export default async function LearnPage({ params }: LearnPageProps) {
                       <span className="metadata text-[color:var(--ink-soft)]">
                         {related.type === "COURSE"
                           ? getCourseLabel(related)
-                          : `${getModuleMinutes(related.id)} min`}
+                          : isPlanned(related)
+                            ? "Planned"
+                            : `${getModuleMinutes(related.id)} min`}
                       </span>
                       <span className="card-title mt-1 block text-sm leading-snug">
                         {related.title}

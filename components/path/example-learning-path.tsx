@@ -4,20 +4,14 @@ import { featuredLearningPath, featuredLearningPathUrl } from "@/lib/demo-discov
 
 export function ExampleLearningPath() {
   return (
-    <div
-      className="flex flex-col gap-6 rounded-[var(--radius-card)] border border-[color:var(--line)] p-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:p-8"
-      style={{ background: "color-mix(in srgb, var(--brand) 5%, var(--surface-raised))" }}
-    >
+    <div className="flex flex-col gap-6 rounded-[var(--radius-card)] border border-[color:var(--line)] bg-[color:var(--surface-raised)] p-6 shadow-[var(--shadow-xs)] sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:p-8">
       <div className="min-w-0">
-        <p className="flex items-center gap-2 text-xs font-semibold text-[color:var(--brand)]">
-          <PathIcon className="h-4 w-4" aria-hidden="true" />
-          Example learning path
-        </p>
-        <h2 className="section-title mt-3 text-xl text-[color:var(--ink)] sm:text-2xl">
+        <h2 className="section-title flex items-center gap-2 text-[22px] text-[color:var(--ink)]">
+          <PathIcon className="h-5 w-5 shrink-0 text-[color:var(--brand)]" aria-hidden="true" />
           {featuredLearningPath.title}
         </h2>
         <p className="mt-2 max-w-xl text-sm leading-6 text-[color:var(--ink-muted)]">
-          {featuredLearningPath.description}
+          An example path. {featuredLearningPath.description}
         </p>
       </div>
       <Link

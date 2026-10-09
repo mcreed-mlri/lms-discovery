@@ -23,12 +23,9 @@ export function MailApp({ host }: WorkspaceAppProps) {
   };
 
   return (
-    <div
-      className="flex h-full min-h-0 flex-1 flex-col bg-white text-[14px] text-[#202124]"
-      style={{ fontFamily: "Roboto, Arial, sans-serif" }}
-    >
+    <div className="flex h-full min-h-0 flex-1 flex-col bg-white text-[14px] text-[#202124]">
       <div className="flex items-center gap-3 border-b border-[#dadce0] px-4 py-3">
-        <Inbox size={24} className="text-[#ea4335]" />
+        <Inbox size={24} className="text-[color:var(--hue-8)]" />
         <span className="text-[22px] font-normal text-[#5f6368]">Mail</span>
         <div className="ml-auto text-[13px] text-[#5f6368]">{host.userName}</div>
       </div>
@@ -104,7 +101,7 @@ function MessageView({
 }) {
   return (
     <article className="mx-auto max-w-[760px] px-8 py-6">
-      <h1 className="text-[24px] font-normal text-[#202124]">{message.subject}</h1>
+      <h1 className="text-[22px] font-normal text-[#202124]">{message.subject}</h1>
       <div className="mt-5 flex items-start gap-3 border-b border-[#eef0f3] pb-5">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#7e57c2] text-[16px] font-medium text-white">
           {message.from.charAt(0)}

@@ -24,10 +24,13 @@ export function UpdateCard({
     >
       <div className="flex flex-wrap items-center gap-2">
         <span
-          className={`metadata inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 ${status.pill}`}
+          className={`metadata inline-flex items-center gap-1.5 rounded-[6px] border px-2.5 py-1 ${status.pill}`}
         >
           <span className={`h-1.5 w-1.5 rounded-full ${status.dot}`} aria-hidden="true" />
           {update.tag}
+        </span>
+        <span className="metadata rounded-[6px] bg-[color:var(--surface-sunken)] px-2 py-1 text-[color:var(--ink-soft)]">
+          Sample, not reviewed
         </span>
         <span className="metadata text-[color:var(--ink-soft)]">{update.when}</span>
       </div>

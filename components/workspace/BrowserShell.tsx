@@ -86,7 +86,7 @@ export function BrowserShell({
             />
           ))}
           <button
-            className="mb-[3px] ml-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[20px] font-light text-[#3c4043] hover:bg-black/10"
+            className="mb-[3px] ml-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[19px] font-light text-[#3c4043] hover:bg-black/10"
             onClick={openBlankTab}
             aria-label="New tab"
             title="New tab"
@@ -216,7 +216,7 @@ function ShellTab({
 function ToolbarButton({ label, children }: { label: string; children: string }) {
   return (
     <button
-      className="flex h-8 w-8 items-center justify-center rounded-full text-[20px] text-[#5f6368] hover:bg-black/[0.06]"
+      className="flex h-8 w-8 items-center justify-center rounded-full text-[19px] text-[#5f6368] hover:bg-black/[0.06]"
       aria-label={label}
     >
       {children}
@@ -241,11 +241,8 @@ function NewTab({
 }) {
   return (
     <div className="flex h-full flex-col items-center bg-white pt-[12vh]">
-      <div className="select-none text-[64px] font-medium leading-none">
-        <span className="text-[#4285f4]">W</span>
-        <span className="text-[#ea4335]">o</span>
-        <span className="text-[#fbbc05]">r</span>
-        <span className="text-[#4285f4]">k</span>
+      <div className="select-none text-[42px] font-semibold leading-none tracking-[-0.02em] text-[#3c4043]">
+        Workplace
       </div>
       <div className="mt-8 flex w-[min(584px,92%)] items-center gap-3 rounded-full bg-white px-5 py-[13px] text-[16px] text-[#5f6368] shadow-[0_1px_6px_rgba(32,33,36,0.28)]">
         <Search size={20} className="shrink-0 text-[#9aa0a6]" />

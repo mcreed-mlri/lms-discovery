@@ -127,10 +127,10 @@ const builtCourses: Course[] = [
     id: "eviction-defense-48h",
     title: "Eviction Defense: The First 48 Hours",
     description:
-      "Five short topics for the first moments after a notice to quit: deadlines, defenses, service, and the first court ask.",
+      "Six short modules for the first moments after a notice to quit: deadlines, notice types, service, the answer, the first court ask, and a practice intake call.",
     level: "Foundations",
     practiceArea: "Housing",
-    duration: "12 min",
+    duration: "22 min",
     brightspaceUrl: "https://mlri.brightspace.com/d2l/home/6703",
   },
 ];
@@ -378,23 +378,11 @@ export const continueLearning: ContinueLearningItem[] = [
   },
 ];
 
-// Learner progress for the home hero — training-hour goal + this-week activity.
+// Learner progress for the home hero: the training-hour goal.
 // Demo values; replace with real progress data when available.
-export type WeekDayActivity = "done" | "today" | "upcoming";
-
 export const learnerProgress = {
   hoursEarned: 8.5,
   hoursRequired: 12,
-  // Mon–Sun: completed a module, the current day, or still to come.
-  weeklyActivity: [
-    "done",
-    "done",
-    "done",
-    "today",
-    "upcoming",
-    "upcoming",
-    "upcoming",
-  ] as WeekDayActivity[],
 };
 
 // ── Microlearning metadata ────────────────────────────────────────────────
@@ -413,6 +401,11 @@ const moduleMeta: Record<string, { minutes: number; skillId: SkillId }> = {
   // homepage skills tiles stay coherent (see lib/curriculum-catalog.ts).
   ...plannedModuleMeta,
 };
+
+/** Planned items come from the curriculum map and have no Brightspace content yet. */
+export function isPlanned(item: { availability?: Availability }): boolean {
+  return item.availability === "planned";
+}
 
 export function getModuleMinutes(moduleId: string): number {
   return moduleMeta[moduleId]?.minutes ?? 10;

@@ -31,24 +31,16 @@ export interface LearnerDashboardPayload {
     enrolledCount: number;
     inProgressCount: number;
     completedCount: number;
-    /** Personal-facing texture only (streaks, hours, heatmap) — never
-     *  effectiveness KPIs. Busy practitioners learn in bursts; these numbers
+    /** Training-hour requirement, shown to the learner only. These numbers
      *  stay out of program/leadership reporting by design. Canonical metric
      *  definitions: Brightspace-Manager/docs/planning/metrics-framework.md. */
-    streakDays?: number;
-    longestStreakNote?: string;
     hoursEarned?: number;
     hoursRequired?: number;
     hoursDueLabel?: string;
-    weeklyHoursAvg?: number;
   };
   courses: LearnerCourse[];
   recentActivity?: { label: string; at: string }[];
   notices?: { id: string; title: string; body: string; severity: "info" | "warning" }[];
-  /** 84 cells (12 weeks x 7 days), intensity 0-4, for the streak heatmap. */
-  activityHeatmap?: number[];
-  /** Recent weekly learning volume, for the trend sparkline. */
-  weeklySparkline?: number[];
   certificates?: LearnerCertificate[];
 }
 

@@ -4,8 +4,10 @@
    courses. A handful of genuinely-built offerings live in lib/data.ts; the rest
    is generated here from lib/curriculum-map.ts so we can envision the full
    offering as if it were built out. Generated items carry
-   `availability: "planned"` for provenance, but the UI presents them the same
-   as built ones (they open their own Learning Hub page).
+   `availability: "planned"`, and every surface labels them Planned so they are
+   never mistaken for something a learner can start today (PRODUCT.md,
+   principle 5). Their descriptions come from the map's own topic names rather
+   than filler, and the UI shows no duration for them because none is known.
 
    Mapping (Legal Skills branch only for now — Substantive Law is left out until
    its areas have topics):
@@ -68,12 +70,13 @@ function generateColumn(column: CurriculumColumn) {
   const skillId = columnSkill[column.id] ?? "research";
   const hueIndex = getSkillHueIndex(skillId);
   const courseId = `course-${column.id}`;
+  const topicTitles = column.notes.filter((note) => note.level === "topic").map((n) => n.text);
 
   // Skill Area → Course.
   plannedCourses.push({
     id: courseId,
     title: column.title,
-    description: `The ${column.title} track in the LACE curriculum — the topics an advocate works through in this area.`,
+    description: `Covers ${listPreview(topicTitles)}.`,
     level,
     practiceArea: column.title,
     duration: "Self-paced",
@@ -89,7 +92,7 @@ function generateColumn(column: CurriculumColumn) {
       currentModule = {
         id: `module-${note.id}`,
         title: note.text,
-        description: `Part of ${column.title}.`,
+        description: `A topic in ${column.title}.`,
         courseId,
         parentCourseTitle: column.title,
         practiceArea: column.title,
@@ -105,8 +108,20 @@ function generateColumn(column: CurriculumColumn) {
       plannedModuleMeta[currentModule.id] = { minutes: 10, skillId };
     } else if (currentModule) {
       currentModule.lessons = [...(currentModule.lessons ?? []), note.text];
+      currentModule.description = `A topic in ${column.title}. Covers ${listPreview(currentModule.lessons)}.`;
     }
   }
+}
+
+// "A, B, and C" for up to three names; longer lists end "…, and N more".
+function listPreview(names: string[]) {
+  if (names.length === 0) return "topics still being mapped";
+  if (names.length === 1) return names[0];
+  const shown = names.slice(0, 3);
+  const rest = names.length - shown.length;
+  if (rest > 0) return `${shown.join(", ")}, and ${rest} more`;
+  const serial = shown.length > 2 ? "," : "";
+  return `${shown.slice(0, -1).join(", ")}${serial} and ${shown[shown.length - 1]}`;
 }
 
 const legalSkills = curriculumMap.branches.find((branch) => branch.id === "legal-skills");
@@ -159,7 +174,7 @@ export const plannedPaths: Path[] = [
   {
     id: "path-at-trial",
     title: "At Trial",
-    description: "Pleadings through closing statements — the courtroom skills for the day itself.",
+    description: "Pleadings through closing statements: the courtroom skills for trial.",
     courseIds: ["course-trial-skills"],
     totalDuration: "Self-paced",
     level: "Advanced",
