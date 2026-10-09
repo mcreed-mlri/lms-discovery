@@ -25,7 +25,14 @@ import { isProductionDeployment } from "@/lib/security";
  * Making it private is a product decision, not a refactor.
  */
 
-const PROTECTED_PREFIXES = ["/browse", "/curriculum-map", "/updates", "/my-learning", "/dashboard"];
+const PROTECTED_PREFIXES = [
+  "/binder",
+  "/browse",
+  "/curriculum-map",
+  "/updates",
+  "/my-learning",
+  "/dashboard",
+];
 
 /**
  * Demo personas live in localStorage, not in a cookie, so there is nothing here

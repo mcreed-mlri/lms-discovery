@@ -256,6 +256,14 @@
   --tab-updates: #6683e6;
   --tab-updates-on: #16161a; /* 5.12:1 */
 
+  /* Binder dividers: closed tabs are manila, like printed index dividers, and
+     take --ink. The open one is the page itself, edged in the binder colour.
+     Legal Skills is ultramarine; substantive-law binders take their colour from
+     the --tab-* set above when they ship. */
+  --divider-manila: #ede4cc; /* --ink 14.3:1 */
+  --divider-manila-alt: #e4d8b9; /* --ink 12.8:1 */
+  --binder: var(--brand-fill);
+
   /* Text selection — a clear wash of the brand fill, not the retired gold. */
   --selection-bg: rgba(47, 69, 181, 0.16);
 }
@@ -320,6 +328,8 @@
   --board-deep: #23211f;
   --sheet-edge: #4a4640;
   --sheet-shadow: rgba(0, 0, 0, 0.55);
+  --divider-manila: #3b372f; /* --ink 10.7:1 */
+  --divider-manila-alt: #343028; /* --ink 11.9:1 */
 
   /* Skill hues: saturated strokes plus deep fills for icon wells/chips. */
   /* Dark tints are deep, so each solid already clears 4.5:1 as text on its own
@@ -692,9 +702,10 @@ input::placeholder {
 }
 
 /* ── The binder ──────────────────────────────────────────────────────────────
-   Desktop only (lg+): the page sheet lies on the chipboard board, and divider
-   tabs run under its right edge. Below lg the sheet is the whole screen and the
-   bottom bar takes over navigation. */
+   Desktop only (lg+): the page sheet runs to the top, left and bottom edges,
+   and the open binder's dividers sit in a chipboard strip on its right. Below
+   lg the sheet is the whole screen, binder pages get the dividers as a strip
+   under the header, and the bottom bar takes the header's job. */
 @media (min-width: 1024px) {
   .hub-shell.binder-board {
     background-color: var(--board);
@@ -711,56 +722,101 @@ input::placeholder {
 
 @media (min-width: 1024px) {
   .binder-sheet {
-    border: 1.5px solid var(--sheet-edge);
-    border-radius: 6px 14px 14px 6px;
+    min-height: 100vh;
+    border-right: 1.5px solid var(--sheet-edge);
     box-shadow: 6px 0 10px -4px var(--sheet-shadow);
-    min-height: calc(100vh - 2.5rem);
+  }
+
+  /* Three punched holes near the spine: board colour showing through. */
+  .binder-sheet::before {
+    content: "";
+    position: absolute;
+    left: 14px;
+    top: 0;
+    bottom: 0;
+    width: 16px;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 8px 8px, var(--board) 7px, transparent 8px) 0 18% / 16px 16px
+        no-repeat,
+      radial-gradient(circle at 8px 8px, var(--board) 7px, transparent 8px) 0 50% / 16px 16px
+        no-repeat,
+      radial-gradient(circle at 8px 8px, var(--board) 7px, transparent 8px) 0 82% / 16px 16px
+        no-repeat;
   }
 }
 
+/* Binder colour as a tiny divider: the switcher's swatch. */
+.binder-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 14px;
+  flex: none;
+  border-radius: 2px 2px 0 0;
+  background: var(--binder);
+}
+
+/* The column is the full viewport height. Dividers share it evenly, like one
+   printed set: each is at least 6.5rem (or its label, if longer) and grows to
+   fill a tall monitor. On a short screen they keep their size and the column
+   scrolls on its own. */
 .binder-tabs {
   position: sticky;
-  top: 1.25rem;
-  /* First tab starts below the sheet header row. */
-  margin-top: 4.5rem;
+  top: 0;
+  /* First divider starts below the sheet header row. */
+  padding: 6rem 12px 1.5rem 0;
+  height: 100vh;
+  box-sizing: border-box;
+  overflow-y: auto;
+  scrollbar-width: none;
   z-index: 1;
   display: flex;
   flex-direction: column;
-  /* Start each tab 2px under the sheet's edge, so the page's outline and cast
-     shadow cover the join. Only the visible end is the tab's box, so clicks and
-     pointer targeting land on what the visitor sees. */
-  margin-left: -2px;
+  gap: 3px;
 }
 
 .binder-tab {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  width: 52px;
-  min-height: 7.25rem;
-  margin-top: -1.5px;
-  padding-right: 14px;
-  border: 1.5px solid var(--sheet-edge);
-  border-left: 0;
-  border-radius: 0 12px 12px 0;
-  background-color: var(--tab);
-  background-image: linear-gradient(90deg, transparent 45%, rgba(0, 0, 0, 0.1));
-  color: var(--tab-on);
+  justify-content: center;
+  flex: 1 0 6.5rem;
+  /* Long labels win over the shared height, never the other way round. */
+  min-height: max-content;
+  max-height: 11rem;
+  width: 44px;
+  padding: 18px 0;
+  border-radius: 0 10px 10px 0;
+  background-color: var(--divider-manila);
+  box-shadow: inset 5px 0 5px -4px var(--sheet-shadow);
+  color: var(--ink);
   text-decoration: none;
   transition: width 180ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.binder-tab:hover {
-  width: 58px;
+.binder-tab:nth-child(even) {
+  background-color: var(--divider-manila-alt);
 }
 
-/* The open section: pulled further out, like a divider flipped open. When the
-   visitor changes section (BinderTabs tracks the previous one), the old
-   divider slides shut and the new one draws out. A fresh load shows it open. */
+.binder-tab:hover {
+  width: 48px;
+}
+
+/* The open section: the page itself, pulled out past the others and edged in
+   the binder colour. When the visitor changes section (BinderTabs tracks the
+   previous one), the old divider slides shut and the new one draws out. */
 .binder-tab[aria-current="page"] {
-  width: 66px;
-  z-index: 2;
+  width: 54px;
+  margin-left: -1.5px;
+  z-index: 3;
+  background-color: var(--paper);
+  border-right: 4px solid var(--binder);
+  box-shadow: 3px 3px 8px -2px var(--sheet-shadow);
+}
+
+.binder-tab[aria-current="page"] .binder-tab-label {
+  font-size: 14px;
+  font-weight: 800;
 }
 
 /* No fill mode: each animation ends at the tab's own resting width, so once it
@@ -775,19 +831,19 @@ input::placeholder {
 
 @keyframes binder-tab-open {
   from {
-    width: 52px;
+    width: 44px;
   }
   to {
-    width: 66px;
+    width: 54px;
   }
 }
 
 @keyframes binder-tab-close {
   from {
-    width: 66px;
+    width: 54px;
   }
   to {
-    width: 52px;
+    width: 44px;
   }
 }
 
@@ -799,8 +855,49 @@ input::placeholder {
 .binder-tab-label {
   writing-mode: vertical-rl;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+/* Phones: the same dividers as a scrolling row under the header. */
+.binder-strip {
+  border-bottom: 1px solid var(--line);
+  background: var(--board);
+}
+
+.binder-strip ul {
+  display: flex;
+  gap: 3px;
+  margin: 0;
+  padding: 8px 16px 0;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.binder-strip-tab {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 9px 9px 0 0;
+  background: var(--divider-manila);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.binder-strip li:nth-child(even) .binder-strip-tab {
+  background: var(--divider-manila-alt);
+}
+
+.binder-strip-tab[aria-current="page"] {
+  background: var(--paper);
+  border-top: 4px solid var(--binder);
+  font-weight: 800;
 }
 
 @media (prefers-reduced-motion: reduce) {

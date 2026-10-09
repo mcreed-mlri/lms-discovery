@@ -86,7 +86,7 @@ What a neighbouring product could not truthfully copy:
 - **MLRI-specific metadata as the basis for ranking:** practice areas, advocate types, jurisdictions, audience, lifecycle status, synonyms and editorial boosts. None of this exists inside Brightspace.
 - **Role and UPL-aware eligibility**, so a non-lawyer advocate is not sent toward attorney-only material.
 
-Language discipline: every item says where it opens (hub, Brightspace ↗, MassLegalServices ↗). Users must never be confused about which system they are in.
+Language discipline: **learners never see the word "Brightspace".** The course wrapper makes courses feel like part of the hub, so a course simply opens or resumes, with no outbound arrow. Only sites the learner really leaves for are named and marked ↗ (MassLegalServices). Brightspace is named only in code, docs, and admin and faculty screens.
 
 ## Practice and Simulation
 
@@ -196,7 +196,7 @@ Explicitly undecided product facts:
   - Don't invent an expansion of the acronym. None is recorded anywhere, and none has been confirmed.
 - No binding logo, palette or type commitments exist yet. The icon assets in `public/` are placeholders, like the name.
 - The binder is the current visual direction (see DESIGN.md). It aims to reduce screen fatigue for advocates who may be tired, rushed, or coming from dense legal work.
-- Voice constraint that does hold: never blur the line between this app, Brightspace and MassLegalServices.
+- Voice constraint that does hold: the hub and its courses read as one product, so never name Brightspace to learners. Name MassLegalServices when the learner actually leaves for it.
 
 ## Evidence on Hand
 

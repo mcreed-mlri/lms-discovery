@@ -177,7 +177,7 @@ components:
 
 The Learning Hub is the binder a legal aid attorney opens when they're stuck. A true-white page runs to the top, left and bottom edges of the screen, with three punched holes near its left edge. A warm-grey chipboard strip shows only on the right, behind the divider tabs. The header carries the app's own navigation (Home · Binders ▾ · My learning · Updates, with search). The divider tabs belong to the binder you have open: for Legal Skills, a Contents tab plus the 12 skill areas. The open divider turns white, joins the page, and wears the binder's colour on its free edge. The open page holds everything filed in that section: practice, reference, courses, new law, MassLegalServices resources and your own notes.
 
-The page is dense but quiet. Hierarchy comes from near-black ink, one workhorse family (Public Sans) on a steep size ramp, and ruled lists in place of cards. Colour is rationed: each hue means one thing (binder, state, or interactive) and is never decoration. There is one inverted near-black element per page, the resume card, and it carries the page's main handoff into Brightspace. Light mode is primary. Dark mode keeps the same structure.
+The page is dense but quiet. Hierarchy comes from near-black ink, one workhorse family (Public Sans) on a steep size ramp, and ruled lists in place of cards. Colour is rationed: each hue means one thing (binder, state, or interactive) and is never decoration. There is one inverted near-black element per page, the resume card, and it carries the page's main way back into a course. Light mode is primary. Dark mode keeps the same structure.
 
 Motion belongs to the dividers. When a section opens, its divider slides out (260ms, exponential ease-out) and the previous one slides shut. Nothing else on the page performs.
 
@@ -185,7 +185,7 @@ Motion belongs to the dividers. When a section opens, its divider slides out (26
 
 - The page sheet runs to the top, left and bottom edges. Chipboard shows only in the strip behind the tabs.
 - The header holds app navigation. The fore-edge dividers are the open binder's sections, manila at rest and white plus binder colour when open.
-- Every item says where it opens: in the hub, Brightspace ↗ or MassLegalServices ↗.
+- Courses open in place and are never labelled Brightspace (the wrapper makes them part of the hub). Only truly external items are marked: MassLegalServices ↗.
 - What's available leads. Planned topics sit in a quiet "Coming" roadmap, never in the main column.
 - Notes are visibly the user's own: a warm notes-paper panel, private by default.
 - Public Sans for every role; weight and size carry the hierarchy.
@@ -325,7 +325,7 @@ A 44px outlined button showing the binder's colour swatch (10 × 14px, a tiny di
 
 ### Item rows
 
-A title (17px / 700), a meta line (kind · source · length) in muted ink, and a trailing destination: "Open", "Brightspace ↗" or "MassLegalServices ↗". The destination is never left implicit. Placeholder titles in mockups are in [brackets].
+A title (17px / 700), a meta line (kind · source · length) in muted ink, and a trailing action: "Open" or "Resume" for anything in the hub or its courses, "MassLegalServices ↗" for external resources. Never write "Brightspace" in learner-facing copy. Placeholder titles in mockups are in [brackets].
 
 ### Practice card
 
@@ -338,7 +338,7 @@ Notes-paper fill with notes-edge border, 14px radius, "Only you can see these" i
 ### Resume card
 
 - **Surface:** Resume Black, 12px radius, 20–24px padding, at most one per page.
-- **Content:** a 22px / 800 course title, a "Next:" line in feature-muted, a lesson-stop line (filled stops for done lessons, hollow for upcoming ones, the current stop 20px with a Learning Teal ring and "You are here" set under it), and a 12px lesson line ending "opens in Brightspace".
+- **Content:** a 22px / 800 course title, a "Next:" line in feature-muted, a lesson-stop line (filled stops for done lessons, hollow for upcoming ones, the current stop 20px with a Learning Teal ring and "You are here" set under it), and a 12px lesson line (for example "Step 3 of 6").
 - **Action:** a white **Resume** button (40px, 7px radius, 14px / 700, with the arrow turned to point out). It uses the inverse focus ring (2px white). In dark mode the button becomes graphite with a hairline border.
 
 ### Buttons

@@ -2,114 +2,68 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, type CSSProperties } from "react";
+import { useEffect } from "react";
 
-import { getEffectiveDashboardRole } from "@/lib/access";
-import { useAuth } from "@/lib/auth";
-import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
-
-export type BinderTone = "home" | "browse" | "paths" | "learning" | "updates";
-
-type BinderTab = {
-  label: string;
-  href: string;
-  /** Token stem: `--tab-<tone>` is the fill, `--tab-<tone>-on` its measured text. */
-  tone: BinderTone;
-  match: (pathname: string) => boolean;
-  learnerOnly?: boolean;
-  adminOnly?: boolean;
-};
-
-// The five divider tabs on the page's fore-edge. Learn pages and the curriculum
-// map live under Browse, because that is where a visitor reaches them from.
-const tabs: BinderTab[] = [
-  { label: "Home", href: "/", tone: "home", match: (p) => p === "/" },
-  {
-    label: "Browse",
-    href: "/browse",
-    tone: "browse",
-    match: (p) =>
-      (p.startsWith("/browse") && !p.startsWith("/browse/paths")) ||
-      p.startsWith("/learn") ||
-      p.startsWith("/curriculum-map"),
-  },
-  {
-    label: "Learning paths",
-    href: "/browse/paths",
-    tone: "paths",
-    match: (p) => p.startsWith("/browse/paths"),
-  },
-  {
-    label: "My learning",
-    href: "/my-learning",
-    tone: "learning",
-    learnerOnly: true,
-    match: (p) => p.startsWith("/my-learning"),
-  },
-  {
-    label: "Manager",
-    href: getBrightspaceManagerUrl(),
-    tone: "learning",
-    adminOnly: true,
-    match: () => false,
-  },
-  {
-    label: "Updates",
-    href: "/updates",
-    tone: "updates",
-    learnerOnly: true,
-    match: (p) => p.startsWith("/updates"),
-  },
-];
-
-/** The open section's tone, so the sheet can carry its colour. Home by default. */
-export function activeBinderTone(pathname: string): BinderTone {
-  return tabs.find((tab) => !tab.adminOnly && tab.match(pathname))?.tone ?? "home";
-}
-
-function tabStyle(tone: BinderTone): CSSProperties {
-  return {
-    "--tab": `var(--tab-${tone})`,
-    "--tab-on": `var(--tab-${tone}-on)`,
-  } as CSSProperties;
-}
+import { legalSkillsBinder, openTabId } from "@/lib/binder";
 
 // Module state survives client-side navigation (each page mounts its own
 // shell), so it remembers which divider was open on the page before. On a hard
 // load or a deep link it is unset, and the open tab simply appears open.
-let lastOpenHref: string | null = null;
+let lastOpenId: string | null = null;
 
 /**
- * Desktop navigation: divider tabs that run under the page sheet and stick out
- * from its right edge. The current section's tab is pulled out further, like a
- * divider flipped open. Phones use the bottom bar in StudioShell instead.
+ * The open binder's divider tabs. App navigation lives in the header; these are
+ * the binder's own sections (Contents, then the Legal Skills areas).
+ *
+ * `rail` is the desktop column on the page's fore-edge: manila dividers, the
+ * open one white and joined to the page with the binder colour on its edge.
+ * `strip` is the phone version, a horizontal row of the same tabs at the top
+ * of binder pages, because thirteen tabs do not fit a bottom bar.
  */
-export function BinderTabs() {
+export function BinderTabs({ variant = "rail" }: { variant?: "rail" | "strip" }) {
   const pathname = usePathname();
-  const { user } = useAuth();
-  const isAdmin = getEffectiveDashboardRole(user) === "super_admin";
-  const visible = tabs.filter((tab) => (isAdmin ? !tab.learnerOnly : !tab.adminOnly));
-  const openHref = visible.find((tab) => tab.match(pathname))?.href ?? null;
+  const openId = openTabId(pathname);
   // Changing section: the old divider slides shut and the new one draws out.
-  const previous = lastOpenHref !== null && lastOpenHref !== openHref ? lastOpenHref : null;
+  const previous = lastOpenId !== null && lastOpenId !== openId ? lastOpenId : null;
 
   useEffect(() => {
-    lastOpenHref = openHref;
-  }, [openHref]);
+    lastOpenId = openId;
+  }, [openId]);
+
+  const label = `${legalSkillsBinder.name} tabs`;
+
+  if (variant === "strip") {
+    return (
+      <nav aria-label={label} className="binder-strip">
+        <ul>
+          {legalSkillsBinder.tabs.map((tab) => (
+            <li key={tab.id}>
+              <Link
+                href={tab.href}
+                aria-current={tab.id === openId ? "page" : undefined}
+                className="binder-strip-tab focus-ring"
+              >
+                {tab.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    );
+  }
 
   return (
-    <nav aria-label="Sections" className="binder-tabs">
-      {visible.map((tab) => {
-        const active = tab.match(pathname);
+    <nav aria-label={label} className="binder-tabs">
+      {legalSkillsBinder.tabs.map((tab) => {
+        const open = tab.id === openId;
         return (
           <Link
-            key={tab.label}
+            key={tab.id}
             href={tab.href}
-            style={tabStyle(tab.tone)}
-            aria-current={active ? "page" : undefined}
-            className={`binder-tab focus-ring ${
-              active && previous ? "binder-tab-opening" : ""
-            } ${tab.href === previous ? "binder-tab-closing" : ""}`}
+            aria-current={open ? "page" : undefined}
+            className={`binder-tab focus-ring ${open && previous ? "binder-tab-opening" : ""} ${
+              tab.id === previous ? "binder-tab-closing" : ""
+            }`}
           >
             <span className="binder-tab-label">{tab.label}</span>
           </Link>

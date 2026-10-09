@@ -336,7 +336,7 @@ test.describe("on a phone", () => {
     await expect(page.getByRole("button", { name: "Open navigation" })).toBeVisible();
     await expect(page.getByRole("button", { name: /Account menu for/ })).toBeVisible();
 
-    await expect(page.getByRole("link", { name: "Updates and notifications" })).toBeHidden();
+    await expect(page.getByRole("navigation", { name: "Main" })).toBeHidden();
     await expect(page.getByRole("button", { name: /Switch to (dark|light) mode/ })).toBeHidden();
     await expect(page.getByRole("button", { name: "Search learning library" })).toHaveCount(0);
 
@@ -352,13 +352,15 @@ test.describe("on a phone", () => {
     await expect(updates.locator("span[aria-hidden='true']")).toHaveCount(1);
   });
 
-  test("the desktop header keeps all four controls", async ({ page }) => {
+  test("the desktop header carries the main nav and its controls", async ({ page }) => {
     // The subtraction is a phone decision; a pointer has the room and no
     // bottom nav to duplicate.
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto("/");
 
-    await expect(page.getByRole("link", { name: "Updates and notifications" })).toBeVisible();
+    const main = page.getByRole("navigation", { name: "Main" });
+    await expect(main.getByRole("link", { name: /^Updates/ })).toBeVisible();
+    await expect(main.getByRole("button", { name: /Legal Skills binder/ })).toBeVisible();
     await expect(
       page.getByRole("button", { name: /Switch to (dark|light) mode/ }).last(),
     ).toBeVisible();
