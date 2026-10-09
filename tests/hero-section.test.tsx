@@ -17,7 +17,6 @@ test("the greeting subtitle is the job title, not the organization", () => {
       onQueryChange={() => undefined}
       suggestions={[]}
       onSelectResult={() => undefined}
-      onSearchLibrary={() => undefined}
       allItems={allItems}
     />,
   );
@@ -43,7 +42,6 @@ test("a production mock user shows MLRI Staff Attorney under the name", () => {
       onQueryChange={() => undefined}
       suggestions={[]}
       onSelectResult={() => undefined}
-      onSearchLibrary={() => undefined}
       allItems={allItems}
     />,
   );

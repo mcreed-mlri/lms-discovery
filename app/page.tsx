@@ -106,7 +106,6 @@ export default function Home() {
         onQueryChange={setQuery}
         suggestions={catalog.searchSuggestions}
         onSelectResult={openSearchResult}
-        onSearchLibrary={(term) => router.push(browseHref({ q: term }))}
         allItems={allItems}
       />
 

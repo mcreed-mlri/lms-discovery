@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 
+import { HearsaySkills } from "@/components/hearsay-skills";
 import { StudioShell } from "@/components/studio-shell";
 import { getEligibleLearningItems } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
@@ -73,6 +74,11 @@ export function BinderSectionView({ binderId, tabId }: { binderId: string; tabId
                       Open
                     </span>
                   </a>
+                  {item.id === "legal-skills-hearsay" ? (
+                    <div className="pb-5">
+                      <HearsaySkills />
+                    </div>
+                  ) : null}
                 </li>
               ))}
             </ul>
@@ -83,7 +89,7 @@ export function BinderSectionView({ binderId, tabId }: { binderId: string; tabId
           )}
         </section>
 
-        <section aria-labelledby="coming" className="border-t border-[color:var(--line)] pt-6">
+        <section aria-labelledby="coming" className="pt-2">
           <h2 id="coming" className="text-base font-bold text-[color:var(--ink)]">
             Coming to this tab
           </h2>

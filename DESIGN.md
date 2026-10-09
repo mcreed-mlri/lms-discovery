@@ -271,7 +271,7 @@ On desktop (1024px and up) the sheet runs to the top, left and bottom of the vie
 
 Inside the sheet, content is centred in a 1180px column (cap it so a very wide monitor doesn't stretch lines), with gutters of 16px (phone), 24px (640px and up) and 44px (desktop). Pages use a flexible main column and a roughly 340px side column, separated by a 44–48px gap, stacking in reading order on phones.
 
-- **Home (binder Contents):** main column holds greeting, scoped search, the pilot course opened to its skills, "Keep at hand" reference, and "What changed". Side column holds resume, latest note, training hours.
+- **Home** (outside the binders): main column holds the greeting, search and "Your binders" (name, one line, and an open count, nothing else). Side column holds the resume card (the one place to continue), "Also open now", and one update. Keep it this quiet: planned counts, tab lists and course outlines belong inside the binders. The Hearsay pilot's five skills live on Litigation › Trial, under the course.
 - **Section tab:** title with the 4px binder rule, a tab-scoped search, kind chips, then grouped lists (Practice, Reference, Courses, New law, Coming). Side column holds My notes.
 
 The header is a slim sticky bar at the top of the sheet. Its height is `--studio-chrome`, and sticky offsets are measured against it. The bottom bar on phones (if kept for app navigation) reserves `--safe-bottom`, and the content column reserves the same amount.

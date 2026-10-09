@@ -4,16 +4,11 @@ import { useMemo } from "react";
 import Link from "next/link";
 
 import { ArrowIcon } from "@/components/icons";
-import { EdgeScroller } from "@/components/edge-scroller";
 import { SearchBox } from "@/components/search-box";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
 import { continueLearning, courses, getContinueLearningUrl, type LearningItem } from "@/lib/data";
 import type { SearchResult } from "@/lib/search";
 import type { User } from "@/lib/auth";
-
-// Suggested searches under the search field, in the vocabulary of a
-// Massachusetts legal aid practice rather than generic course topics.
-const oftenSearched = ["summary process", "client interview", "RAFT", "motions"];
 
 type ResumeEntry = Extract<(typeof continueLearning)[number], { progress: number }>;
 
@@ -43,7 +38,7 @@ function useResumeCard(allItems: LearningItem[]) {
   // The title already names the course, so the lesson line carries only time left.
   const context = minutesLeft(resumeCourse?.duration);
 
-  // "1/5" → lesson 1 of 5, drawn as five stops. Anything else has no stops.
+  // "2/5" → part 2 of 5, drawn as five stops. Anything else has no stops.
   const lesson = /^(\d+)\/(\d+)$/.exec(resumeItem.progressLabel ?? "");
   const current = lesson ? Number(lesson[1]) : 0;
   const total = lesson ? Number(lesson[2]) : 0;
@@ -93,7 +88,6 @@ export function HeroSection({
   onQueryChange,
   suggestions,
   onSelectResult,
-  onSearchLibrary,
   allItems,
 }: {
   user: User;
@@ -102,7 +96,6 @@ export function HeroSection({
   onQueryChange: (value: string) => void;
   suggestions: SearchResult[];
   onSelectResult: (result: SearchResult) => void;
-  onSearchLibrary: (term: string) => void;
   allItems: LearningItem[];
 }) {
   const { resumeItem, resumeUrl, context, current, total } = useResumeCard(allItems);
@@ -128,22 +121,6 @@ export function HeroSection({
             prominent
           />
         </div>
-        <EdgeScroller
-          frameClassName="mt-2.5"
-          className="-mx-4 flex min-w-0 items-center gap-x-3 px-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0 [&::-webkit-scrollbar]:hidden"
-        >
-          <span className="shrink-0 text-[13px] text-[color:var(--ink-soft)]">Often searched</span>
-          {oftenSearched.map((term) => (
-            <button
-              key={term}
-              type="button"
-              onClick={() => onSearchLibrary(term)}
-              className="touch-target shrink-0 rounded-[4px] text-[13px] font-semibold text-[color:var(--ink)] underline decoration-[color:var(--line-control)] underline-offset-[3px] transition hover:decoration-[color:var(--ink)] focus-ring"
-            >
-              {term}
-            </button>
-          ))}
-        </EdgeScroller>
       </div>
 
       {isAdmin ? (
@@ -183,20 +160,19 @@ export function HeroSection({
           <div className="mt-4 flex items-center justify-between gap-4">
             <p className="text-[12px] text-[color:var(--feature-muted)]">
               {[
-                total > 0 ? `Lesson ${current} of ${total}` : `${resumeItem.progress}% complete`,
+                total > 0 ? `Part ${current} of ${total}` : `${resumeItem.progress}% complete`,
                 context,
-                "opens in Brightspace",
               ]
                 .filter(Boolean)
                 .join(" · ")}
             </p>
             <a
               href={resumeUrl}
-              aria-label={`Resume ${resumeItem.title} in Brightspace`}
+              aria-label={`Resume ${resumeItem.title}`}
               className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-[7px] bg-[color:var(--feature-action-bg)] px-4 text-[14px] font-bold text-[color:var(--feature-action-ink)] transition hover:opacity-90 focus-ring-inverse"
             >
               Resume
-              <ArrowIcon className="h-4 w-4 -rotate-45" />
+              <ArrowIcon className="h-4 w-4" />
             </a>
           </div>
         </aside>

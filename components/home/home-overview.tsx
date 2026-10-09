@@ -1,20 +1,13 @@
 import Link from "next/link";
 
 import { ArrowIcon } from "@/components/icons";
+import { binders, filedItems, getSectionTabs } from "@/lib/binder";
 import { getStatusTheme, resolveStatusKey } from "@/lib/course-theme";
-import {
-  contentUpdates,
-  getLearningItemUrl,
-  modules,
-  skillAreas,
-  subjectAreas,
-  type LearningItem,
-} from "@/lib/data";
-import { getHue } from "@/lib/skill-hue";
+import { contentUpdates, getLearningItemUrl, modules, type LearningItem } from "@/lib/data";
 
-// The built courses an attorney can open today, in the order they are most
-// likely to need them. Everything in the curriculum index is still planned.
-const AVAILABLE_NOW = ["eviction-defense-48h", "legal-skills-hearsay", "welcome-to-lace"];
+// Built courses an attorney can open today, other than the pilot, which the
+// resume card already carries.
+const ALSO_OPEN = ["eviction-defense-48h", "welcome-to-lace"];
 
 function availableMeta(item: LearningItem) {
   if (item.type !== "COURSE") return null;
@@ -25,11 +18,74 @@ function availableMeta(item: LearningItem) {
   return parts.join(" · ");
 }
 
-function SectionHeading({ id, children }: { id: string; children: string }) {
+function binderOpenCount(binderId: string, eligibleIds: Set<string>) {
+  const binder = binders.find((b) => b.id === binderId);
+  const tabs = binder ? getSectionTabs(binder) : [];
+  return tabs.reduce(
+    (sum, tab) => sum + (filedItems[tab.id] ?? []).filter((id) => eligibleIds.has(id)).length,
+    0,
+  );
+}
+
+function YourBinders({
+  eligibleIds,
+  catalogTotal,
+}: {
+  eligibleIds: Set<string>;
+  catalogTotal: number;
+}) {
   return (
-    <h2 id={id} className="text-[22px] font-extrabold tracking-[-0.015em] text-[color:var(--ink)]">
-      {children}
-    </h2>
+    <section aria-labelledby="binders-heading" className="min-w-0">
+      <h2
+        id="binders-heading"
+        className="text-[22px] font-extrabold tracking-[-0.015em] text-[color:var(--ink)]"
+      >
+        Your binders
+      </h2>
+      <ul className="mt-4 border-t-[1.5px] border-[color:var(--ink)]">
+        {binders.map((binder) => {
+          const open = binderOpenCount(binder.id, eligibleIds);
+          return (
+            <li key={binder.id}>
+              <Link
+                href={binder.href}
+                className="flex min-h-11 items-start gap-3 border-b border-[color:var(--line)] px-0.5 py-3.5 transition hover:bg-[color:var(--hover-tint)] focus-ring"
+              >
+                <span aria-hidden="true" data-binder={binder.id} className="binder-swatch mt-1.5" />
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[16px] font-bold text-[color:var(--ink)]">
+                    {binder.name}
+                  </span>
+                  <span className="block text-[13px] text-[color:var(--ink-muted)]">
+                    {binder.blurb}
+                  </span>
+                </span>
+                {open > 0 ? (
+                  <span className="shrink-0 pt-0.5 text-[12px] font-semibold tabular-nums text-[color:var(--ink-soft)]">
+                    {open} open
+                  </span>
+                ) : null}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+      <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[13px] text-[color:var(--ink-soft)]">
+        <span>Substantive-law binders are coming.</span>
+        <Link
+          href="/curriculum-map"
+          className="rounded-[3px] font-semibold text-[color:var(--ink)] underline underline-offset-[3px] focus-ring"
+        >
+          Curriculum map
+        </Link>
+        <Link
+          href="/browse"
+          className="rounded-[3px] font-semibold text-[color:var(--ink)] underline underline-offset-[3px] focus-ring"
+        >
+          Browse all {catalogTotal} items
+        </Link>
+      </p>
+    </section>
   );
 }
 
@@ -40,80 +96,30 @@ export function HomeOverview({
   catalogTotal: number;
   allItems: LearningItem[];
 }) {
-  const topicTotal = skillAreas.reduce((sum, area) => sum + area.count, 0);
-  const available = AVAILABLE_NOW.map((id) =>
+  const eligibleIds = new Set(allItems.map((item) => item.id));
+  const alsoOpen = ALSO_OPEN.map((id) =>
     allItems.find((item) => item.type === "COURSE" && item.id === id),
   ).filter((item): item is LearningItem => Boolean(item));
   const update = contentUpdates[0];
   const updateStatus = update ? getStatusTheme(resolveStatusKey(update.tag)) : null;
 
   return (
-    <div className="mx-auto grid max-w-[1180px] gap-10 px-4 pb-12 pt-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_24.5rem] lg:gap-11 lg:px-11 lg:pt-11">
-      <section id="skills" aria-labelledby="curriculum-heading" className="min-w-0 scroll-mt-24">
-        <SectionHeading id="curriculum-heading">The curriculum</SectionHeading>
-        <p className="mt-0.5 text-[13px] text-[color:var(--ink-soft)]">
-          Legal skills: {skillAreas.length} areas, {topicTotal} topics, all planned. Open an area to
-          see its topics and where they stand.
-        </p>
-        <ul className="mt-4 grid border-t-[1.5px] border-[color:var(--ink)] sm:grid-cols-2 sm:gap-x-10">
-          {skillAreas.map((area) => (
-            <li key={area.id} className="flex">
-              <Link
-                href={area.href}
-                className="flex min-h-11 w-full items-center gap-2.5 border-b border-[color:var(--line)] px-0.5 py-2 text-[14px] font-semibold text-[color:var(--ink)] transition hover:bg-[color:var(--hover-tint)] focus-ring"
-              >
-                {/* A divider-tab swatch in the area's hue. */}
-                <span
-                  aria-hidden="true"
-                  className="h-3.5 w-2.5 shrink-0 rounded-t-[2px]"
-                  style={{ background: getHue(area.hueIndex).solid }}
-                />
-                <span className="min-w-0 flex-1">{area.name}</span>
-                {/* Every row says planned, so none reads as openable next to
-                    "Available now". */}
-                <span className="shrink-0 text-[12px] font-semibold tabular-nums text-[color:var(--ink-soft)]">
-                  {area.count} planned
-                  <span className="sr-only"> topics</span>
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-3 text-[13px] text-[color:var(--ink-soft)]">
-          Subject-area training (
-          {subjectAreas
-            .slice(0, 3)
-            .map((area) => area.name.replace(/ Law$/, ""))
-            .join(", ")}{" "}
-          and {Math.max(subjectAreas.length - 3, 0)} more) is on the{" "}
-          <Link
-            href="/curriculum-map"
-            className="rounded-[3px] font-semibold text-[color:var(--ink)] underline underline-offset-[3px] focus-ring"
-          >
-            curriculum map
-          </Link>
-          .{" "}
-          <Link
-            href="/browse"
-            className="rounded-[3px] font-semibold text-[color:var(--ink)] underline underline-offset-[3px] focus-ring"
-          >
-            Browse all {catalogTotal} items
-          </Link>
-          .
-        </p>
-      </section>
+    <div className="mx-auto grid max-w-[1180px] gap-10 px-4 pb-12 pt-6 sm:px-6 lg:grid-cols-[minmax(0,1fr)_24.5rem] lg:gap-11 lg:px-11 lg:pt-6">
+      <div className="flex min-w-0 flex-col gap-10">
+        <YourBinders eligibleIds={eligibleIds} catalogTotal={catalogTotal} />
+      </div>
 
       <div className="flex min-w-0 flex-col gap-8">
-        {available.length > 0 ? (
+        {alsoOpen.length > 0 ? (
           <section aria-labelledby="available-heading">
             <h2
               id="available-heading"
               className="text-[17px] font-extrabold tracking-[-0.01em] text-[color:var(--ink)]"
             >
-              Available now
+              Also open now
             </h2>
             <ul className="mt-2.5 border-t-[1.5px] border-[color:var(--ink)]">
-              {available.map((item) => (
+              {alsoOpen.map((item) => (
                 <li key={item.id}>
                   <a
                     href={getLearningItemUrl(item)}

@@ -356,8 +356,9 @@ export const continueLearning: ContinueLearningItem[] = [
     type: "COURSE",
     title: "Legal Skills: Hearsay",
     detail: "Defending against a hearsay objection in writing",
-    progress: 20,
-    progressLabel: "1/5",
+    // Subskill 2 is the only one built, so that is where a learner is.
+    progress: 40,
+    progressLabel: "2/5",
   },
   {
     id: "eviction-defense-48h",
