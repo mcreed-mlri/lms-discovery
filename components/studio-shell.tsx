@@ -2,8 +2,16 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { BellIcon, BookIcon, GridIcon, HomeIcon, SearchIcon } from "@/components/icons";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
+import { BinderTabs, type BinderTone } from "@/components/binder-tabs";
+import { BellIcon, BookIcon, GridIcon, HomeIcon, PathIcon, SearchIcon } from "@/components/icons";
 import { SearchBox } from "@/components/search-box";
 import { SiteFooter } from "@/components/site-footer";
 import { StudioContentBar } from "@/components/studio-content-bar";
@@ -18,15 +26,13 @@ import { useScrollLock } from "@/lib/hooks/use-scroll-lock";
 import { searchLearningItems, type SearchResult } from "@/lib/search";
 import { recordSearchAnalytics } from "@/lib/search-analytics";
 
-const COLLAPSE_KEY = "lace-rail-collapsed";
-
 export function StudioShell({
   children,
   padded = true,
 }: {
   children: ReactNode;
-  /** Wrap children in the centered 1120px content column. Home opts out to run
-   *  full-bleed hero sections. */
+  /** Wrap children in the centered content column. Home opts out and lays out
+   *  its own sections inside the page sheet. */
   padded?: boolean;
 }) {
   const { user, ready } = useAuth();
@@ -34,7 +40,6 @@ export function StudioShell({
   const pathname = usePathname();
   const isAdmin = getEffectiveDashboardRole(user) === "super_admin";
 
-  const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [globalQuery, setGlobalQuery] = useState("");
@@ -80,27 +85,6 @@ export function StudioShell({
     [globalQuery, router],
   );
 
-  // Restore the per-user rail preference.
-  useEffect(() => {
-    try {
-      if (localStorage.getItem(COLLAPSE_KEY) === "1") setCollapsed(true);
-    } catch {
-      // ignore
-    }
-  }, []);
-
-  const toggleCollapsed = useCallback(() => {
-    setCollapsed((prev) => {
-      const next = !prev;
-      try {
-        localStorage.setItem(COLLAPSE_KEY, next ? "1" : "0");
-      } catch {
-        // ignore
-      }
-      return next;
-    });
-  }, []);
-
   useEffect(() => {
     if (ready && !user) router.replace("/login");
   }, [ready, user, router]);
@@ -139,16 +123,15 @@ export function StudioShell({
     );
   }
 
+  // The binder: on lg+ the page sheet lies on the chipboard board and the
+  // divider tabs (BinderTabs) stick out from its right edge. Below lg the sheet
+  // is the whole screen, the drawer holds the full navigation, and the bottom
+  // bar takes the tabs' job.
   return (
-    <div className="hub-shell flex min-h-screen items-stretch">
+    <div className="hub-shell binder-board min-h-screen">
       <a className="skip-link" href="#main-content">
         Skip to main content
       </a>
-
-      {/* Desktop rail */}
-      <div className="sticky top-0 hidden h-screen shrink-0 lg:flex">
-        <StudioRail collapsed={collapsed} onToggle={toggleCollapsed} />
-      </div>
 
       {/* Mobile rail drawer */}
       {mobileOpen && (
@@ -177,37 +160,62 @@ export function StudioShell({
         </div>
       )}
 
-      {/* Content column */}
-      <div className="flex min-w-0 flex-1 flex-col overflow-x-clip pb-[calc(5rem+var(--safe-bottom))] lg:pb-0">
-        <StudioContentBar onMenu={() => setMobileOpen(true)} />
-        <main id="main-content" className="min-w-0 flex-1 overflow-x-clip">
-          {padded ? (
-            <div className="mx-auto max-w-[1120px] px-4 py-8 sm:px-6 lg:px-10">{children}</div>
-          ) : (
-            children
-          )}
-        </main>
-        <SiteFooter />
+      <div className="pb-[calc(5rem+var(--safe-bottom))] lg:flex lg:items-start lg:py-5 lg:pl-5 lg:pr-3">
+        {/* The page sheet */}
+        <div className="binder-sheet flex min-w-0 flex-1 flex-col overflow-x-clip">
+          <StudioContentBar onMenu={() => setMobileOpen(true)} />
+          <main id="main-content" className="min-w-0 flex-1 overflow-x-clip">
+            {padded ? (
+              <div className="mx-auto max-w-[1180px] px-4 py-8 sm:px-6 lg:px-11">{children}</div>
+            ) : (
+              children
+            )}
+          </main>
+          <SiteFooter />
+        </div>
+
+        <div className="hidden shrink-0 lg:block">
+          <BinderTabs />
+        </div>
       </div>
 
-      {/* Mobile bottom nav */}
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--line)] bg-[color:var(--surface)] px-5 pb-[calc(0.5rem+var(--safe-bottom))] pt-2 lg:hidden">
-        <div className={`mx-auto grid max-w-md ${isAdmin ? "grid-cols-3" : "grid-cols-4"}`}>
+      {/* Mobile bottom bar: the binder's divider tabs, edge-on. Every section
+          carries its tab colour along the bar's top edge; the open one stands
+          taller, like the divider pulled out on desktop. */}
+      <nav
+        aria-label="Sections"
+        className="fixed inset-x-0 bottom-0 z-40 border-t-[1.5px] border-[color:var(--sheet-edge)] bg-[color:var(--surface)] px-1.5 pb-[calc(0.5rem+var(--safe-bottom))] pt-2.5 lg:hidden"
+      >
+        <div className={`mx-auto grid max-w-lg ${isAdmin ? "grid-cols-5" : "grid-cols-6"}`}>
           <BottomNavLink
             href="/"
             label="Home"
+            tone="home"
             active={pathname === "/"}
             icon={<HomeIcon className="h-5 w-5" />}
           />
-          <BottomNavButton
-            label="Search"
-            icon={<SearchIcon className="h-5 w-5" />}
-            onClick={openGlobalSearch}
+          <BottomNavLink
+            href="/browse"
+            label="Browse"
+            tone="browse"
+            active={
+              (pathname.startsWith("/browse") && !pathname.startsWith("/browse/paths")) ||
+              pathname.startsWith("/curriculum-map")
+            }
+            icon={<GridIcon className="h-5 w-5" />}
+          />
+          <BottomNavLink
+            href="/browse/paths"
+            label="Paths"
+            tone="paths"
+            active={pathname.startsWith("/browse/paths")}
+            icon={<PathIcon className="h-5 w-5" />}
           />
           {isAdmin ? (
             <BottomNavLink
               href={getBrightspaceManagerUrl()}
               label="Manager"
+              tone="learning"
               active={false}
               icon={<GridIcon className="h-5 w-5" />}
             />
@@ -216,18 +224,25 @@ export function StudioShell({
               <BottomNavLink
                 href="/my-learning"
                 label="Learning"
+                tone="learning"
                 active={pathname.startsWith("/my-learning")}
                 icon={<BookIcon className="h-5 w-5" />}
               />
               <BottomNavLink
                 href="/updates"
                 label="Updates"
+                tone="updates"
                 active={pathname.startsWith("/updates")}
                 badge
                 icon={<BellIcon className="h-5 w-5" />}
               />
             </>
           )}
+          <BottomNavButton
+            label="Search"
+            icon={<SearchIcon className="h-5 w-5" />}
+            onClick={openGlobalSearch}
+          />
         </div>
       </nav>
 
@@ -307,12 +322,15 @@ function GlobalSearchDialog({
 function BottomNavLink({
   href,
   label,
+  tone,
   active,
   icon,
   badge = false,
 }: {
   href: string;
   label: string;
+  /** The binder tab this item stands in for. */
+  tone: BinderTone;
   active: boolean;
   icon: ReactNode;
   /** The unread dot, which followed the bell down from the header on phones. */
@@ -321,8 +339,11 @@ function BottomNavLink({
   return (
     <Link
       href={href}
-      className={`flex flex-col items-center gap-1 rounded-xl py-2 text-xs font-bold focus-ring ${
-        active ? "text-[color:var(--brand)]" : "text-[color:var(--ink-soft)]"
+      style={{ "--tab": `var(--tab-${tone})` } as CSSProperties}
+      className={`relative flex flex-col items-center gap-1 rounded-xl pb-1.5 pt-2 text-[11px] font-bold focus-ring before:absolute before:inset-x-1 before:rounded-t-[6px] before:border-[1.5px] before:border-b-0 before:border-[color:var(--sheet-edge)] before:bg-[color:var(--tab)] ${
+        active
+          ? "text-[color:var(--ink)] before:-top-[22px] before:h-[12px]"
+          : "text-[color:var(--ink-soft)] before:-top-[17px] before:h-[7px]"
       }`}
       aria-current={active ? "page" : undefined}
     >
@@ -353,7 +374,7 @@ function BottomNavButton({
     <button
       type="button"
       onClick={onClick}
-      className="flex flex-col items-center gap-1 rounded-xl py-2 text-xs font-bold text-[color:var(--ink-soft)] focus-ring"
+      className="flex flex-col items-center gap-1 rounded-xl pb-1.5 pt-2 text-[11px] font-bold text-[color:var(--ink-soft)] focus-ring"
     >
       {icon}
       {label}

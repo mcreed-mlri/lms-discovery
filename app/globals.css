@@ -39,72 +39,70 @@
 }
 
 /* ============================================================================
-   LACE Learning Hub — design tokens
+   Learning Hub design tokens: the binder.
    ----------------------------------------------------------------------------
-   A restrained, durable system. Cool grey/white surfaces stay calm over long
-   sessions; colour is reserved as a *signal*:
-     · topic colours  — orientation / navigation (which course family am I in?)
-     · status colours — lifecycle / progress  (what state is this content in?)
-   The same token names + values are mirrored in the Brightspace course
-   wrapper (course-style.css) so hub → course feels like one product.
+   The app is a ring binder of the curriculum. A white page sheet lies on a
+   warm-grey chipboard board, and divider tabs on its fore-edge are the main
+   navigation. Colour is a signal, never decoration:
+     · tab colours    — which section of the hub you are in
+     · skill hues     — which skill area a course or module belongs to
+     · status colours — what state content is in (red only for law changed)
+   Every pairing with a recorded ratio is measured (ADR 0008); the axe sweep in
+   e2e/a11y.spec.ts checks every route in both themes.
    ========================================================================= */
 :root {
   color-scheme: light;
-  /* UI / body: Geist is the Studio typeface (loaded via next/font in layout.tsx).
-     System faces kept as fallbacks so text stays crisp before the font loads. */
+  /* Public Sans: one workhorse family for every role (loaded via next/font in
+     layout.tsx). System faces are fallbacks so text stays crisp before it loads. */
   --font-sans:
-    var(--font-geist, "Geist"), "Segoe UI Variable", "Segoe UI", "Inter", system-ui, ui-sans-serif,
-    -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-  /* Display: same Geist family; large headings just lean on tighter tracking. */
+    var(--font-public-sans, "Public Sans"), "Segoe UI Variable", "Segoe UI", system-ui,
+    ui-sans-serif, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
   --font-serif:
-    var(--font-geist, "Geist"), "Segoe UI Variable", "Segoe UI", "Inter", system-ui, sans-serif;
-  /* "Mono" role — eyebrows, chips, counts, percentages. Points at the Geist sans
-     stack: the small all-caps label treatment reads crisply in the UI sans and
-     avoids the blurry render a webfont mono had at 9–11px. */
+    var(--font-public-sans, "Public Sans"), "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
   --font-mono:
-    var(--font-geist, "Geist"), "Segoe UI Variable", "Segoe UI", "Inter", system-ui, ui-sans-serif,
-    -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    var(--font-public-sans, "Public Sans"), "Segoe UI Variable", "Segoe UI", system-ui,
+    ui-sans-serif, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
 
-  /* ── Neutral base — warm paper, not beige. The canvas eases the screen down
-        for long legal-work sessions while cards stay crisp and readable. ─── */
-  --paper: #f7f6f2; /* warm grey page canvas */
-  --paper-deep: #eeece6; /* deeper section accent, use sparingly */
-  --panel: #f0eee8; /* section frame */
+  /* ── Neutral base — the page sheet is true white; the warmth lives in the
+        chipboard board around it (see "The binder" below). ─────────────────── */
+  --paper: #ffffff; /* the page sheet's ground */
+  --paper-deep: #f2f2ee; /* deeper section accent, use sparingly */
+  --panel: #f6f6f2; /* section frame */
   --surface: #ffffff; /* clean white card */
   --surface-raised: #ffffff; /* raised surfaces */
-  --surface-sunken: #efede7; /* sunken tracks, chips, active-nav bg */
-  --hover-tint: #f5f2eb; /* whisper hover */
-  --chrome-bg: rgba(255, 253, 248, 0.88);
-  /* Inversion surface — near-black, warm to match --ink rather than a coloured
-     panel. Black carries the *structural* emphasis in this system; blue is left
-     to mean "interactive". */
-  --feature-surface: #191814;
+  --surface-sunken: #f2f2ee; /* sunken tracks, chips, active-nav bg */
+  --hover-tint: #f6f6f2; /* whisper hover */
+  --chrome-bg: rgba(255, 255, 255, 0.94);
+  /* Inversion surface — near-black, used for exactly one element per page: the
+     resume card on Home. Black carries structural weight; ultramarine means
+     "interactive". */
+  --feature-surface: #17181c;
   --feature-ink: #ffffff;
-  --feature-muted: rgba(255, 255, 255, 0.58);
-  --feature-track: rgba(255, 255, 255, 0.16);
+  --feature-muted: #b9bbc0;
+  --feature-track: rgba(255, 255, 255, 0.2);
   --feature-action-bg: #ffffff;
-  --feature-action-ink: #191814;
+  --feature-action-ink: #17181c;
   --feature-action-border: transparent;
-  --hero-wash: #f7f6f2;
+  --hero-wash: #ffffff;
   --hero-wash-soft: #ffffff;
-  --ink: #171511; /* warm near-black — primary text, brand mark */
-  --ink-muted: #575148; /* muted — body copy, descriptions */
+  --ink: #16161a; /* warm near-black — primary text, brand mark */
+  --ink-muted: #45454d; /* muted — body copy, descriptions */
   /* Soft — metadata, captions, default icons, placeholders. Dark enough to
      clear WCAG 1.4.3 (4.5:1) on white, paper, AND sunken, since it is used at
      12–13px on all three. Do not lighten it. */
-  --ink-soft: #6d675e;
-  --line: #e2ded6; /* hairline borders */
-  --line-strong: #d2ccc1; /* stronger hairline */
-  --line-soft: #ece8df; /* inner dividers, hover border */
+  --ink-soft: #66666e;
+  --line: #e2e2dc; /* hairline borders */
+  --line-strong: #cfcfc7; /* stronger hairline */
+  --line-soft: #ecece6; /* inner dividers, hover border */
   /* Form-control boundary. A control's edge is "information required to
      identify a UI component", so WCAG 1.4.11 wants 3:1 — the decorative
      hairlines above cannot carry an input or select border. */
-  --line-control: #827b70;
-  --shadow-xs: 0 1px 2px rgba(32, 27, 19, 0.04);
-  --shadow-card: 0 1px 2px rgba(32, 27, 19, 0.035), 0 4px 14px rgba(32, 27, 19, 0.045);
-  --shadow-sm: 0 1px 2px rgba(32, 27, 19, 0.035), 0 4px 14px rgba(32, 27, 19, 0.045);
-  --shadow-md: 0 1px 2px rgba(32, 27, 19, 0.04), 0 6px 18px rgba(32, 27, 19, 0.05);
-  --shadow-lg: 0 8px 24px rgba(32, 27, 19, 0.1), 0 2px 6px rgba(32, 27, 19, 0.06);
+  --line-control: #7a7a72;
+  --shadow-xs: 0 1px 2px rgba(22, 22, 26, 0.05);
+  --shadow-card: 0 1px 2px rgba(22, 22, 26, 0.05), 0 4px 14px rgba(22, 22, 26, 0.05);
+  --shadow-sm: 0 1px 2px rgba(22, 22, 26, 0.05), 0 4px 14px rgba(22, 22, 26, 0.05);
+  --shadow-md: 0 1px 2px rgba(22, 22, 26, 0.05), 0 6px 18px rgba(22, 22, 26, 0.06);
+  --shadow-lg: 0 8px 24px rgba(22, 22, 26, 0.12), 0 2px 6px rgba(22, 22, 26, 0.07);
 
   /* The device's insets, behind variables so a test can simulate a notched
      phone. No headless browser reports a non-zero env(safe-area-inset-*), which
@@ -129,17 +127,17 @@
   --press: brightness(0.92);
   --press-inverse: brightness(0.86);
 
-  /* ── Brand — steel blue, drawn from the MLRI blue family. Institutional, not
-        electric, and firmly on the blue side of the wheel (no violet cast).
-        Blue means *interactive*: links, active icons, progress, resume. ────── */
-  --brand: #1a5aa0; /* links, active icons, avatar fill */
-  --brand-ink: #12447c; /* brand text on light */
-  --brand-fill: #1c63b0; /* progress fill / accent graphics */
-  --brand-tint: #e8eff8; /* "Continue" chip bg */
+  /* ── Brand — the binder's ultramarine. It means *interactive*: links, active
+        icons, progress, focus rings. (The Updates tab uses a lighter blue so
+        it can take the same dark ink as every other tab.) ─────────────────── */
+  --brand: #2f45b5; /* links, active icons, avatar fill */
+  --brand-ink: #24379a; /* brand text on light */
+  --brand-fill: #2f45b5; /* progress fill / accent graphics */
+  --brand-tint: #eceefa; /* "Continue" chip bg */
   /* Foreground for text sitting ON the solid --brand fill (avatar initials, the
      filter-count badge). NOT --brand-ink, which is brand-coloured text on a page
-     background. This has to flip with the theme: white clears 5.6:1 on the light
-     brand but measures 2.19:1 on the lifted dark brand, an AA failure that axe
+     background. This has to flip with the theme: white clears 7.96:1 on the light
+     brand but would fail on the lifted dark brand, an AA failure that axe
      caught on the dark-theme sweep. */
   --brand-on: #ffffff;
 
@@ -147,69 +145,68 @@
      control that must read as chosen use this instead of a colour fill, so the
      UI's weight comes from ink and colour stays a signal. Flips to near-white
      in dark mode, which is why it is a token pair and not `var(--ink)`. */
-  --solid-bg: #191814;
+  --solid-bg: #16161a;
   --solid-ink: #ffffff;
 
-  /* ── Skill-hue palette — 8 disciplined hues, used BY INDEX on skill tiles
-        and practice-area swatches. Identical S/L feel so it reads systematic.
-        Mirrors lib/skill-hue.ts (keep the two in sync).
+  /* ── Skill-hue palette — 8 binder-divider hues, assigned by skill lens (see
+        lib/skill-hue.ts, which references these by name).
 
         Each hue carries three roles, exactly like the topic families: `solid`
         for strokes/swatches/rails, `tint` for pale fills, and `ink` for TEXT on
         that tint. The saturated solid is never used as text — at 11–12px it
         lands around 3:1 on its own tint. Use `-ink` for any label.
 
-        The family is deliberately grounded: steel, teal, olive, amber, green,
-        sky, graphite, rust. No violet or pink — the set should read sober and
-        earthy, and graphite keeps ink in rotation as a colour. ─────────────── */
-  --hue-1: #1a5aa0;
-  --hue-1-tint: #e8eff8;
-  --hue-1-ink: #16508f; /* steel blue */
-  --hue-2: #0e7a80;
-  --hue-2-tint: #e0f1f1;
-  --hue-2-ink: #0b666b; /* teal */
-  --hue-3: #5c7326;
-  --hue-3-tint: #eef2e2;
-  --hue-3-ink: #4c6020; /* olive */
-  --hue-4: #c8791b;
-  --hue-4-tint: #fbf0dc;
-  --hue-4-ink: #9e5f15; /* amber */
-  --hue-5: #179a72;
-  --hue-5-tint: #e2f4ed;
-  --hue-5-ink: #137c5c; /* green */
-  --hue-6: #3a8ec9;
-  --hue-6-tint: #e7f3fb;
-  --hue-6-ink: #2f73a3; /* sky */
-  --hue-7: #414852;
-  --hue-7-tint: #eaecef;
-  --hue-7-ink: #363c45; /* graphite */
-  --hue-8: #bb573b;
-  --hue-8-tint: #fbe8e2;
-  --hue-8-ink: #ab5036; /* rust */
+        The family is the divider set from a reference binder: ultramarine,
+        teal, grass, chrome yellow, oxide orange, violet, graphite, sienna.
+        Every -ink is measured at 4.5:1 or better on its own tint. ──────────── */
+  --hue-1: #2f45b5;
+  --hue-1-tint: #eceefa;
+  --hue-1-ink: #2b3fa6; /* ultramarine */
+  --hue-2: #0b6b6b;
+  --hue-2-tint: #e2f1f1;
+  --hue-2-ink: #0a5e5e; /* teal */
+  --hue-3: #3f7f2e;
+  --hue-3-tint: #e9f3e4;
+  --hue-3-ink: #366d27; /* grass */
+  --hue-4: #e8b500;
+  --hue-4-tint: #fbf2d2;
+  --hue-4-ink: #6e5300; /* chrome yellow */
+  --hue-5: #dc6a3c;
+  --hue-5-tint: #fbe9e1;
+  --hue-5-ink: #a03f19; /* oxide orange */
+  --hue-6: #6b3fa0;
+  --hue-6-tint: #f1eaf8;
+  --hue-6-ink: #61398f; /* violet */
+  --hue-7: #45454d;
+  --hue-7-tint: #ececea;
+  --hue-7-ink: #3a3a41; /* graphite */
+  --hue-8: #8a5a3c;
+  --hue-8-tint: #f4ece5;
+  --hue-8-ink: #7a4f34; /* sienna */
 
-  /* ── Topic families — one accent per course family. Remapped to the restrained
-        hue palette so existing cards/dashboard accents stay useful signals. ─ */
-  --topic-court: #3a8ec9;
-  --topic-court-soft: #e7f3fb;
-  --topic-court-ink: #2b6c9b; /* sky */
-  --topic-client: #179a72;
-  --topic-client-soft: #e2f4ed;
-  --topic-client-ink: #0f6e51; /* green */
-  --topic-ethics: #414852;
-  --topic-ethics-soft: #eaecef;
-  --topic-ethics-ink: #363c45; /* graphite */
-  --topic-research: #0e7a80;
-  --topic-research-soft: #e0f1f1;
-  --topic-research-ink: #0b666b; /* teal */
-  --topic-drafting: #1a5aa0;
-  --topic-drafting-soft: #e8eff8;
-  --topic-drafting-ink: #16508f; /* steel */
-  --topic-trauma: #bb573b;
-  --topic-trauma-soft: #fbe8e2;
-  --topic-trauma-ink: #ab5036; /* rust */
-  --topic-foundations: #5c7326;
-  --topic-foundations-soft: #eef2e2;
-  --topic-foundations-ink: #4c6020; /* olive */
+  /* ── Topic families — one accent per course family, aliased onto the skill
+        hues so both colour paths land on the same eight values. ────────────── */
+  --topic-court: var(--hue-1);
+  --topic-court-soft: var(--hue-1-tint);
+  --topic-court-ink: var(--hue-1-ink);
+  --topic-client: var(--hue-3);
+  --topic-client-soft: var(--hue-3-tint);
+  --topic-client-ink: var(--hue-3-ink);
+  --topic-ethics: var(--hue-7);
+  --topic-ethics-soft: var(--hue-7-tint);
+  --topic-ethics-ink: var(--hue-7-ink);
+  --topic-research: var(--hue-2);
+  --topic-research-soft: var(--hue-2-tint);
+  --topic-research-ink: var(--hue-2-ink);
+  --topic-drafting: var(--hue-6);
+  --topic-drafting-soft: var(--hue-6-tint);
+  --topic-drafting-ink: var(--hue-6-ink);
+  --topic-trauma: var(--hue-5);
+  --topic-trauma-soft: var(--hue-5-tint);
+  --topic-trauma-ink: var(--hue-5-ink);
+  --topic-foundations: var(--hue-8);
+  --topic-foundations-soft: var(--hue-8-tint);
+  --topic-foundations-ink: var(--hue-8-ink);
   --topic-neutral: #8b909d;
   --topic-neutral-soft: #efede7;
   --topic-neutral-ink: #565c69;
@@ -240,8 +237,27 @@
   --radius-card: 14px;
   --radius-control: 9px;
 
+  /* ── The binder — board, page sheet, and the five divider tabs. Tab colours
+        are the section's identity. Every tab takes the same dark ink, like one
+        printed divider set; each fill is light enough to clear 4.5:1 with it.
+        Board text uses --ink (10.4:1). ─────────────────────────────────────── */
+  --board: #c9c4bb; /* warm-grey chipboard */
+  --board-deep: #b8b2a8;
+  --sheet-edge: #2a2622; /* page and tab outline */
+  --sheet-shadow: rgba(40, 32, 24, 0.42);
+  --tab-home: #dc6a3c;
+  --tab-home-on: #16161a; /* 5.30:1 */
+  --tab-browse: #e8a33c;
+  --tab-browse-on: #16161a; /* 8.37:1 */
+  --tab-paths: #5a9e45;
+  --tab-paths-on: #16161a; /* 5.51:1 */
+  --tab-learning: #2f9a9a;
+  --tab-learning-on: #16161a; /* 5.34:1 */
+  --tab-updates: #6683e6;
+  --tab-updates-on: #16161a; /* 5.12:1 */
+
   /* Text selection — a clear wash of the brand fill, not the retired gold. */
-  --selection-bg: rgba(28, 99, 176, 0.18);
+  --selection-bg: rgba(47, 69, 181, 0.16);
 }
 
 [data-theme="dark"] {
@@ -284,11 +300,11 @@
   --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.24), 0 16px 38px rgba(0, 0, 0, 0.26);
   --shadow-lg: 0 16px 42px rgba(0, 0, 0, 0.38), 0 2px 8px rgba(0, 0, 0, 0.28);
 
-  /* Brand: the same steel blue, lifted for dark surfaces. */
-  --brand: #7fb3ee;
-  --brand-ink: #98c2f3;
-  --brand-fill: #3b8ede;
-  --brand-tint: #13304d;
+  /* Brand: the same ultramarine, lifted for dark surfaces. */
+  --brand: #8b9cf0;
+  --brand-ink: #a6b3f4;
+  --brand-fill: #6f84ea;
+  --brand-tint: #1b2350;
   /* The lifted brand is a light blue, so its foreground inverts to dark ink —
      same reasoning as --solid-ink just below. Do not set this to white. */
   --brand-on: #14161b;
@@ -298,55 +314,62 @@
   --solid-bg: #eceef2;
   --solid-ink: #14161b;
 
+  /* The binder in dark: a deep board, the page sheet lifts to --surface, and the
+     tabs keep their colours (same measured foregrounds as light). */
+  --board: #2b2926;
+  --board-deep: #23211f;
+  --sheet-edge: #4a4640;
+  --sheet-shadow: rgba(0, 0, 0, 0.55);
+
   /* Skill hues: saturated strokes plus deep fills for icon wells/chips. */
   /* Dark tints are deep, so each solid already clears 4.5:1 as text on its own
      tint (6.1–7.6:1); ink mirrors solid here rather than inventing a value. */
-  --hue-1: #6f9fe8;
-  --hue-1-tint: #13304d;
-  --hue-1-ink: #6f9fe8;
-  --hue-2: #4fc3c3;
+  --hue-1: #8b9cf0;
+  --hue-1-tint: #1b2350;
+  --hue-1-ink: #8b9cf0;
+  --hue-2: #5fc4c4;
   --hue-2-tint: #0e2f31;
-  --hue-2-ink: #4fc3c3;
-  --hue-3: #a9c06a;
-  --hue-3-tint: #262e14;
-  --hue-3-ink: #a9c06a;
-  --hue-4: #e0a552;
-  --hue-4-tint: #3a2c10;
-  --hue-4-ink: #e0a552;
-  --hue-5: #5fc9a8;
-  --hue-5-tint: #133029;
-  --hue-5-ink: #5fc9a8;
-  --hue-6: #7cc0ec;
-  --hue-6-tint: #14283a;
-  --hue-6-ink: #7cc0ec;
-  --hue-7: #a9b2c0;
-  --hue-7-tint: #262a31;
-  --hue-7-ink: #a9b2c0;
-  --hue-8: #e8957a;
-  --hue-8-tint: #3a1f17;
-  --hue-8-ink: #e8957a;
+  --hue-2-ink: #5fc4c4;
+  --hue-3: #8fc77a;
+  --hue-3-tint: #1d2e16;
+  --hue-3-ink: #8fc77a;
+  --hue-4: #e8c24a;
+  --hue-4-tint: #33290a;
+  --hue-4-ink: #e8c24a;
+  --hue-5: #f0926a;
+  --hue-5-tint: #3a1c10;
+  --hue-5-ink: #f0926a;
+  --hue-6: #b897e6;
+  --hue-6-tint: #2a1d40;
+  --hue-6-ink: #b897e6;
+  --hue-7: #b4b4bc;
+  --hue-7-tint: #2a2a2f;
+  --hue-7-ink: #b4b4bc;
+  --hue-8: #d4a283;
+  --hue-8-tint: #33241a;
+  --hue-8-ink: #d4a283;
 
-  --topic-court: #7cc0ec;
-  --topic-court-soft: #14283a;
-  --topic-court-ink: #7cc0ec;
-  --topic-client: #5fc9a8;
-  --topic-client-soft: #133029;
-  --topic-client-ink: #5fc9a8;
-  --topic-ethics: #a9b2c0;
-  --topic-ethics-soft: #262a31;
-  --topic-ethics-ink: #a9b2c0;
-  --topic-research: #4fc3c3;
-  --topic-research-soft: #0e2f31;
-  --topic-research-ink: #4fc3c3;
-  --topic-drafting: #6f9fe8;
-  --topic-drafting-soft: #13304d;
-  --topic-drafting-ink: #6f9fe8;
-  --topic-trauma: #e8957a;
-  --topic-trauma-soft: #3a1f17;
-  --topic-trauma-ink: #e8957a;
-  --topic-foundations: #a9c06a;
-  --topic-foundations-soft: #262e14;
-  --topic-foundations-ink: #a9c06a;
+  --topic-court: var(--hue-1);
+  --topic-court-soft: var(--hue-1-tint);
+  --topic-court-ink: var(--hue-1-ink);
+  --topic-client: var(--hue-3);
+  --topic-client-soft: var(--hue-3-tint);
+  --topic-client-ink: var(--hue-3-ink);
+  --topic-ethics: var(--hue-7);
+  --topic-ethics-soft: var(--hue-7-tint);
+  --topic-ethics-ink: var(--hue-7-ink);
+  --topic-research: var(--hue-2);
+  --topic-research-soft: var(--hue-2-tint);
+  --topic-research-ink: var(--hue-2-ink);
+  --topic-drafting: var(--hue-6);
+  --topic-drafting-soft: var(--hue-6-tint);
+  --topic-drafting-ink: var(--hue-6-ink);
+  --topic-trauma: var(--hue-5);
+  --topic-trauma-soft: var(--hue-5-tint);
+  --topic-trauma-ink: var(--hue-5-ink);
+  --topic-foundations: var(--hue-8);
+  --topic-foundations-soft: var(--hue-8-tint);
+  --topic-foundations-ink: var(--hue-8-ink);
   --topic-neutral: #9aa0ad;
   --topic-neutral-soft: #262a33;
   --topic-neutral-ink: #c0c6d1;
@@ -374,7 +397,7 @@
   --status-later-ink: #c0c6d1;
 
   /* Brighter wash so the selection stays visible on the dark canvas. */
-  --selection-bg: rgba(59, 142, 222, 0.34);
+  --selection-bg: rgba(139, 156, 240, 0.26);
 }
 
 * {
@@ -666,6 +689,127 @@ input::placeholder {
 
 ::selection {
   background: var(--selection-bg);
+}
+
+/* ── The binder ──────────────────────────────────────────────────────────────
+   Desktop only (lg+): the page sheet lies on the chipboard board, and divider
+   tabs run under its right edge. Below lg the sheet is the whole screen and the
+   bottom bar takes over navigation. */
+@media (min-width: 1024px) {
+  .hub-shell.binder-board {
+    background-color: var(--board);
+    /* Fine chipboard grain: a low-alpha inline noise tile over the board colour. */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+  }
+}
+
+.binder-sheet {
+  position: relative;
+  z-index: 2;
+  background: var(--paper);
+}
+
+@media (min-width: 1024px) {
+  .binder-sheet {
+    border: 1.5px solid var(--sheet-edge);
+    border-radius: 6px 14px 14px 6px;
+    box-shadow: 6px 0 10px -4px var(--sheet-shadow);
+    min-height: calc(100vh - 2.5rem);
+  }
+}
+
+.binder-tabs {
+  position: sticky;
+  top: 1.25rem;
+  /* First tab starts below the sheet header row. */
+  margin-top: 4.5rem;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  /* Start each tab 2px under the sheet's edge, so the page's outline and cast
+     shadow cover the join. Only the visible end is the tab's box, so clicks and
+     pointer targeting land on what the visitor sees. */
+  margin-left: -2px;
+}
+
+.binder-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 52px;
+  min-height: 7.25rem;
+  margin-top: -1.5px;
+  padding-right: 14px;
+  border: 1.5px solid var(--sheet-edge);
+  border-left: 0;
+  border-radius: 0 12px 12px 0;
+  background-color: var(--tab);
+  background-image: linear-gradient(90deg, transparent 45%, rgba(0, 0, 0, 0.1));
+  color: var(--tab-on);
+  text-decoration: none;
+  transition: width 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.binder-tab:hover {
+  width: 58px;
+}
+
+/* The open section: pulled further out, like a divider flipped open. When the
+   visitor changes section (BinderTabs tracks the previous one), the old
+   divider slides shut and the new one draws out. A fresh load shows it open. */
+.binder-tab[aria-current="page"] {
+  width: 66px;
+  z-index: 2;
+}
+
+/* No fill mode: each animation ends at the tab's own resting width, so once it
+   finishes the normal rules (including :hover) take over again. */
+.binder-tab-opening {
+  animation: binder-tab-open 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.binder-tab-closing {
+  animation: binder-tab-close 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes binder-tab-open {
+  from {
+    width: 52px;
+  }
+  to {
+    width: 66px;
+  }
+}
+
+@keyframes binder-tab-close {
+  from {
+    width: 66px;
+  }
+  to {
+    width: 52px;
+  }
+}
+
+.binder-tab.focus-ring:focus-visible {
+  outline-color: var(--ink);
+  outline-offset: 3px;
+}
+
+.binder-tab-label {
+  writing-mode: vertical-rl;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .binder-tab,
+  .binder-tab-opening,
+  .binder-tab-closing {
+    transition: none;
+    animation: none;
+  }
 }
 
 .hub-shell {

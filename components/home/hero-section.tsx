@@ -3,26 +3,27 @@
 import { useMemo } from "react";
 import Link from "next/link";
 
-import { ArrowIcon, PlayIcon } from "@/components/icons";
+import { ArrowIcon } from "@/components/icons";
 import { EdgeScroller } from "@/components/edge-scroller";
 import { SearchBox } from "@/components/search-box";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
-import {
-  continueLearning,
-  courses,
-  getContinueLearningUrl,
-  learnerProgress,
-  type LearningItem,
-} from "@/lib/data";
-import { resumeMinutesLeftLabel } from "@/lib/home-helpers";
+import { continueLearning, courses, getContinueLearningUrl, type LearningItem } from "@/lib/data";
 import type { SearchResult } from "@/lib/search";
 import type { User } from "@/lib/auth";
 
-// Suggested searches under the command bar — a short, scannable set of the
-// things a busy advocate reaches for most. Presented as suggestions, not filters.
-const popularSearches = ["legal research", "legal writing", "client interview", "motions"];
+// Suggested searches under the search field, in the vocabulary of a
+// Massachusetts legal aid practice rather than generic course topics.
+const oftenSearched = ["summary process", "client interview", "RAFT", "motions"];
 
 type ResumeEntry = Extract<(typeof continueLearning)[number], { progress: number }>;
+
+function minutesLeft(duration?: string) {
+  if (!duration || !/min/i.test(duration)) return null;
+  return `about ${duration
+    .replace(/[~\s]*min\s*$/i, "")
+    .replace(/^~/, "")
+    .trim()} min left`;
+}
 
 function useResumeCard(allItems: LearningItem[]) {
   const eligibleItemIds = useMemo(() => new Set(allItems.map((item) => item.id)), [allItems]);
@@ -39,20 +40,52 @@ function useResumeCard(allItems: LearningItem[]) {
     } satisfies ResumeEntry);
   const resumeUrl = getContinueLearningUrl(resumeItem, allItems);
   const resumeCourse = courses.find((course) => course.id === resumeItem.id);
-  const resumeEyebrow = [resumeCourse?.practiceArea, resumeMinutesLeftLabel(resumeCourse?.duration)]
-    .filter(Boolean)
-    .join(" · ")
-    .toUpperCase();
-  const resumeProgressLabel = resumeItem.progressLabel
-    ? `Lesson ${resumeItem.progressLabel}`
-    : `${resumeItem.progress}%`;
+  // The title already names the course, so the lesson line carries only time left.
+  const context = minutesLeft(resumeCourse?.duration);
 
-  return { resumeItem, resumeUrl, resumeEyebrow, resumeProgressLabel };
+  // "1/5" → lesson 1 of 5, drawn as five stops. Anything else has no stops.
+  const lesson = /^(\d+)\/(\d+)$/.exec(resumeItem.progressLabel ?? "");
+  const current = lesson ? Number(lesson[1]) : 0;
+  const total = lesson ? Number(lesson[2]) : 0;
+
+  return { resumeItem, resumeUrl, context, current, total };
 }
 
-// HERO — greeting, search, and resume card. It scrolls with the page: pinned,
-// it took about a third of a laptop screen and covered the skill tiles. Ctrl K
-// still opens search from anywhere.
+// The T Map's stop line: one stop per lesson, with "You are here" set under the
+// current one. Decorative; the lesson line below carries the same fact in words.
+function LessonStops({ current, total }: { current: number; total: number }) {
+  return (
+    <div className="relative mt-4 flex items-center pb-5" aria-hidden="true">
+      {Array.from({ length: total }).map((_, index) => {
+        const stop = index + 1;
+        const here = stop === current;
+        return (
+          <span key={stop} className="contents">
+            {index > 0 ? <span className="h-0.5 flex-1 bg-[color:var(--feature-track)]" /> : null}
+            <span
+              className={`relative ${
+                here
+                  ? "h-5 w-5 shrink-0 rounded-full bg-[color:var(--feature-ink)] shadow-[0_0_0_3px_var(--feature-surface),0_0_0_5px_var(--tab-learning)]"
+                  : stop < current
+                    ? "h-3 w-3 shrink-0 rounded-full bg-[color:var(--feature-ink)]"
+                    : "h-3 w-3 shrink-0 rounded-full border-2 border-[color:var(--feature-ink)]"
+              }`}
+            >
+              {here ? (
+                <span className="absolute left-0 top-[calc(100%+6px)] whitespace-nowrap text-[12px] font-semibold text-[color:var(--feature-ink)]">
+                  You are here
+                </span>
+              ) : null}
+            </span>
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+// HERO — greeting, search, and the resume card. It scrolls with the page; Ctrl K
+// opens search from anywhere.
 export function HeroSection({
   user,
   isAdmin,
@@ -72,185 +105,102 @@ export function HeroSection({
   onSearchLibrary: (term: string) => void;
   allItems: LearningItem[];
 }) {
-  const { resumeItem, resumeUrl, resumeEyebrow, resumeProgressLabel } = useResumeCard(allItems);
-  const hoursPct = Math.round((learnerProgress.hoursEarned / learnerProgress.hoursRequired) * 100);
+  const { resumeItem, resumeUrl, context, current, total } = useResumeCard(allItems);
 
   return (
-    <section className="overflow-x-clip border-b border-[color:var(--line)] bg-[color:var(--chrome-bg)]">
-      <div className="mx-auto min-w-0 max-w-[1120px] px-4 py-4 sm:px-6 sm:py-5 lg:px-10 lg:py-6">
-        {/* Top row: headline + training hours */}
-        <div className="flex min-w-0 items-center justify-between gap-3 sm:gap-6">
-          <div className="min-w-0">
-            <h1 className="hero-display min-w-0 text-[22px] leading-[1.1] text-[color:var(--ink)] sm:text-[32px] sm:leading-[1.06] lg:text-[34px]">
-              Welcome back, {user.firstName}.
-            </h1>
-            <p className="mt-1 flex flex-wrap items-center gap-x-1.5 text-[13px] text-[color:var(--ink-muted)] sm:mt-1.5 sm:text-[14px]">
-              <span className="font-semibold tracking-[-0.01em] text-[color:var(--ink-soft)]">
-                {user.title}
-              </span>
-              {user.unit ? (
-                <>
-                  <span className="text-[color:var(--ink-soft)]/45" aria-hidden="true">
-                    ·
-                  </span>
-                  <span>{user.unit}</span>
-                </>
-              ) : null}
-            </p>
-          </div>
-
-          {/* Mobile: text-only training hours — no ring. Hidden for the
-              headless admin account, which tracks no personal progress. */}
-          {!isAdmin && (
-            <p className="shrink-0 pt-0.5 text-right font-mono text-[11px] leading-tight tabular-nums sm:hidden">
-              <span className="block font-semibold text-[color:var(--ink-soft)]">Training</span>
-              <span className="font-semibold text-[color:var(--ink)]">
-                {learnerProgress.hoursEarned}/{learnerProgress.hoursRequired} hrs
-              </span>
-            </p>
-          )}
-
-          {!isAdmin && (
-            <div className="hidden min-w-[9rem] sm:block sm:pt-1.5">
-              <p className="text-right text-[13px] leading-tight text-[color:var(--ink-soft)]">
-                <span className="font-semibold tabular-nums text-[color:var(--ink)]">
-                  {learnerProgress.hoursEarned} of {learnerProgress.hoursRequired}
-                </span>{" "}
-                training hours
-              </p>
-              <div
-                className="mt-1.5 h-1 overflow-hidden rounded-full bg-[color:var(--surface-sunken)]"
-                role="img"
-                aria-label={`${hoursPct}% of training hours goal`}
-              >
-                <div
-                  className="h-full rounded-full bg-[color:var(--brand-fill)]"
-                  style={{ width: `${hoursPct}%` }}
-                />
-              </div>
-            </div>
-          )}
+    <section className="mx-auto grid min-w-0 max-w-[1180px] gap-6 px-4 pb-2 pt-6 sm:px-6 sm:pt-9 lg:grid-cols-[minmax(0,1fr)_24.5rem] lg:gap-11 lg:px-11 lg:pt-10">
+      <div className="min-w-0">
+        <h1 className="hero-display text-[32px] leading-[1.08] tracking-[-0.025em] text-[color:var(--ink)] sm:text-[42px]">
+          Welcome back, {user.firstName}.
+        </h1>
+        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[14px] text-[color:var(--ink-muted)]">
+          <span>{user.title}</span>
+          {user.unit ? <span>{user.unit}</span> : null}
         </div>
 
-        {/* Main row: resume first on mobile, then search */}
-        <div className="mt-3 grid min-w-0 gap-3 sm:mt-5 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-8">
-          {isAdmin ? (
-            <aside
-              className="order-1 min-w-0 rounded-[12px] bg-[color:var(--feature-surface)] px-3 py-2.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-3 lg:order-2 lg:self-start"
-              aria-label="Brightspace Manager"
-            >
-              <div className="flex items-start gap-2.5 sm:items-center sm:gap-3">
-                <div className="min-w-0 flex-1">
-                  <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.04em] text-[color:var(--feature-muted)] sm:text-[10px]">
-                    Service account
-                  </p>
-                  <h2 className="mt-0.5 truncate text-[14px] font-bold leading-snug tracking-[-0.01em] text-[color:var(--feature-ink)] sm:text-[15px] sm:leading-tight">
-                    Brightspace Manager
-                  </h2>
-                </div>
-                <Link
-                  href={getBrightspaceManagerUrl()}
-                  aria-label="Open Brightspace Manager"
-                  className="touch-target inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--feature-action-border)] bg-[color:var(--feature-action-bg)] text-[color:var(--feature-action-ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:opacity-90 focus-ring-inverse sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
-                >
-                  <ArrowIcon className="h-[14px] w-[14px]" />
-                  <span className="hidden sm:inline">Manager</span>
-                </Link>
-              </div>
-              <p className="mt-1.5 text-[11px] leading-snug text-[color:var(--feature-muted)] sm:mt-2">
-                Course operations, sync checks, and Brightspace setup now live there.
-              </p>
-            </aside>
-          ) : (
-            <aside
-              className="order-1 min-w-0 rounded-[12px] bg-[color:var(--feature-surface)] px-3 py-2.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-3 lg:order-2 lg:self-start"
-              aria-label="Resume learning"
-            >
-              <div className="flex items-start gap-2.5 sm:items-center sm:gap-3">
-                <div className="min-w-0 flex-1">
-                  {resumeEyebrow ? (
-                    <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.04em] text-[color:var(--feature-muted)] sm:text-[10px]">
-                      {resumeEyebrow}
-                    </p>
-                  ) : null}
-                  <h2 className="mt-0.5 line-clamp-2 text-[14px] font-bold leading-snug tracking-[-0.01em] text-[color:var(--feature-ink)] sm:line-clamp-none sm:truncate sm:text-[15px] sm:leading-tight">
-                    {resumeItem.title}
-                  </h2>
-                </div>
-                <a
-                  href={resumeUrl}
-                  aria-label={`Resume ${resumeItem.title}. Up next: ${resumeItem.detail}. ${resumeProgressLabel}.`}
-                  className="touch-target inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] border border-[color:var(--feature-action-border)] bg-[color:var(--feature-action-bg)] text-[color:var(--feature-action-ink)] shadow-[0_1px_2px_rgba(0,0,0,0.14)] transition hover:opacity-90 focus-ring-inverse sm:h-9 sm:w-auto sm:gap-1.5 sm:px-3 sm:text-[13px] sm:font-bold"
-                >
-                  <PlayIcon className="h-[14px] w-[14px]" />
-                  <span className="hidden sm:inline">Resume</span>
-                </a>
-              </div>
-              <div className="mt-1.5 flex items-center gap-2 sm:mt-2 sm:gap-2.5">
-                <div className="h-1 min-w-0 flex-1 overflow-hidden rounded-full bg-[color:var(--feature-track)]">
-                  <div
-                    className="h-full rounded-full bg-[color:var(--brand-fill)]"
-                    style={{ width: `${resumeItem.progress}%` }}
-                  />
-                </div>
-                <span className="shrink-0 font-mono text-[9px] font-semibold tabular-nums text-[color:var(--feature-muted)] sm:text-[10px]">
-                  {resumeProgressLabel}
-                </span>
-              </div>
-            </aside>
-          )}
-
-          <div className="order-2 min-w-0 lg:order-1">
-            <SearchBox
-              value={query}
-              onChange={onQueryChange}
-              suggestions={suggestions}
-              onSelect={onSelectResult}
-              prominent
-            />
-            <EdgeScroller
-              frameClassName="mt-2 sm:hidden"
-              className="-mx-4 flex min-w-0 gap-2 px-4 pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-            >
-              {popularSearches.map((q) => (
-                <button
-                  key={q}
-                  type="button"
-                  onClick={() => onSearchLibrary(q)}
-                  className="shrink-0 rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-[12px] font-medium text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
-                >
-                  {q}
-                </button>
-              ))}
-            </EdgeScroller>
-            <div className="mt-2.5 hidden flex-wrap items-center gap-2 sm:flex">
-              <span className="text-[13px] font-medium text-[color:var(--ink-soft)]">Popular:</span>
-              {popularSearches.map((q) => (
-                <button
-                  key={q}
-                  type="button"
-                  onClick={() => onSearchLibrary(q)}
-                  className="rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-[13px] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-strong)] hover:text-[color:var(--ink)] focus-ring"
-                >
-                  {q}
-                </button>
-              ))}
-            </div>
-            <nav
-              className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] sm:hidden"
-              aria-label="Jump to section"
-            >
-              <span className="font-medium text-[color:var(--ink-soft)]">Jump to</span>
-              <a href="#skills" className="font-semibold text-[color:var(--brand)]">
-                Skills
-              </a>
-              <a href="/browse" className="font-semibold text-[color:var(--brand)]">
-                Library
-              </a>
-            </nav>
-          </div>
+        <div className="mt-6">
+          <SearchBox
+            value={query}
+            onChange={onQueryChange}
+            suggestions={suggestions}
+            onSelect={onSelectResult}
+            placeholder="What’s in front of you today? Try “notice to quit”"
+            prominent
+          />
         </div>
+        <EdgeScroller
+          frameClassName="mt-2.5"
+          className="-mx-4 flex min-w-0 items-center gap-x-3 px-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0 [&::-webkit-scrollbar]:hidden"
+        >
+          <span className="shrink-0 text-[13px] text-[color:var(--ink-soft)]">Often searched</span>
+          {oftenSearched.map((term) => (
+            <button
+              key={term}
+              type="button"
+              onClick={() => onSearchLibrary(term)}
+              className="touch-target shrink-0 rounded-[4px] text-[13px] font-semibold text-[color:var(--ink)] underline decoration-[color:var(--line-control)] underline-offset-[3px] transition hover:decoration-[color:var(--ink)] focus-ring"
+            >
+              {term}
+            </button>
+          ))}
+        </EdgeScroller>
       </div>
+
+      {isAdmin ? (
+        <aside
+          className="min-w-0 self-start rounded-[12px] bg-[color:var(--feature-surface)] px-5 py-5 text-[color:var(--feature-ink)]"
+          aria-label="Brightspace Manager"
+        >
+          <p className="text-[12px] font-semibold text-[color:var(--feature-muted)]">
+            Service account
+          </p>
+          <h2 className="mt-1 text-[19px] font-extrabold tracking-[-0.01em]">
+            Brightspace Manager
+          </h2>
+          <p className="mt-1 text-[13px] text-[color:var(--feature-muted)]">
+            Course operations, sync checks, and Brightspace setup live there.
+          </p>
+          <Link
+            href={getBrightspaceManagerUrl()}
+            className="mt-4 inline-flex h-10 items-center gap-2 rounded-[7px] bg-[color:var(--feature-action-bg)] px-4 text-[14px] font-bold text-[color:var(--feature-action-ink)] transition hover:opacity-90 focus-ring-inverse"
+          >
+            Open Manager
+            <ArrowIcon className="h-4 w-4" />
+          </Link>
+        </aside>
+      ) : (
+        <aside
+          className="min-w-0 self-start rounded-[12px] bg-[color:var(--feature-surface)] px-5 py-5 text-[color:var(--feature-ink)] sm:px-6"
+          aria-label="Resume learning"
+        >
+          <h2 className="text-[22px] font-extrabold leading-tight tracking-[-0.01em]">
+            {resumeItem.title}
+          </h2>
+          <p className="mt-1 text-[13px] text-[color:var(--feature-muted)]">
+            Next: {resumeItem.detail}
+          </p>
+          {total > 1 ? <LessonStops current={current} total={total} /> : null}
+          <div className="mt-4 flex items-center justify-between gap-4">
+            <p className="text-[12px] text-[color:var(--feature-muted)]">
+              {[
+                total > 0 ? `Lesson ${current} of ${total}` : `${resumeItem.progress}% complete`,
+                context,
+                "opens in Brightspace",
+              ]
+                .filter(Boolean)
+                .join(" · ")}
+            </p>
+            <a
+              href={resumeUrl}
+              aria-label={`Resume ${resumeItem.title} in Brightspace`}
+              className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-[7px] bg-[color:var(--feature-action-bg)] px-4 text-[14px] font-bold text-[color:var(--feature-action-ink)] transition hover:opacity-90 focus-ring-inverse"
+            >
+              Resume
+              <ArrowIcon className="h-4 w-4 -rotate-45" />
+            </a>
+          </div>
+        </aside>
+      )}
     </section>
   );
 }

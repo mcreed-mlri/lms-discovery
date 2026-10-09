@@ -1,16 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Public_Sans } from "next/font/google";
 import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { Providers } from "./providers";
 import "./globals.css";
 
-// Geist — the Studio sans, used app-wide (body plus the small-caps label role).
-// Exposed as a CSS var consumed in globals.css.
-const geist = Geist({
+// Public Sans — the binder's one workhorse family, used for every role. It is a
+// variable font, so no weight list. Exposed as a CSS var consumed in globals.css.
+const publicSans = Public_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-geist",
+  variable: "--font-public-sans",
 });
 
 export const metadata: Metadata = {
@@ -32,7 +31,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#14161b",
+  themeColor: "#c9c4bb",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -59,7 +58,7 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className={geist.variable}>
+      <body className={publicSans.variable}>
         <Providers>{children}</Providers>
         <Analytics />
       </body>

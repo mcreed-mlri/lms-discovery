@@ -14,14 +14,13 @@ for (const viewport of [
     await page.setViewportSize(viewport);
     await page.goto("/");
     const main = page.getByRole("main");
-    await expect(main.getByText("Legal skills", { exact: true })).toBeVisible();
-    await expect(main.getByRole("heading", { name: intakeToVerdictPath.title })).toHaveCount(1);
+    await expect(main.getByRole("heading", { name: "The curriculum" })).toBeVisible();
     await expect(main.getByText("Advocate & Paralegal Foundations")).toHaveCount(0);
     await expect(main.getByText("Experienced Attorney: Advanced Practice")).toHaveCount(0);
-    const explore = main.getByRole("link", { name: "Explore the path" });
-    await explore.scrollIntoViewIfNeeded();
-    await explore.focus();
-    await expect(explore).toBeFocused();
+    const research = main.getByRole("link", { name: /^Legal Research/ });
+    await research.scrollIntoViewIfNeeded();
+    await research.focus();
+    await expect(research).toBeFocused();
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
     ).toBe(true);
@@ -30,15 +29,12 @@ for (const viewport of [
       window.scrollTo({ top: 0, behavior: "instant" });
     });
     await page.screenshot({ path: testInfo.outputPath("home.png"), fullPage: true });
-    await main
-      .getByRole("link")
-      .filter({ has: page.getByRole("heading", { name: "Legal Research", exact: true }) })
-      .click();
+    await research.click();
     await expect(page).toHaveURL(/learn\/course-legal-research/);
     await expect(
       page.getByRole("heading", { name: "Legal Research", exact: true }).first(),
     ).toBeVisible();
-    await page.goto("/");
+    await page.goto("/browse/paths");
     await page.getByRole("link", { name: "Explore the path" }).click();
     await expect(page).toHaveURL(/browse\/paths\/intake-to-verdict/);
     await expect(page.getByRole("heading", { name: intakeToVerdictPath.title })).toBeVisible();

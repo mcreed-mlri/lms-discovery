@@ -12,6 +12,8 @@ type SearchBoxProps = {
   onSelect?: (result: SearchResult) => void;
   compact?: boolean;
   prominent?: boolean;
+  /** Visible prompt. Home asks in the advocate's own terms; elsewhere it stays generic. */
+  placeholder?: string;
 };
 
 export function SearchBox({
@@ -21,6 +23,7 @@ export function SearchBox({
   onSelect,
   compact = false,
   prominent = false,
+  placeholder = "Search the library",
 }: SearchBoxProps) {
   const inputId = useId();
   const listboxId = useId();
@@ -96,11 +99,11 @@ export function SearchBox({
         onKeyDown={handleKeyDown}
         className={`w-full border border-[color:var(--line-control)] bg-[color:var(--surface-raised)] font-semibold text-[color:var(--ink)] outline-none transition placeholder:font-normal placeholder:text-[color:var(--ink-soft)] hover:border-[color:var(--ink-soft)] focus:border-[color:var(--brand)] focus-ring ${
           prominent
-            ? "h-11 rounded-[12px] pl-10 pr-4 text-[16px] shadow-[var(--shadow-card)] sm:h-[52px] sm:pl-[3.25rem] sm:pr-16 sm:text-[17px]"
+            ? "h-12 rounded-[8px] border-[1.5px] pl-10 pr-4 text-[16px] sm:h-14 sm:pl-[3.25rem] sm:pr-20 sm:text-[17px]"
             : `rounded-[var(--radius-control)] pl-10 pr-4 text-base shadow-[var(--shadow-xs)] ${compact ? "h-10" : "h-12"}`
         }`}
         id={inputId}
-        placeholder="Search the library"
+        placeholder={placeholder}
         role="combobox"
         type="search"
       />

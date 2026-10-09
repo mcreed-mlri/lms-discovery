@@ -46,7 +46,10 @@ const columnLevel: Record<string, Level> = {
 // skills tiles stay coherent (otherwise every planned module would fall back to
 // "research"). See getModuleSkillId in lib/data.ts.
 const columnSkill: Record<string, SkillId> = {
-  foundations: "ethics",
+  // Foundations shares Ethics' subject but not its colour: the two sit side by
+  // side at the top of the Home index, so it takes a hue outside the orange
+  // family (sienna lifts to peach in dark mode, too close to Ethics).
+  foundations: "drafting",
   ethics: "ethics",
   "pre-engagement": "triage",
   "legal-writing": "drafting",

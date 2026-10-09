@@ -251,7 +251,7 @@ export function StudioRail({
         </button>
         {!collapsed && (
           <span className="text-[19px] font-bold tracking-[-0.02em] text-[color:var(--ink)]">
-            LACE
+            Learning Hub
           </span>
         )}
       </div>

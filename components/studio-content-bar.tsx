@@ -1,15 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type { CSSProperties } from "react";
 import { AccountMenu } from "@/components/account-menu";
+import { activeBinderTone } from "@/components/binder-tabs";
 import { BellIcon, MenuIcon } from "@/components/icons";
 import { ThemeToggle } from "@/components/theme-toggle";
 
-/* Slim sticky header inside the content column. On desktop it carries the
-   "what is this product" eyebrow, notifications, the theme toggle and the
-   account bubble; on a phone it narrows to the hamburger, the LACE wordmark
-   and the account bubble. Height is `--studio-chrome` in globals.css — the
-   homepage hero pins under it.
+/* Slim sticky header at the top of the page sheet. On desktop it carries the
+   wordmark, notifications, the theme toggle and the account bubble; on a
+   phone it narrows to the hamburger, the wordmark and the account bubble.
+   Height is `--studio-chrome` in globals.css.
 
    What a phone does NOT get here is deliberate. Search, notifications and the
    theme toggle all had a second home already — the first two in the bottom
@@ -20,8 +22,14 @@ import { ThemeToggle } from "@/components/theme-toggle";
    carrying the duplicates. The unread dot moved to the bottom nav's Updates
    item with the bell, since that is now where a phone user meets it. */
 export function StudioContentBar({ onMenu }: { onMenu?: () => void }) {
+  // On desktop the open section's tab colour runs along the sheet's header rule,
+  // the one place it reaches into the page.
+  const section = { "--section": `var(--tab-${activeBinderTone(usePathname())})` } as CSSProperties;
   return (
-    <div className="sticky top-0 z-20 flex min-w-0 max-w-full items-center gap-3 border-b border-[color:var(--line)] bg-[color:var(--chrome-bg)] px-4 pb-2.5 pt-[calc(0.625rem+var(--safe-top))] backdrop-blur-[10px] sm:px-6 sm:pb-3 sm:pt-[calc(0.75rem+var(--safe-top))] lg:px-10 lg:py-4">
+    <div
+      style={section}
+      className="sticky top-0 z-20 flex min-w-0 max-w-full items-center gap-3 border-b border-[color:var(--line)] lg:border-b-[3px] lg:border-b-[color:var(--section)] bg-[color:var(--chrome-bg)] px-4 pb-2.5 pt-[calc(0.625rem+var(--safe-top))] sm:px-6 lg:rounded-tr-[14px] lg:rounded-tl-[6px] sm:pb-3 sm:pt-[calc(0.75rem+var(--safe-top))] lg:px-10 lg:py-4"
+    >
       {/* Mobile: menu + wordmark */}
       <button
         type="button"
@@ -31,9 +39,12 @@ export function StudioContentBar({ onMenu }: { onMenu?: () => void }) {
       >
         <MenuIcon className="h-5 w-5" />
       </button>
-      <span className="font-mono text-[17px] font-bold tracking-[-0.02em] text-[color:var(--ink)] lg:hidden">
-        LACE
-      </span>
+      <Link
+        href="/"
+        className="rounded-[6px] text-[17px] font-extrabold tracking-[-0.01em] text-[color:var(--ink)] focus-ring"
+      >
+        Learning Hub
+      </Link>
 
       <div className="flex-1" />
 

@@ -27,7 +27,9 @@ function StageNode({ stage, hue }: { stage: PathStage; hue: SkillHue }) {
       ? {}
       : engaged
         ? ({
-            background: hue.solid,
+            // The hue's ink, not its solid: a white check on chrome yellow measures
+            // under 2:1, and every -ink clears 4.5:1 against the icon colour.
+            background: hue.ink,
             color: "var(--brand-on)",
             // Read by the .stage-node-current keyframe below — a CSS animation
             // overrides an inline box-shadow for its duration, so the halo

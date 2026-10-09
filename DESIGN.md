@@ -1,516 +1,366 @@
 ---
-name: The Studio
-description: A calm warm-grey learning studio where colour is never decoration — only orientation or status.
+name: The Binder
+description: A ring binder of the curriculum. Divider tabs on the page's fore-edge are the navigation; the open page holds today's work.
 colors:
-  studio-blue: "#1a5aa0"
-  signal-blue: "#1c63b0"
-  studio-blue-tint: "#e8eff8"
-  studio-grey: "#f7f6f2"
-  panel: "#f0eee8"
-  surface: "#ffffff"
-  surface-sunken: "#efede7"
-  feature-surface: "#191814"
-  solid-bg: "#191814"
-  studio-ink: "#171511"
-  ink-muted: "#575148"
-  ink-soft: "#6d675e"
-  line: "#e2ded6"
-  line-strong: "#d2ccc1"
-  line-soft: "#ece8df"
-  line-control: "#827b70"
-  hue-1-steel: "#1a5aa0"
-  hue-1-steel-tint: "#e8eff8"
-  hue-1-steel-ink: "#16508f"
-  hue-2-teal: "#0e7a80"
-  hue-2-teal-tint: "#e0f1f1"
-  hue-2-teal-ink: "#0b666b"
-  hue-3-olive: "#5c7326"
-  hue-3-olive-tint: "#eef2e2"
-  hue-3-olive-ink: "#4c6020"
-  hue-4-amber: "#c8791b"
-  hue-4-amber-tint: "#fbf0dc"
-  hue-4-amber-ink: "#9e5f15"
-  hue-5-green: "#179a72"
-  hue-5-green-tint: "#e2f4ed"
-  hue-5-green-ink: "#137c5c"
-  hue-6-sky: "#3a8ec9"
-  hue-6-sky-tint: "#e7f3fb"
-  hue-6-sky-ink: "#2f73a3"
-  hue-7-graphite: "#414852"
-  hue-7-graphite-tint: "#eaecef"
-  hue-7-graphite-ink: "#363c45"
-  hue-8-rust: "#bb573b"
-  hue-8-rust-tint: "#fbe8e2"
-  hue-8-rust-ink: "#ab5036"
+  brand-ultramarine: "#2f45b5"
+  brand-ink: "#24379a"
+  brand-tint: "#eceefa"
+  brand-on: "#ffffff"
+  ink: "#16161a"
+  ink-muted: "#45454d"
+  ink-soft: "#66666e"
+  paper: "#ffffff"
+  surface-sunken: "#f2f2ee"
+  hover-tint: "#f6f6f2"
+  line: "#e2e2dc"
+  line-strong: "#cfcfc7"
+  line-control: "#7a7a72"
+  chipboard: "#c9c4bb"
+  sheet-edge: "#2a2622"
+  tab-home-orange: "#dc6a3c"
+  tab-browse-amber: "#e8a33c"
+  tab-paths-green: "#5a9e45"
+  tab-learning-teal: "#2f9a9a"
+  tab-updates-periwinkle: "#6683e6"
+  tab-on: "#16161a"
+  feature-surface: "#17181c"
+  feature-ink: "#ffffff"
+  feature-muted: "#b9bbc0"
+  hue-1-ultramarine: "#2f45b5"
+  hue-2-teal: "#0b6b6b"
+  hue-3-grass: "#3f7f2e"
+  hue-4-chrome-yellow: "#e8b500"
+  hue-5-oxide-orange: "#dc6a3c"
+  hue-6-violet: "#6b3fa0"
+  hue-7-graphite: "#45454d"
+  hue-8-sienna: "#8a5a3c"
+  status-progress: "#179a72"
+  status-progress-ink: "#0f6e51"
+  status-next: "#1c63b0"
+  status-new: "#c8791b"
+  status-new-ink: "#99610f"
   status-changed: "#c8493b"
-  status-changed-tint: "#fbe9e6"
-  status-green-ink: "#0f6e51"
-  status-amber-ink: "#99610f"
+  status-changed-soft: "#fbe9e6"
+  status-changed-ink: "#9c3528"
+  status-later: "#8b909d"
 typography:
-  display-lg:
-    fontFamily: "Geist, 'Segoe UI Variable', 'Segoe UI', Inter, system-ui, sans-serif"
-    fontSize: "42px"
-    fontWeight: 700
-    lineHeight: 1.15
-    letterSpacing: "-0.02em"
   display:
-    fontFamily: "Geist, 'Segoe UI Variable', 'Segoe UI', Inter, system-ui, sans-serif"
-    fontSize: "34px"
+    fontFamily: "Public Sans, Segoe UI Variable, Segoe UI, system-ui, sans-serif"
+    fontSize: "42px"
     fontWeight: 720
-    lineHeight: 1.1
-    letterSpacing: "-0.03em"
-  display-sm:
-    fontFamily: "Geist, 'Segoe UI Variable', 'Segoe UI', Inter, system-ui, sans-serif"
-    fontSize: "32px"
-    fontWeight: 700
-    lineHeight: 1.15
-    letterSpacing: "-0.02em"
+    lineHeight: 1.08
+    letterSpacing: "-0.025em"
   headline:
-    fontFamily: "Geist, 'Segoe UI Variable', 'Segoe UI', Inter, system-ui, sans-serif"
-    fontSize: "26px"
-    fontWeight: 700
-    lineHeight: 1.2
-    letterSpacing: "-0.02em"
-  title:
-    fontFamily: "Geist, 'Segoe UI Variable', 'Segoe UI', Inter, system-ui, sans-serif"
+    fontFamily: "Public Sans, Segoe UI Variable, Segoe UI, system-ui, sans-serif"
     fontSize: "22px"
-    fontWeight: 700
-    lineHeight: 1.2
-    letterSpacing: "-0.02em"
-  card-title:
-    fontFamily: "Geist, 'Segoe UI Variable', 'Segoe UI', Inter, system-ui, sans-serif"
-    fontSize: "19px"
-    fontWeight: 750
-    lineHeight: 1.2
-    letterSpacing: "-0.012em"
-  subtitle:
-    fontFamily: "Geist, 'Segoe UI Variable', 'Segoe UI', Inter, system-ui, sans-serif"
-    fontSize: "17px"
-    fontWeight: 700
+    fontWeight: 800
     lineHeight: 1.25
+    letterSpacing: "-0.015em"
+  title:
+    fontFamily: "Public Sans, Segoe UI Variable, Segoe UI, system-ui, sans-serif"
+    fontSize: "17px"
+    fontWeight: 800
+    lineHeight: 1.3
     letterSpacing: "-0.01em"
-  body-lg:
-    fontFamily: "Geist, 'Segoe UI Variable', 'Segoe UI', Inter, system-ui, sans-serif"
-    fontSize: "16px"
-    fontWeight: 400
-    lineHeight: 1.6
-    letterSpacing: "normal"
   body:
-    fontFamily: "Geist, 'Segoe UI Variable', 'Segoe UI', Inter, system-ui, sans-serif"
+    fontFamily: "Public Sans, Segoe UI Variable, Segoe UI, system-ui, sans-serif"
     fontSize: "15px"
     fontWeight: 400
     lineHeight: 1.6
-    letterSpacing: "normal"
-  reading:
-    fontFamily: "'Segoe UI Variable', 'Segoe UI', Aptos, ui-sans-serif, system-ui, sans-serif"
+  row:
+    fontFamily: "Public Sans, Segoe UI Variable, Segoe UI, system-ui, sans-serif"
     fontSize: "14px"
-    fontWeight: 400
-    lineHeight: 1.58
-    letterSpacing: "normal"
-  meta:
-    fontFamily: "Geist, 'Segoe UI Variable', 'Segoe UI', Inter, system-ui, sans-serif"
-    fontSize: "13px"
     fontWeight: 600
-    lineHeight: 1.2
-    letterSpacing: "0.01em"
+    lineHeight: 1.4
   label:
-    fontFamily: "Geist, 'Segoe UI Variable', 'Segoe UI', Inter, system-ui, sans-serif"
+    fontFamily: "Public Sans, Segoe UI Variable, Segoe UI, system-ui, sans-serif"
     fontSize: "12px"
     fontWeight: 600
-    lineHeight: 1.2
+    lineHeight: 1.4
+  tab-label:
+    fontFamily: "Public Sans, Segoe UI Variable, Segoe UI, system-ui, sans-serif"
+    fontSize: "13px"
+    fontWeight: 700
     letterSpacing: "0.01em"
-  label-sm:
-    fontFamily: "Geist, 'Segoe UI Variable', 'Segoe UI', Inter, system-ui, sans-serif"
-    fontSize: "11px"
-    fontWeight: 600
-    lineHeight: 1.2
-    letterSpacing: "0.02em"
-  eyebrow:
-    fontFamily: "Geist, 'Segoe UI Variable', 'Segoe UI', Inter, system-ui, sans-serif"
-    fontSize: "10px"
-    fontWeight: 600
-    lineHeight: 1.2
-    letterSpacing: "0.06em"
-  micro:
-    fontFamily: "Geist, 'Segoe UI Variable', 'Segoe UI', Inter, system-ui, sans-serif"
-    fontSize: "9px"
-    fontWeight: 600
-    lineHeight: 1.2
-    letterSpacing: "0.04em"
 rounded:
-  badge: "6px"
-  key: "7px"
-  nav: "8px"
+  link: "3px"
+  pill: "4px"
+  action: "7px"
+  field: "8px"
   control: "9px"
-  input-prominent: "12px"
+  feature: "12px"
+  tab: "0 12px 12px 0"
+  sheet: "6px 14px 14px 6px"
   card: "14px"
-  overlay: "16px"
-  pill: "999px"
 spacing:
-  hair: "2px"
-  xs: "6px"
-  sm: "8px"
-  md: "12px"
-  lg: "16px"
-  xl: "20px"
-  2xl: "24px"
-  3xl: "32px"
-  4xl: "40px"
-  content-max: "1120px"
-  rail-open: "248px"
-  rail-collapsed: "68px"
+  board-margin: "20px"
+  gutter-phone: "16px"
+  gutter-tablet: "24px"
+  gutter-desktop: "44px"
+  column-gap: "44px"
+  content-max: "1180px"
+  side-column: "392px"
 components:
-  button-primary:
-    backgroundColor: "{colors.studio-ink}"
-    textColor: "{colors.surface}"
-    rounded: "{rounded.pill}"
-    padding: "0 20px"
-    height: "44px"
-  button-primary-hover:
-    backgroundColor: "{colors.studio-ink}"
-    textColor: "{colors.surface}"
-  button-secondary:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink-muted}"
-    rounded: "{rounded.pill}"
-    padding: "0 20px"
-    height: "44px"
-  button-secondary-hover:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.studio-ink}"
-  button-secondary-active:
-    backgroundColor: "{colors.surface-sunken}"
-    textColor: "{colors.studio-ink}"
-  chip-suggestion:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink-muted}"
-    rounded: "{rounded.pill}"
-    padding: "6px 12px"
-  chip-suggestion-hover:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.studio-ink}"
-  badge-type:
-    backgroundColor: "{colors.surface-sunken}"
-    textColor: "{colors.ink-soft}"
-    typography: "{typography.label}"
-    rounded: "{rounded.badge}"
-    padding: "4px 10px"
-  card:
-    backgroundColor: "{colors.surface}"
-    rounded: "{rounded.card}"
-    padding: "18px"
-  card-module:
-    backgroundColor: "{colors.surface}"
-    rounded: "{rounded.card}"
-    padding: "16px"
-  input-search:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.studio-ink}"
-    rounded: "{rounded.control}"
-    padding: "0 16px 0 40px"
-    height: "48px"
-  input-search-prominent:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.studio-ink}"
-    rounded: "{rounded.input-prominent}"
-    padding: "0 64px 0 52px"
-    height: "52px"
-  select-refine:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink-muted}"
-    rounded: "{rounded.control}"
-    padding: "0 12px"
-    height: "44px"
-  segment-track:
-    backgroundColor: "{colors.surface-sunken}"
-    rounded: "{rounded.control}"
-    padding: "4px"
-  segment-active:
-    backgroundColor: "{colors.studio-ink}"
-    textColor: "{colors.surface}"
-    rounded: "{rounded.nav}"
-    padding: "0 16px"
-    height: "36px"
-  segment-inactive:
-    backgroundColor: "{colors.surface-sunken}"
-    textColor: "{colors.ink-muted}"
-    rounded: "{rounded.nav}"
-    padding: "0 16px"
-    height: "36px"
-  nav-item:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink-muted}"
-    rounded: "{rounded.control}"
-    padding: "9px 11px"
-  nav-item-active:
-    backgroundColor: "{colors.surface-sunken}"
-    textColor: "{colors.studio-ink}"
-    rounded: "{rounded.control}"
-    padding: "9px 11px"
-  feature-panel:
+  binder-tab:
+    backgroundColor: "{colors.tab-home-orange}"
+    textColor: "{colors.tab-on}"
+    rounded: "{rounded.tab}"
+    width: "52px"
+    height: "116px"
+    typography: "{typography.tab-label}"
+  binder-tab-hover:
+    width: "58px"
+  binder-tab-open:
+    width: "66px"
+  resume-card:
     backgroundColor: "{colors.feature-surface}"
-    textColor: "{colors.surface}"
-    rounded: "{rounded.input-prominent}"
-    padding: "12px 16px"
+    textColor: "{colors.feature-ink}"
+    rounded: "{rounded.feature}"
+    padding: "20px 24px"
+  button-resume:
+    backgroundColor: "{colors.feature-ink}"
+    textColor: "{colors.feature-surface}"
+    rounded: "{rounded.action}"
+    height: "40px"
+    padding: "0 16px"
+  button-solid:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.paper}"
+    rounded: "{rounded.control}"
+    height: "40px"
+    padding: "0 20px"
+  button-quiet:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.control}"
+    height: "36px"
+    padding: "0 14px"
+  search-field-prominent:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.field}"
+    height: "56px"
+    padding: "0 80px 0 52px"
+  ruled-row:
+    textColor: "{colors.ink}"
+    typography: "{typography.row}"
+    height: "44px"
+    padding: "8px 2px"
+  status-pill-law-changed:
+    backgroundColor: "{colors.status-changed-soft}"
+    textColor: "{colors.status-changed-ink}"
+    rounded: "{rounded.pill}"
+    padding: "2px 8px"
+  catalog-card:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.card}"
+    padding: "24px 20px 20px"
+  avatar:
+    backgroundColor: "{colors.brand-ultramarine}"
+    textColor: "{colors.brand-on}"
+    size: "38px"
 ---
 
-# Design System: The Studio
+# Design System: The Binder
 
 ## Overview
 
-**Creative North Star: "The Studio"**
+**Creative North Star: "The Ring Binder"**
 
-The Studio is a working surface, not a showpiece. A warm-grey paper canvas holds crisp white cards on hairline borders; typography carries the hierarchy; and colour is withheld until it has something to say. The name comes from the implementation itself — Studio Blue, the Studio canvas, `StudioShell`, `StudioRail` — and this document keeps that vocabulary rather than inventing a new one.
+The Learning Hub is a ring binder of the curriculum. A true-white page sheet, outlined in dark ink (1.5px) with tighter spine corners and rounder fore-edge corners, lies on a warm-grey chipboard board with a fine paper grain. Five divider tabs sit flush under the sheet's right edge in saturated binder colours, and the open section's divider is pulled out further than the rest. The open page holds today's work. This replaces the retired "Studio" system, and it turns down the LMS dashboard default: no greeting-plus-stat-tile header, no card grid on Home, no sidebar as the main navigation.
 
-The system's discipline is a single decision applied everywhere: **colour is a signal, never decoration.** It speaks in exactly two languages that never mix. _Topic colour_ answers "which part of the curriculum am I in?" and appears only on small accents — a card's top rail, a parent-course pill, an icon well, a swatch in the rail. _Status colour_ answers "what state is this content in?" and always arrives with a text label beside it. The page itself stays silent: flat warm-grey field, no gradients, no wallpaper, no illustration.
+The page is dense but quiet. Hierarchy comes from near-black ink, one workhorse family (Public Sans) on a steep size ramp, and ruled lists in place of cards. Colour is rationed: each hue means one thing (section, skill area, or state) and is never decoration. There is one inverted near-black element per page, the resume card, and it carries the page's main handoff into Brightspace. Light mode is primary. Dark mode keeps the same structure: a deep board, a lifted sheet, tab fills unchanged, and every hue lifted until it clears its measured contrast on dark grounds.
 
-Its warmth is both behavioural and material. The system is built around someone under real pressure — an advocate with a hearing in an hour, or a tired lawyer trying not to feel fried by another screen. So the canvas has a slight paper warmth and the ink is a warmer charcoal. But cards are true white, the resume/progress system uses confident steel blue, and the palette never drifts into cream, tan, or cozy decoration. It labels things, keeps numbers tabular so they scan, dims what is secondary, and gets out of the way. Restraint is how this system is kind.
+Motion belongs to the dividers. When a page arrives, its tab slides out from the closed position (260ms, exponential ease-out) and the previous one slides shut. Hovering draws a tab out slightly. Nothing else on the page performs.
 
 **Key Characteristics:**
 
-- One typeface (Geist) doing every job, from 9px eyebrow to 2.15rem display
-- Warm-grey canvas (#f7f6f2) with crisp white cards on 1px hairlines
-- Two independent colour languages: topic (orientation) and status (lifecycle), never blended
-- Eight matched hues at deliberately identical saturation, assigned by index so a grid reads as one family
-- Flat at rest; depth is a response to interaction, not a resting state
-- Full light and dark parity — every token is redefined, never filtered
-- Colour never carries meaning alone; a text label is always present
+- White page sheet on a constant warm-grey chipboard board (desktop, 1024px and up); the sheet fills the screen below that.
+- Five divider tabs on the right fore-edge are the primary desktop navigation. On phones the bottom bar shows the same dividers edge-on.
+- The open section's tab colour runs along the sheet's header rule (3px), the only place a tab colour enters the page.
+- Public Sans for every role; weight and size carry the hierarchy.
+- Ruled lists with a 1.5px ink top rule and hairline rows, not cards, on Home.
+- One near-black resume card per page.
+- Every text/fill pairing with a recorded ratio is measured and locked (ADR 0008).
 
 ## Colors
 
-A warm, low-chroma neutral base with a single blue brand voice, plus two strictly separated signal palettes drawn from one eight-hue family. The warmth belongs to the environment — canvas, lines, shadows, and charcoal ink — not to decorative fills.
+A white-and-ink page on warm chipboard, with saturated binder colours rationed to signal duty only.
 
 ### Primary
 
-- **Studio Ink** (`#191814`): the system's heaviest voice. Black carries _structure_ — the feature/resume inversion, the rule above an action section, the selected filter chip, the app icon. Anywhere the UI needs weight rather than meaning, it spends ink instead of colour.
-- **Studio Blue** (`#1a5aa0`): the brand voice at text weight — links, active nav icons, the current-location marker, the avatar fill, and the "Show more" affordance. A steel blue from the MLRI blue family: institutional, no violet cast. Deep enough to read as body-adjacent text on white.
-- **Signal Blue** (`#1c63b0`): the brighter sibling, used only for _fills_ — progress bars, the training-hours ring, weekly-activity squares, featured-card borders. Never used for running text.
-- **Studio Blue Tint** (`#e8eff8`): the pale wash behind next-up states.
+- **Binder Ultramarine** (brand-ultramarine): means _interactive_. Used for links such as "All updates", the search icon on focus, progress fills, the avatar fill, and the focus ring. Text in brand colour on light grounds uses **Deep Ultramarine** (brand-ink). Text sitting on a solid ultramarine fill uses **Brand On** (brand-on), which flips to dark ink in dark mode, where ultramarine lifts to #8b9cf0.
+- **Ultramarine Wash** (brand-tint): pale fill behind "Continue"-type chips.
 
-### Secondary
+### Secondary: the divider set (section identity)
 
-The **eight-hue skill palette** — Steel, Teal, Olive, Amber, Green, Sky, Graphite, Rust — held at a deliberately matched saturation and lightness so that eight of them side by side read as one systematic family rather than a rainbow. The set is deliberately grounded and earthy: no violet, no pink, and one slot spent on graphite so ink stays in rotation as a colour. They are assigned **by index**, wrapping after eight: the Nth skill area takes the Nth hue, and a skill area shares its hue with every course and module beneath it. That is the whole orientation mechanism.
+- **Home Orange** (tab-home-orange), **Browse Amber** (tab-browse-amber), **Paths Green** (tab-paths-green), **Learning Teal** (tab-learning-teal), **Updates Periwinkle** (tab-updates-periwinkle). Each fill is light enough to take the same dark ink (tab-on), as a single printed divider set would: 5.30, 8.37, 5.51, 5.34 and 5.12:1. Tab fills stay the same in dark mode. Updates is periwinkle, not ultramarine, so it can take dark ink like the other tabs. Ultramarine stays reserved for interaction. (The direction contract named an ultramarine Updates tab. The build changed it, and the build is what this file records.)
+- **Learning Teal** also rings the current stop on the resume card's lesson line. That is the one place a tab colour appears inside the page body, because the resume card belongs to My learning.
 
-Each hue carries **three roles**, exactly like the topic families: `solid` for strokes, swatches, and rails; `tint` for pale fills; and `ink` for text or glyphs sitting on that tint. The three-role split is not cosmetic — the saturated `solid` lands between 3.0:1 and 4.6:1 on its own pale tint, so using it for an 11px label fails WCAG 1.4.3. `ink` is the same hue darkened until it clears 4.5:1 (amber, the worst case, moves from 3.00:1 to 4.53:1). In dark mode the tints are deep enough that `ink` mirrors `solid`.
+### Tertiary: skill hues (area identity)
 
-The **topic families** (Court Skills, Client Communication, Ethics, Legal Research, Drafting, Trauma-Informed Practice, Foundations) are not a separate palette. Every topic token is an alias onto a value in the eight-hue family — Court to Sky, Research to Teal, Client to Green, Ethics to Graphite, Drafting to Steel, Foundations to Olive, Trauma to Rust; each family now holds its own hue. Built courses use their topic family; curriculum-generated items use an explicit hue index. Both paths land in the same eight values.
+- Eight binder-divider hues, assigned by skill lens in `lib/skill-hue.ts` and never by grid position: **Ultramarine** (hue-1), **Teal** (hue-2), **Grass** (hue-3), **Chrome Yellow** (hue-4), **Oxide Orange** (hue-5), **Violet** (hue-6), **Graphite** (hue-7), **Sienna** (hue-8). Each hue has three roles. `solid` is for swatches, rails and dots. `-tint` is for pale fills. `-ink` is for text on that tint, measured at 4.5:1 or better. A skill keeps its hue on the Home curriculum index, the drawer swatches, and every course and module card in that area. Topic-family tokens alias onto these same eight values.
 
-### Tertiary
+### Status (state)
 
-The **status palette**, kept deliberately distinct in role from topic colour even where it reuses a hue value:
-
-- **Green** (`#179a72`, ink `#0f6e51`): in progress, and completed.
-- **Signal Blue** (`#1c63b0`, tint `#e8eff8`, ink `#12447c`): next up.
-- **Amber** (`#c8791b`, ink `#99610f`): new, and updated.
-- **Alert Red** (`#c8493b`, tint `#fbe9e6`, ink `#9c3528`): law changed or process changed — the only red in the system, and the only colour reserved for a substantive legal-content warning.
-- **Grey** (`#8b909d`): later, not started, inactive.
+- **Progress / Done Green** (status-progress, ink status-progress-ink), **Next Blue** (status-next), **New / Updated Amber** (status-new, ink status-new-ink), **Later Grey** (status-later).
+- **Law-Changed Red** (status-changed, soft status-changed-soft, ink status-changed-ink): marks content where the law changed, plus the unread dot on the Updates bell that leads to those notices.
 
 ### Neutral
 
-- **Studio Grey** (`#f7f6f2`): the page canvas. Flat, warm-grey, unbroken.
-- **Panel** (`#f0eee8`): section frames and quiet bands.
-- **Panel / Sunken** (`#efede7`): segmented-control tracks, progress tracks, type badges, active-nav backgrounds.
-- **Surface** (`#ffffff`): card and control surfaces. True white against the warm canvas, not cream.
-- **Surface Raised** (`#ffffff`): raised panels and cards. Same true-white plane; warmth comes from the page, borders, and shadows.
-- **Feature Surface** (`#191814`): the near-black inversion used for exactly one element per screen — the resume/handoff panel in the hero. Warm to match Studio Ink, so it reads as the same black as the type, not as a coloured panel. Dark mode cannot invert to black, so it lifts to graphite `#23262c` instead.
-- **Solid Action** (`#191814` on `#ffffff` text; inverts to `#eceef2` / `#14161b` in dark): the maximum-contrast chip used for a chosen filter or segmented-control value.
-- **Studio Ink** (`#171511`): primary text, the brand mark, and the primary-button fill.
-- **Ink Muted** (`#575148`): body copy and descriptions.
-- **Ink Soft** (`#6d675e`): metadata, captions, counts, default icon colour, placeholders. Set at the darkest of its three backgrounds because it is the smallest text in the product — never lighten it.
-- **Line** (`#e2ded6`) / **Line Strong** (`#d2ccc1`) / **Line Soft** (`#ece8df`): the hairline vocabulary — resting border, hover border, and inner divider respectively. Decorative separation only.
-- **Line Control** (`#827b70`): the border of an input, select, or textarea. Visibly darker than the hairlines by necessity: a control's edge is information required to identify it, so WCAG 1.4.11 wants 3:1 where the hairlines sit near decorative contrast.
+- **Ink** (ink): headings, row labels, the wordmark, ruled-list top rules, and the solid "black" action.
+- **Muted Ink** (ink-muted): body copy and descriptions.
+- **Soft Ink** (ink-soft): metadata, counts, captions, placeholders. Measured at 4.5:1 on white, paper and sunken grounds. Do not lighten it.
+- **Page White** (paper): the sheet's ground. **Sunken** (surface-sunken) is for tracks, key hints and chips. **Whisper** (hover-tint) is the row hover fill.
+- **Hairline** (line), **Strong Hairline** (line-strong): decorative dividers and card edges. **Control Edge** (line-control): the 3:1 boundary for inputs and selects (WCAG 1.4.11). Hairlines cannot stand in for it.
+- **Chipboard** (chipboard; dark #2b2926): the board, with a 160px inline fractal-noise grain at 16% alpha. **Sheet Edge** (sheet-edge; dark #4a4640): the outline of the page and the tabs.
+- **Resume Black** (feature-surface; dark lifts to graphite #23262c), with **Feature Ink** (feature-ink) and **Feature Muted** (feature-muted): the single inverted element per page.
 
 ### Named Rules
 
-**The Two Languages Rule.** Topic colour means _where_; status colour means _what state_. A single element never carries both. When a card needs both, topic goes to the rail and status goes to a labelled chip.
+**The Signal Rule.** Colour is a signal, never decoration. Tab colour means section, skill hue means area, status colour means state, and ultramarine means interactive. If a colour on screen answers none of those, remove it.
 
-**The Never-Colour-Alone Rule.** No state, status, or category is communicated by hue alone. Every status pill pairs its dot with a word; every topic pill pairs its dot with the parent course name. This is a WCAG 1.4.1 obligation and it is also why the system survives being printed, dimmed, or read by someone colourblind.
+**The Law-Changed Red Rule.** Red appears only for law-changed notices and for the unread dot that leads to them. Errors, deadlines and emphasis do not get red.
 
-**The Small-Accent Rule.** Topic colour appears only on small accents: a 4px card rail, a 2px list rail, a 9px swatch, a 6px dot, a chip fill, an icon well. It never fills a card, a section, or a page.
+**The Measured Pair Rule.** Every token with a recorded contrast ratio in `app/globals.css` is locked (ADR 0008). Changing one means running `npm run e2e`, whose axe sweep checks every route in both themes. Saturated hue solids are never used as text; use the `-ink` member of the pair. Text on solid ultramarine uses `--brand-on`, not white.
 
-**The One Red Rule.** Alert Red (`#c8493b`) is reserved for substantive change notices — the law or process behind the content changed. It is never used for form validation, destructive actions, or emphasis.
-
-**The Three Roles Rule.** Every accent colour — topic or hue — exists as `solid` / `tint` / `ink`. Strokes and rails take `solid`, fills take `tint`, and anything a person reads takes `ink`. Putting `solid` on `tint` is the one way this palette produces an accessibility failure, and it is always avoidable.
+**The Constant Board Rule.** The chipboard board does not change between sections, and no tab colour matches it. The sheet carries the section; the board stays put.
 
 ## Typography
 
-**Display Font:** Geist (with Segoe UI Variable, Segoe UI, Inter, system-ui)
-**Body Font:** Geist (same stack)
-**Label Font:** Geist (same stack)
-**Reading Font:** Segoe UI Variable / Segoe UI / Aptos — used only for long-form description copy
+**Display Font:** Public Sans (via `next/font`, variable; falls back to Segoe UI Variable, Segoe UI, system-ui)
+**Body Font:** Public Sans
+**Label/Mono Font:** Public Sans (the `--font-mono` and `--font-serif` tokens both resolve to it)
 
-**Character:** One geometric sans doing every job. Hierarchy comes entirely from weight, size, and tracking rather than from contrast between families — display sizes pull tracking in to −0.03em and push weight to 720; labels push tracking out to +0.02em and sit at 600. The result is quiet and mechanical in a way a display-serif pairing would undercut.
+**Character:** One sturdy civic grotesque handles every job. The ramp is steep, from a heavy 42px greeting down to 12px counts, and the weight stays high in headings (720–800), so the page reads like a printed reference manual rather than an app.
 
 ### Hierarchy
 
-A **15-step px ladder**. Every size in the product is one of these; there are no in-between values and no `rem` literals. Steps are dense at the small end, where most of the interface lives, and sparse at the display end.
-
-`9 · 10 · 11 · 12 · 13 · 14 · 15 · 16 · 17 · 19 · 22 · 26 · 32 · 34 · 42`
-
-- **Display LG** (42px, 700, 1.15, −0.02em): the dashboard page header.
-- **Display** (34px, 720, 1.1, −0.03em): the hero greeting. One per page, and the top of the hero's `22 → 32 → 34` responsive climb.
-- **Display SM** (32px, 700, 1.15): standalone page titles and the hero at `sm`.
-- **Headline** (26px, 700, 1.2, −0.02em): the library section heading.
-- **Title** (22px, 700, 1.2, −0.02em): section headings, and the hero at mobile width.
-- **Card Title** (19px, 750, 1.2, −0.012em): the heaviest weight in the system, because a card title is the thing being scanned for.
-- **Subtitle** (17px, 700, 1.25): skill-tile names, dark-panel titles.
-- **Body LG** (16px, 400, 1.6): modal summaries and long-form intros.
-- **Body** (15px, 400, 1.6): the app default, set on `body`.
-- **Reading** (14px, 400, 1.58, Segoe UI Variable stack): card descriptions, capped at `max-w-2xl` (~65ch).
-- **Meta** (13px, 600, +0.01em): the workhorse — metadata, nav links, stat labels, durations, counts. The single most-used step.
-- **Label** (12px, 600): chips, badges, secondary counts.
-- **Label SM** (11px, 600, +0.02em): dense chrome, keyboard hints.
-- **Eyebrow** (10px, 600, +0.06em, uppercase): rail section headers.
-- **Micro** (9px, 600, +0.04em, uppercase): the small caps on the dark feature panel only.
-
-Sentence case everywhere except **Eyebrow** and **Micro**, the only two uppercase steps.
+- **Display** (720, 42px desktop / 32px phone, 1.08): the page's one greeting or page title.
+- **Headline** (800, 22px): section heads such as "The curriculum", and the resume card's course title.
+- **Title** (800, 17px): side-column heads such as "Available now" and "Updates". The wordmark also sits at 17px / 800.
+- **Body** (400, 15px, 1.6): running copy and descriptions in muted ink.
+- **Row** (600–700, 14px): ruled-list entries and item titles.
+- **Label** (600, 12–13px): metadata lines, counts with tabular numerals, "Often searched", lesson lines. Sentence case.
+- **Tab label** (700, 13px, +0.01em): set vertically along the divider (`writing-mode: vertical-rl`).
 
 ### Named Rules
 
-**The One Family Rule.** `--font-sans`, `--font-serif`, and `--font-mono` all resolve to Geist. This is deliberate, not an oversight: the "mono" role exists for eyebrows, counts, and percentages, and a real monospace webfont rendered blurry at 9–11px. If a second family is ever introduced, it must earn its place against this rule explicitly.
+**The One Family Rule.** Public Sans is used for every role. Hierarchy comes from size and weight, never from a second face.
 
-**The Tabular Numbers Rule.** Every number that a user compares or watches change — durations, counts, percentages, training hours — carries `tabular-nums`. Digits must not shift width as they update.
+**The Sentence Case Rule.** Headings, labels, tabs and buttons are in sentence case. No all-caps tracking labels, and no eyebrow or kicker line above a heading. The heading names the section itself.
 
-**The Sentence-Case Rule.** Labels are sentence case. Uppercase is reserved for the 9px and 10px steps and nothing else; uppercasing a readable-size label is a regression.
-
-**The Fifteen Steps Rule.** The ladder above is the whole scale. A new size is not a local decision — if a design genuinely needs a step that isn't there, add it here first. `rem` literals in component classes are how the scale rotted to 38 values once already.
+**The 16px Field Rule.** On coarse pointers, every text input, select and textarea renders at 16px or larger so iOS does not zoom, which would leave the page panning sideways. Never use `maximum-scale` to get around this.
 
 ## Layout
 
-A **two-zone shell**: a fixed left rail and a scrolling content column. The rail is 248px expanded, 68px collapsed to icons, with the collapse preference persisted per user; it becomes an overlay drawer below `lg` and is replaced by a bottom tab bar on mobile. Content is centred in a **1120px column** with 16px / 24px / 40px horizontal padding across the small / sm / lg breakpoints. The homepage opts out of the padded column so its hero and sections can run full-bleed against the canvas.
+On desktop (1024px and up) the binder sits inside a 20px board margin: the sheet fills the remaining width and is at least the viewport height minus 40px. The tab column sits to its right, sticky 20px from the top, with the first tab starting 72px down so it clears the header row. Below 1024px the sheet is the whole screen, navigation moves to a fixed bottom bar, and the full rail opens as a drawer.
 
-Section rhythm is expressed as **spacing plus a hairline**, never as a nested box — `.section-panel` is a single `border-top`. Catalog grids run 2 columns at `sm`, 3 at `lg`, 4 at `xl` with a fixed 16px gap. Cards hold a minimum height (180px for modules, 252px for courses) so a row stays even, and push their footer to the bottom with `mt-auto` so metadata aligns across a row regardless of title length.
+Inside the sheet, content is centred in a 1180px column with gutters of 16px (phone), 24px (640px and up) and 44px (desktop). Home uses a two-column grid on desktop: a flexible main column and a 392px side column, separated by a 44px gap. The main column holds the greeting, the 56px search and the curriculum index. The side column holds the resume card, "Available now" and one update. On phones everything stacks in reading order. The curriculum index is a two-column ruled grid with a 40px column gap from 640px up, and a single column below that.
 
-Density shifts materially at `sm`. Below it, descriptions are hidden entirely, cards drop to 12px padding, list rows replace the grid, and metadata moves up beside the type badge — the mobile view is a scannable index, not a shrunken desktop. Sticky filters offset 3.25rem on mobile and 5rem above `sm`. Safe-area insets are honoured on the skip link, bottom nav, mobile drawer, and modal padding.
+The header is a slim sticky bar at the top of the sheet. Its height is `--studio-chrome`, and sticky offsets are measured against it. On phones it carries only the menu, wordmark and avatar, because search, updates and theme each have a home in the bottom bar or drawer. The bottom bar reserves `--safe-bottom`, and the content column reserves the same amount, so the two cannot drift apart.
 
-Breakpoints are Tailwind defaults: `sm` 640px, `md` 768px, `lg` 1024px, `xl` 1280px. The rail/drawer switch is at `lg`; the grid/list switch is at `sm`.
+**The Ruled List Rule.** On Home, indexes and lists are ruled: a 1.5px ink top rule, hairline row separators, rows at least 44px tall, and a Whisper fill on hover. Do not wrap Home lists in cards.
 
 ## Elevation & Depth
 
-**Flat at rest; depth is a response, not a state.** In-page surfaces sit on a 1px hairline with a shadow so faint it reads as a seam (`0 1px 2px rgba(32,27,19,0.04)`). On hover a card gains its border-strong colour, a whisper of tint, and a soft ambient shadow — the depth arrives _because_ the user pointed at it. Default cards do not translate; only `.interactive-tile` lifts, and only by 1px.
-
-Overlays are the deliberate exception. Modals, the global search dialog, and the mobile drawer float freely on the heaviest shadow plus a `backdrop-blur-sm` scrim over near-black at 34–40% opacity. They are a different plane, and they are allowed to look like it.
-
-Depth otherwise comes from **tonal layering**, not shadow: sunken (`#efede7`) for tracks and segmented-control wells, canvas (`#f7f6f2`) for the page, surface (`#ffffff`) for cards and controls. Three tones, three planes.
+The system is flat paper with one physical cast. The sheet throws a soft shadow onto its tabs (`6px 0 10px -4px` in sheet-shadow), and that is what makes the tabs read as tucked under the page. Each tab has a faint darkening gradient toward its free end. Everything else on the sheet is flat: hairlines separate, and the near-black resume card carries weight through inversion, not lift. Overlays (search dialog, drawer, suggestion list, detail sheet) are the only things that float, and they use the large ambient shadow.
 
 ### Shadow Vocabulary
 
-- **Seam** (`box-shadow: 0 1px 2px rgba(32,27,19,0.04)`): the resting state of every card and control. Barely visible by design.
-- **Ambient** (`box-shadow: 0 1px 2px rgba(32,27,19,0.04), 0 6px 18px rgba(32,27,19,0.06)`): hover on cards and tiles, and the resting state of the prominent search field and hero panels.
-- **Overlay** (`box-shadow: 0 8px 24px rgba(32,27,19,0.1), 0 2px 6px rgba(32,27,19,0.06)`): modals, dialogs, suggestion dropdowns, the mobile drawer, the skip link.
-
-Dark mode redefines all three with black at 0.2–0.38 alpha rather than reusing the light values.
-
-Focus is **not** part of the depth system. It is a solid 2px `brand` outline at 2px offset, applied through the `.focus-ring` / `.focus-ring-inverse` classes — never a shadow, never a translucent ring. A 15%-alpha ring measures 1.24:1 against white; the solid outline measures 6.0–8.8:1 across every surface in both themes.
+- **Sheet cast** (`box-shadow: 6px 0 10px -4px rgba(40, 32, 24, 0.42)`; dark rgba(0,0,0,0.55)): the page sheet over the tabs, desktop only.
+- **Hairline lift** (`box-shadow: 0 1px 2px rgba(22, 22, 26, 0.05)`): resting catalog cards and quiet fields.
+- **Overlay** (`box-shadow: 0 8px 24px rgba(22, 22, 26, 0.12), 0 2px 6px rgba(22, 22, 26, 0.07)`): dialogs, the drawer, suggestion lists, the skip link.
 
 ### Named Rules
 
-**The Flat-At-Rest Rule.** In-page surfaces rest on a hairline and the Seam shadow. Resting elevation above Seam is reserved for overlays and the prominent search field. If a surface looks lifted before the user touches it, it is wrong.
-
-**The Hairline-First Rule.** Separation is a 1px line before it is ever a shadow. `line` at rest, `line-strong` on hover, `line-soft` for dividers inside a surface. Form controls are the exception and take `line-control`.
-
-**The One Focus Rule.** Every interactive element gets `.focus-ring` (or `.focus-ring-inverse` on the dark feature panel) and nothing else. No per-component focus treatments, no translucent rings, and never `outline: none` without a replacement — the class already scopes the outline to `:focus-visible`, so pointer users never see it.
+**The One Resume Card Rule.** A page has at most one near-black feature surface. On Home it is the resume card (or the Manager card for admins). It is not a style for promoting other content.
 
 ## Shapes
 
-A **two-radius system** with a pill exception. Containers round at 14px (`--radius-card`); controls round at 9px (`--radius-control`). Small chrome tightens further — 8px for rail items and segment buttons, 7px for the keyboard-shortcut key, 6px for type and status badges. Overlays round at 16px, and on mobile the detail modal squares its bottom corners entirely to sit as a bottom sheet against the viewport edge.
-
-Fully round (999px) is reserved for things that are conceptually _tokens_ rather than containers: primary and secondary buttons, progress tracks, dots, and the avatar. Suggestion actions, utility controls, counts, and "Details" affordances use the 9px control radius so the interface does not collapse into a field of pills.
-
-The recurring silhouette is the **accent rail**: a 4px bar across the top of a card, a 2px bar down the left of a list row or syllabus entry, drawn with a `::before` pseudo-element in the item's topic colour at 85% opacity. It is the system's signature and the only place topic colour appears at any scale.
-
-Borders are 1px and universal; every surface has one. There are no borderless cards, and no card relies on shadow alone to define its edge.
+The binder's silhouette is asymmetric. The sheet has 6px corners at the spine and 14px at the fore-edge. Tabs have square corners where they meet the sheet and 12px corners at their free end. They have no left border, so the sheet's outline and cast cover the join. On phones, bottom-bar dividers are 6px-topped tab edges with 1.5px ink outlines. Inside the sheet, corners get smaller as elements get smaller: the resume card 12px, catalog cards 14px, controls 9px, the prominent search field 8px, actions on the feature surface 7px, status pills 4px, inline links 3px (focus shape only). Skill swatches are tiny dividers, 10 × 14px with 2px rounded tops. Lines do the structural work: a 1.5px ink outline for the binder and list heads, hairlines for everything else.
 
 ## Components
 
-Buttons, cards, and inputs are **restrained and precise**. Nothing is approximate: radii are 14px and 9px, not "rounded"; the rail is 248px, not "about 250"; card titles sit at weight 750, not 700 or 800. At rest components are nearly silent, and the whole state vocabulary is carried by border colour, a tint shift, and a shadow step.
+### Binder tabs (signature)
+
+The primary desktop navigation: Home, Browse, Learning paths, My learning, Updates (admins see Manager in place of the learner tabs).
+
+- **Shape:** 52px wide and at least 116px tall, overlapping by 1.5px, 1.5px sheet-edge outline with no left border, 12px rounded free end.
+- **Colour:** each tab sets `--tab` from its tone. The label is in tab-on ink at 13px / 700, set vertically.
+- **States:** hover widens to 58px (180ms). The open section (`aria-current="page"`) is 66px wide and stacks above its neighbours. On section change the new tab animates 52→66px and the old one 66→52px (260ms, `cubic-bezier(0.16, 1, 0.3, 1)`), with no fill mode, so hover takes over afterwards. A fresh load shows the tab already open.
+- **Focus:** a 2px ink outline (not ultramarine) at 3px offset, because ultramarine would sit too close to the periwinkle tab.
+- **Reduced motion:** the tab keeps its open position and nothing moves.
+
+**The Still Divider Rule.** Under `prefers-reduced-motion`, every divider shows its final position immediately. State feedback (colour, border, focus) survives; movement does not.
+
+### Bottom bar (phones)
+
+Six slots: Home, Browse, Paths, Learning, Updates, Search. Each section shows its tab colour as a divider edge above it, 7px tall at rest and 12px raised when open, with ink label text. Inactive slots use soft ink. The bar has a 1.5px sheet-edge top rule. The Updates slot carries the law-changed red unread dot.
+
+### Header and section rule
+
+The wordmark "Learning Hub" (17px / 800) at left. On desktop, the theme toggle, the notifications bell (38px, 9px radius, hairline edge) and the avatar at right. On desktop the header's bottom rule is 3px in the open section's tab colour; on phones it is a hairline.
+
+### Resume card
+
+- **Surface:** Resume Black, 12px radius, 20–24px padding, at most one per page.
+- **Content:** a 22px / 800 course title, a "Next:" line in feature-muted, a lesson-stop line (filled stops for done lessons, hollow for upcoming ones, the current stop 20px with a Learning Teal ring and "You are here" set under it), and a 12px lesson line ending "opens in Brightspace".
+- **Action:** a white **Resume** button (40px, 7px radius, 14px / 700, with the arrow turned to point out). It uses the inverse focus ring (2px white). In dark mode the button becomes graphite with a hairline border.
 
 ### Buttons
 
-- **Shape:** Fully round pill (999px) for the primary and secondary actions; 9px for utility controls like Refine.
-- **Primary:** Studio Ink fill, white text, 44px tall, 20px horizontal padding, bold, with a leading 16px icon. Hover reduces opacity to 90% rather than shifting hue.
-- **Secondary:** White fill, 1px `line` border, muted ink text, same 44px height. Hover moves the border to `line-strong` and the text to full ink. Its selected state (an item already saved) swaps to a sunken fill with a `line-strong` border.
-- **Focus:** `.focus-ring` — a solid 2px `brand` outline at 2px offset, on `:focus-visible`. The system's single focus treatment; buttons, links, inputs, chips, nav items, and cards all use the same class.
-- **On the dark feature panel:** white fill, near-black text, and `.focus-ring-inverse`, because a standard brand outline has too little separation from `#191814`.
+- **Solid (ink):** ink fill with page-white text, 9px radius, 36–40px tall, 700 weight. This is the "chosen" or maximum-contrast action. It inverts to near-white in dark mode through the `--solid-bg`/`--solid-ink` pair.
+- **Quiet:** white fill, hairline edge, ink or muted text, 9px radius. The edge strengthens on hover.
+- **Text links:** ink with a 3px-offset underline for in-copy links, or ultramarine for "All …" links. "Often searched" terms are ink with a Control Edge underline that turns to ink on hover.
+- **Pressed (touch):** a brightness step (`--press`, 0.92; 1.25 in dark mode) on `:active` under `hover: none`, which survives reduced motion.
 
-### Chips
+### Search field
 
-- **Suggestion actions** (popular searches, no-result suggestions): 9px control radius, white fill, `line` border, muted ink at 12–13px. Hover moves border and text one step darker. No fill change.
-- **Type badge** (Course / Module / Path): 6px radius, sunken fill, soft ink, 12px icon, sentence case. Deliberately the most neutral chip in the system — it describes the _shape_ of the content, so it must never compete with topic or status colour on the same card.
-- **Status pill**: 6px radius, soft status fill, status-ink text, neutral `line` border, with a 6px saturated dot and always a word.
-- **Topic pill** (parent course on a module card): tinted in the item's accent, accent-ink text, neutral border, 6px accent dot.
-- **Active filter chip**: 9px control radius with full-ink text and a `✕` plus a screen-reader-only "Clear filter".
+- **Prominent (Home, Browse, dialog):** 56px (48px on phones), 1.5px Control Edge border, 8px radius, white fill, 17px / 600 text with a regular-weight placeholder in soft ink. The placeholder is phrased in case terms ("What's in front of you today? Try "notice to quit""). A 22px search icon turns ultramarine on focus, and a "Ctrl K" key hint sits on a sunken chip.
+- **Focus:** the border turns ultramarine and the 2px ultramarine focus ring appears.
+- **Suggestions:** a floating list with a 12px radius, overlay shadow, type badge plus context line, and the active row in a sunken fill.
 
-### Cards / Containers
+### Ruled rows
 
-- **Corner Style:** 14px (`--radius-card`).
-- **Background:** White surface on the warm-grey canvas.
-- **Shadow Strategy:** Seam at rest, Ambient on hover. See Elevation.
-- **Border:** 1px `line`, moving to the item's **accent colour** on hover — the hover border is itself an orientation cue, not just a highlight.
-- **Internal Padding:** 18px for course cards, 16px for module cards, 12px on mobile, with an extra 2–4px on top to sit clear of the accent rail.
-- **Structure:** badge row → title (2-line clamp) → optional topic label → description (2–3 line clamp) → `line-soft` divider → footer with metadata and a Details affordance. The footer is pushed down with `mt-auto` so it aligns across a row.
-- **Featured course:** one course in the grid may become a two-column "Recommended next" treatment with a Studio Blue border and larger title. It breaks the uniform grid without turning the whole catalog into marketing cards.
+Curriculum index and "Available now". Below a 1.5px ink top rule, each row is at least 44px tall with a hairline bottom, in 14px / 600–700 ink. Curriculum rows lead with a skill-hue swatch and end with a soft-ink count reading "N planned". Available rows show a title, a meta line (practice area · modules · minutes) and "Open →" in ink.
 
-### Inputs / Fields
+**The Planned Label Rule.** Anything not yet built says so in place: "N planned" counts, "Planned" in card footers, "Not set yet" for durations. Never present a planned item as available, and never invent a length for it.
 
-- **Style:** White fill, 1px **`line-control`** (not the decorative hairline), 9px radius (12px for the prominent variant), 48px tall (52px prominent), leading search icon in soft ink, semibold input text with a normal-weight placeholder.
-- **Focus:** Border shifts to Studio Blue and the `.focus-ring` outline appears; the leading icon also shifts to brand colour via `group-focus-within`. Hover moves the border **darker** to `ink-soft` — a control's hover must never reduce its own edge contrast.
-- **Prominent variant:** carries the Ambient shadow at rest and a `Ctrl K` key hint in a 7px-radius sunken well, hidden below `sm`.
-- **Suggestions:** a 12px-radius overlay-shadowed listbox, each row a two-column grid of badge + context + title against an "Open" tag, with the active row on a sunken fill. Full combobox semantics — `role="combobox"`, `aria-expanded`, `aria-activedescendant`, arrow/enter/escape keys.
-- **Selects (Refine):** 44px tall, 9px radius, bold muted text, same focus treatment as inputs.
+### Status pills
 
-### Navigation
+4px radius, hairline edge, soft fill with ink text from the state's own trio (for example, Law changed is shown as status-changed-ink on status-changed-soft). The update card on Home pairs the pill with "Sample, not reviewed" in soft ink. Sample content is always labelled as sample.
 
-- **Rail:** White surface against the warm-grey canvas, separated by a right hairline. Items are 9px-radius rows at 13.5–14px, muted ink with soft-ink icons; the active item takes a quiet ink-washed fill with a **brand-blue marker rail** at its left edge, weight 650, full ink, and a **brand-coloured icon** — black for the weight, blue for the "you are here". Width transitions over 200ms on `cubic-bezier(.4,0,.2,1)`.
-- **Brand mark:** a 30px Studio Ink square holding a scales-of-justice glyph, doubling as the collapse toggle, with the wordmark beside it at 20px/700/−0.02em.
-- **Skill areas:** a labelled group below the primary nav, each row a 9px rounded swatch in the area's indexed hue plus a name and a count, capped at 7 with a "Show more" toggle. Collapsed, all swatches show — the compact form fits.
-- **Mobile:** the rail becomes a left drawer over a warm near-black scrim; a fixed bottom tab bar takes over primary navigation with brand-coloured active icons. The bar's item count changes by role.
-- **Segmented control:** a sunken 9px track with 4px padding holding 8px-radius 36px buttons; the active button inverts to Studio Ink with white text plus a 1px inner white highlight, while the view-mode toggle's active state instead lifts to a white surface with a border.
+### Catalog cards (Browse)
 
-### The Accent Rail
+Flat white tiles with a 14px radius, hairline edge and hairline lift. A 4px skill-hue rail runs across the top (85% opacity). Content is a 16–17px / 700 title, a two-line muted description, and a 12px footer with a hue dot, the type, the length or "Planned", and an arrow. On hover the edge takes the skill hue, the fill becomes Whisper, and the arrow nudges 2px. The list variant moves the rail to a 2px left edge.
 
-The system's signature component. Every catalog item exposes its colour as three CSS custom properties (`--accent`, `--accent-tint`, `--accent-ink`) set inline on the element, so static Tailwind classes like `bg-[color:var(--accent)]` can pick up a data-driven hue without runtime class names. The rail renders as a `::before` pseudo-element: 4px across the top of a card at 85% opacity, 2px down the left of a list row or syllabus entry at full opacity. Cards, list rows, path cards, and modal syllabus rows all share this mechanism.
+### Focus
+
+One treatment across the app: a 2px solid ultramarine outline at 2px offset, shown on `:focus-visible` only (6.0–8.8:1 on every surface). Controls on the resume card use a 2px white outline. Binder tabs use an ink outline.
 
 ## Do's and Don'ts
 
 ### Do:
 
-- **Do** keep colour to the two languages: topic for orientation, status for lifecycle. If a new colour need doesn't fit either, the answer is a neutral.
-- **Do** warm the environment before warming the components: canvas, hairlines, shadows, and ink can carry warmth; cards, inputs, and chips stay white and crisp.
-- **Do** spend ink where the UI needs weight — inversions, structural rules, the chosen filter — and blue where it needs to say "interactive": resume, progress, links, active navigation, and the single featured-course treatment.
-- **Do** pair every status and topic colour with a text label. Colour alone is never the signal.
-- **Do** define new colours as CSS custom properties in `app/globals.css` under both `:root` and `[data-theme="dark"]`, then expose them through `tailwind.config.ts`. Both themes, always, in the same commit.
-- **Do** use `var(--radius-card)` (14px) for containers and `var(--radius-control)` (9px) for controls.
-- **Do** put `.focus-ring` on every interactive element, and `.focus-ring-inverse` on the dark feature panel. Never hand-roll a focus treatment.
-- **Do** give comparable numbers `tabular-nums`.
-- **Do** let the hairline do the separating — `line` at rest, `line-strong` on hover, `line-soft` inside a surface — and use `line-control` on inputs, selects, and textareas.
-- **Do** pick every font size from the 15-step px ladder.
-- **Do** use an accent's `ink` role for anything readable and `solid` only for strokes and rails.
-- **Do** make an element that opens a dialog a `<button>`. A link whose `href` is a fragment that doesn't exist lies to assistive tech.
-- **Do** give controls a 24×24 minimum hit area, and announce result-count changes in a polite live region.
-- **Do** set an item's accent through the `--accent` / `--accent-tint` / `--accent-ink` inline custom properties, and write Tailwind arbitrary values out in full so the content scanner keeps them.
-- **Do** hide description copy and switch to list rows below `sm`. Mobile is an index, not a shrunken desktop.
-- **Do** cap reading copy at `max-w-2xl` (~65ch).
-- **Do** meet WCAG 2.2 AA, including target size — controls sit at 36px minimum, and 44px for primary actions.
-- **Do** prefer the 9px control radius for repeated inline actions. Pills are reserved, not the default.
+- **Do** keep the five dividers in their fixed order and colours (Home orange, Browse amber, Paths green, Learning teal, Updates periwinkle), each with dark tab-on ink.
+- **Do** let the open section's colour reach into the page only through the header's 3px bottom rule (and the resume card's teal current-stop ring).
+- **Do** assign skill hues by skill id through `lib/skill-hue.ts`, so an area keeps its colour on every surface.
+- **Do** use the `-ink` member of a hue or status trio for any text on its tint.
+- **Do** run `npm run e2e` (axe, both themes) after touching any token with a recorded ratio.
+- **Do** label planned items and sample content where they appear.
+- **Do** build Home lists as ruled rows with a 1.5px ink top rule.
+- **Do** keep tab motion at 260ms exponential ease-out and drop it entirely under reduced motion.
 
 ### Don't:
 
-- **Don't** fill a card, section, or page with topic colour. Topic colour lives on rails, dots, swatches, wells, and chip tints only.
-- **Don't** use Alert Red (`#c8493b`) for anything but a substantive law-or-process change notice.
-- **Don't** add a gradient, glow, glassmorphism, or a neon dark mode. The canvas is a flat warm-grey field; blur exists only on overlay scrims. No AI-SaaS dashboard cliché.
-- **Don't** reintroduce legacy-LMS chrome — bevels, dense tab strips, tables used for layout, or a second nav bar. The hub exists as the alternative to that.
-- **Don't** let calm become lifeless. Corporate compliance grey is the failure mode on the other side: the eight hues, the accent rails, and the near-black feature panel are what keep the system from flattening into enterprise grey-on-grey.
-- **Don't** let warmth become beige. Avoid cream, tan, oatmeal, parchment, coffee, or hospitality palettes. The product should feel like a calm working library table, not a lifestyle app.
-- **Don't** use pill shape as the default way to make something look clickable. Repeated pills make the screen feel busier and less professional.
-- **Don't** give a resting surface more than the Seam shadow. Lift is a response to interaction; overlays and the prominent search field are the only exceptions.
-- **Don't** introduce a second typeface without explicitly overturning The One Family Rule.
-- **Don't** uppercase anything at readable size. Uppercase belongs to the 9px and 10px steps.
-- **Don't** write a `rem` font size or an off-ladder px value in a component class.
-- **Don't** use an accent's saturated `solid` as text or as a glyph on its own tint — that is the palette's one reliable contrast failure.
-- **Don't** let a control's hover state lighten its border. Hover goes darker; anything else trades contrast for feedback.
-- **Don't** render a mobile tree and a desktop tree and hide one with `sm:hidden`. Branch on `useIsDesktop()` and render once.
-- **Don't** build a new light-mode token and leave dark mode to a filter or an opacity trick. Every token is redefined by hand.
-- **Don't** add new warm-neutral values locally in components. If the product needs a warmer surface, change the global token ladder in `app/globals.css` and keep dark-mode parity in the same commit.
-- **Don't** animate for its own sake. Transitions are 160–200ms `ease`/`ease-out` on colour, border, shadow, and at most a 1px translate; entrance animations are 220–320ms on `cubic-bezier(0.16,1,0.3,1)` and reserved for overlays.
-- **Don't** blanket-kill motion under `prefers-reduced-motion`. The rule keeps colour, border, shadow, and opacity transitions and drops only movement — a 0.01ms global also destroys the state feedback those transitions carry.
+- **Don't** use red for anything except law-changed notices and the unread dot that leads to them.
+- **Don't** place more than one near-black feature surface on a page.
+- **Don't** put an eyebrow or kicker label above a heading, or set labels in tracked all-caps.
+- **Don't** use a second typeface; Public Sans covers every role.
+- **Don't** set a saturated hue solid, or white, as text on its own tint or on the light tabs.
+- **Don't** colour the board per section or give a tab the board's warm grey.
+- **Don't** rebuild Home as a dashboard of greeting, stat tiles, card grid and sidebar.
+- **Don't** spend ultramarine on decoration; it means interactive.
+- **Don't** use the "T Map" line diagram outside Learning paths; it is reserved there (the resume card's lesson stops are the one borrowed piece).

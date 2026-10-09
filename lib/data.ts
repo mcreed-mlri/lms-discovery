@@ -378,13 +378,6 @@ export const continueLearning: ContinueLearningItem[] = [
   },
 ];
 
-// Learner progress for the home hero: the training-hour goal.
-// Demo values; replace with real progress data when available.
-export const learnerProgress = {
-  hoursEarned: 8.5,
-  hoursRequired: 12,
-};
-
 // ── Microlearning metadata ────────────────────────────────────────────────
 // Estimated minutes + the legal skill each module practices. Keyed by module
 // id so the catalog above stays declarative and easy to scan.
