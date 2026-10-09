@@ -1,6 +1,6 @@
 ---
 name: The Binder
-description: A ring binder of the curriculum. Divider tabs on the page's fore-edge are the navigation; the open page holds today's work.
+description: The attorney's binder. App navigation lives in the header; the divider tabs on the page's fore-edge are the sections of the binder you have open.
 colors:
   brand-ultramarine: "#2f45b5"
   brand-ink: "#24379a"
@@ -23,6 +23,11 @@ colors:
   tab-learning-teal: "#2f9a9a"
   tab-updates-periwinkle: "#6683e6"
   tab-on: "#16161a"
+  divider-manila: "#ede4cc"
+  divider-manila-alt: "#e4d8b9"
+  binder-legal-skills: "#2f45b5"
+  notes-paper: "#fbf8ef"
+  notes-edge: "#e8dfc6"
   feature-surface: "#17181c"
   feature-ink: "#ffffff"
   feature-muted: "#b9bbc0"
@@ -164,23 +169,26 @@ components:
 
 # Design System: The Binder
 
+> **Status, October 2026.** This file describes the chosen direction, which is ahead of the build. The shipped app (commit ae37cfe) still uses five coloured section tabs as navigation. The mockups are on the canvas at https://claude.ai/artifact/MCQCHbvATG2m4KVNQiu3QW (B is Home, E is a section tab, F is the flow). Where this file and the code disagree, this file is the target, and PRODUCT.md is the source for structure and scope.
+
 ## Overview
 
-**Creative North Star: "The Ring Binder"**
+**Creative North Star: "The Attorney's Binder"**
 
-The Learning Hub is a ring binder of the curriculum. A true-white page sheet, outlined in dark ink (1.5px) with tighter spine corners and rounder fore-edge corners, lies on a warm-grey chipboard board with a fine paper grain. Five divider tabs sit flush under the sheet's right edge in saturated binder colours, and the open section's divider is pulled out further than the rest. The open page holds today's work. This replaces the retired "Studio" system, and it turns down the LMS dashboard default: no greeting-plus-stat-tile header, no card grid on Home, no sidebar as the main navigation.
+The Learning Hub is the binder a legal aid attorney opens when they're stuck. A true-white page runs to the top, left and bottom edges of the screen, with three punched holes near its left edge. A warm-grey chipboard strip shows only on the right, behind the divider tabs. The header carries the app's own navigation (Home · Binders ▾ · My learning · Updates, with search). The divider tabs belong to the binder you have open: for Legal Skills, a Contents tab plus the 12 skill areas. The open divider turns white, joins the page, and wears the binder's colour on its free edge. The open page holds everything filed in that section: practice, reference, courses, new law, MassLegalServices resources and your own notes.
 
-The page is dense but quiet. Hierarchy comes from near-black ink, one workhorse family (Public Sans) on a steep size ramp, and ruled lists in place of cards. Colour is rationed: each hue means one thing (section, skill area, or state) and is never decoration. There is one inverted near-black element per page, the resume card, and it carries the page's main handoff into Brightspace. Light mode is primary. Dark mode keeps the same structure: a deep board, a lifted sheet, tab fills unchanged, and every hue lifted until it clears its measured contrast on dark grounds.
+The page is dense but quiet. Hierarchy comes from near-black ink, one workhorse family (Public Sans) on a steep size ramp, and ruled lists in place of cards. Colour is rationed: each hue means one thing (binder, state, or interactive) and is never decoration. There is one inverted near-black element per page, the resume card, and it carries the page's main handoff into Brightspace. Light mode is primary. Dark mode keeps the same structure.
 
-Motion belongs to the dividers. When a page arrives, its tab slides out from the closed position (260ms, exponential ease-out) and the previous one slides shut. Hovering draws a tab out slightly. Nothing else on the page performs.
+Motion belongs to the dividers. When a section opens, its divider slides out (260ms, exponential ease-out) and the previous one slides shut. Nothing else on the page performs.
 
 **Key Characteristics:**
 
-- White page sheet on a constant warm-grey chipboard board (desktop, 1024px and up); the sheet fills the screen below that.
-- Five divider tabs on the right fore-edge are the primary desktop navigation. On phones the bottom bar shows the same dividers edge-on.
-- The open section's tab colour runs along the sheet's header rule (3px), the only place a tab colour enters the page.
+- The page sheet runs to the top, left and bottom edges. Chipboard shows only in the strip behind the tabs.
+- The header holds app navigation. The fore-edge dividers are the open binder's sections, manila at rest and white plus binder colour when open.
+- Every item says where it opens: in the hub, Brightspace ↗ or MassLegalServices ↗.
+- What's available leads. Planned topics sit in a quiet "Coming" roadmap, never in the main column.
+- Notes are visibly the user's own: a warm notes-paper panel, private by default.
 - Public Sans for every role; weight and size carry the hierarchy.
-- Ruled lists with a 1.5px ink top rule and hairline rows, not cards, on Home.
 - One near-black resume card per page.
 - Every text/fill pairing with a recorded ratio is measured and locked (ADR 0008).
 
@@ -193,12 +201,16 @@ A white-and-ink page on warm chipboard, with saturated binder colours rationed t
 - **Binder Ultramarine** (brand-ultramarine): means _interactive_. Used for links such as "All updates", the search icon on focus, progress fills, the avatar fill, and the focus ring. Text in brand colour on light grounds uses **Deep Ultramarine** (brand-ink). Text sitting on a solid ultramarine fill uses **Brand On** (brand-on), which flips to dark ink in dark mode, where ultramarine lifts to #8b9cf0.
 - **Ultramarine Wash** (brand-tint): pale fill behind "Continue"-type chips.
 
-### Secondary: the divider set (section identity)
+### Secondary: binders and dividers (where you are)
 
-- **Home Orange** (tab-home-orange), **Browse Amber** (tab-browse-amber), **Paths Green** (tab-paths-green), **Learning Teal** (tab-learning-teal), **Updates Periwinkle** (tab-updates-periwinkle). Each fill is light enough to take the same dark ink (tab-on), as a single printed divider set would: 5.30, 8.37, 5.51, 5.34 and 5.12:1. Tab fills stay the same in dark mode. Updates is periwinkle, not ultramarine, so it can take dark ink like the other tabs. Ultramarine stays reserved for interaction. (The direction contract named an ultramarine Updates tab. The build changed it, and the build is what this file records.)
-- **Learning Teal** also rings the current stop on the resume card's lesson line. That is the one place a tab colour appears inside the page body, because the resume card belongs to My learning.
+- **Binder colour.** Each binder has one colour. Legal Skills is ultramarine (binder-legal-skills). Substantive-law binders get theirs from the divider set below when they ship: Housing orange, and so on. The binder colour appears in three places only: the switcher's swatch, the open divider's free edge (4px), and the 4px rule under the open section's title.
+- **Manila dividers** (divider-manila, alternating with divider-manila-alt) are the closed tabs. They take dark ink (tab-on), like printed index dividers. No rainbow: 13 coloured tabs would be noise.
+- **The old section set** (tab-home-orange, tab-browse-amber, tab-paths-green, tab-learning-teal, tab-updates-periwinkle, measured 5.30, 8.37, 5.51, 5.34 and 5.12:1 with tab-on) is now the pool that substantive-law binder colours come from. The tokens and their recorded ratios stay locked.
+- **Notes Paper** (notes-paper, edge notes-edge): the warm fill for the My notes panel. Use it only for content the user wrote.
 
-### Tertiary: skill hues (area identity)
+### Tertiary: skill hues (area identity, under review)
+
+> In the binder direction the skill areas are dividers, and dividers are manila. Skill hues are likely to retire from Home and the tabs. Keep the tokens, which are measured and locked, until the Browse and card surfaces are redesigned. Then either drop the hues or keep them only on the catalog cards.
 
 - Eight binder-divider hues, assigned by skill lens in `lib/skill-hue.ts` and never by grid position: **Ultramarine** (hue-1), **Teal** (hue-2), **Grass** (hue-3), **Chrome Yellow** (hue-4), **Oxide Orange** (hue-5), **Violet** (hue-6), **Graphite** (hue-7), **Sienna** (hue-8). Each hue has three roles. `solid` is for swatches, rails and dots. `-tint` is for pale fills. `-ink` is for text on that tint, measured at 4.5:1 or better. A skill keeps its hue on the Home curriculum index, the drawer swatches, and every course and module card in that area. Topic-family tokens alias onto these same eight values.
 
@@ -219,7 +231,7 @@ A white-and-ink page on warm chipboard, with saturated binder colours rationed t
 
 ### Named Rules
 
-**The Signal Rule.** Colour is a signal, never decoration. Tab colour means section, skill hue means area, status colour means state, and ultramarine means interactive. If a colour on screen answers none of those, remove it.
+**The Signal Rule.** Colour is a signal, never decoration. Binder colour means which binder you're in, status colour means state, and ultramarine means interactive. (Legal Skills shares ultramarine, but only on the switcher swatch, the open divider's edge and the section rule, never as text or fill.) If a colour on screen answers none of those, remove it.
 
 **The Law-Changed Red Rule.** Red appears only for law-changed notices and for the unread dot that leads to them. Errors, deadlines and emphasis do not get red.
 
@@ -255,11 +267,14 @@ A white-and-ink page on warm chipboard, with saturated binder colours rationed t
 
 ## Layout
 
-On desktop (1024px and up) the binder sits inside a 20px board margin: the sheet fills the remaining width and is at least the viewport height minus 40px. The tab column sits to its right, sticky 20px from the top, with the first tab starting 72px down so it clears the header row. Below 1024px the sheet is the whole screen, navigation moves to a fixed bottom bar, and the full rail opens as a drawer.
+On desktop (1024px and up) the sheet runs to the top, left and bottom of the viewport, with no board margin. A chipboard strip about 50px wide on the right holds the divider column, sticky, with the first divider starting about 96px down so it clears the header. The sheet casts its shadow onto that strip. Below 1024px the sheet is the whole screen, and the open binder's dividers become a "Sections" menu at the top of the page (13 tabs don't fit a bottom bar).
 
-Inside the sheet, content is centred in a 1180px column with gutters of 16px (phone), 24px (640px and up) and 44px (desktop). Home uses a two-column grid on desktop: a flexible main column and a 392px side column, separated by a 44px gap. The main column holds the greeting, the 56px search and the curriculum index. The side column holds the resume card, "Available now" and one update. On phones everything stacks in reading order. The curriculum index is a two-column ruled grid with a 40px column gap from 640px up, and a single column below that.
+Inside the sheet, content is centred in a 1180px column (cap it so a very wide monitor doesn't stretch lines), with gutters of 16px (phone), 24px (640px and up) and 44px (desktop). Pages use a flexible main column and a roughly 340px side column, separated by a 44–48px gap, stacking in reading order on phones.
 
-The header is a slim sticky bar at the top of the sheet. Its height is `--studio-chrome`, and sticky offsets are measured against it. On phones it carries only the menu, wordmark and avatar, because search, updates and theme each have a home in the bottom bar or drawer. The bottom bar reserves `--safe-bottom`, and the content column reserves the same amount, so the two cannot drift apart.
+- **Home (binder Contents):** main column holds greeting, scoped search, the pilot course opened to its skills, "Keep at hand" reference, and "What changed". Side column holds resume, latest note, training hours.
+- **Section tab:** title with the 4px binder rule, a tab-scoped search, kind chips, then grouped lists (Practice, Reference, Courses, New law, Coming). Side column holds My notes.
+
+The header is a slim sticky bar at the top of the sheet. Its height is `--studio-chrome`, and sticky offsets are measured against it. The bottom bar on phones (if kept for app navigation) reserves `--safe-bottom`, and the content column reserves the same amount.
 
 **The Ruled List Rule.** On Home, indexes and lists are ruled: a 1.5px ink top rule, hairline row separators, rows at least 44px tall, and a Whisper fill on hover. Do not wrap Home lists in cards.
 
@@ -283,25 +298,42 @@ The binder's silhouette is asymmetric. The sheet has 6px corners at the spine an
 
 ## Components
 
-### Binder tabs (signature)
+### Binder dividers (signature)
 
-The primary desktop navigation: Home, Browse, Learning paths, My learning, Updates (admins see Manager in place of the learner tabs).
+The open binder's sections, in `<nav aria-label="Legal Skills tabs">` (named for the binder). For Legal Skills: Contents, then Foundations, Ethics, Pre-Engagement, Research, Writing, Pre-Trial, Trial, Post-Trial, Appellate, ADR, Legislative, Community. Labels are short forms of the skill-area names; the section title uses the full name.
 
-- **Shape:** 52px wide and at least 116px tall, overlapping by 1.5px, 1.5px sheet-edge outline with no left border, 12px rounded free end.
-- **Colour:** each tab sets `--tab` from its tone. The label is in tab-on ink at 13px / 700, set vertically.
-- **States:** hover widens to 58px (180ms). The open section (`aria-current="page"`) is 66px wide and stacks above its neighbours. On section change the new tab animates 52→66px and the old one 66→52px (260ms, `cubic-bezier(0.16, 1, 0.3, 1)`), with no fill mode, so hover takes over afterwards. A fresh load shows the tab already open.
-- **Focus:** a 2px ink outline (not ultramarine) at 3px offset, because ultramarine would sit too close to the periwinkle tab.
-- **Reduced motion:** the tab keeps its open position and nothing moves.
+- **Shape:** 40px wide at rest, height fitted to the label (at least 56px), 9px rounded free end, no left border. 3px gap between dividers.
+- **Colour:** manila fills alternating, tab-on ink at 13px / 600, set vertically.
+- **Open:** white fill, 50px wide, pulled 8px into the sheet so it reads as joined, a 4px binder-colour free edge, 14px / 800 label, `aria-current="page"`.
+- **Motion:** opening animates width (260ms, `cubic-bezier(0.16, 1, 0.3, 1)`). Hover draws a divider out 4px.
+- **Focus:** a 2px ink outline at 3px offset.
+- **Overflow:** if the column is taller than the viewport, it scrolls on its own. Never shrink labels below 13px.
 
 **The Still Divider Rule.** Under `prefers-reduced-motion`, every divider shows its final position immediately. State feedback (colour, border, focus) survives; movement does not.
 
-### Bottom bar (phones)
+### Header
 
-Six slots: Home, Browse, Paths, Learning, Updates, Search. Each section shows its tab colour as a divider edge above it, 7px tall at rest and 12px raised when open, with ink label text. Inactive slots use soft ink. The bar has a 1.5px sheet-edge top rule. The Updates slot carries the law-changed red unread dot.
+The wordmark "Learning Hub" (17–19px / 800) at left, then the main nav: **Home**, the **Binders ▾** switcher, **My learning**, **Updates** (with an unread count). The current item has a 3px ink underline. At right: a "Search · Ctrl K" button, the theme toggle, the avatar. All controls are at least 44px tall.
 
-### Header and section rule
+### Binder switcher
 
-The wordmark "Learning Hub" (17px / 800) at left. On desktop, the theme toggle, the notifications bell (38px, 9px radius, hairline edge) and the avatar at right. On desktop the header's bottom rule is 3px in the open section's tab colour; on phones it is a hairline.
+A 44px outlined button showing the binder's colour swatch (10 × 14px, a tiny divider) and its name, "Legal Skills binder ▾". It opens a menu of binders. Binders without content yet are listed as "Coming", never hidden and never clickable into an empty shell. The switcher remembers the last tab per binder.
+
+### Kind chips
+
+40px pill toggles (`aria-pressed`) above a section's lists: Everything · Practice · Reference · Courses · New law · My notes · Coming, each with a count. Selected is solid ink. A count of zero still shows (honest), but the empty group explains itself instead of vanishing.
+
+### Item rows
+
+A title (17px / 700), a meta line (kind · source · length) in muted ink, and a trailing destination: "Open", "Brightspace ↗" or "MassLegalServices ↗". The destination is never left implicit. Placeholder titles in mockups are in [brackets].
+
+### Practice card
+
+The practice kind gets a stronger row: 1.5px ink border, a short description of the scenario, and an action ("Start practice"). An AI drill, if one ships, is labelled "Practice feedback, not legal advice" in the card itself and on its page.
+
+### My notes panel
+
+Notes-paper fill with notes-edge border, 14px radius, "Only you can see these" in soft ink. Each note shows what it's attached to (an item or the whole tab) and its date. A labelled textarea at least 16px in size plus a solid "Save note" button.
 
 ### Resume card
 
@@ -344,8 +376,10 @@ One treatment across the app: a 2px solid ultramarine outline at 2px offset, sho
 
 ### Do:
 
-- **Do** keep the five dividers in their fixed order and colours (Home orange, Browse amber, Paths green, Learning teal, Updates periwinkle), each with dark tab-on ink.
-- **Do** let the open section's colour reach into the page only through the header's 3px bottom rule (and the resume card's teal current-stop ring).
+- **Do** keep app navigation in the header and binder sections on the dividers. Never mix the two.
+- **Do** keep closed dividers manila. The binder colour appears only on the switcher swatch, the open divider's edge and the section rule.
+- **Do** say where every item opens.
+- **Do** put available content first and planned content in a quiet "Coming" group.
 - **Do** assign skill hues by skill id through `lib/skill-hue.ts`, so an area keeps its colour on every surface.
 - **Do** use the `-ink` member of a hue or status trio for any text on its tint.
 - **Do** run `npm run e2e` (axe, both themes) after touching any token with a recorded ratio.
@@ -361,6 +395,9 @@ One treatment across the app: a 2px solid ultramarine outline at 2px offset, sho
 - **Don't** use a second typeface; Public Sans covers every role.
 - **Don't** set a saturated hue solid, or white, as text on its own tint or on the light tabs.
 - **Don't** colour the board per section or give a tab the board's warm grey.
+- **Don't** give every divider its own colour.
+- **Don't** let a grid of planned topics take the main column.
+- **Don't** use notes-paper for anything the user didn't write.
 - **Don't** rebuild Home as a dashboard of greeting, stat tiles, card grid and sidebar.
 - **Don't** spend ultramarine on decoration; it means interactive.
 - **Don't** use the "T Map" line diagram outside Learning paths; it is reserved there (the resume card's lesson stops are the one borrowed piece).
