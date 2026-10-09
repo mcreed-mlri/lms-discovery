@@ -8,7 +8,7 @@ import { BellIcon, BookIcon, GridIcon, HomeIcon, SearchIcon } from "@/components
 import { SearchBox } from "@/components/search-box";
 import { SiteFooter } from "@/components/site-footer";
 import { StudioContentBar } from "@/components/studio-content-bar";
-import { StudioRail } from "@/components/studio-rail";
+import { SiteDrawer } from "@/components/site-drawer";
 import { getEffectiveDashboardRole, getEligibleLearningItems } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
@@ -149,11 +149,7 @@ export function StudioShell({
             onClick={() => setMobileOpen(false)}
           />
           <div className="absolute inset-y-0 left-0 flex max-h-[100dvh] overflow-y-auto overscroll-contain pt-[var(--safe-top)] shadow-[var(--shadow-lg)]">
-            <StudioRail
-              collapsed={false}
-              onToggle={() => setMobileOpen(false)}
-              onNavigate={() => setMobileOpen(false)}
-            />
+            <SiteDrawer onClose={() => setMobileOpen(false)} />
           </div>
         </div>
       )}
