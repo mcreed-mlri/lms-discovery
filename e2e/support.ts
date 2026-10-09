@@ -28,4 +28,6 @@ export const SIGNED_IN_ROUTES = [
   { path: "/curriculum-map/", name: "curriculum map" },
   { path: "/updates/", name: "updates" },
   { path: "/my-learning/", name: "my learning" },
+  { path: "/binder/litigation/", name: "litigation binder contents" },
+  { path: "/binder/litigation/trial-skills/", name: "trial tab" },
 ] as const;

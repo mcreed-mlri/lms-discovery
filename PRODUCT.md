@@ -163,7 +163,7 @@ Not built yet (the binder direction needs these):
 
 - Binders, tab membership, and an item `kind` (course, module, reference, resource, update, note). The Supabase `learning_items` table is the natural home for all of these.
 - Hub-native reference pages.
-- Notes. These start in `localStorage` like progress and move to the server when they need to follow the advocate across devices.
+- Notes beyond this device. My notes is built per binder tab (`lib/notes.ts`), stored in `localStorage` and keyed by user id so a shared office computer keeps them apart. Moving them to the server is what lets them follow the advocate across devices.
 - MassLegalServices records (see above).
 - Deep links that survive the login round trip to the exact item. `returnTo` already supports this; the item URLs need to exist.
 

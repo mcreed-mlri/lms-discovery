@@ -263,6 +263,10 @@
   --divider-manila: #ede4cc; /* --ink 14.3:1 */
   --divider-manila-alt: #e4d8b9; /* --ink 12.8:1 */
   --binder: var(--brand-fill);
+  /* My notes: a warm notes-paper fill, used only for what the user wrote.
+     --ink-muted 9.0:1 and --ink-soft 5.3:1 on it. */
+  --notes-paper: #fbf8ef;
+  --notes-edge: #e8dfc6;
 
   /* Text selection — a clear wash of the brand fill, not the retired gold. */
   --selection-bg: rgba(47, 69, 181, 0.16);
@@ -330,6 +334,8 @@
   --sheet-shadow: rgba(0, 0, 0, 0.55);
   --divider-manila: #3b372f; /* --ink 10.7:1 */
   --divider-manila-alt: #343028; /* --ink 11.9:1 */
+  --notes-paper: #24221d; /* --ink-muted 6.7:1, --ink-soft 4.8:1 */
+  --notes-edge: #3a362d;
 
   /* Skill hues: saturated strokes plus deep fills for icon wells/chips. */
   /* Dark tints are deep, so each solid already clears 4.5:1 as text on its own

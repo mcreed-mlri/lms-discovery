@@ -170,3 +170,20 @@ test.describe("signed in", () => {
     }
   });
 });
+
+test("a note saved in a binder tab is still there after a reload", async ({ page }) => {
+  await signIn(page);
+  await page.goto("/binder/litigation/trial-skills/");
+  const field = page.getByRole("textbox", { name: /Add a note/ });
+  await field.fill("Ask about remote testimony.");
+  await page.getByRole("button", { name: "Save note" }).click();
+  await expect(field).toHaveValue("");
+
+  await page.reload();
+  const notes = page.getByRole("region", { name: "My notes" });
+  await expect(notes.getByText("Ask about remote testimony.")).toBeVisible();
+
+  // Filed under Trial only.
+  await page.goto("/binder/litigation/post-trial/");
+  await expect(page.getByText("Ask about remote testimony.")).toHaveCount(0);
+});

@@ -63,6 +63,26 @@ test.describe("signed-in routes", () => {
     expect(violations, `\n${describe(violations)}`).toEqual([]);
   });
 
+  test("a binder tab with a saved note has no violations in dark theme", async ({ page }) => {
+    // The dividers, the open tab and the notes paper all have their own dark
+    // values; a saved note puts every one of them on screen at once.
+    await page.addInitScript(() => {
+      window.localStorage.setItem("lace-learning-hub-theme", "dark");
+    });
+    await page.goto("/binder/litigation/trial-skills/");
+    await expect(page.locator("main")).toBeVisible();
+    await page.getByRole("textbox", { name: /Add a note/ }).fill("Bring the exhibit list.");
+    await page.getByRole("button", { name: "Save note" }).click();
+    await expect(page.getByText("Bring the exhibit list.")).toBeVisible();
+
+    const { violations } = await scan(page);
+    expect(
+      violations,
+      `
+${describe(violations)}`,
+    ).toEqual([]);
+  });
+
   test("the search dialog has no accessibility violations while open", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("main")).toBeVisible();

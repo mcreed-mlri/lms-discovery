@@ -321,7 +321,7 @@ A 44px outlined button showing the binder's colour swatch (10 × 14px, a tiny di
 
 ### Kind chips
 
-40px pill toggles (`aria-pressed`) above a section's lists: Everything · Practice · Reference · Courses · New law · My notes · Coming, each with a count. Selected is solid ink. A count of zero still shows (honest), but the empty group explains itself instead of vanishing.
+**Not shown until a tab holds three or more kinds of item**; before that, a row of mostly-zero chips is noise, so groups simply appear when they have content (New law only when a change is filed under the tab). When they ship: 40px pill toggles (`aria-pressed`) above a section's lists, Everything · Practice · Reference · Courses · New law · My notes · Coming, each with a count. Selected is solid ink.
 
 ### Item rows
 
