@@ -197,7 +197,7 @@ function AreaList({
 
   return (
     <details open className="group mt-[26px]">
-      <summary className="mb-3 flex cursor-pointer list-none items-center justify-between rounded-[8px] px-[11px] py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-[color:var(--ink-soft)] transition hover:bg-[color:var(--surface-sunken)] focus-ring marker:content-none [&::-webkit-details-marker]:hidden">
+      <summary className="mb-3 flex cursor-pointer list-none items-center justify-between rounded-[8px] px-[11px] py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.06em] text-[color:var(--ink-soft)] transition hover:bg-[color:var(--surface-sunken)] focus-ring marker:content-none [&::-webkit-details-marker]:hidden">
         <span>{label}</span>
         <ChevronLeftIcon className="h-3 w-3 shrink-0 -rotate-90 text-[color:var(--ink-soft)] transition-transform duration-200 group-open:rotate-90" />
       </summary>

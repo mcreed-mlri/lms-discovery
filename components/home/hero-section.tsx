@@ -4,7 +4,6 @@ import { useMemo } from "react";
 import Link from "next/link";
 
 import { ArrowIcon, PlayIcon } from "@/components/icons";
-import { ProgressRing } from "@/components/progress-ring";
 import { EdgeScroller } from "@/components/edge-scroller";
 import { SearchBox } from "@/components/search-box";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
@@ -51,9 +50,9 @@ function useResumeCard(allItems: LearningItem[]) {
   return { resumeItem, resumeUrl, resumeEyebrow, resumeProgressLabel };
 }
 
-// HERO — compact personalized greeting, search, and resume card.
-// Pinned under the studio content bar (`--studio-chrome` is set on the shell)
-// so search stays in reach while the page scrolls.
+// HERO — greeting, search, and resume card. It scrolls with the page: pinned,
+// it took about a third of a laptop screen and covered the skill tiles. Ctrl K
+// still opens search from anywhere.
 export function HeroSection({
   user,
   isAdmin,
@@ -77,9 +76,9 @@ export function HeroSection({
   const hoursPct = Math.round((learnerProgress.hoursEarned / learnerProgress.hoursRequired) * 100);
 
   return (
-    <section className="sticky top-[var(--studio-chrome)] z-10 overflow-x-clip border-b border-[color:var(--line)] bg-[color:var(--chrome-bg)] backdrop-blur-[10px]">
+    <section className="overflow-x-clip border-b border-[color:var(--line)] bg-[color:var(--chrome-bg)]">
       <div className="mx-auto min-w-0 max-w-[1120px] px-4 py-4 sm:px-6 sm:py-5 lg:px-10 lg:py-6">
-        {/* Top row: headline + training hours / this-week streak */}
+        {/* Top row: headline + training hours */}
         <div className="flex min-w-0 items-center justify-between gap-3 sm:gap-6">
           <div className="min-w-0">
             <h1 className="hero-display min-w-0 text-[22px] leading-[1.1] text-[color:var(--ink)] sm:text-[32px] sm:leading-[1.06] lg:text-[34px]">
@@ -104,9 +103,7 @@ export function HeroSection({
               headless admin account, which tracks no personal progress. */}
           {!isAdmin && (
             <p className="shrink-0 pt-0.5 text-right font-mono text-[11px] leading-tight tabular-nums sm:hidden">
-              <span className="block font-semibold uppercase tracking-[0.04em] text-[color:var(--ink-soft)]">
-                Training
-              </span>
+              <span className="block font-semibold text-[color:var(--ink-soft)]">Training</span>
               <span className="font-semibold text-[color:var(--ink)]">
                 {learnerProgress.hoursEarned}/{learnerProgress.hoursRequired} hrs
               </span>
@@ -114,43 +111,22 @@ export function HeroSection({
           )}
 
           {!isAdmin && (
-            <div className="hidden items-center gap-4 sm:flex sm:pt-1.5">
-              <div className="flex items-center gap-2.5">
-                <ProgressRing
-                  value={hoursPct}
-                  size={44}
-                  stroke={4}
-                  color="var(--brand-fill)"
-                  trackColor="var(--surface-sunken)"
-                  label={`${hoursPct}% of training hours goal`}
-                >
-                  <span className="text-[10px] font-bold tabular-nums text-[color:var(--ink)]">
-                    {hoursPct}%
-                  </span>
-                </ProgressRing>
-                <p className="text-[13px] leading-tight text-[color:var(--ink-soft)]">
-                  <span className="font-semibold text-[color:var(--ink)]">
-                    {learnerProgress.hoursEarned}/{learnerProgress.hoursRequired} hrs
-                  </span>{" "}
-                  to goal
-                </p>
-              </div>
-              <div className="hidden items-center gap-2.5 border-l border-[color:var(--line)] pl-4 md:flex">
-                <span className="text-[13px] text-[color:var(--ink-soft)]">This week</span>
-                <div className="flex gap-1" role="img" aria-label="This week's learning activity">
-                  {learnerProgress.weeklyActivity.map((day, i) => (
-                    <span
-                      key={i}
-                      className={`h-2.5 w-2.5 rounded-[3px] ${
-                        day === "done"
-                          ? "bg-[color:var(--brand-fill)]"
-                          : day === "today"
-                            ? "border-[1.5px] border-dashed border-[color:var(--brand-fill)]"
-                            : "bg-[color:var(--surface-sunken)]"
-                      }`}
-                    />
-                  ))}
-                </div>
+            <div className="hidden min-w-[9rem] sm:block sm:pt-1.5">
+              <p className="text-right text-[13px] leading-tight text-[color:var(--ink-soft)]">
+                <span className="font-semibold tabular-nums text-[color:var(--ink)]">
+                  {learnerProgress.hoursEarned} of {learnerProgress.hoursRequired}
+                </span>{" "}
+                training hours
+              </p>
+              <div
+                className="mt-1.5 h-1 overflow-hidden rounded-full bg-[color:var(--surface-sunken)]"
+                role="img"
+                aria-label={`${hoursPct}% of training hours goal`}
+              >
+                <div
+                  className="h-full rounded-full bg-[color:var(--brand-fill)]"
+                  style={{ width: `${hoursPct}%` }}
+                />
               </div>
             </div>
           )}

@@ -20,10 +20,22 @@ export function UpdatesView() {
     <>
       <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
         <header className="border-b border-[color:var(--line)] pb-4">
-          <p className="section-kicker secondary">Keep current</p>
-          <h1 className="section-title mt-1 text-2xl text-[color:var(--ink)]">Updates</h1>
+          <h1 className="section-title text-2xl text-[color:var(--ink)]">Updates</h1>
           <p className="mt-2 text-[color:var(--ink-muted)]">
-            Recent changes to modules, checklists, and practice guidance.
+            Changes to modules, checklists, and practice guidance.
+          </p>
+          {/*
+            Every entry in contentUpdates is sample copy written to show the
+            layout. None of it has been checked by an attorney, so the page says
+            so before anyone reads a statute citation as current law.
+          */}
+          <p
+            role="note"
+            className="mt-4 max-w-2xl rounded-[var(--radius-control)] border border-[color:var(--line-strong)] bg-[color:var(--surface-sunken)] px-3 py-2.5 text-[13px] leading-relaxed text-[color:var(--ink)]"
+          >
+            <strong className="font-bold">These updates are samples, not legal guidance.</strong>{" "}
+            They show how change notices will look. The citations, dates, and amounts have not been
+            reviewed. Don&apos;t rely on them in a case.
           </p>
         </header>
 

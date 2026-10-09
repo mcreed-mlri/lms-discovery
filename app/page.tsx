@@ -60,10 +60,7 @@ export default function Home() {
     return (
       <div className="hub-shell flex min-h-screen items-center justify-center px-4">
         <div className="editorial-panel w-full max-w-sm rounded-xl p-6 text-center">
-          <p className="editorial-eyebrow">Learning Hub</p>
-          <h1 className="hero-title mt-3 text-3xl text-[color:var(--ink)]">
-            Preparing your library
-          </h1>
+          <h1 className="hero-title text-3xl text-[color:var(--ink)]">Preparing your library</h1>
           <p className="mt-2 text-sm font-semibold text-[color:var(--ink-muted)]">
             Loading your courses, modules, and reading list.
           </p>
@@ -76,12 +73,11 @@ export default function Home() {
     return (
       <div className="hub-shell flex min-h-screen items-center justify-center px-4 py-12">
         <div className="editorial-panel w-full max-w-md rounded-2xl p-7 text-center">
-          <p className="editorial-eyebrow">LACE Learning Hub</p>
-          <h1 className="hero-title mt-4 text-4xl text-[color:var(--ink)]">
-            Start where the case is.
+          <h1 className="hero-title text-4xl text-[color:var(--ink)]">
+            Sign in to the Learning Hub
           </h1>
           <p className="mt-3 text-base leading-7 text-[color:var(--ink-muted)]">
-            Continue into focused training for Massachusetts legal aid practice.
+            Find MLRI training for Massachusetts legal aid practice, then open it in Brightspace.
           </p>
           {/*
             One destination. login() now resolves the provider via /login, so the

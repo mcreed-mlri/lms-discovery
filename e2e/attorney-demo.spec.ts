@@ -42,7 +42,7 @@ for (const viewport of [
     await page.getByRole("link", { name: "Explore the path" }).click();
     await expect(page).toHaveURL(/browse\/paths\/intake-to-verdict/);
     await expect(page.getByRole("heading", { name: intakeToVerdictPath.title })).toBeVisible();
-    await expect(page.getByText("Sample progress shown for this demo.")).toBeVisible();
+    await expect(page.getByText(/sample progress/i)).toBeVisible();
     await page.evaluate(() => {
       (document.activeElement as HTMLElement)?.blur();
       window.scrollTo({ top: 0, behavior: "instant" });
@@ -76,11 +76,11 @@ test("path landing page, catalog, and global search share one example", async ({
   await expect(search.getByRole("option").first()).toContainText(intakeToVerdictPath.title);
   await search.getByRole("option").first().click();
   const detail = page.getByRole("dialog", { name: intakeToVerdictPath.title });
-  await expect(detail.getByRole("link", { name: "Open in Learning Hub" })).toHaveAttribute(
+  await expect(detail.getByRole("link", { name: "Open full page" })).toHaveAttribute(
     "href",
     intakeToVerdictPath.href,
   );
-  await detail.getByRole("link", { name: "Open in Learning Hub" }).click();
+  await detail.getByRole("link", { name: "Open full page" }).click();
   await expect(page).toHaveURL(/browse\/paths\/intake-to-verdict/);
   await page.goto("/learn/path-new-attorney");
   await expect(

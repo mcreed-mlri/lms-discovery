@@ -6,8 +6,8 @@ import { useEffect, useState, type ReactNode } from "react";
  * Storyboard frames 01 and 09: the cinematic bookends.
  *
  * A full-bleed photograph with text animating in over a scrim. `image` is
- * optional - with no file present the panel falls back to a warm gradient
- * that still reads as a deliberate design rather than a broken image.
+ * optional - with no file present the panel falls back to the flat near-black
+ * feature surface, which still reads as deliberate rather than a broken image.
  *
  * Animation is plain CSS transitions with staggered delays, so this needs
  * no additions to tailwind.config.
@@ -65,7 +65,7 @@ export function Bookend({
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/25" />
         </>
       ) : (
-        <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_15%_20%,#4a3f36_0%,#2b2622_55%,#1c1917_100%)]" />
+        <div className="absolute inset-0 bg-[color:var(--feature-surface)]" />
       )}
 
       <div

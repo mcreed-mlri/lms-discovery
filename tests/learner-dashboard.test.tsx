@@ -52,7 +52,7 @@ test("renders the learner's courses once loaded", async () => {
   // than once — as its own card, and again inside the rating / stalled-course
   // prompts that reference it by name.
   await waitFor(() => {
-    expect(screen.getAllByText("Housing Law Fundamentals")[0]).toBeVisible();
+    expect(screen.getAllByText("Legal Skills: Hearsay")[0]).toBeVisible();
   });
   expect(screen.queryByText(/Loading your learning/i)).not.toBeInTheDocument();
 });
@@ -81,7 +81,7 @@ test("Try again refetches in place instead of reloading the document", async () 
   await user.click(screen.getByRole("button", { name: /Try again/i }));
 
   await waitFor(() => {
-    expect(screen.getAllByText("Housing Law Fundamentals")[0]).toBeVisible();
+    expect(screen.getAllByText("Legal Skills: Hearsay")[0]).toBeVisible();
   });
   expect(getLearnerDashboard).toHaveBeenCalledTimes(2);
   expect(screen.queryByRole("alert")).not.toBeInTheDocument();

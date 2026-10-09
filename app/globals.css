@@ -670,8 +670,8 @@ input::placeholder {
 
 .hub-shell {
   background: var(--paper);
-  /* StudioContentBar height (padding + 38px controls + bottom border). The
-     homepage hero pins under it via top: var(--studio-chrome). Keep these in
+  /* StudioContentBar height (padding + 38px controls + bottom border). Sticky
+     offsets are measured against it via var(--studio-chrome). Keep these in
      lockstep if the bar's padding or control size changes. */
   --studio-chrome: calc(3.5rem + 1px + env(safe-area-inset-top, 0px));
 }

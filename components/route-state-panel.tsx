@@ -12,13 +12,11 @@ import type { ReactNode } from "react";
    Lives in one place on purpose: four hand-copied variants would drift the way
    the button styles did. */
 export function RouteStatePanel({
-  eyebrow,
   title,
   description,
   children,
   role,
 }: {
-  eyebrow: string;
   title: string;
   description?: ReactNode;
   /** Actions — buttons or links. */
@@ -33,8 +31,7 @@ export function RouteStatePanel({
         role={role}
         aria-live={role ? "polite" : undefined}
       >
-        <p className="editorial-eyebrow">{eyebrow}</p>
-        <h1 className="hero-title mt-4 text-3xl text-[color:var(--ink)]">{title}</h1>
+        <h1 className="hero-title text-3xl text-[color:var(--ink)]">{title}</h1>
         {description ? (
           <p className="mt-3 text-base leading-7 text-[color:var(--ink-muted)]">{description}</p>
         ) : null}

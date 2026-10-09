@@ -124,8 +124,8 @@ const CHOICES: ScenarioChoice[] = [
 type Step =
   "intro" | "call" | "notice" | "choice" | "feedback" | "lease-doc" | "lease" | "complete";
 
-// Drop your Unsplash photos at these paths. Missing files fall back to a
-// gradient, so the scenario looks intentional before the art arrives.
+// Drop your Unsplash photos at these paths. Missing files fall back to a flat
+// dark panel, so the scenario looks intentional before the art arrives.
 const OPENING_IMAGE = "/images/desk-morning.jpg";
 const CLOSING_IMAGE = "/images/desk-evening.jpg";
 
@@ -207,7 +207,7 @@ export default function ScenarioPage() {
 
             {step === "notice" && (
               <div>
-                <h2 className="text-[20px] font-semibold text-[#1c1c1c]">
+                <h2 className="text-[19px] font-semibold text-[#1c1c1c]">
                   Document from the client
                 </h2>
                 <p className="mt-1 text-[14px] text-[#6f7680]">
@@ -269,7 +269,7 @@ export default function ScenarioPage() {
 
             {step === "lease-doc" && (
               <div>
-                <h2 className="text-[20px] font-semibold text-[#1c1c1c]">The lease</h2>
+                <h2 className="text-[19px] font-semibold text-[#1c1c1c]">The lease</h2>
                 <p className="mt-1 text-[14px] text-[#6f7680]">
                   Find the lease term and the monthly rent.
                 </p>
@@ -295,7 +295,7 @@ export default function ScenarioPage() {
 
             {step === "lease" && (
               <div className="max-w-[640px]">
-                <h2 className="text-[20px] font-semibold text-[#1c1c1c]">Important dates</h2>
+                <h2 className="text-[19px] font-semibold text-[#1c1c1c]">Important dates</h2>
                 <Timeline />
                 <div className="mt-5 rounded-lg border border-[#cfe9db] bg-[#f0faf5] px-4 py-3.5 text-[14px] leading-relaxed text-[#1c4a35]">
                   This notice may not meet the required notice period for this type of eviction in
@@ -318,7 +318,7 @@ export default function ScenarioPage() {
                   <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1fa06a]">
                     <Check size={18} strokeWidth={3} color="#fff" />
                   </span>
-                  <h2 className="text-[30px] font-semibold text-white">Scenario Complete</h2>
+                  <h2 className="text-[32px] font-semibold text-white">Scenario complete</h2>
                 </div>
 
                 <p className="text-[15px] text-white/80">

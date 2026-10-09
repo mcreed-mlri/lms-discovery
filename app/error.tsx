@@ -27,9 +27,8 @@ export default function RouteError({
 
   return (
     <RouteStatePanel
-      eyebrow="Learning Hub"
       title="Something went wrong on this page"
-      description="The rest of the Hub is still working. Trying again usually clears it — your progress in Brightspace is unaffected."
+      description="The rest of the Hub is still working. Trying again usually clears it. Your progress in Brightspace is unaffected."
       role="alert"
     >
       <button

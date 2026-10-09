@@ -2,8 +2,8 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 
 import { EdgeScrollerList } from "@/components/edge-scroller";
-import { CheckIcon, ChevronLeftIcon, PathIcon, PlayIcon, StarIcon } from "@/components/icons";
-import { ProgressRing } from "@/components/progress-ring";
+import { CheckIcon, ChevronLeftIcon, PlayIcon, StarIcon } from "@/components/icons";
+import { getStatusTheme } from "@/lib/course-theme";
 import { type MockLearningPath, type PathPhase, type PathStage } from "@/lib/mocks/core-curriculum";
 import { getHue, type SkillHue } from "@/lib/skill-hue";
 
@@ -72,20 +72,13 @@ function SpotlightTimeline({ stages, hue }: { stages: PathStage[]; hue: SkillHue
             <div className="flex min-w-[6rem] flex-1 flex-col items-center">
               <StageNode stage={stage} hue={hue} />
               <p
-                className={`mt-2.5 text-center text-[11.5px] leading-snug ${
+                className={`mt-2.5 text-center text-[12px] leading-snug ${
                   stage.status === "featured"
                     ? "font-bold text-[color:var(--ink)]"
                     : "font-semibold text-[color:var(--ink)]"
                 }`}
               >
                 {stage.title}
-              </p>
-              {/* ink-muted, not ink-soft: this timeline only renders on the
-                  spotlight card's tinted background (color-mix over
-                  surface-raised), which ink-soft's contrast guarantee was
-                  never measured against. */}
-              <p className="mt-0.5 text-center text-[10.5px] text-[color:var(--ink-muted)]">
-                {stage.detail}
               </p>
             </div>
             {isLast ? null : (
@@ -135,7 +128,7 @@ function PhaseSummaryRow({
         />
         <span className="text-[14px] font-semibold text-[color:var(--ink)]">{phase.label}</span>
         <span className="metadata text-[color:var(--ink-soft)]">{phase.range}</span>
-        <span className="ml-auto flex items-center gap-1.5 text-[12.5px] text-[color:var(--ink-soft)]">
+        <span className="ml-auto flex items-center gap-1.5 text-[13px] text-[color:var(--ink-soft)]">
           {status === "complete" ? (
             <CheckIcon className="h-3.5 w-3.5 text-[color:var(--status-done)]" />
           ) : null}
@@ -147,7 +140,7 @@ function PhaseSummaryRow({
         {phase.stages.map((stage) => (
           <li
             key={stage.id}
-            className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-[12.5px] text-[color:var(--ink-muted)]"
+            className="inline-flex items-center gap-1.5 rounded-[var(--radius-control)] border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-[13px] text-[color:var(--ink-muted)]"
           >
             {stage.status === "complete" ? (
               <CheckIcon className="h-3 w-3 text-[color:var(--status-done)]" />
@@ -156,7 +149,6 @@ function PhaseSummaryRow({
               <StarIcon className="h-3 w-3 text-[color:var(--hue-4)]" />
             ) : null}
             <span className="font-medium text-[color:var(--ink)]">{stage.title}</span>
-            <span className="text-[color:var(--ink-soft)]">{stage.detail}</span>
           </li>
         ))}
       </ul>
@@ -230,6 +222,9 @@ export function PathJourney({ path }: { path: MockLearningPath }) {
   }));
   const currentIndex = computed.findIndex((c) => c.status === "current");
   const overallPct = Math.round((path.stagesComplete / path.stageCount) * 100);
+  // Status colour, not the phase hue: topic colour says where, status says what
+  // state (DESIGN.md, The Two Languages Rule).
+  const inProgress = getStatusTheme("progress");
 
   return (
     <div className="mx-auto max-w-[1120px] px-4 py-6 sm:px-6 sm:py-8 lg:px-10 lg:py-9">
@@ -240,39 +235,19 @@ export function PathJourney({ path }: { path: MockLearningPath }) {
         <span aria-hidden="true">←</span> Back to learning paths
       </Link>
 
-      <p className="mt-4 flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-[color:var(--brand)]">
-        <PathIcon className="h-3.5 w-3.5" />
-        {path.kicker}
-      </p>
-      <h1 className="hero-display mt-2 max-w-3xl text-[28px] text-[color:var(--ink)] sm:text-[38px]">
+      <h1 className="hero-display mt-4 max-w-3xl text-[26px] text-[color:var(--ink)] sm:text-[32px]">
         {path.title}
       </h1>
-      <p className="mt-3 max-w-xl text-[14.5px] leading-6 text-[color:var(--ink-muted)] sm:text-[15px]">
+      <p className="mt-3 max-w-xl text-[15px] leading-6 text-[color:var(--ink-muted)]">
         {path.description}
       </p>
 
-      <p className="mt-5 text-xs text-[color:var(--ink-muted)]">
-        Sample progress shown for this demo.
+      <p className="mt-5 text-[13px] leading-tight text-[color:var(--ink-soft)]">
+        <span className="font-semibold tabular-nums text-[color:var(--ink)]">
+          {path.stagesComplete} of {path.stageCount} stages complete ({overallPct}%)
+        </span>{" "}
+        · {path.kicker}, sample progress. These stages are planned and not built yet.
       </p>
-      <div className="mt-3 flex items-center gap-4">
-        <ProgressRing
-          value={overallPct}
-          size={52}
-          stroke={5}
-          color="var(--brand-fill)"
-          label={`${overallPct} percent of the journey complete`}
-        >
-          <span className="text-[12px] font-bold tabular-nums text-[color:var(--ink)]">
-            {overallPct}%
-          </span>
-        </ProgressRing>
-        <p className="text-[13px] leading-tight text-[color:var(--ink-soft)]">
-          <span className="font-semibold text-[color:var(--ink)]">
-            {path.stagesComplete} of {path.stageCount} stages
-          </span>{" "}
-          complete · {path.hoursLabel}
-        </p>
-      </div>
 
       <JourneyMeter phases={path.phases} computed={computed} />
 
@@ -297,11 +272,10 @@ export function PathJourney({ path }: { path: MockLearningPath }) {
                     {phase.label}
                   </h2>
                   <span
-                    className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.04em]"
-                    style={{ background: hue.tint, color: hue.ink }}
+                    className={`metadata inline-flex items-center gap-1.5 rounded-[6px] border px-2 py-0.5 ${inProgress.pill}`}
                   >
-                    <span className="h-1.5 w-1.5 rounded-full" style={{ background: hue.solid }} />
-                    In progress
+                    <span className={`h-1.5 w-1.5 rounded-full ${inProgress.dot}`} />
+                    {inProgress.label}
                   </span>
                 </div>
                 <p className="text-[12px] font-medium text-[color:var(--ink-muted)]">
@@ -313,11 +287,8 @@ export function PathJourney({ path }: { path: MockLearningPath }) {
 
               <div className="mt-6 flex flex-col gap-3 border-t border-[color:var(--line)] pt-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="section-label" style={{ color: hue.ink }}>
-                    {path.upNext.kicker}
-                  </p>
-                  <h3 className="section-title mt-1 text-[15px] text-[color:var(--ink)] sm:text-[16px]">
-                    {path.upNext.title}
+                  <h3 className="section-title text-[15px] text-[color:var(--ink)] sm:text-[16px]">
+                    {path.upNext.kicker}: {path.upNext.title}
                   </h3>
                   <p className="mt-1 max-w-lg text-[13px] leading-5 text-[color:var(--ink-muted)]">
                     {path.upNext.body}
@@ -337,9 +308,8 @@ export function PathJourney({ path }: { path: MockLearningPath }) {
 
       {currentIndex === -1 ? (
         <aside className="mt-9 rounded-[14px] border border-[color:var(--line)] bg-[color:var(--surface-raised)] px-5 py-5 shadow-[var(--shadow-xs)] sm:px-6 sm:py-6">
-          <p className="section-label text-[color:var(--ink-soft)]">{path.upNext.kicker}</p>
-          <h2 className="section-title mt-2 text-[18px] text-[color:var(--ink)] sm:text-[20px]">
-            {path.upNext.title}
+          <h2 className="section-title text-[17px] text-[color:var(--ink)] sm:text-[19px]">
+            {path.upNext.kicker}: {path.upNext.title}
           </h2>
           <p className="mt-2 max-w-2xl text-[14px] leading-6 text-[color:var(--ink-muted)]">
             {path.upNext.body}

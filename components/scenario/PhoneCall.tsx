@@ -142,7 +142,7 @@ export function PhoneCall({
             <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
               Incoming call
             </div>
-            <div className="mt-1.5 text-[21px] font-medium text-white">{callerName}</div>
+            <div className="mt-1.5 text-[22px] font-medium text-white">{callerName}</div>
 
             <div className="mt-5 flex h-[86px] w-[86px] items-center justify-center rounded-full bg-white/10">
               <User size={40} strokeWidth={1.5} color="rgba(255,255,255,0.55)" />

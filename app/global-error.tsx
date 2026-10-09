@@ -45,28 +45,14 @@ export default function GlobalError({
             maxWidth: "28rem",
             width: "100%",
             textAlign: "center",
-            border: "1px solid #d9d4cc",
+            border: "1px solid #e2ded6",
             borderRadius: "14px",
             background: "#ffffff",
             padding: "1.75rem",
           }}
         >
-          <p
-            style={{
-              margin: 0,
-              fontSize: "0.6875rem",
-              fontWeight: 700,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              color: "#6d675e",
-            }}
-          >
-            LACE Learning Hub
-          </p>
-          <h1 style={{ margin: "0.75rem 0 0", fontSize: "1.5rem", lineHeight: 1.25 }}>
-            The Hub failed to load
-          </h1>
-          <p style={{ margin: "0.75rem 0 0", lineHeight: 1.6, color: "#4a453e" }}>
+          <h1 style={{ margin: 0, fontSize: "26px", lineHeight: 1.2 }}>The Hub failed to load</h1>
+          <p style={{ margin: "0.75rem 0 0", lineHeight: 1.6, color: "#575148" }}>
             This is a problem on our side, not with your account. Your training records in
             Brightspace are unaffected.
           </p>

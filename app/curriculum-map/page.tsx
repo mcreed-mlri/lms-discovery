@@ -13,7 +13,7 @@ import {
   type CurriculumColumn,
   type CurriculumNote,
 } from "@/lib/curriculum-map";
-import { getLearningItemById, getLearningItemUrl } from "@/lib/data";
+import { getLearningItemById, getLearningItemUrl, skillAreas, subjectAreas } from "@/lib/data";
 import { getHue } from "@/lib/skill-hue";
 
 // Where a curriculum topic maps to a built catalog course, resolve its link so
@@ -88,7 +88,7 @@ function Column({ column }: { column: CurriculumColumn }) {
         </div>
       ) : (
         <p className="px-1 py-2 text-[12px] font-medium italic text-[color:var(--ink-soft)]">
-          In development — topics coming soon.
+          No topics mapped yet.
         </p>
       )}
     </div>
@@ -98,7 +98,7 @@ function Column({ column }: { column: CurriculumColumn }) {
 function Branch({ branch }: { branch: CurriculumBranch }) {
   return (
     <section className="mb-10">
-      <SectionHead kicker="Curriculum branch" title={branch.title} />
+      <SectionHead title={branch.title} />
       {branch.type === "columns" ? (
         /* This region scrolls horizontally and its children are static text, so
            there is nothing inside for the keyboard to land on — a keyboard-only
@@ -140,6 +140,19 @@ const NAV_LABELS: Record<string, string> = {
   "substantive-law": "Subject-area training",
 };
 
+// The left rail lists these same areas. Read its hue and count rather than
+// recomputing them, so an area is the same colour and number in both places.
+function railArea(branchId: string, column: CurriculumColumn, index: number) {
+  const area =
+    branchId === "legal-skills"
+      ? skillAreas.find((a) => a.id === `course-${column.id}`)
+      : subjectAreas.find((a) => a.id === column.id);
+  return {
+    hue: getHue(area?.hueIndex ?? index),
+    count: area?.count ?? column.notes.filter((note) => note.level === "topic").length,
+  };
+}
+
 function jumpToColumn(columnId: string) {
   document
     .getElementById(`column-${columnId}`)
@@ -154,14 +167,14 @@ function NavGroup({ branch, defaultOpen }: { branch: CurriculumBranch; defaultOp
       className="group border-b border-[color:var(--line)] py-1 last:border-b-0"
     >
       <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-[var(--radius-control)] px-2 py-2.5 marker:content-none focus-ring [&::-webkit-details-marker]:hidden">
-        <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.06em] text-[color:var(--ink-soft)]">
+        <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.06em] text-[color:var(--ink-soft)]">
           {NAV_LABELS[branch.id] ?? branch.title}
         </span>
         <ChevronLeftIcon className="h-3.5 w-3.5 shrink-0 -rotate-90 text-[color:var(--ink-soft)] transition-transform duration-200 group-open:rotate-90" />
       </summary>
       <ul className="flex flex-col gap-0.5 pb-2">
         {branch.columns.map((column, index) => {
-          const hue = getHue(index);
+          const { hue, count } = railArea(branch.id, column, index);
           return (
             <li key={column.id}>
               <button
@@ -175,8 +188,8 @@ function NavGroup({ branch, defaultOpen }: { branch: CurriculumBranch; defaultOp
                   aria-hidden="true"
                 />
                 <span className="flex-1 truncate">{column.title}</span>
-                <span className="text-[11px] font-medium text-[color:var(--ink-soft)]">
-                  {column.notes.length}
+                <span className="text-[11px] font-medium tabular-nums text-[color:var(--ink-soft)]">
+                  {count}
                 </span>
               </button>
             </li>
@@ -221,16 +234,13 @@ export default function CurriculumMapPage() {
       <div className="lg:flex lg:items-start lg:gap-8">
         <div className="min-w-0 flex-1">
           <header className="mb-8">
-            <p className="editorial-eyebrow text-[color:var(--ink-soft)]">
-              Faculty &amp; content creators
-            </p>
-            <h1 className="hero-title mt-2 text-3xl text-[color:var(--ink)] sm:text-4xl">
+            <h1 className="hero-title text-3xl text-[color:var(--ink)] sm:text-4xl">
               Curriculum Map
             </h1>
             <p className="mt-3 max-w-2xl text-[15px] leading-7 text-[color:var(--ink-muted)]">
-              How the LACE curriculum is organized — the Legal Skills that carry across the case
-              lifecycle, and the Substantive Law areas beside them. This map is a work in progress:
-              topics marked <span className="font-semibold text-[color:var(--brand)]">Built</span>{" "}
+              How the curriculum is organized: the Legal Skills that carry across the case
+              lifecycle, and the Substantive Law areas beside them. This map is a work in progress.
+              Topics marked <span className="font-semibold text-[color:var(--brand)]">Built</span>{" "}
               link to a live course you can open now; everything else is planned as the curriculum
               develops.
             </p>

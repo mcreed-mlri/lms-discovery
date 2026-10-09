@@ -71,13 +71,12 @@ export default function BrowsePage() {
   return (
     <StudioShell padded={false}>
       <div className="mx-auto max-w-[1120px] px-4 pt-6 sm:px-6 sm:pt-9 lg:px-10">
-        <p className="section-kicker secondary">Discover</p>
-        <h1 className="hero-title mt-1 text-3xl text-[color:var(--ink)] sm:text-4xl">
+        <h1 className="hero-title text-3xl text-[color:var(--ink)] sm:text-4xl">
           Browse the catalog
         </h1>
         <p className="mt-3 max-w-2xl text-[15px] leading-7 text-[color:var(--ink-muted)]">
-          Every course, module, and learning path across the LACE curriculum. Search or refine to
-          find what fits the case in front of you.
+          Courses, modules, and learning paths in the MLRI curriculum. Most are planned and marked
+          that way; the rest open in Brightspace.
         </p>
         <div className="mt-5">
           <SearchBox

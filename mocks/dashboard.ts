@@ -1,7 +1,7 @@
 import type { DashboardUser, LearnerDashboardPayload } from "@/types/dashboard";
 
-const DEMO_RESUME_URL =
-  "https://mlri.brightspace.com/content/enforced/6698-demo.instructor_mc/Sequencing.html?ou=6698&d2l_body_type=3&ou=6698";
+const WELCOME_COURSE_URL =
+  "https://mlri.brightspace.com/content/enforced/6706-demo.onboarding_mc/Home.html?ou=6706&d2l_body_type=3";
 const HOUSING_COURSE_URL =
   "https://mlri.brightspace.com/content/enforced/6703-course.outline/Home.html?ou=6703&d2l_body_type=3";
 
@@ -24,113 +24,75 @@ const daysAhead = (n: number) => {
   return d.toISOString().slice(0, 10);
 };
 
+// Sample payload. Every course here is a real catalog item (lib/data.ts) and
+// the progress matches the home resume card, so the demo never shows a course
+// or certificate that does not exist. The numbers themselves are invented and
+// the page says so.
 export const learnerDashboardMock: LearnerDashboardPayload = {
   user: baseUser,
   summary: {
-    enrolledCount: 6,
-    inProgressCount: 3,
-    completedCount: 2,
-    streakDays: 12,
-    longestStreakNote: "Longest streak in the Housing area",
+    enrolledCount: 3,
+    inProgressCount: 2,
+    completedCount: 1,
     hoursEarned: 8.5,
     hoursRequired: 12,
     hoursDueLabel: "Due Jun 30",
-    weeklyHoursAvg: 4.2,
   },
   courses: [
     {
-      offeringId: "6698",
-      title: "Housing Law Fundamentals",
-      trainingArea: "Housing",
-      completionPct: 62,
+      offeringId: "7102",
+      title: "Legal Skills: Hearsay",
+      trainingArea: "Legal skills",
+      completionPct: 20,
       status: "in_progress",
       lastAccessedAt: daysAgo(1),
-      resumeUrl: DEMO_RESUME_URL,
-      dueDate: daysAhead(14),
-    },
-    {
-      offeringId: "7102",
-      title: "Hearsay & Exceptions",
-      trainingArea: "Practice skills",
-      completionPct: 100,
-      status: "completed",
-      lastAccessedAt: daysAgo(5),
-      resumeUrl: "#course-7102",
-    },
-    {
-      offeringId: "6844",
-      title: "Client Intake & Screening",
-      trainingArea: "Practice skills",
-      completionPct: 28,
-      status: "in_progress",
-      // Idle past STALLED_AFTER_DAYS so the stalled-course nudge is demoable.
-      lastAccessedAt: daysAgo(21),
-      resumeUrl: "#course-6844",
-      dueDate: daysAhead(21),
+      resumeUrl: "/legal-skills-hearsay/Home.html",
     },
     {
       offeringId: "6703",
       title: "Eviction Defense: The First 48 Hours",
       trainingArea: "Housing",
-      completionPct: 0,
-      status: "not_started",
-      lastAccessedAt: daysAgo(45),
-      resumeUrl: HOUSING_COURSE_URL,
-      dueDate: daysAhead(30),
-    },
-    {
-      offeringId: "7055",
-      title: "Public Benefits Overview",
-      trainingArea: "Benefits",
-      completionPct: 85,
+      completionPct: 40,
       status: "in_progress",
-      lastAccessedAt: daysAgo(2),
-      resumeUrl: "#course-7055",
+      // Idle past STALLED_AFTER_DAYS so the stalled-course nudge is demoable.
+      lastAccessedAt: daysAgo(21),
+      resumeUrl: HOUSING_COURSE_URL,
+      dueDate: daysAhead(14),
     },
     {
-      offeringId: "7188",
-      title: "Domestic Violence Safety Planning",
-      trainingArea: "Family law",
+      offeringId: "6706",
+      title: "Welcome to the Learning Hub",
+      trainingArea: "Orientation",
       completionPct: 100,
       status: "completed",
-      lastAccessedAt: daysAgo(12),
-      resumeUrl: "#course-7188",
+      lastAccessedAt: daysAgo(5),
+      resumeUrl: WELCOME_COURSE_URL,
     },
   ],
   recentActivity: [
-    { label: "Completed module: Reasonable Accommodation Requests", at: daysAgo(1) },
-    { label: "Started Self Check: Hearsay scenarios", at: daysAgo(4) },
-    { label: "Bookmarked: Working with court interpreters", at: daysAgo(4) },
-    { label: "Earned 2.0 training hrs: Hearsay & Exceptions", at: daysAgo(5) },
+    { label: "Opened Legal Skills: Hearsay, lesson 1", at: daysAgo(1) },
+    { label: "Completed Welcome to the Learning Hub", at: daysAgo(5) },
+    { label: "Earned 0.5 training hrs: Welcome to the Learning Hub", at: daysAgo(5) },
+    { label: "Completed module: When the Clock Starts", at: daysAgo(21) },
   ],
   notices: [
     {
       id: "notice-hearsay-2026",
-      title: "Trial skills refresher available",
-      body: "Brush up on Hearsay & Exceptions before your next trial assignment. Your prior completion counts toward partial credit.",
+      title: "Hearsay course available",
+      body: "Legal Skills: Hearsay covers responding to hearsay objections in written advocacy.",
       severity: "info",
     },
   ],
-  // 84 cells = 12 weeks x 7 days, intensity 0-4. Demo data; production reads
-  // this from Brightspace engagement snapshots.
-  activityHeatmap: [
-    0, 2, 1, 0, 3, 1, 2, 0, 1, 2, 3, 0, 1, 4, 2, 3, 1, 0, 2, 3, 1, 2, 0, 3, 1, 2, 3, 1, 4, 2, 1, 2,
-    3, 1, 2, 0, 1, 3, 2, 1, 2, 3, 4, 2, 3, 1, 0, 2, 1, 3, 2, 4, 1, 2, 3, 2, 1, 3, 2, 4, 1, 2, 3, 4,
-    2, 3, 2, 1, 2, 3, 2, 4, 1, 3, 2, 4, 3, 2, 1, 3, 2, 3, 4, 2,
-  ],
-  weeklySparkline: [2, 4, 3, 6, 4, 7, 5, 8],
   certificates: [
     {
-      id: "cert-hearsay",
-      title: "Hearsay & Exceptions",
-      earnedOn: "May 20, 2026",
-      credits: "2.0 hrs",
-    },
-    {
-      id: "cert-dv",
-      title: "Domestic Violence Safety Planning",
-      earnedOn: "May 9, 2026",
-      credits: "3.0 hrs",
+      id: "cert-welcome",
+      title: "Welcome to the Learning Hub",
+      earnedOn: new Date(daysAgo(5)).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
+      credits: "0.5 hrs",
     },
   ],
 };

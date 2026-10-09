@@ -4,45 +4,16 @@ import type { CSSProperties } from "react";
 import { ArrowIcon } from "@/components/icons";
 import { SkillGlyph } from "@/components/skill-glyph";
 import { ExampleLearningPath } from "@/components/path/example-learning-path";
+import { skillAreas } from "@/lib/data";
 import { learningPathExplanation } from "@/lib/demo-discovery";
-import {
-  coreSkillCards,
-  type CoreSkillCard,
-  type CoreSkillProgress,
-} from "@/lib/mocks/core-curriculum";
-
-const topicVars: Record<CoreSkillCard["topic"], { solid: string; tint: string; ink: string }> = {
-  foundations: {
-    solid: "var(--topic-foundations)",
-    tint: "var(--topic-foundations-soft)",
-    ink: "var(--topic-foundations-ink)",
-  },
-  ethics: {
-    solid: "var(--topic-ethics)",
-    tint: "var(--topic-ethics-soft)",
-    ink: "var(--topic-ethics-ink)",
-  },
-  drafting: {
-    solid: "var(--topic-drafting)",
-    tint: "var(--topic-drafting-soft)",
-    ink: "var(--topic-drafting-ink)",
-  },
-  research: {
-    solid: "var(--topic-research)",
-    tint: "var(--topic-research-soft)",
-    ink: "var(--topic-research-ink)",
-  },
-};
-
-const progressCopy: Record<CoreSkillProgress, { label: string; dot: string }> = {
-  complete: { label: "Complete", dot: "bg-[color:var(--status-done)]" },
-  "in-progress": { label: "In progress", dot: "bg-[color:var(--brand-fill)]" },
-  "not-started": { label: "Not started", dot: "bg-[color:var(--ink-soft)]/35" },
-};
+import { coreSkillCards, type CoreSkillCard } from "@/lib/mocks/core-curriculum";
+import { getHue } from "@/lib/skill-hue";
 
 function CoreSkillTile({ skill }: { skill: CoreSkillCard }) {
-  const hue = topicVars[skill.topic];
-  const progress = progressCopy[skill.progress];
+  // Same hue and count as the rail row for this area, so the two never disagree.
+  const area = skillAreas.find((entry) => entry.href === skill.href);
+  const hue = getHue(area?.hueIndex ?? 0);
+  const topicCount = area?.count ?? 0;
 
   return (
     <Link
@@ -54,21 +25,23 @@ function CoreSkillTile({ skill }: { skill: CoreSkillCard }) {
           "--accent-ink": hue.ink,
         } as CSSProperties
       }
-      className="interactive-tile group relative flex min-h-0 flex-col p-4 text-left focus-ring sm:min-h-[13.5rem] sm:p-5"
+      className="interactive-tile group relative flex min-h-0 flex-col overflow-hidden p-4 pt-5 text-left focus-ring before:absolute before:inset-x-0 before:top-0 before:h-1 before:bg-[color:var(--accent)] before:opacity-[0.85] hover:border-[color:var(--accent)] sm:min-h-[11rem] sm:p-5 sm:pt-6"
     >
-      <span className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-[color:var(--accent-tint)] text-[color:var(--accent-ink)] sm:h-11 sm:w-11">
-        <SkillGlyph kind={skill.glyph} className="h-5 w-5 sm:h-6 sm:w-6" />
-      </span>
-      <h3 className="section-title mt-3 text-[16px] leading-snug text-[color:var(--ink)] sm:text-[17px]">
+      <h3 className="section-title flex items-center gap-2 text-[16px] leading-snug text-[color:var(--ink)] sm:text-[17px]">
+        <SkillGlyph
+          kind={skill.glyph}
+          className="h-[18px] w-[18px] shrink-0 text-[color:var(--accent-ink)]"
+        />
         {skill.name}
       </h3>
       <p className="mt-1.5 text-[13px] leading-snug text-[color:var(--ink-muted)] sm:text-[14px]">
         {skill.blurb}
       </p>
       <div className="mt-auto flex items-center justify-between gap-3 pt-4">
-        <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[color:var(--ink-soft)]">
-          <span className={`h-1.5 w-1.5 rounded-full ${progress.dot}`} aria-hidden="true" />
-          {skill.topicCount} topics · {progress.label}
+        {/* Every topic in these areas is still planned, so the tile counts
+            them rather than showing progress through content that isn't built. */}
+        <span className="text-[12px] font-semibold tabular-nums text-[color:var(--ink-soft)]">
+          {topicCount} planned {topicCount === 1 ? "topic" : "topics"}
         </span>
         <ArrowIcon className="h-4 w-4 text-[color:var(--ink-soft)] transition-transform duration-200 group-hover:translate-x-0.5" />
       </div>

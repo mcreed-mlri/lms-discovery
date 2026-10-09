@@ -10,6 +10,7 @@ import {
   courses,
   getLearningItemUrl,
   getModuleMinutes,
+  isPlanned,
   modules,
   type LearningItem,
 } from "@/lib/data";
@@ -37,10 +38,16 @@ function getSummary(item: LearningItem) {
   return item.description;
 }
 
+// Planned items have no length yet; say so rather than guess one.
 function getDuration(item: LearningItem) {
+  if (isPlanned(item)) return "Not set yet";
   if (item.type === "PATH") return item.totalDuration.replace(" total", "");
-  if (item.type === "MODULE") return "Approx. 25 min";
+  if (item.type === "MODULE") return `${getModuleMinutes(item.id)} min`;
   return item.duration;
+}
+
+function moduleDuration(module: (typeof modules)[number]) {
+  return isPlanned(module) ? "Planned" : `${getModuleMinutes(module.id)} min`;
 }
 
 function getSyllabus(item: LearningItem): SyllabusEntry[] {
@@ -52,7 +59,7 @@ function getSyllabus(item: LearningItem): SyllabusEntry[] {
         label: getCourseLabel(course),
         title: course.title,
         description: course.description,
-        duration: course.duration,
+        duration: isPlanned(course) ? "Planned" : course.duration,
         accent: getCourseAccent(course.id, course.hueIndex),
         href: getLearningItemUrl({ ...course, type: "COURSE" as const }),
       }));
@@ -66,7 +73,7 @@ function getSyllabus(item: LearningItem): SyllabusEntry[] {
         label: "Module",
         title: module.title,
         description: module.description,
-        duration: `${getModuleMinutes(module.id)} min`,
+        duration: moduleDuration(module),
         accent: getItemAccent({ ...module, type: "MODULE" as const }),
         href: getLearningItemUrl({ ...module, type: "MODULE" as const }),
       }));
@@ -91,7 +98,7 @@ function getSyllabus(item: LearningItem): SyllabusEntry[] {
       label: item.parentCourseTitle,
       title: item.title,
       description: item.description,
-      duration: `${getModuleMinutes(item.id)} min`,
+      duration: moduleDuration(item),
       accent,
       href: getLearningItemUrl(item),
     },
@@ -164,7 +171,14 @@ export function DetailModal({
 
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_15rem]">
           <div className="pr-8">
-            <TypeBadge type={item.type} />
+            <div className="flex flex-wrap items-center gap-2">
+              <TypeBadge type={item.type} />
+              {isPlanned(item) ? (
+                <span className="metadata rounded-[6px] border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-2.5 py-1 text-[color:var(--ink-soft)]">
+                  Planned, not built yet
+                </span>
+              ) : null}
+            </div>
             <h2
               id="learning-detail-title"
               className="modal-title mt-5 max-w-2xl text-4xl text-[color:var(--ink)] sm:text-5xl"
@@ -178,7 +192,7 @@ export function DetailModal({
                 href={getLearningItemUrl(item)}
               >
                 <BookIcon className="h-4 w-4" />
-                Open in Learning Hub
+                Open full page
               </a>
               <button
                 className={`inline-flex h-11 items-center justify-center rounded-full border px-5 text-sm font-bold transition focus-ring ${
@@ -216,7 +230,9 @@ export function DetailModal({
               </div>
               <div>
                 <dt className="editorial-eyebrow">Format</dt>
-                <dd className="mt-1 font-bold text-[color:var(--ink)]">Self-paced reading</dd>
+                <dd className="mt-1 font-bold text-[color:var(--ink)]">
+                  {isPlanned(item) ? "Not built yet" : "Self-paced reading"}
+                </dd>
               </div>
             </dl>
           </aside>
@@ -225,7 +241,7 @@ export function DetailModal({
         <div className="mt-8 border-t border-[color:var(--line)] pt-5">
           <div className="mb-3 flex items-center gap-2">
             <p className="editorial-eyebrow">Syllabus</p>
-            <span className="metadata text-[color:var(--ink-soft)]">- {syllabusLabel}</span>
+            <span className="metadata text-[color:var(--ink-soft)]">· {syllabusLabel}</span>
           </div>
           <div className="divide-y divide-[color:var(--line)]">
             {syllabus.map((entry) => {

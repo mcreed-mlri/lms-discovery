@@ -1,6 +1,6 @@
-import { ArrowIcon, BookIcon, FolderIcon, PathIcon } from "@/components/icons";
+import { ArrowIcon } from "@/components/icons";
 import { getItemAccent, type Accent } from "@/lib/course-theme";
-import { getModuleMinutes, type LearningItem } from "@/lib/data";
+import { getModuleMinutes, isPlanned, type LearningItem } from "@/lib/data";
 import type { CSSProperties } from "react";
 
 function accentVars(accent: Accent): CSSProperties {
@@ -11,31 +11,22 @@ function accentVars(accent: Accent): CSSProperties {
   } as CSSProperties;
 }
 
-const typeIcons = {
-  COURSE: BookIcon,
-  MODULE: FolderIcon,
-  PATH: PathIcon,
-};
-
 function typeLabel(type: LearningItem["type"]) {
   if (type === "PATH") return "Path";
   if (type === "COURSE") return "Course";
   return "Module";
 }
 
+// Planned items have no real duration yet, so they say "Planned" instead of
+// inventing one.
 function getMeta(item: LearningItem) {
-  if (item.type === "PATH") return `${item.courseIds.length} courses, ${item.totalDuration}`;
+  if (item.type === "PATH") {
+    const courses = `${item.courseIds.length} courses`;
+    return isPlanned(item) ? `${courses} · Planned` : `${courses}, ${item.totalDuration}`;
+  }
+  if (isPlanned(item)) return "Planned";
   if (item.type === "MODULE") return `${getModuleMinutes(item.id)} min`;
   return `${item.practiceArea}, ${item.duration}`;
-}
-
-function TypeWell({ type }: { type: LearningItem["type"] }) {
-  const Icon = typeIcons[type];
-  return (
-    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-[color:var(--accent-tint)] text-[color:var(--accent-ink)] sm:h-11 sm:w-11">
-      <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
-    </span>
-  );
 }
 
 function CardFooter({ item }: { item: LearningItem }) {
@@ -57,8 +48,9 @@ function CardFooter({ item }: { item: LearningItem }) {
   );
 }
 
+// The accent rail (DESIGN.md) carries the topic colour; type lives in the footer text.
 const tileClass =
-  "interactive-tile group relative flex h-full cursor-pointer flex-col p-4 text-left focus-ring sm:min-h-[13.5rem] sm:p-5";
+  "interactive-tile group relative flex h-full cursor-pointer flex-col overflow-hidden p-4 pt-5 text-left focus-ring before:absolute before:inset-x-0 before:top-0 before:h-1 before:bg-[color:var(--accent)] before:opacity-[0.85] hover:border-[color:var(--accent)] sm:min-h-[11rem] sm:p-5 sm:pt-6";
 
 export function ContentCard({
   item,
@@ -83,8 +75,7 @@ export function ContentCard({
       {isFeatured ? (
         <p className="mb-2 text-[12px] font-bold text-[color:var(--brand-ink)]">Recommended next</p>
       ) : null}
-      <TypeWell type={item.type} />
-      <h3 className="section-title mt-3 text-[16px] leading-snug text-[color:var(--ink)] sm:text-[17px]">
+      <h3 className="section-title text-[16px] leading-snug text-[color:var(--ink)] sm:text-[17px]">
         {item.title}
       </h3>
       <p className="mt-1.5 line-clamp-2 text-[13px] leading-snug text-[color:var(--ink-muted)] sm:text-[14px]">
@@ -110,9 +101,8 @@ export function ContentListRow({
       style={accentVars(accent)}
       onClick={() => onOpen?.(item)}
       aria-label={`${item.title}. Open detail view.`}
-      className="interactive-tile group flex w-full cursor-pointer items-start gap-3 p-4 text-left focus-ring sm:items-center sm:gap-4 sm:px-5"
+      className="interactive-tile group relative flex w-full cursor-pointer items-start gap-3 overflow-hidden p-4 pl-5 text-left focus-ring before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--accent)] hover:border-[color:var(--accent)] sm:items-center sm:gap-4 sm:px-5 sm:pl-6"
     >
-      <TypeWell type={item.type} />
       <div className="min-w-0 flex-1">
         <h3 className="section-title line-clamp-2 text-[15px] leading-snug text-[color:var(--ink)] sm:line-clamp-none sm:text-[16px]">
           {item.title}
