@@ -33,7 +33,7 @@ The Critical Incident Technique collects specific, real moments from people who 
 4. **Why was it effective, or not?**
 5. **What would an experienced advocate have done?**
 
-Collect 20 to 40 incidents per skill area, from several people, both good and bad. Then sort them:
+Collect 20 to 40 incidents per skill area, from several people, both good and bad. The interview guide, incident form and coding sheet are in `docs/planning/cit-interview-guide.md`. Then sort them:
 
 | What you find in the incidents                                                             | What it becomes                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------ |
