@@ -41,31 +41,30 @@
 
     <section class="outline-section">
       <div class="outline-section-head">
-        <h2>Learning pattern</h2>
-        <span class="eyebrow eyebrow-muted">Subskill 2 prototype</span>
+        <h2>How this course works</h2>
       </div>
       <div class="compact-grid">
         <div class="compact-card">
-          <p class="eyebrow">Review</p>
-          <h3>Key concepts</h3>
-          <p>Refresh the hearsay distinction before the practice begins.</p>
+          <p class="eyebrow">Here</p>
+          <h3>Read each part</h3>
+          <p>What hearsay is, when it matters, and the steps of a response. A few minutes each.</p>
         </div>
         <div class="compact-card">
-          <p class="eyebrow">Observe</p>
-          <h3>Expert model</h3>
-          <p>Watch a realistic attorney reasoning sequence in a video mockup.</p>
+          <p class="eyebrow">In the hub</p>
+          <h3>Practise it</h3>
+          <p>Watch an expert, finish one with help, then do it solo. Each part links to its practice.</p>
         </div>
         <div class="compact-card">
-          <p class="eyebrow">Practice</p>
-          <h3>Support to independence</h3>
-          <p>Move from guided analysis to rapid classification and final drafting.</p>
+          <p class="eyebrow">Your record</p>
+          <h3>Reading counts</h3>
+          <p>Reading a part counts toward your training record.</p>
         </div>
       </div>
     </section>
 
     <section class="outline-section">
       <div class="outline-section-head">
-        <h2>Module outline</h2>
+        <h2>The five parts</h2>
         <span class="eyebrow eyebrow-muted" id="outline-count"></span>
       </div>
       <div class="outline-list" id="outline-list"></div>
@@ -133,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("outline-title").textContent = config.courseTitle;
   document.getElementById("outline-lead").innerHTML = config.courseBlurb || config.courseSubtitle || "";
   document.getElementById("outline-count").textContent =
-    total + " subskills - " + totalMinutes + " min demo path";
+    total + " parts · " + totalMinutes + " min reading";
 
   var resume = flat.find(function (t) { return !completedSet[t.slug]; });
   var card = document.getElementById("continue-card");
@@ -147,18 +146,18 @@ document.addEventListener("DOMContentLoaded", function () {
     var resumeIndex = flat.indexOf(resume) + 1;
     var verb = done > 0 ? "Continue" : "Begin";
     document.getElementById("continue-kicker").textContent =
-      verb + " - Subskill " + resumeIndex + " of " + total;
+      verb + " · Part " + resumeIndex + " of " + total;
     document.getElementById("continue-topic").textContent = resume.title;
     document.getElementById("continue-sub").textContent =
-      done + " of " + total + " subskills visited - " + minutesLeft + " min remaining";
+      done + " of " + total + " parts read · " + minutesLeft + " min remaining";
     document.getElementById("continue-go").textContent =
       verb + (resume.minutes ? " - " + resume.minutes + " min" : "");
     card.setAttribute("href", resume.url);
   } else {
     card.classList.add("is-complete");
     document.getElementById("continue-kicker").textContent = "Demo complete";
-    document.getElementById("continue-topic").textContent = "You have visited every subskill";
-    document.getElementById("continue-sub").textContent = total + " of " + total + " subskills visited";
+    document.getElementById("continue-topic").textContent = "You have read every part";
+    document.getElementById("continue-sub").textContent = total + " of " + total + " parts read";
     document.getElementById("continue-go").textContent = "Review outline";
     card.setAttribute("href", config.courseHomeUrl);
   }
@@ -174,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
       var nodeInner = status === "done"
         ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>'
         : (idxGlobal + 1);
-      var pillCls = t.kind === "Practice" ? "pill-progress" : "pill-later";
+      var pillCls = t.kind === "Planned" ? "pill-later" : "pill-progress";
       html +=
         '<a class="outline-row ' + status + '" href="' + url + '">' +
           '<span class="' + nodeClass + '">' + nodeInner + "</span>" +

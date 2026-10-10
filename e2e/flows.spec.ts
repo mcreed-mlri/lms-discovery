@@ -299,7 +299,7 @@ test("the Hearsay levels: watch, then help, and the map keeps score", async ({ p
   );
 });
 
-test("the Hearsay course carries the binder's tabs and leads back to Objections", async ({
+test("the Hearsay course is a hub page: binder tabs, hub breadcrumb, practice in the hub", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -310,10 +310,19 @@ test("the Hearsay course carries the binder's tabs and leads back to Objections"
     "aria-current",
     "true",
   );
-  await expect(page.getByRole("link", { name: "Back to Objections" }).first()).toHaveAttribute(
+  const crumbs = page.getByRole("navigation", { name: "Breadcrumb" });
+  await expect(crumbs.getByRole("link", { name: "Objections" })).toHaveAttribute(
     "href",
     "/binder/litigation/trial-skills/objections/",
   );
-  await tabs.getByRole("link", { name: "Contents" }).click();
+  await expect(crumbs.getByText("Part 2 of 5")).toBeVisible();
+  // The course is reading only; its practice is the hub's Hearsay level 1.
+  await page.getByRole("link", { name: "Start level 1" }).click();
+  await expect(page).toHaveURL(/\/objections\/hearsay\/level-1\/watch\/?$/);
+  await page.goBack();
+  await page
+    .getByRole("navigation", { name: "Litigation tabs" })
+    .getByRole("link", { name: "Contents" })
+    .click();
   await expect(page).toHaveURL(/\/binder\/litigation\/?$/);
 });

@@ -9,13 +9,15 @@
 
 window.COURSE_CONFIG = {
   deployMode: "local",
-  chromeMode: "bar",
+  chromeMode: "hub",
 
   courseId: "legal-skills-hearsay",
   courseTitle: "Legal Skills: Hearsay",
-  courseSubtitle: "Practice recognizing and responding to hearsay objections in written advocacy.",
+  courseShortTitle: "Hearsay course",
+  contentNote: "Prototype, not reviewed",
+  courseSubtitle: "Recognizing and responding to hearsay objections, in writing and out loud.",
   courseBlurb:
-    "A polished prototype for a five-subskill hearsay module. Subskill 2 is fully interactive; the remaining subskills are shown as planned demo structure.",
+    "Five short parts on hearsay objections, in writing and out loud. Read each part here, then practise it in the Learning Hub. Part 2 is ready now; the others are planned.",
 
   hubLabel: "Hub",
   courseArea: "Legal Skills",
@@ -64,7 +66,7 @@ window.COURSE_CONFIG = {
       id: "hearsay-module",
       title: "Legal Skills: Hearsay",
       accent: "drafting",
-      description: "Five subskills for analyzing and responding to hearsay issues.",
+      description: "Five parts on analyzing and responding to hearsay issues.",
       topics: [
         {
           slug: "objecting-hearsay-written-documents",
@@ -74,17 +76,35 @@ window.COURSE_CONFIG = {
           kind: "Planned",
           minutes: 2,
           updated: "Planned",
-          description: "A future subskill on making a clear written hearsay objection.",
+          description: "Planned: making a clear written hearsay objection.",
+          practice: {
+            status: "coming",
+            title: "Practice for objecting in writing",
+            text: "Levels for this part are being written. Level 1, a written objection, is ready now.",
+            href: "/binder/litigation/trial-skills/objections/hearsay/",
+            linkText: "See the Hearsay levels",
+          },
         },
         {
           slug: "defending-hearsay-objection-writing",
           title: "Defending against a hearsay objection in writing",
           file: "defending-hearsay-objection-writing.html",
           url: "#",
-          kind: "Practice",
-          minutes: 12,
+          kind: "Reading",
+          minutes: 6,
           updated: "Prototype",
-          description: "Recognize possible exclusions and exceptions, then draft a focused written response.",
+          description: "When a statement is hearsay, and the five steps of a written response.",
+          practice: {
+            title: "Hearsay, level 1: a written objection",
+            href: "/binder/litigation/trial-skills/objections/hearsay/level-1/watch/",
+            linkText: "Start level 1",
+            steps: [
+              { label: "Watch", text: "an expert answer it" },
+              { label: "Help", text: "finish one the expert started" },
+              { label: "Solo", text: "write the whole response" },
+            ],
+            note: "About 15 minutes. Plus a 2-minute drill: Hearsay or not?",
+          },
         },
         {
           slug: "objecting-hearsay-oral-advocacy",
@@ -94,7 +114,14 @@ window.COURSE_CONFIG = {
           kind: "Planned",
           minutes: 2,
           updated: "Planned",
-          description: "A future subskill on concise, timely oral hearsay objections.",
+          description: "Planned: concise, timely oral hearsay objections.",
+          practice: {
+            status: "coming",
+            title: "Practice for objecting out loud",
+            text: "Levels for this part are being written. Level 1, a written objection, is ready now.",
+            href: "/binder/litigation/trial-skills/objections/hearsay/",
+            linkText: "See the Hearsay levels",
+          },
         },
         {
           slug: "defending-hearsay-oral-advocacy",
@@ -104,7 +131,14 @@ window.COURSE_CONFIG = {
           kind: "Planned",
           minutes: 2,
           updated: "Planned",
-          description: "A future subskill on responding in the moment during argument or hearing.",
+          description: "Planned: responding in the moment during argument or hearing.",
+          practice: {
+            status: "coming",
+            title: "Practice for defending out loud",
+            text: "Levels for this part are being written. Level 1, a written objection, is ready now.",
+            href: "/binder/litigation/trial-skills/objections/hearsay/",
+            linkText: "See the Hearsay levels",
+          },
         },
         {
           slug: "strategic-external-hearsay-considerations",
@@ -114,7 +148,14 @@ window.COURSE_CONFIG = {
           kind: "Planned",
           minutes: 2,
           updated: "Planned",
-          description: "A future subskill on strategy, forum, record, client goals, and collateral risks.",
+          description: "Planned: strategy, forum, record, client goals, and collateral risks.",
+          practice: {
+            status: "coming",
+            title: "Practice for strategy",
+            text: "Levels for this part are being written. Level 1, a written objection, is ready now.",
+            href: "/binder/litigation/trial-skills/objections/hearsay/",
+            linkText: "See the Hearsay levels",
+          },
         },
       ],
     },

@@ -4,6 +4,7 @@ import { runInNewContext } from "node:vm";
 import { expect, test } from "vitest";
 
 import { getBinder, getSectionTab, getTopic } from "@/lib/binder";
+import { getSkillPath, skillHref, stepHref } from "@/lib/skill-paths";
 
 /* The Hearsay course package shows the hub's binder (its divider tabs and
    breadcrumb), described in its own course-config.js because the package is
@@ -19,6 +20,9 @@ type CourseConfig = {
     tabs: { id: string; label: string; href: string }[];
     crumbs: { label: string; href: string }[];
   };
+  modules: {
+    topics: { slug: string; practice?: { status?: string; href: string; linkText: string } }[];
+  }[];
 };
 
 function loadConfig(): CourseConfig {
@@ -73,4 +77,21 @@ test("the course takes the hub's look and never puts text on the binder colour",
     .filter((body) => /background: var\(--brand-fill\)/.test(body));
   expect(filled.length).toBeGreaterThan(0);
   for (const body of filled) expect(body).not.toMatch(/(^|[\s;])color:/);
+});
+
+test("each part's practice card leads to a real place in the hub's Hearsay levels", () => {
+  const topics = loadConfig().modules.flatMap((mod) => mod.topics);
+  const hearsay = getSkillPath("hearsay")!;
+  const level1 = hearsay.levels[0];
+  for (const topic of topics) {
+    const practice = topic.practice;
+    expect(practice, topic.slug).toBeDefined();
+    if (practice?.status === "coming") {
+      expect(practice.href).toBe(page(skillHref(hearsay)));
+    } else {
+      // A built level starts at its first step.
+      expect(practice?.href).toBe(page(stepHref(hearsay, level1, "watch")));
+    }
+  }
+  expect(topics.filter((topic) => topic.practice?.status !== "coming")).toHaveLength(1);
 });

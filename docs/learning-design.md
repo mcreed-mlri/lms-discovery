@@ -21,7 +21,19 @@ The first skill path is live in the hub at `/binder/litigation/trial-skills/obje
 
 Content lives in `lib/skill-paths.ts` (all prototype, labelled as not reviewed); progress in `lib/skill-progress.ts`. Adding level 2 means writing its `watch`, `help` and Solo drill there.
 
+## The course reads, the hub practises
+
+The Hearsay course (`public/legal-skills-hearsay/`) is reading only: each part is
+supportive and procedural information (what hearsay is, the five steps, a drafting
+frame), laid out as a page of the hub. A card beside the reading sends the learner
+to that part's practice in the hub: the worked example, completion task and
+conventional task (Watch, Help, Solo) plus the drills. Practice is never built in
+both places. Reading a part still counts in Brightspace, which keeps the record.
+
 ## You are already doing it
+
+The table below is how the course was first built, with every step inside it. The
+practice steps have since moved to the hub's levels; the mapping still holds.
 
 The Hearsay course (`public/legal-skills-hearsay/`) maps onto 4C/ID almost exactly:
 
