@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { runInNewContext } from "node:vm";
 import { expect, test } from "vitest";
@@ -70,7 +70,13 @@ test("the course takes the hub's look and never puts text on the binder colour",
   // The hub's page, ink and type.
   expect(css).toMatch(/--bg: #ffffff;/);
   expect(css).toMatch(/--ink: #16161a;/);
-  expect(css).toContain("family=Public+Sans");
+  // Public Sans ships with the course: the hub's CSP blocks Google Fonts, and a
+  // blocked font silently fell back to Segoe UI.
+  expect(css).not.toContain("fonts.googleapis.com");
+  for (const [, file] of css.matchAll(/url\('(fonts\/[^']+\.woff2)'\)/g)) {
+    expect(existsSync(join(__dirname, "..", "public/legal-skills-hearsay", file)), file).toBe(true);
+  }
+  expect(css).toContain("url('fonts/public-sans-latin.woff2')");
   // The binder colour is for strokes; a rule that fills with it sets no text colour.
   const filled = [...css.matchAll(/\{([^{}]*)\}/g)]
     .map((m) => m[1])
