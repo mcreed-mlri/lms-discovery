@@ -37,7 +37,6 @@ export const benchmarkQueries: BenchmarkQuery[] = [
       "Lesson: Defending against a hearsay objection in writing",
     ],
     why: "A question, not keywords: filler words must not sink it.",
-    knownGap: "Every word must match, so filler words (how, do, my, the) sink a question.",
   },
   {
     query: "opposing counsel says my declaration is hearsay",
@@ -47,7 +46,6 @@ export const benchmarkQueries: BenchmarkQuery[] = [
       "Reference: Procedure: answering a hearsay objection in writing",
     ],
     why: "The situation, described the way it happens.",
-    knownGap: "Every word must match, so filler words (how, do, my, the) sink a question.",
   },
   {
     query: "layered hearsay",
@@ -67,7 +65,6 @@ export const benchmarkQueries: BenchmarkQuery[] = [
     query: "practice answering an objection",
     answers: ["Practice: Answer a hearsay objection in writing"],
     why: "Someone looking to rehearse, not read.",
-    knownGap: "Every word must match, so filler words (how, do, my, the) sink a question.",
   },
   {
     query: "heresay",
@@ -115,19 +112,16 @@ export const benchmarkQueries: BenchmarkQuery[] = [
     query: "client got a notice to quit what is the deadline",
     answers: ["Module: When the Clock Starts"],
     why: "The just-in-time question PRODUCT.md is built around.",
-    knownGap: "Every word must match, so filler words (how, do, my, the) sink a question.",
   },
   {
     query: "how many days to answer an eviction",
     answers: ["Module: When the Clock Starts", "Module: Drafting the Answer"],
     why: "Deadline question in plain words.",
-    knownGap: "Every word must match, so filler words (how, do, my, the) sink a question.",
   },
   {
     query: "landlord served the notice wrong",
     answers: ["Module: Service of Process Checklist"],
     why: "Service problem described as a situation.",
-    knownGap: "Every word must match, so filler words (how, do, my, the) sink a question.",
   },
   {
     query: "summary process answer",
@@ -145,7 +139,6 @@ export const benchmarkQueries: BenchmarkQuery[] = [
     query: "first day in housing court",
     answers: ["Module: Walking into Housing Court"],
     why: "Preparing for a first appearance.",
-    knownGap: "Every word must match, so filler words (how, do, my, the) sink a question.",
   },
   {
     query: "eviction intake call",
@@ -169,19 +162,23 @@ export const benchmarkQueries: BenchmarkQuery[] = [
     query: "how do I find my assigned courses",
     answers: ["Course: Welcome to the Learning Hub"],
     why: "First-week orientation.",
-    knownGap: "Every word must match, so filler words (how, do, my, the) sink a question.",
   },
   {
     query: "where does my training fit",
     answers: ["Course: Curriculum Map"],
     why: "Orientation to the curriculum.",
-    knownGap: "Every word must match, so filler words (how, do, my, the) sink a question.",
+    knownGap:
+      "No words in common with the Curriculum Map; needs a synonym or a better description.",
+  },
+  {
+    query: "Legal Skills for New Attorneys",
+    answers: ["Path: Legal Skills for New Attorneys"],
+    why: "An exact title must win over loose matches on some of its words.",
   },
   {
     query: "new attorney training",
     answers: ["Path: Legal Skills for New Attorneys"],
     why: "The path for the primary audience.",
-    knownGap: "No synonym links training to course or path.",
   },
 
   // Planned topics: the honest answer is the planned module or topic.
@@ -199,7 +196,6 @@ export const benchmarkQueries: BenchmarkQuery[] = [
     query: "rules of professional conduct",
     answers: ["Module: MA Rules of Prof. Conduct"],
     why: "The full name of an abbreviated title.",
-    knownGap: "The title abbreviates Professional to Prof., and nothing expands it.",
   },
   {
     query: "conflict check",

@@ -89,6 +89,38 @@ const tokenSynonyms: Record<string, string[]> = {
   trauma: ["trauma-informed"],
 };
 
+/* Words that carry no topic on their own. A question like "how do I respond
+   to a hearsay objection" is matched on "respond hearsay objection". If a
+   query is nothing but these words, they are kept so it can still match. */
+const STOP_WORDS = new Set(
+  (
+    "a about after an and any are as at be been before but by can could did do does doing " +
+    "during for from get gets getting got had has have how i if in into is it its just me " +
+    "my need needs of on or our should so than that the their them then there these they " +
+    "this to too up us was we were what when where which while who why will with would " +
+    "you your many much"
+  ).split(" "),
+);
+
+/** Query words that carry meaning: filler words dropped, unless nothing is left. */
+function meaningfulTokens(tokens: string[]) {
+  const kept = tokens.filter((token) => !STOP_WORDS.has(token));
+  return kept.length > 0 ? kept : tokens;
+}
+
+/**
+ * How many query words a result must match. One or two words: all of them.
+ * Longer queries, which are usually questions or situations: at least half,
+ * and the score then scales with the share matched, so fuller matches lead.
+ */
+function enoughMatched(matched: number, total: number) {
+  return total <= 2 ? matched === total : matched >= Math.ceil(total / 2);
+}
+
+function coverageFactor(matched: number, total: number) {
+  return (matched / total) ** 2;
+}
+
 function normalize(value: string) {
   return value
     .toLowerCase()
@@ -106,6 +138,16 @@ function tokenVariants(token: string) {
     variants.add(`${normalizedToken.slice(0, -3)}y`);
   if (normalizedToken.endsWith("es") && normalizedToken.length > 3)
     variants.add(normalizedToken.slice(0, -2));
+  // Light stemming for verbs: "served" also tries "serve" and "serv" (which
+  // matches "service"); "answering" tries "answer".
+  if (normalizedToken.endsWith("ed") && normalizedToken.length > 4) {
+    variants.add(normalizedToken.slice(0, -1));
+    variants.add(normalizedToken.slice(0, -2));
+  }
+  if (normalizedToken.endsWith("ing") && normalizedToken.length > 5) {
+    variants.add(normalizedToken.slice(0, -3));
+    variants.add(`${normalizedToken.slice(0, -3)}e`);
+  }
   if (normalizedToken.endsWith("s") && normalizedToken.length > 3)
     variants.add(normalizedToken.slice(0, -1));
 
@@ -223,7 +265,7 @@ function getDurationFacet(item: LearningItem): DurationFacet {
 
 function expandQuery(rawQuery: string) {
   const query = normalize(rawQuery);
-  const tokens = tokenize(rawQuery);
+  const tokens = meaningfulTokens(tokenize(rawQuery));
   const expandedTokens = new Set(tokens);
   const phraseBoosts = new Set<string>();
 
@@ -361,11 +403,11 @@ function scoreDocument(document: SearchDocument, rawQuery: string) {
     document.summaryText,
     document.metadataText,
   ];
-  const everyTokenMatches = tokens.every((token) =>
+  const matchedTokens = tokens.filter((token) =>
     searchableFields.some((field) => fieldIncludesToken(field, token)),
-  );
+  ).length;
 
-  if (!everyTokenMatches) return { score: 0, matchedFields: [] };
+  if (!enoughMatched(matchedTokens, tokens.length)) return { score: 0, matchedFields: [] };
 
   let score = document.metadata.editorialBoost ?? 0;
   const matchedFields = new Set<string>();
@@ -400,13 +442,16 @@ function scoreDocument(document: SearchDocument, rawQuery: string) {
   if (document.item.type === "COURSE") score += 8;
   if (document.item.type === "PATH") score += 4;
 
-  return { score, matchedFields: [...matchedFields] };
+  return {
+    score: Math.round(score * coverageFactor(matchedTokens, tokens.length)),
+    matchedFields: [...matchedFields],
+  };
 }
 
 /**
  * Scores free-standing text against a query with the same rules as catalog
- * items: synonyms, plurals, one-letter typos, and every query word must match
- * somewhere. The first field is the title (exact and prefix matches count
+ * items: synonyms, plurals, one-letter typos, filler words ignored, and enough
+ * of the query's words matching somewhere (see enoughMatched). The first field is the title (exact and prefix matches count
  * extra). 0 means no match. Used for things that are not catalog items, such
  * as binder topics, drills and reference pages.
  */
@@ -414,9 +459,10 @@ export function scoreText(fields: { text: string; weight: number }[], rawQuery: 
   const { query, tokens, expandedTokens, phraseBoosts } = expandQuery(rawQuery);
   if (!query || tokens.length === 0 || fields.length === 0) return 0;
   const normalized = fields.map((field) => ({ ...field, text: normalize(field.text) }));
-  if (!tokens.every((token) => normalized.some((field) => fieldIncludesToken(field.text, token)))) {
-    return 0;
-  }
+  const matched = tokens.filter((token) =>
+    normalized.some((field) => fieldIncludesToken(field.text, token)),
+  ).length;
+  if (!enoughMatched(matched, tokens.length)) return 0;
   const title = normalized[0].text;
   let score = 0;
   if (title === query) score += 1400;
@@ -427,7 +473,7 @@ export function scoreText(fields: { text: string; weight: number }[], rawQuery: 
   for (const field of normalized) {
     score += scoreField("field", field.text, query, expandedTokens, field.weight).score;
   }
-  return score;
+  return Math.round(score * coverageFactor(matched, tokens.length));
 }
 
 export function buildSearchIndex(items: LearningItem[]) {

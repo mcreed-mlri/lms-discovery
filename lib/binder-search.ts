@@ -20,6 +20,8 @@ export type BinderHit = {
   /** Where it is filed, e.g. "Litigation › Trial › Objections". */
   context: string;
   href: string;
+  /** Relevance, on the same scale as library results; absent when listing. */
+  score?: number;
 };
 
 type Entry = BinderHit & {
@@ -130,12 +132,13 @@ export function searchBinders(query: string, eligibleIds: Set<string>, limit = 4
     .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score || a.entry.title.localeCompare(b.entry.title))
     .slice(0, limit)
-    .map(({ entry }) => ({
+    .map(({ entry, score }) => ({
       id: entry.id,
       kind: entry.kind,
       title: entry.title,
       context: entry.context,
       href: entry.href,
+      score,
     }));
 }
 
