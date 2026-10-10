@@ -97,7 +97,7 @@ Language discipline: **learners never see the word "Brightspace".** The course w
 
 ## Practice and Simulation
 
-**The team's top request:** training must be very interactive. New attorneys want a safe place to rehearse a skill before they do it in court. Built so far: the scripted Hearsay practice room (Stage 1 below). The full plan, from document exercises to voice and avatars, with research questions and decisions, is in `docs/simulations.md`.
+**The team's top request:** training must be very interactive. New attorneys want a safe place to rehearse a skill before they do it in court. Built so far: the scripted Hearsay practice room (Stage 1 below). The full plan, from document exercises to voice and avatars, with research questions and decisions, is in `docs/simulations.md`. The team's teaching method (4C/ID with the Critical Incident Technique) and how it becomes interactive practice is in `docs/learning-design.md`.
 
 **Practice is an item kind**, filed under a tab like everything else. It is not a separate product area. A tab's "Practice" chip shows every drill for that section.
 

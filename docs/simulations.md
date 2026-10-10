@@ -2,6 +2,8 @@
 
 A plan for bringing practice and simulation into the hub: scripted drills, document exercises, AI role-play in text, then voice, and possibly an AI avatar. It covers what to build in what order, what to decide, and what to research before spending money. It extends PRODUCT.md ("Practice and Simulation"), which stays the source for scope.
 
+**Teaching method:** the team designs with 4C/ID and the Critical Incident Technique. How each maps onto interactive practice, with a worked blueprint for Hearsay, is in `docs/learning-design.md`. Simulations are 4C/ID's _conventional tasks_ at the harder task classes.
+
 **The short version:** the technology is the easy part. What determines whether simulations help new attorneys is the scenarios and rubrics subject-matter experts write, how feedback is framed, and how confidentiality is protected. Build up one level of realism at a time, and only move to the next when the last one shows learners use it and experts trust its feedback.
 
 ## Where we are
@@ -52,6 +54,8 @@ id: hearsay-objection-written-response
 skill: Defending against a hearsay objection in writing
 binder: litigation / trial-skills / objections
 level: 3 # 1 scripted, 2 document, 3 text, 4 voice, 5 avatar
+task_class: 3 # 4C/ID: which step of the simple-to-complex sequence
+support: conventional # 4C/ID: worked example, completion, or conventional
 audience: [attorney] # access rules apply (UPL)
 learning_goals:
   - Name the challenged statement and the purpose it is offered for
@@ -69,6 +73,9 @@ rubric: # the expert-written standard feedback is measured against
     weak: …
 sample_answer: an expert's model response
 sources: the course panels or authorities the rubric relies on
+supportive_info: concept panels and think-alouds to study first # 4C/ID
+procedural_info: steps and frames shown during the task, and when they fade # 4C/ID
+incidents: the CIT incidents this scenario is based on (anonymised)
 reviewed_by: name and date of subject-matter review
 version: 1
 ```
