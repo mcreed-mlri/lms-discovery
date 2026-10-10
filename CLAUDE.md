@@ -9,6 +9,7 @@ npm run dev            # dev server on https://localhost:3000 (self-signed cert)
 npm test               # Vitest: unit + component suites in tests/
 npm run test:watch     # Vitest watch mode
 npm run test:coverage  # enforces the coverage ratchet in vitest.config.ts
+npm run search:benchmark # where the right answer ranks for each benchmark question
 npm run e2e            # Playwright + axe in e2e/; builds and serves the app itself
 npm run lint           # ESLint (flat config in eslint.config.mjs)
 npm run format         # Prettier (format:check in CI)

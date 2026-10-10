@@ -18,9 +18,10 @@ import { getLearningItems } from "@/lib/data";
 import { browseHref } from "@/lib/home-helpers";
 import { useFocusTrap } from "@/lib/hooks/use-focus-trap";
 import { useScrollLock } from "@/lib/hooks/use-scroll-lock";
-import { searchBinders, type BinderHit } from "@/lib/binder-search";
+import type { BinderHit } from "@/lib/binder-search";
 import { openBinderHit } from "@/lib/open-binder-hit";
-import { searchLearningItems, type SearchResult } from "@/lib/search";
+import type { SearchResult } from "@/lib/search";
+import { searchEverything } from "@/lib/search-results";
 import { recordSearchAnalytics } from "@/lib/search-analytics";
 
 export function StudioShell({
@@ -48,14 +49,10 @@ export function StudioShell({
   useScrollLock(mobileOpen || searchOpen);
 
   const allItems = useMemo(() => getEligibleLearningItems(getLearningItems(), user), [user]);
-  const globalBinderHits = useMemo(
-    () => searchBinders(globalQuery, new Set(allItems.map((item) => item.id))),
-    [allItems, globalQuery],
-  );
   // Binder hits lead; the library follows, trimmed so the list stays short.
-  const globalResults = useMemo(
-    () => searchLearningItems(allItems, globalQuery).slice(0, globalBinderHits.length > 0 ? 4 : 6),
-    [allItems, globalQuery, globalBinderHits.length],
+  const { binderHits: globalBinderHits, library: globalResults } = useMemo(
+    () => searchEverything(allItems, globalQuery),
+    [allItems, globalQuery],
   );
 
   const openGlobalSearch = useCallback(() => {

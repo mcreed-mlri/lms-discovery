@@ -138,3 +138,9 @@ export function searchBinders(query: string, eligibleIds: Set<string>, limit = 4
       href: entry.href,
     }));
 }
+
+/** Every binder entry as a hit, regardless of query or eligibility (for checks). */
+export function listBinderEntries(): BinderHit[] {
+  index ??= buildEntries();
+  return index.map(({ id, kind, title, context, href }) => ({ id, kind, title, context, href }));
+}

@@ -9,9 +9,9 @@ import { StudioShell } from "@/components/studio-shell";
 import { getEffectiveDashboardRole } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
 import { browseHref } from "@/lib/home-helpers";
-import { searchBinders } from "@/lib/binder-search";
 import { useCatalogFilters } from "@/lib/hooks/use-catalog-filters";
 import { openBinderHit } from "@/lib/open-binder-hit";
+import { searchEverything } from "@/lib/search-results";
 import { recordSearchAnalytics } from "@/lib/search-analytics";
 import type { SearchResult } from "@/lib/search";
 
@@ -35,14 +35,11 @@ export default function Home() {
 
   const catalog = useCatalogFilters(user);
   const { allItems, setQuery } = catalog;
-  // References, drills, lessons and topics lead the dropdown; the library
-  // follows, trimmed so the list stays short.
-  const binderHits = useMemo(
-    () => searchBinders(catalog.query, new Set(allItems.map((item) => item.id))),
-    [catalog.query, allItems],
+  // References, drills, lessons and topics lead the dropdown; the library follows.
+  const { binderHits, library: suggestions } = useMemo(
+    () => searchEverything(allItems, catalog.query),
+    [allItems, catalog.query],
   );
-  const suggestions =
-    binderHits.length > 0 ? catalog.searchSuggestions.slice(0, 4) : catalog.searchSuggestions;
 
   function openSearchResult(result: SearchResult) {
     recordSearchAnalytics({

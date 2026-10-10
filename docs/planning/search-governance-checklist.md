@@ -42,3 +42,11 @@ Every searchable course, module, and learning path needs:
 - Most-launched Brightspace items
 - Metadata gaps or stale review dates
 - Confusing synonyms or misleading result ordering
+
+## Benchmark
+
+`tests/search-benchmark/queries.ts` holds questions as advocates type them, each with the answers that count as right. `npm test` fails if a question without a known gap loses its top-3 answer, or if a known gap starts passing (remove its note to keep the win). `npm run search:benchmark` prints the report.
+
+- Replace the starter questions with real ones from attorneys and supervisors; a subject-matter expert picks the right answers.
+- Add each zero-result search worth answering from the weekly review.
+- Raise `TOP3_FLOOR` in `tests/search-benchmark.test.ts` as results improve; never lower it.
