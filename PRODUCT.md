@@ -155,6 +155,7 @@ MLRI runs MassLegalServices (masslegalservices.org), and its team works in the s
 Confirmed and working:
 
 - Search over courses, modules and paths with synonyms, facets and editorial ranking (`lib/search.ts`, `lib/search-metadata.ts`).
+- Binder search (`lib/binder-search.ts`): reference pages, practice drills, open lessons and topic pages, listed first under "In your binders" with where each is filed, quickest answer first. Library results follow.
 - Catalog browsing, filtering, learning-item detail pages, and a curriculum-map view.
 - Real Brightspace OAuth login with an HMAC-signed session cookie. Demo personas sit behind a flag.
 - Access gating by advocate type, jurisdiction and UPL acknowledgment (`lib/access.ts`).

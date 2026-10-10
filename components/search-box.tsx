@@ -3,6 +3,7 @@
 import { useEffect, useId, useState, type KeyboardEvent } from "react";
 import { SearchIcon } from "@/components/icons";
 import { TypeBadge } from "@/components/type-badge";
+import type { BinderHit } from "@/lib/binder-search";
 import type { SearchResult } from "@/lib/search";
 
 type SearchBoxProps = {
@@ -10,6 +11,9 @@ type SearchBoxProps = {
   onChange: (value: string) => void;
   suggestions?: SearchResult[];
   onSelect?: (result: SearchResult) => void;
+  /** References, drills, lessons and topic pages, listed before library results. */
+  binderHits?: BinderHit[];
+  onSelectBinderHit?: (hit: BinderHit) => void;
   compact?: boolean;
   prominent?: boolean;
   /** Visible prompt. Home asks in the advocate's own terms; elsewhere it stays generic. */
@@ -21,6 +25,8 @@ export function SearchBox({
   onChange,
   suggestions = [],
   onSelect,
+  binderHits = [],
+  onSelectBinderHit,
   compact = false,
   prominent = false,
   placeholder = "Search the library",
@@ -31,10 +37,21 @@ export function SearchBox({
   const [activeIndex, setActiveIndex] = useState(0);
   const hasQuery = value.trim().length > 0;
   const showSuggestions = hasQuery && isOpen;
+  // One list for the keyboard: binder hits first, then library results.
+  const total = binderHits.length + suggestions.length;
 
+  // Keyed on ids, not the array: callers may build a fresh array each render,
+  // which would otherwise reset the highlighted row on every keypress.
+  const binderKey = binderHits.map((hit) => hit.id).join("|");
   useEffect(() => {
     setActiveIndex(0);
-  }, [suggestions, value]);
+  }, [suggestions, binderKey, value]);
+
+  // The list scrolls on short screens; keep the highlighted row in view.
+  useEffect(() => {
+    if (!showSuggestions) return;
+    document.getElementById(`${listboxId}-${activeIndex}`)?.scrollIntoView?.({ block: "nearest" });
+  }, [activeIndex, listboxId, showSuggestions]);
 
   function selectResult(result: SearchResult) {
     setIsOpen(false);
@@ -42,13 +59,16 @@ export function SearchBox({
     onSelect?.(result);
   }
 
+  function selectBinderHit(hit: BinderHit) {
+    setIsOpen(false);
+    onSelectBinderHit?.(hit);
+  }
+
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === "ArrowDown") {
       event.preventDefault();
       setIsOpen(true);
-      setActiveIndex((current) =>
-        suggestions.length === 0 ? 0 : Math.min(current + 1, suggestions.length - 1),
-      );
+      setActiveIndex((current) => (total === 0 ? 0 : Math.min(current + 1, total - 1)));
       return;
     }
 
@@ -63,12 +83,11 @@ export function SearchBox({
       return;
     }
 
-    if (event.key === "Enter" && hasQuery) {
-      const result = suggestions[activeIndex] ?? suggestions[0];
-      if (result) {
-        event.preventDefault();
-        selectResult(result);
-      }
+    if (event.key === "Enter" && hasQuery && total > 0) {
+      event.preventDefault();
+      const index = Math.min(activeIndex, total - 1);
+      if (index < binderHits.length) selectBinderHit(binderHits[index]);
+      else selectResult(suggestions[index - binderHits.length]);
     }
   }
 
@@ -84,7 +103,7 @@ export function SearchBox({
       />
       <input
         aria-activedescendant={
-          showSuggestions && suggestions[activeIndex] ? `${listboxId}-${activeIndex}` : undefined
+          showSuggestions && activeIndex < total ? `${listboxId}-${activeIndex}` : undefined
         }
         aria-autocomplete="list"
         aria-controls={listboxId}
@@ -117,44 +136,106 @@ export function SearchBox({
       ) : null}
       {showSuggestions && (
         <div
-          className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-[color:var(--line)] bg-[color:var(--surface-raised)] text-[color:var(--ink)] shadow-[var(--shadow-lg)]"
+          className="absolute left-0 right-0 top-full z-50 mt-2 max-h-[calc(100dvh-10rem)] overflow-y-auto overscroll-contain rounded-xl border border-[color:var(--line)] bg-[color:var(--surface-raised)] text-[color:var(--ink)] shadow-[var(--shadow-lg)]"
           id={listboxId}
           role="listbox"
         >
-          {suggestions.length > 0 ? (
-            suggestions.map((result, index) => (
-              <button
-                aria-selected={activeIndex === index}
-                className={`grid w-full grid-cols-[1fr_auto] gap-3 px-3 py-2.5 text-left transition ${
-                  activeIndex === index
-                    ? "bg-[color:var(--surface-sunken)]"
-                    : "bg-[color:var(--surface-raised)] hover:bg-[color:var(--surface)]"
-                }`}
-                id={`${listboxId}-${index}`}
-                key={`${result.item.type}-${result.item.id}`}
-                onMouseDown={(event) => event.preventDefault()}
-                onMouseEnter={() => setActiveIndex(index)}
-                onClick={() => selectResult(result)}
-                role="option"
-                title="Details coming soon"
-                type="button"
-              >
-                <span className="min-w-0">
-                  <span className="mb-2 flex flex-wrap items-center gap-2">
-                    <TypeBadge type={result.item.type} />
-                    <span className="metadata truncate text-[color:var(--ink-soft)]">
-                      {result.context}
-                    </span>
-                  </span>
-                  <span className="block truncate text-sm font-bold text-[color:var(--ink)]">
-                    {result.item.title}
-                  </span>
-                </span>
-                <span className="metadata self-center rounded-full border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-2.5 py-1 text-[color:var(--ink-soft)]">
-                  Open
-                </span>
-              </button>
-            ))
+          {total > 0 ? (
+            <>
+              {binderHits.length > 0 ? (
+                <div role="group" aria-label="In your binders">
+                  <div
+                    aria-hidden="true"
+                    className="metadata px-3 pb-1 pt-2.5 text-[color:var(--ink-soft)]"
+                  >
+                    In your binders
+                  </div>
+                  {binderHits.map((hit, index) => (
+                    <button
+                      aria-selected={activeIndex === index}
+                      className={`grid w-full grid-cols-[1fr_auto] gap-3 px-3 py-2.5 text-left transition ${
+                        activeIndex === index
+                          ? "bg-[color:var(--surface-sunken)]"
+                          : "bg-[color:var(--surface-raised)] hover:bg-[color:var(--surface)]"
+                      }`}
+                      id={`${listboxId}-${index}`}
+                      key={hit.id}
+                      onMouseDown={(event) => event.preventDefault()}
+                      onMouseEnter={() => setActiveIndex(index)}
+                      onClick={() => selectBinderHit(hit)}
+                      role="option"
+                      type="button"
+                    >
+                      <span className="min-w-0">
+                        <span className="mb-2 flex flex-wrap items-center gap-2">
+                          <span className="metadata inline-flex w-fit items-center rounded-md border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-2.5 py-1 leading-none text-[color:var(--ink-soft)]">
+                            {hit.kind}
+                          </span>
+                          <span className="metadata truncate text-[color:var(--ink-soft)]">
+                            {hit.context}
+                          </span>
+                        </span>
+                        <span className="block truncate text-sm font-bold text-[color:var(--ink)]">
+                          {hit.title}
+                        </span>
+                      </span>
+                      <span className="metadata self-center rounded-full border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-2.5 py-1 text-[color:var(--ink-soft)]">
+                        Open
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+              {suggestions.length > 0 ? (
+                <div
+                  role="group"
+                  aria-label="Library"
+                  className={binderHits.length > 0 ? "border-t border-[color:var(--line)]" : ""}
+                >
+                  {binderHits.length > 0 ? (
+                    <div
+                      aria-hidden="true"
+                      className="metadata px-3 pb-1 pt-2.5 text-[color:var(--ink-soft)]"
+                    >
+                      Library
+                    </div>
+                  ) : null}
+                  {suggestions.map((result, index) => (
+                    <button
+                      aria-selected={activeIndex === binderHits.length + index}
+                      className={`grid w-full grid-cols-[1fr_auto] gap-3 px-3 py-2.5 text-left transition ${
+                        activeIndex === binderHits.length + index
+                          ? "bg-[color:var(--surface-sunken)]"
+                          : "bg-[color:var(--surface-raised)] hover:bg-[color:var(--surface)]"
+                      }`}
+                      id={`${listboxId}-${binderHits.length + index}`}
+                      key={`${result.item.type}-${result.item.id}`}
+                      onMouseDown={(event) => event.preventDefault()}
+                      onMouseEnter={() => setActiveIndex(binderHits.length + index)}
+                      onClick={() => selectResult(result)}
+                      role="option"
+                      title="Details coming soon"
+                      type="button"
+                    >
+                      <span className="min-w-0">
+                        <span className="mb-2 flex flex-wrap items-center gap-2">
+                          <TypeBadge type={result.item.type} />
+                          <span className="metadata truncate text-[color:var(--ink-soft)]">
+                            {result.context}
+                          </span>
+                        </span>
+                        <span className="block truncate text-sm font-bold text-[color:var(--ink)]">
+                          {result.item.title}
+                        </span>
+                      </span>
+                      <span className="metadata self-center rounded-full border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-2.5 py-1 text-[color:var(--ink-soft)]">
+                        Open
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </>
           ) : (
             <div
               className="px-4 py-4 text-sm font-bold text-[color:var(--ink-muted)]"

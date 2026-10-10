@@ -237,3 +237,16 @@ test("the hearsay practice room runs two rounds end to end", async ({ page }) =>
   await page.reload();
   await expect(page.getByText("The note is offered to show notice.")).toHaveCount(0);
 });
+
+test("searching from Home goes straight to the drill inside its binder", async ({ page }) => {
+  await signIn(page);
+  await page.goto("/");
+  await page.getByRole("combobox").fill("hearsay objection");
+  const binders = page.getByRole("group", { name: "In your binders" });
+  await expect(binders.getByRole("option").first()).toContainText(
+    "Procedure: answering a hearsay objection in writing",
+  );
+  await binders.getByRole("option", { name: /Answer a hearsay objection in writing/ }).click();
+  await expect(page).toHaveURL(/practice\/hearsay-objection-in-writing\/?$/);
+  await expect(page.getByRole("heading", { level: 1, name: /Practice:/ })).toBeVisible();
+});

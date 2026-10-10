@@ -120,7 +120,13 @@ ${describe(violations)}`,
     const dialog = page.getByRole("dialog", { name: /search/i });
     await expect(dialog).toBeVisible();
 
-    const { violations } = await scan(page);
+    let { violations } = await scan(page);
+    expect(violations, `\n${describe(violations)}`).toEqual([]);
+
+    // With a query, the listbox holds two labelled groups: binder hits, then library.
+    await dialog.getByRole("combobox").fill("hearsay objection");
+    await expect(dialog.getByRole("group", { name: "In your binders" })).toBeVisible();
+    ({ violations } = await scan(page));
     expect(violations, `\n${describe(violations)}`).toEqual([]);
   });
 });

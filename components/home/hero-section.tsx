@@ -8,6 +8,7 @@ import { SearchBox } from "@/components/search-box";
 import { findFiling, hearsaySkills } from "@/lib/binder";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
 import { continueLearning, courses, getContinueLearningUrl, type LearningItem } from "@/lib/data";
+import type { BinderHit } from "@/lib/binder-search";
 import type { SearchResult } from "@/lib/search";
 import type { User } from "@/lib/auth";
 
@@ -165,6 +166,8 @@ export function HeroSection({
   onQueryChange,
   suggestions,
   onSelectResult,
+  binderHits,
+  onSelectBinderHit,
   allItems,
 }: {
   user: User;
@@ -173,6 +176,8 @@ export function HeroSection({
   onQueryChange: (value: string) => void;
   suggestions: SearchResult[];
   onSelectResult: (result: SearchResult) => void;
+  binderHits?: BinderHit[];
+  onSelectBinderHit?: (hit: BinderHit) => void;
   allItems: LearningItem[];
 }) {
   const card = useMemo(() => getResumeCard(allItems), [allItems]);
@@ -194,6 +199,8 @@ export function HeroSection({
             onChange={onQueryChange}
             suggestions={suggestions}
             onSelect={onSelectResult}
+            binderHits={binderHits}
+            onSelectBinderHit={onSelectBinderHit}
             placeholder="What’s in front of you today? Try “notice to quit”"
             prominent
           />

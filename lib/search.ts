@@ -77,6 +77,8 @@ const phraseSynonyms: Record<string, string[]> = {
 const tokenSynonyms: Record<string, string[]> = {
   dv: ["domestic", "violence", "safety", "screening"],
   d2l: ["brightspace"],
+  // A common misspelling, two letters off, so the one-typo rule misses it.
+  heresay: ["hearsay"],
   hearing: ["court", "appearance", "courtroom"],
   intake: ["interview", "client", "screening"],
   lawyer: ["attorney"],
@@ -399,6 +401,33 @@ function scoreDocument(document: SearchDocument, rawQuery: string) {
   if (document.item.type === "PATH") score += 4;
 
   return { score, matchedFields: [...matchedFields] };
+}
+
+/**
+ * Scores free-standing text against a query with the same rules as catalog
+ * items: synonyms, plurals, one-letter typos, and every query word must match
+ * somewhere. The first field is the title (exact and prefix matches count
+ * extra). 0 means no match. Used for things that are not catalog items, such
+ * as binder topics, drills and reference pages.
+ */
+export function scoreText(fields: { text: string; weight: number }[], rawQuery: string) {
+  const { query, tokens, expandedTokens, phraseBoosts } = expandQuery(rawQuery);
+  if (!query || tokens.length === 0 || fields.length === 0) return 0;
+  const normalized = fields.map((field) => ({ ...field, text: normalize(field.text) }));
+  if (!tokens.every((token) => normalized.some((field) => fieldIncludesToken(field.text, token)))) {
+    return 0;
+  }
+  const title = normalized[0].text;
+  let score = 0;
+  if (title === query) score += 1400;
+  if (title.startsWith(query)) score += 900;
+  for (const phrase of phraseBoosts) {
+    if (normalized.some((field) => fieldIncludesPhrase(field.text, phrase))) score += 180;
+  }
+  for (const field of normalized) {
+    score += scoreField("field", field.text, query, expandedTokens, field.weight).score;
+  }
+  return score;
 }
 
 export function buildSearchIndex(items: LearningItem[]) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { HeroSection } from "@/components/home/hero-section";
@@ -9,7 +9,9 @@ import { StudioShell } from "@/components/studio-shell";
 import { getEffectiveDashboardRole } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
 import { browseHref } from "@/lib/home-helpers";
+import { searchBinders } from "@/lib/binder-search";
 import { useCatalogFilters } from "@/lib/hooks/use-catalog-filters";
+import { openBinderHit } from "@/lib/open-binder-hit";
 import { recordSearchAnalytics } from "@/lib/search-analytics";
 import type { SearchResult } from "@/lib/search";
 
@@ -33,6 +35,14 @@ export default function Home() {
 
   const catalog = useCatalogFilters(user);
   const { allItems, setQuery } = catalog;
+  // References, drills, lessons and topics lead the dropdown; the library
+  // follows, trimmed so the list stays short.
+  const binderHits = useMemo(
+    () => searchBinders(catalog.query, new Set(allItems.map((item) => item.id))),
+    [catalog.query, allItems],
+  );
+  const suggestions =
+    binderHits.length > 0 ? catalog.searchSuggestions.slice(0, 4) : catalog.searchSuggestions;
 
   function openSearchResult(result: SearchResult) {
     recordSearchAnalytics({
@@ -114,8 +124,10 @@ export default function Home() {
           isAdmin={isAdmin}
           query={catalog.query}
           onQueryChange={setQuery}
-          suggestions={catalog.searchSuggestions}
+          suggestions={suggestions}
           onSelectResult={openSearchResult}
+          binderHits={binderHits}
+          onSelectBinderHit={(hit) => openBinderHit(hit, catalog.query, router)}
           allItems={allItems}
         />
 

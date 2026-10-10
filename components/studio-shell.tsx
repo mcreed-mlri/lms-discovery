@@ -18,6 +18,8 @@ import { getLearningItems } from "@/lib/data";
 import { browseHref } from "@/lib/home-helpers";
 import { useFocusTrap } from "@/lib/hooks/use-focus-trap";
 import { useScrollLock } from "@/lib/hooks/use-scroll-lock";
+import { searchBinders, type BinderHit } from "@/lib/binder-search";
+import { openBinderHit } from "@/lib/open-binder-hit";
 import { searchLearningItems, type SearchResult } from "@/lib/search";
 import { recordSearchAnalytics } from "@/lib/search-analytics";
 
@@ -46,9 +48,14 @@ export function StudioShell({
   useScrollLock(mobileOpen || searchOpen);
 
   const allItems = useMemo(() => getEligibleLearningItems(getLearningItems(), user), [user]);
-  const globalResults = useMemo(
-    () => searchLearningItems(allItems, globalQuery).slice(0, 6),
+  const globalBinderHits = useMemo(
+    () => searchBinders(globalQuery, new Set(allItems.map((item) => item.id))),
     [allItems, globalQuery],
+  );
+  // Binder hits lead; the library follows, trimmed so the list stays short.
+  const globalResults = useMemo(
+    () => searchLearningItems(allItems, globalQuery).slice(0, globalBinderHits.length > 0 ? 4 : 6),
+    [allItems, globalQuery, globalBinderHits.length],
   );
 
   const openGlobalSearch = useCallback(() => {
@@ -236,6 +243,12 @@ export function StudioShell({
         <GlobalSearchDialog
           query={globalQuery}
           results={globalResults}
+          binderHits={globalBinderHits}
+          onSelectBinderHit={(hit) => {
+            setSearchOpen(false);
+            setGlobalQuery("");
+            openBinderHit(hit, globalQuery, router);
+          }}
           onChange={setGlobalQuery}
           onClose={closeGlobalSearch}
           onSelect={openGlobalSearchResult}
@@ -248,12 +261,16 @@ export function StudioShell({
 function GlobalSearchDialog({
   query,
   results,
+  binderHits,
+  onSelectBinderHit,
   onChange,
   onClose,
   onSelect,
 }: {
   query: string;
   results: SearchResult[];
+  binderHits: BinderHit[];
+  onSelectBinderHit: (hit: BinderHit) => void;
   onChange: (value: string) => void;
   onClose: () => void;
   onSelect: (result: SearchResult) => void;
@@ -288,10 +305,12 @@ function GlobalSearchDialog({
           onChange={onChange}
           suggestions={results}
           onSelect={onSelect}
+          binderHits={binderHits}
+          onSelectBinderHit={onSelectBinderHit}
           prominent
         />
         <div className="mt-3 flex items-center justify-between px-1 text-xs font-semibold text-[color:var(--ink-soft)]">
-          <span>Search courses, modules, paths, and topics</span>
+          <span>Search references, practice, courses and topics</span>
           <button
             type="button"
             onClick={onClose}
