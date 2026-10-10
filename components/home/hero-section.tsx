@@ -204,7 +204,7 @@ export function HeroSection({
             binderHits={binderHits}
             onSelectBinderHit={onSelectBinderHit}
             onSeeAll={onSeeAll}
-            placeholder="What’s in front of you today? Try “notice to quit”"
+            placeholder="What’s in front of you today?"
             prominent
           />
         </div>

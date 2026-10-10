@@ -107,7 +107,7 @@ export function SearchResultsView({
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="What’s in front of you today? Try “notice to quit”"
+              placeholder="What’s in front of you today?"
               className="h-14 w-full rounded-[8px] border-[1.5px] border-[color:var(--line-control)] bg-[color:var(--surface-raised)] pl-12 pr-4 text-[17px] font-semibold text-[color:var(--ink)] outline-none placeholder:font-normal placeholder:text-[color:var(--ink-soft)] focus:border-[color:var(--brand)] focus-ring"
             />
           </form>
