@@ -13,6 +13,15 @@ import { useCatalogFilters } from "@/lib/hooks/use-catalog-filters";
 import { recordSearchAnalytics } from "@/lib/search-analytics";
 import type { SearchResult } from "@/lib/search";
 
+/**
+ * Home is one grid so each column flows on its own. Phones stack the cells in
+ * source order: greeting, resume card, binders, side column. From lg the resume
+ * card spans rows 1–2 on the right while "Your binders" spans rows 2–3 on the
+ * left, so the binders start under search however tall the card is.
+ */
+const HOME_GRID =
+  "mx-auto grid max-w-[1180px] gap-y-8 px-4 pb-12 pt-6 sm:px-6 sm:pt-9 lg:grid-cols-[minmax(0,1fr)_24.5rem] lg:gap-x-11 lg:gap-y-10 lg:px-11 lg:pt-10";
+
 export default function Home() {
   const { user, ready, login } = useAuth();
   const router = useRouter();
@@ -99,17 +108,19 @@ export default function Home() {
 
   return (
     <StudioShell padded={false}>
-      <HeroSection
-        user={user}
-        isAdmin={isAdmin}
-        query={catalog.query}
-        onQueryChange={setQuery}
-        suggestions={catalog.searchSuggestions}
-        onSelectResult={openSearchResult}
-        allItems={allItems}
-      />
+      <div className={HOME_GRID}>
+        <HeroSection
+          user={user}
+          isAdmin={isAdmin}
+          query={catalog.query}
+          onQueryChange={setQuery}
+          suggestions={catalog.searchSuggestions}
+          onSelectResult={openSearchResult}
+          allItems={allItems}
+        />
 
-      <HomeOverview catalogTotal={catalog.catalogTotal} allItems={allItems} />
+        <HomeOverview allItems={allItems} />
+      </div>
     </StudioShell>
   );
 }

@@ -12,12 +12,19 @@ import type { User } from "@/lib/auth";
 
 type ResumeEntry = Extract<(typeof continueLearning)[number], { progress: number }>;
 
-function minutesLeft(duration?: string) {
-  if (!duration || !/min/i.test(duration)) return null;
-  return `about ${duration
-    .replace(/[~\s]*min\s*$/i, "")
-    .replace(/^~/, "")
-    .trim()} min left`;
+/**
+ * Time left on a course of `duration` when the learner is on part `current` of
+ * `total`. Parts are assumed equal, so the estimate is rounded to 5 minutes and
+ * said with "about". Without parts there is nothing honest to subtract from, so
+ * the course length is shown as a length, not as time left.
+ */
+export function timeLeft(duration: string | undefined, current: number, total: number) {
+  const minutes = Number(/(\d+)\s*min/i.exec(duration ?? "")?.[1]);
+  if (!minutes) return null;
+  if (total < 1 || current < 1) return `about ${minutes} min`;
+  // On part 2 of 5, parts 2 through 5 are still ahead.
+  const remaining = (minutes * (total - current + 1)) / total;
+  return `about ${Math.max(5, Math.round(remaining / 5) * 5)} min left`;
 }
 
 function useResumeCard(allItems: LearningItem[]) {
@@ -35,13 +42,13 @@ function useResumeCard(allItems: LearningItem[]) {
     } satisfies ResumeEntry);
   const resumeUrl = getContinueLearningUrl(resumeItem, allItems);
   const resumeCourse = courses.find((course) => course.id === resumeItem.id);
-  // The title already names the course, so the lesson line carries only time left.
-  const context = minutesLeft(resumeCourse?.duration);
 
   // "2/5" → part 2 of 5, drawn as five stops. Anything else has no stops.
   const lesson = /^(\d+)\/(\d+)$/.exec(resumeItem.progressLabel ?? "");
   const current = lesson ? Number(lesson[1]) : 0;
   const total = lesson ? Number(lesson[2]) : 0;
+  // The title already names the course, so the lesson line carries only time left.
+  const context = timeLeft(resumeCourse?.duration, current, total);
 
   return { resumeItem, resumeUrl, context, current, total };
 }
@@ -80,7 +87,9 @@ function LessonStops({ current, total }: { current: number; total: number }) {
 }
 
 // HERO — greeting, search, and the resume card. It scrolls with the page; Ctrl K
-// opens search from anywhere.
+// opens search from anywhere. Renders two cells of the Home grid in app/page.tsx
+// (see HOME_GRID there): the greeting, and the side card that spans two rows so
+// "Your binders" can start right under search instead of under the card.
 export function HeroSection({
   user,
   isAdmin,
@@ -101,8 +110,8 @@ export function HeroSection({
   const { resumeItem, resumeUrl, context, current, total } = useResumeCard(allItems);
 
   return (
-    <section className="mx-auto grid min-w-0 max-w-[1180px] gap-6 px-4 pb-2 pt-6 sm:px-6 sm:pt-9 lg:grid-cols-[minmax(0,1fr)_24.5rem] lg:gap-11 lg:px-11 lg:pt-10">
-      <div className="min-w-0">
+    <>
+      <div className="min-w-0 lg:col-start-1 lg:row-start-1">
         <h1 className="hero-display text-[32px] leading-[1.08] tracking-[-0.025em] text-[color:var(--ink)] sm:text-[42px]">
           Welcome back, {user.firstName}.
         </h1>
@@ -125,7 +134,7 @@ export function HeroSection({
 
       {isAdmin ? (
         <aside
-          className="min-w-0 self-start rounded-[12px] bg-[color:var(--feature-surface)] px-5 py-5 text-[color:var(--feature-ink)]"
+          className="min-w-0 self-start rounded-[12px] bg-[color:var(--feature-surface)] px-5 py-5 text-[color:var(--feature-ink)] lg:col-start-2 lg:row-span-2 lg:row-start-1"
           aria-label="Brightspace Manager"
         >
           <p className="text-[12px] font-semibold text-[color:var(--feature-muted)]">
@@ -147,7 +156,7 @@ export function HeroSection({
         </aside>
       ) : (
         <aside
-          className="min-w-0 self-start rounded-[12px] bg-[color:var(--feature-surface)] px-5 py-5 text-[color:var(--feature-ink)] sm:px-6"
+          className="min-w-0 self-start rounded-[12px] bg-[color:var(--feature-surface)] px-5 py-5 text-[color:var(--feature-ink)] sm:px-6 lg:col-start-2 lg:row-span-2 lg:row-start-1"
           aria-label="Resume learning"
         >
           <h2 className="text-[22px] font-extrabold leading-tight tracking-[-0.01em]">
@@ -177,6 +186,6 @@ export function HeroSection({
           </div>
         </aside>
       )}
-    </section>
+    </>
   );
 }

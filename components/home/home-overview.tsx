@@ -35,7 +35,10 @@ function YourBinders({
   catalogTotal: number;
 }) {
   return (
-    <section aria-labelledby="binders-heading" className="min-w-0">
+    <section
+      aria-labelledby="binders-heading"
+      className="min-w-0 lg:col-start-1 lg:row-span-2 lg:row-start-2"
+    >
       <h2
         id="binders-heading"
         className="text-[22px] font-extrabold tracking-[-0.015em] text-[color:var(--ink)]"
@@ -82,20 +85,16 @@ function YourBinders({
           href="/browse"
           className="rounded-[3px] font-semibold text-[color:var(--ink)] underline underline-offset-[3px] focus-ring"
         >
-          Browse all {catalogTotal} items
+          Browse all {catalogTotal} {catalogTotal === 1 ? "item" : "items"}
         </Link>
       </p>
     </section>
   );
 }
 
-export function HomeOverview({
-  catalogTotal,
-  allItems,
-}: {
-  catalogTotal: number;
-  allItems: LearningItem[];
-}) {
+// The rest of Home, as two more cells of the grid in app/page.tsx: "Your binders"
+// under search, and the side column under the resume card.
+export function HomeOverview({ allItems }: { allItems: LearningItem[] }) {
   const eligibleIds = new Set(allItems.map((item) => item.id));
   const alsoOpen = ALSO_OPEN.map((id) =>
     allItems.find((item) => item.type === "COURSE" && item.id === id),
@@ -104,12 +103,11 @@ export function HomeOverview({
   const updateStatus = update ? getStatusTheme(resolveStatusKey(update.tag)) : null;
 
   return (
-    <div className="mx-auto grid max-w-[1180px] gap-10 px-4 pb-12 pt-6 sm:px-6 lg:grid-cols-[minmax(0,1fr)_24.5rem] lg:gap-11 lg:px-11 lg:pt-6">
-      <div className="flex min-w-0 flex-col gap-10">
-        <YourBinders eligibleIds={eligibleIds} catalogTotal={catalogTotal} />
-      </div>
+    <>
+      {/* Everything the user can open, not what the search box currently matches. */}
+      <YourBinders eligibleIds={eligibleIds} catalogTotal={allItems.length} />
 
-      <div className="flex min-w-0 flex-col gap-8">
+      <div className="flex min-w-0 flex-col gap-8 lg:col-start-2 lg:row-start-3">
         {alsoOpen.length > 0 ? (
           <section aria-labelledby="available-heading">
             <h2
@@ -178,6 +176,6 @@ export function HomeOverview({
           </section>
         ) : null}
       </div>
-    </div>
+    </>
   );
 }
