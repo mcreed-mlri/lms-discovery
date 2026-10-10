@@ -2469,3 +2469,128 @@ a.crumb:hover {
     scroll-behavior: auto;
   }
 }
+
+
+/* ── Binder tabs ───────────────────────────────────────────────────────────
+   The hub's divider tabs, carried into the course (course-nav.js,
+   renderBinderTabs) so moving between the hub and a course feels like one
+   binder. Same manila dividers on a chipboard strip, the open tab white with
+   the binder's colour on its edge. Wide screens only, as in the hub. */
+.lace-binder-tabs {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  html.has-binder-tabs body {
+    padding-right: 60px;
+  }
+
+  .lace-binder-tabs {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 44;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 60px;
+    box-sizing: border-box;
+    padding: 22px 10px 24px 0;
+    overflow-y: auto;
+    background: #c9c4bb;
+    scrollbar-width: none;
+  }
+}
+
+.lbt-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 6px;
+  padding-left: 12px;
+  writing-mode: vertical-rl;
+  font-size: 12px;
+  font-weight: 800;
+  color: #16161a;
+  white-space: nowrap;
+}
+
+.lbt-swatch {
+  width: 14px;
+  height: 10px;
+  border-radius: 0 2px 2px 0;
+  background: var(--binder, #dc6a3c);
+}
+
+.lbt-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 0 6.5rem;
+  max-height: 11rem;
+  width: 44px;
+  padding: 18px 0;
+  border-radius: 0 10px 10px 0;
+  background: #ede4cc;
+  color: #16161a;
+  text-decoration: none;
+  transition: width 180ms ease;
+}
+
+.lbt-tab:nth-of-type(even) {
+  background: #e4d8b9;
+}
+
+.lbt-tab:hover {
+  width: 48px;
+}
+
+.lbt-tab:focus-visible {
+  outline: 3px solid #16161a;
+  outline-offset: 2px;
+}
+
+.lbt-tab.lbt-open {
+  width: 50px;
+  margin-left: -1.5px;
+  background: #ffffff;
+  border-right: 4px solid var(--binder, #dc6a3c);
+}
+
+.lbt-label {
+  writing-mode: vertical-rl;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.lbt-open .lbt-label {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+[data-theme="dark"] .lace-binder-tabs {
+  background: #2b2926;
+}
+
+[data-theme="dark"] .lbt-name,
+[data-theme="dark"] .lbt-tab {
+  color: #f1f1ee;
+}
+
+[data-theme="dark"] .lbt-tab {
+  background: #3b372f;
+}
+
+[data-theme="dark"] .lbt-tab:nth-of-type(even) {
+  background: #343028;
+}
+
+[data-theme="dark"] .lbt-tab.lbt-open {
+  background: #15171c;
+}
+
+[data-theme="dark"] .lbt-tab:focus-visible {
+  outline-color: #f1f1ee;
+}

@@ -298,3 +298,22 @@ test("the Hearsay levels: watch, then help, and the map keeps score", async ({ p
     /practice\/hearsay-objection-in-writing/,
   );
 });
+
+test("the Hearsay course carries the binder's tabs and leads back to Objections", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await signIn(page);
+  await page.goto("/legal-skills-hearsay/defending-hearsay-objection-writing.html");
+  const tabs = page.getByRole("navigation", { name: "Litigation tabs" });
+  await expect(tabs.getByRole("link", { name: "Trial", exact: true })).toHaveAttribute(
+    "aria-current",
+    "true",
+  );
+  await expect(page.getByRole("link", { name: "Back to Objections" }).first()).toHaveAttribute(
+    "href",
+    "/binder/litigation/trial-skills/objections/",
+  );
+  await tabs.getByRole("link", { name: "Contents" }).click();
+  await expect(page).toHaveURL(/\/binder\/litigation\/?$/);
+});

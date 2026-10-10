@@ -22,8 +22,34 @@ window.COURSE_CONFIG = {
   topic: "drafting",
   accent: "drafting",
 
-  homeLinkText: "Exit to Hub",
-  homeLinkUrl: "/",
+  // The Learning Hub's address. Empty when the hub serves this package (its
+  // links stay on the same site); set to the hub's full address, for example
+  // "https://hub.mlri.org", when the package is hosted in Brightspace.
+  hubBaseUrl: "",
+
+  homeLinkText: "Back to Objections",
+  homeLinkUrl: "/binder/litigation/trial-skills/objections/",
+
+  // Where this course is filed in the hub, so the course shows the same
+  // binder: its divider tabs on the right, and the hub's breadcrumb. Mirrors
+  // lib/binder.ts in the hub; tests/course-binder.test.ts there checks it.
+  binder: {
+    name: "Litigation",
+    colour: "#dc6a3c",
+    currentTab: "trial-skills",
+    tabs: [
+      { id: "contents", label: "Contents", href: "/binder/litigation/" },
+      { id: "pre-trial", label: "Case Prep", href: "/binder/litigation/pre-trial/" },
+      { id: "trial-skills", label: "Trial", href: "/binder/litigation/trial-skills/" },
+      { id: "post-trial", label: "Post-Trial", href: "/binder/litigation/post-trial/" },
+      { id: "appellate", label: "Appeals", href: "/binder/litigation/appellate/" },
+    ],
+    crumbs: [
+      { label: "Litigation", href: "/binder/litigation/" },
+      { label: "Trial", href: "/binder/litigation/trial-skills/" },
+      { label: "Objections", href: "/binder/litigation/trial-skills/objections/" },
+    ],
+  },
 
   beacon: {
     enabled: false,
