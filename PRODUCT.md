@@ -97,7 +97,7 @@ Language discipline: **learners never see the word "Brightspace".** The course w
 
 ## Practice and Simulation
 
-**The team's top request:** training must be very interactive. New attorneys want a safe place to rehearse a skill before they do it in court. Nothing is built yet beyond the Hearsay pilot's own practice steps (supported, rapid and independent practice in skill 2).
+**The team's top request:** training must be very interactive. New attorneys want a safe place to rehearse a skill before they do it in court. Built so far: the scripted Hearsay practice room (Stage 1 below). The full plan, from document exercises to voice and avatars, with research questions and decisions, is in `docs/simulations.md`.
 
 **Practice is an item kind**, filed under a tab like everything else. It is not a separate product area. A tab's "Practice" chip shows every drill for that section.
 
