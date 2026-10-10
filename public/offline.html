@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>You're offline · Learning Hub</title>
+    <!-- Served by the service worker when a page can't load. Self-contained on
+         purpose: no app styles, scripts or personal data, so it works with
+         nothing else cached. -->
+    <style>
+      :root {
+        color-scheme: light dark;
+        --ink: #16161a;
+        --muted: #45454d;
+        --paper: #ffffff;
+        --line: #e2e2dc;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --ink: #f1f1ee;
+          --muted: #b7b9c0;
+          --paper: #15171c;
+          --line: #33363d;
+        }
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        box-sizing: border-box;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "Public Sans", "Segoe UI", system-ui, sans-serif;
+      }
+      main {
+        max-width: 28rem;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 28px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 26px;
+        line-height: 1.2;
+      }
+      p {
+        margin: 12px 0 0;
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--muted);
+      }
+      button {
+        margin-top: 20px;
+        min-height: 44px;
+        padding: 0 20px;
+        border: none;
+        border-radius: 8px;
+        background: var(--ink);
+        color: var(--paper);
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      button:focus-visible {
+        outline: 3px solid var(--ink);
+        outline-offset: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>You're offline</h1>
+      <p>
+        The Learning Hub needs a connection to open this page. Check your Wi-Fi or data, then try
+        again.
+      </p>
+      <button type="button" onclick="location.reload()">Try again</button>
+    </main>
+  </body>
+</html>

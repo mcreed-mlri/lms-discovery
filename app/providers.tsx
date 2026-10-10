@@ -72,15 +72,24 @@ export function Providers({ children }: { children: ReactNode }) {
     return () => document.removeEventListener("touchstart", noop);
   }, []);
 
+  // The service worker (public/sw.js) lets the hub be installed on a phone and
+  // show an offline page. It caches only static build files, never pages or
+  // API responses. Production only, so development never serves stale files.
+  // This effect usually runs after the page's load event has already fired,
+  // so register straight away when it has, rather than waiting for one.
   useEffect(() => {
-    if (typeof window !== "undefined" && "serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("/sw.js")
-          .then((reg) => console.log("[PWA] Service Worker registered with scope:", reg.scope))
-          .catch((err) => console.error("[PWA] Service Worker registration failed:", err));
+    if (process.env.NODE_ENV !== "production" || !("serviceWorker" in navigator)) return;
+    const register = () => {
+      navigator.serviceWorker.register("/sw.js").catch(() => {
+        // Not fatal: the hub works without it, it just can't work offline.
       });
+    };
+    if (document.readyState === "complete") {
+      register();
+      return;
     }
+    window.addEventListener("load", register, { once: true });
+    return () => window.removeEventListener("load", register);
   }, []);
 
   return (
