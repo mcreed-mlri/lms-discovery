@@ -8,7 +8,7 @@ import { StudioShell } from "@/components/studio-shell";
 import { getEligibleLearningItems } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
 import { getBinder, getSectionTab, getTopic } from "@/lib/binder";
-import { getTopicContents } from "@/lib/binder-topics";
+import { getTabTopics, getTopicContents, isBuilt } from "@/lib/binder-topics";
 import { getStatusTheme, resolveStatusKey } from "@/lib/course-theme";
 import { getLearningItemById, getLearningItemUrl, type LearningItem } from "@/lib/data";
 import { drillHref } from "@/lib/practice";
@@ -20,6 +20,10 @@ const h2Class = "text-[22px] font-extrabold tracking-[-0.015em] text-[color:var(
  * out for the moment before a hearing: the reference to keep open first, then
  * practice, then the courses (grouped by skill, with their parts), then any
  * law change. Notes here are filed under the topic.
+ *
+ * A planned topic gets a page too while the hub is a prototype: a plain
+ * "Coming" state with what the curriculum map says it will cover, and the
+ * topics in the same tab that are open now.
  */
 export function BinderTopicView({
   binderId,
@@ -36,7 +40,10 @@ export function BinderTopicView({
   const topic = binder && tab ? getTopic(binder, tabId, topicId) : undefined;
   if (!binder || !tab || !topic) return null;
 
-  const { itemIds, references, drills, changes } = getTopicContents(tabId, topic);
+  const contents = getTopicContents(tabId, topic);
+  const { itemIds, references, drills, changes } = contents;
+  const built = isBuilt(contents);
+  const openNearby = built ? [] : getTabTopics(binder, tabId).built.map((nearby) => nearby.topic);
   const courses = getEligibleLearningItems(
     itemIds
       .map((id) => getLearningItemById(id))
@@ -67,10 +74,76 @@ export function BinderTopicView({
           <h1 className="mt-1 text-[clamp(2rem,4vw,2.75rem)] font-extrabold leading-[1.05] tracking-[-0.025em] text-[color:var(--ink)]">
             {topic.title}
           </h1>
+          {!built ? (
+            <p className="mt-3 flex flex-wrap gap-2">
+              <span className="metadata inline-flex rounded-[4px] border border-[color:var(--line)] bg-[color:var(--surface-sunken)] px-2 py-0.5 text-[color:var(--ink-muted)]">
+                Coming
+              </span>
+              {topic.tag ? (
+                <span className="metadata inline-flex rounded-[4px] border border-[color:var(--line)] px-2 py-0.5 text-[color:var(--ink-muted)]">
+                  {topic.tag}
+                </span>
+              ) : null}
+            </p>
+          ) : null}
         </div>
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-11">
           <div className="flex min-w-0 flex-col gap-9">
+            {!built ? (
+              <section aria-labelledby="coming">
+                <h2 id="coming" className={h2Class}>
+                  Nothing here yet
+                </h2>
+                <p className="mt-2 max-w-[60ch] text-[16px] leading-relaxed text-[color:var(--ink-muted)]">
+                  {topic.title} is planned for {tab.title}. When it opens, this page will hold quick
+                  reference, practice and courses, and it will show up under Updates.
+                </p>
+                {topic.subTopics.length > 0 ? (
+                  <>
+                    <h3 className="mt-6 text-[15px] font-bold text-[color:var(--ink)]">
+                      Planned to cover
+                    </h3>
+                    <ul className="mt-2 border-t border-[color:var(--line)] text-[15px] text-[color:var(--ink-muted)]">
+                      {topic.subTopics.map((sub) => (
+                        <li key={sub} className="border-b border-[color:var(--line-soft)] py-2.5">
+                          {sub}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : null}
+                <p className="mt-4 text-sm text-[color:var(--ink-soft)]">
+                  See where it fits on the{" "}
+                  <Link href="/curriculum-map" className="underline underline-offset-[3px]">
+                    curriculum map
+                  </Link>
+                  .
+                </p>
+              </section>
+            ) : null}
+
+            {openNearby.length > 0 ? (
+              <section aria-labelledby="open-nearby">
+                <h2 id="open-nearby" className="text-[17px] font-extrabold text-[color:var(--ink)]">
+                  Open now in {tab.label}
+                </h2>
+                <ul className="mt-2.5 border-t-[1.5px] border-[color:var(--ink)]">
+                  {openNearby.map((nearby) => (
+                    <li key={nearby.id} className="border-b border-[color:var(--line)]">
+                      <Link
+                        href={nearby.href}
+                        className="flex min-h-11 items-center justify-between gap-3 py-3 text-[15px] font-bold text-[color:var(--ink)] hover:bg-[color:var(--hover-tint)] focus-ring"
+                      >
+                        {nearby.title}
+                        <span aria-hidden="true">›</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+
             {references.length > 0 ? (
               <section aria-labelledby="keep-at-hand">
                 <h2 id="keep-at-hand" className={h2Class}>

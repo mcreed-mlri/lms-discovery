@@ -15,8 +15,8 @@ import { getLearningItemById, type LearningItem } from "@/lib/data";
 /**
  * One divider's page in a binder: an index of its topics. Built topics are
  * rows that say what each holds and open the topic's own page; planned topics
- * wait in one collapsed line, so the page stays a screen long however much
- * the tab grows. Law changes for the tab sit under the index, and the
+ * wait behind one collapsed line (each opens a "Coming" page), so the page
+ * stays a screen long however much the tab grows. Law changes for the tab sit under the index, and the
  * advocate's notes for the whole tab sit alongside.
  */
 export function BinderSectionView({ binderId, tabId }: { binderId: string; tabId: string }) {
@@ -145,9 +145,23 @@ export function BinderSectionView({ binderId, tabId }: { binderId: string; tabId
                     ? `${planned.length} more topics planned`
                     : `${planned.length} topics planned`}
                 </summary>
-                <p className="mt-2 text-[15px] leading-relaxed text-[color:var(--ink-muted)]">
-                  {planned.map((topic) => topic.title).join(" · ")}
-                </p>
+                <ul className="mt-2 grid gap-x-8 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                  {planned.map((topic) => (
+                    <li key={topic.id} className="border-b border-[color:var(--line-soft)]">
+                      <Link
+                        href={topic.href}
+                        className="flex min-h-11 items-center justify-between gap-3 py-2 text-[15px] text-[color:var(--ink-muted)] hover:bg-[color:var(--hover-tint)] hover:text-[color:var(--ink)] focus-ring"
+                      >
+                        {topic.title}
+                        {topic.tag ? (
+                          <span className="text-[12px] text-[color:var(--ink-soft)]">
+                            {topic.tag}
+                          </span>
+                        ) : null}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
                 <p className="mt-3 text-sm text-[color:var(--ink-soft)]">
                   Each one shows up under Updates when it opens. See where they fit on the{" "}
                   <Link href="/curriculum-map" className="underline underline-offset-[3px]">

@@ -146,6 +146,8 @@ export type BinderTopic = {
   href: string;
   /** Sub-topics the map lists under it, e.g. Hearsay under Objections. */
   subTopics: string[];
+  /** The map's badge, e.g. "tentative" or "unit intro". */
+  tag?: string;
 };
 
 /** "Oral Argument / Best Practice" → "oral-argument-best-practice". */
@@ -166,7 +168,13 @@ export function getTopics(binder: Binder, tabId: string): BinderTopic[] {
   for (const note of column.notes) {
     if (note.level === "topic") {
       const id = topicSlug(note.text);
-      topics.push({ id, title: note.text, href: `${tab.href}/${id}`, subTopics: [] });
+      topics.push({
+        id,
+        title: note.text,
+        href: `${tab.href}/${id}`,
+        subTopics: [],
+        ...(note.tag ? { tag: note.tag } : {}),
+      });
     } else if (topics.length > 0) {
       topics[topics.length - 1].subTopics.push(note.text);
     }

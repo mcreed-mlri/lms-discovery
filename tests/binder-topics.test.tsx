@@ -41,10 +41,15 @@ test("Hearsay sits under Objections, the one built topic in Trial", () => {
   expect(findFiling("legal-skills-hearsay")?.topic.title).toBe("Objections");
 });
 
-test("only built topics get a page", () => {
-  expect(generateStaticParams()).toEqual([
-    { binder: "litigation", tab: "trial-skills", topic: "objections" },
-  ]);
+test("every curriculum topic gets a page, planned ones included", () => {
+  const params = generateStaticParams();
+  expect(params).toContainEqual({ binder: "litigation", tab: "trial-skills", topic: "objections" });
+  expect(params).toContainEqual({ binder: "litigation", tab: "trial-skills", topic: "discovery" });
+  expect(params).toContainEqual({
+    binder: "practice-foundations",
+    tab: "ethics",
+    topic: "ai-legal-aid",
+  });
 });
 
 test("the Trial tab is an index: one open topic, the rest collapsed", () => {
@@ -56,8 +61,12 @@ test("the Trial tab is an index: one open topic, the rest collapsed", () => {
   expect(objections).toHaveTextContent("Hearsay");
   expect(objections).toHaveTextContent("1 course · 1 drill · 2 references");
   expect(screen.getByText("13 more topics planned")).toBeVisible();
-  // Planned topics are names, never links to empty pages.
-  expect(screen.queryByRole("link", { name: "Discovery" })).not.toBeInTheDocument();
+  // Planned topics wait behind the collapsed line, each opening a Coming page.
+  expect(screen.getByRole("link", { name: "Discovery" })).toHaveAttribute(
+    "href",
+    "/binder/litigation/trial-skills/discovery",
+  );
+  expect(screen.getByRole("link", { name: /^Witnesses & Experts/ })).toHaveTextContent("tentative");
   expect(screen.getByRole("link", { name: "‹ Case Prep" })).toBeVisible();
   expect(screen.getByRole("link", { name: "Post-Trial ›" })).toBeVisible();
 });
@@ -71,4 +80,18 @@ test("the Objections page puts quick reference before practice and the course", 
     "Litigation › Trial › Objections",
   );
   expect(screen.getByRole("textbox", { name: "Add a note to Objections" })).toBeVisible();
+});
+
+test("a planned topic page says it is coming and points to what is open nearby", () => {
+  render(<BinderTopicView binderId="litigation" tabId="trial-skills" topicId="discovery" />);
+
+  expect(screen.getByRole("heading", { level: 1, name: "Discovery" })).toBeVisible();
+  expect(screen.getByText("Coming")).toBeVisible();
+  expect(screen.getByRole("heading", { name: "Nothing here yet" })).toBeVisible();
+  expect(screen.getByRole("link", { name: /Objections/ })).toHaveAttribute(
+    "href",
+    "/binder/litigation/trial-skills/objections",
+  );
+  expect(screen.queryByRole("heading", { name: "Keep at hand" })).not.toBeInTheDocument();
+  expect(screen.getByRole("textbox", { name: "Add a note to Discovery" })).toBeVisible();
 });

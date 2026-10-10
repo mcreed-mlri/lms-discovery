@@ -1,20 +1,19 @@
 import { notFound } from "next/navigation";
 
 import { BinderTopicView } from "@/components/binder-topic-view";
-import { binders, getBinder, getSectionTabs, getTopic } from "@/lib/binder";
-import { getTabTopics, getTopicContents, isBuilt } from "@/lib/binder-topics";
+import { binders, getBinder, getSectionTabs, getTopic, getTopics } from "@/lib/binder";
 
-// Only built topics have a page; a planned topic is a name on its tab, never
-// an empty page to click into.
+// Every curriculum topic has a page while the hub is a prototype, so the whole
+// binder can be clicked through. Planned topics show a "Coming" page.
 export const dynamicParams = false;
 
 export function generateStaticParams() {
   return binders.flatMap((binder) =>
     getSectionTabs(binder).flatMap((tab) =>
-      getTabTopics(binder, tab.id).built.map((contents) => ({
+      getTopics(binder, tab.id).map((topic) => ({
         binder: binder.id,
         tab: tab.id,
-        topic: contents.topic.id,
+        topic: topic.id,
       })),
     ),
   );
@@ -28,6 +27,6 @@ export default async function BinderTopicPage({
   const { binder: binderId, tab, topic: topicId } = await params;
   const binder = getBinder(binderId);
   const topic = binder ? getTopic(binder, tab, topicId) : undefined;
-  if (!binder || !topic || !isBuilt(getTopicContents(tab, topic))) notFound();
+  if (!binder || !topic) notFound();
   return <BinderTopicView binderId={binderId} tabId={tab} topicId={topicId} />;
 }

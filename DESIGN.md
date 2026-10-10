@@ -317,13 +317,13 @@ The wordmark "Learning Hub" (17–19px / 800) at left, then the main nav: **Home
 
 ### Binder switcher
 
-A 44px outlined button showing the binder's colour swatch (10 × 14px, a tiny divider) and its name, for example "Litigation ▾". It opens a menu of binders, each with a one-line description. Each binder has its own colour from the measured tab set: Practice Foundations teal, Litigation orange, Beyond the Courtroom green. Binders without content yet are listed as "Coming", never hidden and never clickable into an empty shell. The switcher remembers the last tab per binder.
+A 44px outlined button showing the binder's colour swatch (10 × 14px, a tiny divider) and its name, for example "Litigation ▾". It opens a menu of binders, each with a one-line description. Each binder has its own colour from the measured tab set: Practice Foundations teal, Litigation orange, Beyond the Courtroom green. Binders without content yet still open while the hub is a prototype, so the structure can be explored; Home labels them "Coming" and their tabs and topics say plainly that nothing is open yet. The switcher remembers the last tab per binder.
 
 ### Tab index and topic pages
 
-A tab page is an index, never the content itself, so it stays a screen long however much the tab grows. Header: the binder's name as a link, the divider's short label as the title ("Trial"), the curriculum's full name under it in muted ink. Then "Open in this tab": built topics as ruled rows (title, its sub-topics, and a soft line such as "1 course · 1 drill · 2 references", with an arrow). Planned topics collapse into one `<details>` line ("13 more topics planned") listing their names as plain text. Previous and next tab links close the page; notes for the whole tab sit alongside.
+A tab page is an index, never the content itself, so it stays a screen long however much the tab grows. Header: the binder's name as a link, the divider's short label as the title ("Trial"), the curriculum's full name under it in muted ink. Then "Open in this tab": built topics as ruled rows (title, its sub-topics, and a soft line such as "1 course · 1 drill · 2 references", with an arrow). Planned topics collapse into one `<details>` line ("13 more topics planned"); opened, it lists them as quiet links, with the map's badge ("tentative") where there is one. Previous and next tab links close the page; notes for the whole tab sit alongside.
 
-A topic page has a breadcrumb (Litigation › Trial › Objections) and, in this order: Keep at hand, Practice, Courses (each course with its parts), New law and rules. Its notes are filed under the topic, and the practice room files its notes there too. Only built topics have a page.
+A topic page has a breadcrumb (Litigation › Trial › Objections) and, in this order: Keep at hand, Practice, Courses (each course with its parts), New law and rules. Its notes are filed under the topic, and the practice room files its notes there too. While the hub is a prototype every topic has a page so the binder can be clicked through: a planned topic shows a "Coming" badge, "Nothing here yet", the sub-topics the map plans for it, the topics open now in the same tab, and notes.
 
 ### Kind chips
 
