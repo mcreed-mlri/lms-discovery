@@ -14,7 +14,7 @@ import {
 import { ThemeToggle } from "@/components/theme-toggle";
 import { getEffectiveDashboardRole } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
-import { binders, comingBinders, locateInBinder } from "@/lib/binder";
+import { binders, locateInBinder } from "@/lib/binder";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
 import { useOpenBinder } from "@/lib/hooks/use-open-binder";
 
@@ -138,9 +138,6 @@ export function SiteDrawer({ onClose }: { onClose: () => void }) {
             </ul>
           </details>
         ))}
-        <p className="px-3 pt-1 text-[13px] leading-snug text-[color:var(--ink-soft)]">
-          Substantive law, coming: {comingBinders.join(", ")} and more.
-        </p>
       </nav>
 
       <nav aria-label="Library" className="mt-6 flex flex-col gap-0.5">

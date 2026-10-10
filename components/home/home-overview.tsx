@@ -77,7 +77,6 @@ function YourBinders({
         })}
       </ul>
       <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[13px] text-[color:var(--ink-soft)]">
-        <span>Substantive-law binders are coming.</span>
         <Link
           href="/curriculum-map"
           className="rounded-[3px] font-semibold text-[color:var(--ink)] underline underline-offset-[3px] focus-ring"

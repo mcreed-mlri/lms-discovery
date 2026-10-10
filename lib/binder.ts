@@ -99,10 +99,6 @@ export const binders: Binder[] = binderPlan.map((plan) => {
 /** The binder the pilot lives in, opened by default before the visitor picks one. */
 export const DEFAULT_BINDER_ID = "litigation";
 
-/** Substantive-law binders named in the switcher before they have content.
- *  Shown as coming, never as an empty shell to click into. */
-export const comingBinders = ["Housing", "Family", "Immigration", "Education"] as const;
-
 export function getBinder(id: string): Binder | undefined {
   return binders.find((binder) => binder.id === id);
 }

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 
 import { ChevronDownIcon } from "@/components/icons";
-import { binders, comingBinders } from "@/lib/binder";
+import { binders } from "@/lib/binder";
 import { useOpenBinder } from "@/lib/hooks/use-open-binder";
 import { useFocusTrap } from "@/lib/hooks/use-focus-trap";
 import { useScrollLock } from "@/lib/hooks/use-scroll-lock";
@@ -21,10 +21,10 @@ export function isBinderRoute(pathname: string) {
 }
 
 /**
- * "<Binder> ▾" beside the wordmark, naming the open binder. Opens the list of binders
- * (the three Legal Skills binders; substantive-law binders are named as coming)
- * and the whole-library routes that used to be their own tabs. An overlay, so it takes the focus trap
- * and scroll lock like the account menu.
+ * "<Binder> ▾" beside the wordmark, naming the open binder. Opens the list of
+ * binders (the three Legal Skills binders) and the whole-library routes that
+ * used to be their own tabs. An overlay, so it takes the focus trap and scroll
+ * lock like the account menu.
  */
 export function BinderSwitcher() {
   const pathname = usePathname();
@@ -115,9 +115,6 @@ export function BinderSwitcher() {
               </li>
             ))}
           </ul>
-          <p className="px-2.5 py-2 text-[14px] leading-snug text-[color:var(--ink-soft)]">
-            Substantive law, coming: {comingBinders.join(", ")} and more.
-          </p>
           <div className="my-1 border-t border-[color:var(--line)]" />
           <Link
             href="/browse"
