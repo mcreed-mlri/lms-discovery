@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
 
+import { BookmarkFilledIcon } from "@/components/icons";
 import { useOpenBinder } from "@/lib/hooks/use-open-binder";
 
 // Module state survives client-side navigation (each page mounts its own
@@ -17,7 +18,8 @@ let lastOpenHref: string | null = null;
  * `rail` is the desktop column on the page's fore-edge: manila dividers, the
  * open one white and joined to the page with the binder colour on its edge.
  * Off the binder's pages (Home, My learning) nothing is open: the rail names
- * the binder and marks the divider the visitor left off on, still manila, so
+ * the binder and marks the divider the visitor left off on with a bookmark,
+ * still manila, so
  * it never looks as if Home were a page inside the binder.
  * `strip` is the phone version, a horizontal row of the same tabs at the top
  * of binder pages.
@@ -70,14 +72,14 @@ export function BinderTabs({ variant = "rail" }: { variant?: "rail" | "strip" })
             key={tab.id}
             href={tab.href}
             aria-current={open ? "page" : undefined}
-            // The two vertical labels would otherwise read as "Trialleft off here".
+            // The marker is an icon, so the left-off state is named here.
             aria-label={leftOff ? `${tab.label}, where you left off` : undefined}
             className={`binder-tab focus-ring ${open && previous ? "binder-tab-opening" : ""} ${
               tab.href === previous ? "binder-tab-closing" : ""
             } ${leftOff ? "binder-tab-left-off" : ""}`}
           >
             <span className="binder-tab-label">{tab.label}</span>
-            {leftOff ? <span className="binder-tab-note">left off here</span> : null}
+            {leftOff ? <BookmarkFilledIcon className="binder-tab-marker" /> : null}
           </Link>
         );
       })}

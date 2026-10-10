@@ -32,7 +32,7 @@ test("on a binder tab, that divider is open and nothing is marked left off", () 
   render(<BinderTabs />);
 
   expect(screen.getByRole("link", { name: "Trial" })).toHaveAttribute("aria-current", "page");
-  expect(screen.queryByText("left off here")).not.toBeInTheDocument();
+  expect(document.querySelector(".binder-tab-marker")).toBeNull();
   expect(localStorage.getItem("lace-open-tab")).toBe("trial-skills");
 });
 
@@ -42,7 +42,7 @@ test("off the binder, the divider left off on is marked and none is open", async
   render(<BinderTabs />);
 
   const trial = await screen.findByRole("link", { name: "Trial, where you left off" });
-  expect(trial).toHaveTextContent("left off here");
+  expect(trial.querySelector(".binder-tab-marker")).not.toBeNull();
   expect(trial).not.toHaveAttribute("aria-current");
   expect(trial).toHaveClass("binder-tab-left-off");
   expect(screen.getAllByRole("link").filter((link) => link.hasAttribute("aria-current"))).toEqual(
@@ -56,5 +56,5 @@ test("a remembered tab from another binder is ignored", async () => {
   render(<BinderTabs />);
 
   expect(await screen.findByRole("link", { name: "Ethics" })).toBeVisible();
-  expect(screen.queryByText("left off here")).not.toBeInTheDocument();
+  expect(document.querySelector(".binder-tab-marker")).toBeNull();
 });

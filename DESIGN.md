@@ -377,7 +377,7 @@ One treatment across the app: a 2px solid ultramarine outline at 2px offset, sho
 ### Do:
 
 - **Do** keep app navigation in the header and binder sections on the dividers. Never mix the two.
-- **Do** keep closed dividers manila. Off the binder's pages, the divider the visitor left off on stays manila too, with the binder colour on its edge and "left off here" beside its label; the binder's name sits above the dividers.
+- **Do** keep closed dividers manila. Off the binder's pages, the divider the visitor left off on stays manila too, with the binder colour on its edge and a small bookmark in that colour above its label; the binder's name sits above the dividers.
 - **Do** say where every item opens.
 - **Do** put available content first and planned content in a quiet "Coming" group.
 - **Do** assign skill hues by skill id through `lib/skill-hue.ts`, so an area keeps its colour on every surface.

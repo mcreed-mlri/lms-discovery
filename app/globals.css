@@ -874,11 +874,12 @@ input::placeholder {
 }
 
 /* Off the binder's pages: the divider the visitor left off on. It stays manila
-   (nothing is open) and carries the binder colour on its edge, plus a note. In
-   vertical-rl the note reads after the label, so it sits to the label's left. */
+   (nothing is open) and carries the binder colour on its edge, plus a small
+   bookmark above its label, like a ribbon marking the place. */
 .binder-tab-left-off {
-  flex-direction: row-reverse;
-  gap: 4px;
+  /* The marker follows the label in the markup; show it above, like a ribbon. */
+  flex-direction: column-reverse;
+  gap: 8px;
   border-right: 4px solid var(--binder);
 }
 
@@ -886,12 +887,11 @@ input::placeholder {
   font-weight: 800;
 }
 
-.binder-tab-note {
-  writing-mode: vertical-rl;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--ink-muted);
-  white-space: nowrap;
+.binder-tab-marker {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  color: var(--binder);
 }
 
 /* The binder's name above its dividers when none is open, so Home reads as
