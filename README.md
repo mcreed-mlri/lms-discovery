@@ -7,7 +7,7 @@ A Next.js App Router MVP for discovering MLRI learning content and navigating in
 Brightspace remains the system of record for courses, users, enrollment, and progress. This app handles discovery UI, search, browsing, learning paths, learner progress surfaces, and handoff links. Course operations, sync checks, and Brightspace setup live in Brightspace Manager.
 
 Current delivery status, pilot timing, and sandbox constraints are summarized in
-[`PILOT_STATUS.md`](PILOT_STATUS.md).
+[`docs/pilot-status.md`](docs/pilot-status.md).
 
 ## Run locally
 
