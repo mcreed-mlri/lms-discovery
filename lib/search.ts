@@ -13,6 +13,8 @@ import {
   type SearchAudience,
   type SearchMetadata,
 } from "@/lib/search-metadata";
+import { normalize, STOP_WORDS, tokenize } from "@/lib/search-text";
+import { analyzeQuery, synonymGroups } from "@/lib/search-vocabulary";
 
 export type DurationFacet = "Short" | "Medium" | "Long";
 
@@ -66,50 +68,9 @@ export type SearchFacetOptions = {
   durations: DurationFacet[];
 };
 
-const phraseSynonyms: Record<string, string[]> = {
-  "client intake": ["client interview", "intake", "fact gathering"],
-  "client interview": ["client intake", "intake", "fact gathering"],
-  "court appearance": ["hearing", "first appearance", "courtroom procedure"],
-  "domestic violence": ["dv", "safety screening", "crisis recognition"],
-  "legal services": ["legal aid", "public interest"],
-};
-
-const tokenSynonyms: Record<string, string[]> = {
-  dv: ["domestic", "violence", "safety", "screening"],
-  d2l: ["brightspace"],
-  // A common misspelling, two letters off, so the one-typo rule misses it.
-  heresay: ["hearsay"],
-  hearing: ["court", "appearance", "courtroom"],
-  intake: ["interview", "client", "screening"],
-  lawyer: ["attorney"],
-  lawyers: ["attorney", "attorneys"],
-  motion: ["motions", "court", "procedure"],
-  motions: ["motion", "court", "procedure"],
-  privilege: ["confidentiality"],
-  trauma: ["trauma-informed"],
-};
-
-/* Words that carry no topic on their own. A question like "how do I respond
-   to a hearsay objection" is matched on "respond hearsay objection". If a
-   query is nothing but these words, they are kept so it can still match. */
-const STOP_WORDS = new Set(
-  (
-    "a about after an and any are as at be been before but by can could did do does doing " +
-    "during for from get gets getting got had has have how i if in into is it its just me " +
-    "my need needs of on or our should so than that the their them then there these they " +
-    "this to too up us was we were what when where which while who why will with would " +
-    "you your many much"
-  ).split(" "),
-);
-
-/** Query words that carry meaning: filler words dropped, unless nothing is left. */
-function meaningfulTokens(tokens: string[]) {
-  const kept = tokens.filter((token) => !STOP_WORDS.has(token));
-  return kept.length > 0 ? kept : tokens;
-}
-
 /**
- * How many query words a result must match. One or two words: all of them.
+ * How many query concepts a result must match (a concept is a word, a synonym
+ * group or a citation; see lib/search-vocabulary.ts). One or two: all of them.
  * Longer queries, which are usually questions or situations: at least half,
  * and the score then scales with the share matched, so fuller matches lead.
  */
@@ -121,18 +82,9 @@ function coverageFactor(matched: number, total: number) {
   return (matched / total) ** 2;
 }
 
-function normalize(value: string) {
-  return value
-    .toLowerCase()
-    .replace(/&/g, " and ")
-    .replace(/[^a-z0-9]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
 function tokenVariants(token: string) {
   const normalizedToken = normalize(token);
-  const variants = new Set([normalizedToken, ...(tokenSynonyms[normalizedToken] ?? [])]);
+  const variants = new Set([normalizedToken]);
 
   if (normalizedToken.endsWith("ies") && normalizedToken.length > 4)
     variants.add(`${normalizedToken.slice(0, -3)}y`);
@@ -152,10 +104,6 @@ function tokenVariants(token: string) {
     variants.add(normalizedToken.slice(0, -1));
 
   return [...variants].filter(Boolean);
-}
-
-function tokenize(value: string) {
-  return normalize(value).split(" ").filter(Boolean);
 }
 
 function editDistanceWithinOne(a: string, b: string) {
@@ -264,29 +212,25 @@ function getDurationFacet(item: LearningItem): DurationFacet {
 }
 
 function expandQuery(rawQuery: string) {
-  const query = normalize(rawQuery);
-  const tokens = meaningfulTokens(tokenize(rawQuery));
-  const expandedTokens = new Set(tokens);
-  const phraseBoosts = new Set<string>();
-
-  for (const [phrase, synonyms] of Object.entries(phraseSynonyms)) {
-    if (query.includes(phrase)) {
-      phraseBoosts.add(phrase);
-      synonyms.forEach((synonym) => {
-        phraseBoosts.add(synonym);
-        tokenize(synonym).forEach((token) => expandedTokens.add(token));
-      });
+  const { query, concepts, phrases } = analyzeQuery(rawQuery);
+  const expandedTokens = new Set<string>();
+  for (const alternatives of concepts) {
+    for (const alternative of alternatives) {
+      for (const token of tokenize(alternative)) {
+        if (STOP_WORDS.has(token)) continue;
+        tokenVariants(token).forEach((variant) => expandedTokens.add(variant));
+      }
     }
   }
+  return { query, concepts, expandedTokens: [...expandedTokens], phraseBoosts: phrases };
+}
 
-  tokens.forEach((token) => tokenVariants(token).forEach((variant) => expandedTokens.add(variant)));
-
-  return {
-    query,
-    tokens,
-    expandedTokens: [...expandedTokens],
-    phraseBoosts: [...phraseBoosts],
-  };
+/** A concept matches a field when any alternative's words all appear in it. */
+function conceptMatches(field: string, alternatives: string[]) {
+  return alternatives.some((alternative) => {
+    const words = tokenize(alternative).filter((word) => !STOP_WORDS.has(word));
+    return words.length > 0 && words.every((word) => fieldIncludesToken(field, word));
+  });
 }
 
 /**
@@ -391,8 +335,8 @@ function matchesFacets(document: SearchDocument, filters?: SearchFacetFilters) {
 }
 
 function scoreDocument(document: SearchDocument, rawQuery: string) {
-  const { query, tokens, expandedTokens, phraseBoosts } = expandQuery(rawQuery);
-  if (!query || tokens.length === 0)
+  const { query, concepts, expandedTokens, phraseBoosts } = expandQuery(rawQuery);
+  if (!query || concepts.length === 0)
     return { score: document.metadata.editorialBoost ?? 0, matchedFields: [] };
 
   const searchableFields = [
@@ -403,11 +347,11 @@ function scoreDocument(document: SearchDocument, rawQuery: string) {
     document.summaryText,
     document.metadataText,
   ];
-  const matchedTokens = tokens.filter((token) =>
-    searchableFields.some((field) => fieldIncludesToken(field, token)),
+  const matchedConcepts = concepts.filter((alternatives) =>
+    searchableFields.some((field) => conceptMatches(field, alternatives)),
   ).length;
 
-  if (!enoughMatched(matchedTokens, tokens.length)) return { score: 0, matchedFields: [] };
+  if (!enoughMatched(matchedConcepts, concepts.length)) return { score: 0, matchedFields: [] };
 
   let score = document.metadata.editorialBoost ?? 0;
   const matchedFields = new Set<string>();
@@ -443,7 +387,7 @@ function scoreDocument(document: SearchDocument, rawQuery: string) {
   if (document.item.type === "PATH") score += 4;
 
   return {
-    score: Math.round(score * coverageFactor(matchedTokens, tokens.length)),
+    score: Math.round(score * coverageFactor(matchedConcepts, concepts.length)),
     matchedFields: [...matchedFields],
   };
 }
@@ -456,13 +400,13 @@ function scoreDocument(document: SearchDocument, rawQuery: string) {
  * as binder topics, drills and reference pages.
  */
 export function scoreText(fields: { text: string; weight: number }[], rawQuery: string) {
-  const { query, tokens, expandedTokens, phraseBoosts } = expandQuery(rawQuery);
-  if (!query || tokens.length === 0 || fields.length === 0) return 0;
+  const { query, concepts, expandedTokens, phraseBoosts } = expandQuery(rawQuery);
+  if (!query || concepts.length === 0 || fields.length === 0) return 0;
   const normalized = fields.map((field) => ({ ...field, text: normalize(field.text) }));
-  const matched = tokens.filter((token) =>
-    normalized.some((field) => fieldIncludesToken(field.text, token)),
+  const matched = concepts.filter((alternatives) =>
+    normalized.some((field) => conceptMatches(field.text, alternatives)),
   ).length;
-  if (!enoughMatched(matched, tokens.length)) return 0;
+  if (!enoughMatched(matched, concepts.length)) return 0;
   const title = normalized[0].text;
   let score = 0;
   if (title === query) score += 1400;
@@ -473,7 +417,7 @@ export function scoreText(fields: { text: string; weight: number }[], rawQuery: 
   for (const field of normalized) {
     score += scoreField("field", field.text, query, expandedTokens, field.weight).score;
   }
-  return Math.round(score * coverageFactor(matched, tokens.length));
+  return Math.round(score * coverageFactor(matched, concepts.length));
 }
 
 export function buildSearchIndex(items: LearningItem[]) {
@@ -507,12 +451,9 @@ export function getNoResultSuggestions(query: string) {
   const related = new Set<string>();
   queryTokens.forEach((token) => {
     tokenVariants(token).forEach((variant) => {
-      Object.entries(phraseSynonyms).forEach(([phrase, synonyms]) => {
-        if (
-          phrase.includes(variant) ||
-          synonyms.some((synonym) => normalize(synonym).includes(variant))
-        )
-          related.add(phrase);
+      synonymGroups.forEach((group) => {
+        // Suggest a group by its first, fullest term.
+        if (group.some((term) => term.length > 2 && term.includes(variant))) related.add(group[0]);
       });
     });
   });

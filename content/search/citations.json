@@ -1,0 +1,40 @@
+{
+  "about": "Citations advocates type, mapped to what they are about. Search recognises a citation in a query (\"c. 239\", \"ch. 239\", \"chapter 239\", \"G.L. 239\", \"MGL 239\"; \"Mass. G. Evid. 801\", \"Guide to Evidence 801\", \"FRE 801\") and finds content about its topics. A statute is matched by chapter; evidence by section. Owned by the content team. Starter list; needs subject-matter review before anyone relies on it.",
+  "citations": [
+    {
+      "cite": "G.L. c. 239",
+      "about": "Summary process (eviction)",
+      "means": ["summary process", "eviction", "notice to quit"]
+    },
+    {
+      "cite": "G.L. c. 186",
+      "about": "Landlord and tenant",
+      "means": ["landlord", "tenant", "notice to quit"]
+    },
+    {
+      "cite": "Mass. G. Evid. § 801",
+      "about": "Hearsay definitions",
+      "means": ["hearsay"]
+    },
+    {
+      "cite": "Mass. G. Evid. § 802",
+      "about": "The hearsay rule",
+      "means": ["hearsay"]
+    },
+    {
+      "cite": "Mass. G. Evid. § 803",
+      "about": "Hearsay exceptions, availability immaterial",
+      "means": ["hearsay exceptions", "hearsay"]
+    },
+    {
+      "cite": "Mass. G. Evid. § 804",
+      "about": "Hearsay exceptions, declarant unavailable",
+      "means": ["hearsay exceptions", "hearsay"]
+    },
+    {
+      "cite": "Mass. G. Evid. § 805",
+      "about": "Hearsay within hearsay",
+      "means": ["layered hearsay", "hearsay"]
+    }
+  ]
+}

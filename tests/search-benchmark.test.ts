@@ -14,7 +14,7 @@ import { PASS_RANK, passes, runBenchmark, summarize } from "./search-benchmark/r
 const rows = runBenchmark();
 
 // Raise this when the benchmark improves; never lower it (like the coverage ratchet).
-const TOP3_FLOOR = 23;
+const TOP3_FLOOR = 30;
 
 describe("search benchmark", () => {
   test("every expected answer names something that exists", () => {

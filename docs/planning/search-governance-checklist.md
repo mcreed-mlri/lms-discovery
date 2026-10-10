@@ -50,3 +50,12 @@ Every searchable course, module, and learning path needs:
 - Replace the starter questions with real ones from attorneys and supervisors; a subject-matter expert picks the right answers.
 - Add each zero-result search worth answering from the weekly review.
 - Raise `TOP3_FLOOR` in `tests/search-benchmark.test.ts` as results improve; never lower it.
+
+## Vocabulary and citations
+
+Two files in `content/search/` let the content team improve search without code:
+
+- `vocabulary.json`: groups of terms that mean the same thing (`"notice to quit", "ntq"`; `"summary process", "eviction"`). A query containing any term in a group matches results containing any other. Add a group for every abbreviation, nickname or common misspelling advocates use. A term may belong to only one group.
+- `citations.json`: citations mapped to the topics they concern. Statutes are matched by chapter (`G.L. c. 239`, `ch. 239`, `chapter 239`, `MGL 239`); evidence by section (`Mass. G. Evid. § 801`, `Guide to Evidence 801`, `FRE 801`). Add a citation with what it is `about` and the topic words it `means`.
+
+Both are starter lists that need subject-matter review. `npm test` checks they are well formed, and the benchmark shows the effect of each change: add a question for every term or citation you add.

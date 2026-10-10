@@ -74,7 +74,12 @@ function buildEntries(): Entry[] {
             title: page.title,
             context: place,
             href: page.href,
-            fields: [{ text: page.title, weight: 120 }, { text: page.meta, weight: 22 }, placeText],
+            fields: [
+              { text: page.title, weight: 120 },
+              { text: page.searchText ?? "", weight: 40 },
+              { text: page.meta, weight: 22 },
+              placeText,
+            ],
             courseId,
           });
         }

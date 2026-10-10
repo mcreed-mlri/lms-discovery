@@ -1,0 +1,31 @@
+{
+  "about": "Words that mean the same thing in a search. If a query contains any term in a group, results containing any other term in that group count as matching it. Owned by the content team: add a group for every abbreviation, nickname or misspelling advocates use. Starter list; needs subject-matter review.",
+  "groups": [
+    { "terms": ["notice to quit", "ntq"], "note": "The everyday abbreviation." },
+    {
+      "terms": ["summary process", "eviction"],
+      "note": "Massachusetts calls an eviction case summary process."
+    },
+    { "terms": ["hearsay", "heresay"], "note": "The common misspelling." },
+    {
+      "terms": ["client intake", "client interview", "intake", "fact gathering"],
+      "note": "First conversation with a client."
+    },
+    {
+      "terms": ["court appearance", "hearing", "first appearance", "courtroom procedure"]
+    },
+    {
+      "terms": ["domestic violence", "dv", "safety screening", "crisis recognition"]
+    },
+    { "terms": ["legal services", "legal aid", "public interest"] },
+    { "terms": ["lawyer", "attorney"] },
+    { "terms": ["privilege", "confidentiality"] },
+    { "terms": ["trauma informed", "trauma"] },
+    {
+      "terms": ["professional", "prof"],
+      "note": "Titles abbreviate it, as in MA Rules of Prof. Conduct."
+    },
+    { "terms": ["massachusetts", "ma"] },
+    { "terms": ["brightspace", "d2l"], "note": "Staff and faculty only; learners never see it." }
+  ]
+}

@@ -108,7 +108,7 @@ const builtCourses: Course[] = [
     id: "curriculum-map",
     title: "Curriculum Map",
     description:
-      "How the LACE curriculum is organized across Legal Skills and Substantive Law. Browse where your content fits; built topics link straight to their course.",
+      "How all MLRI training fits together across Legal Skills and Substantive Law. See where a course fits and what is planned; built topics link straight to their course.",
     level: "Foundations",
     practiceArea: "Faculty Support",
     duration: "Browse",

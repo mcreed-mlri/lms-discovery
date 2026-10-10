@@ -219,6 +219,8 @@ export type ReferencePage = {
   /** Kind and source, shown under the title. */
   meta: string;
   href: string;
+  /** The page's own words, copied from the course, so search can find what it says. */
+  searchText?: string;
 };
 
 /** Short reference an advocate keeps open at counsel table, keyed by
@@ -230,11 +232,23 @@ export const referencePages: Record<string, ReferencePage[]> = {
       title: "Hearsay: key concepts",
       meta: "Opens a panel in Legal Skills: Hearsay",
       href: "/legal-skills-hearsay/defending-hearsay-objection-writing.html#key-concepts",
+      searchText:
+        "What hearsay is: an out-of-court statement offered to prove the truth of what the " +
+        "statement asserts. Hearsay vs. non-hearsay: the same words may be hearsay for one " +
+        "purpose and non-hearsay for another. Why the distinction matters: if the statement " +
+        "is not offered for its truth, the objection may fail at the threshold. Exclusions " +
+        "and exceptions are rule-specific routes to admission.",
     },
     {
       title: "Procedure: answering a hearsay objection in writing",
       meta: "Five steps and a drafting frame · opens a panel in Legal Skills: Hearsay",
       href: "/legal-skills-hearsay/defending-hearsay-objection-writing.html#procedure",
+      searchText:
+        "Five-step written response: identify the challenged statement; state the purpose " +
+        "for which the evidence is offered; identify the applicable exclusion or exception; " +
+        "connect the facts to the rule; request admission clearly. Drafting structure: the " +
+        "challenged statement is offered to show… It is not hearsay because… Alternatively, " +
+        "it is admissible under… because…",
     },
   ],
 };

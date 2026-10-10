@@ -59,7 +59,6 @@ export const benchmarkQueries: BenchmarkQuery[] = [
     query: "hearsay exceptions",
     answers: ["Reference: Hearsay: key concepts"],
     why: "Quick reference, not the whole course.",
-    knownGap: "The reference page is indexed by its title only; its contents are not searchable.",
   },
   {
     query: "practice answering an objection",
@@ -80,7 +79,14 @@ export const benchmarkQueries: BenchmarkQuery[] = [
     query: "Mass. G. Evid. 801",
     answers: ["Reference: Hearsay: key concepts", "Topic: Objections"],
     why: "Lawyers search by rule number.",
-    knownGap: "Rule and citation numbers are not recognised yet.",
+  },
+  {
+    query: "Mass. G. Evid. 805",
+    answers: [
+      "Practice: Answer a hearsay objection in writing",
+      "Reference: Hearsay: key concepts",
+    ],
+    why: "Hearsay within hearsay, by section number.",
   },
   {
     query: "objections",
@@ -127,13 +133,16 @@ export const benchmarkQueries: BenchmarkQuery[] = [
     query: "summary process answer",
     answers: ["Module: Drafting the Answer"],
     why: "Massachusetts name for an eviction case.",
-    knownGap: "No synonym links summary process to eviction.",
   },
   {
     query: "G.L. c. 239",
     answers: ["Course: Eviction Defense: The First 48 Hours", "Module: The Four Notice Types"],
     why: "The summary process statute, by citation.",
-    knownGap: "Citations are not recognised yet.",
+  },
+  {
+    query: "chapter 186 notice",
+    answers: ["Module: The Four Notice Types", "Module: When the Clock Starts"],
+    why: "Landlord-tenant statute plus the thing being asked about.",
   },
   {
     query: "first day in housing court",
@@ -149,7 +158,6 @@ export const benchmarkQueries: BenchmarkQuery[] = [
     query: "NTQ",
     answers: ["Module: The Four Notice Types", "Module: When the Clock Starts"],
     why: "The everyday abbreviation.",
-    knownGap: "No legal-aid abbreviation list yet.",
   },
   {
     query: "no fault eviction",
@@ -168,7 +176,7 @@ export const benchmarkQueries: BenchmarkQuery[] = [
     answers: ["Course: Curriculum Map"],
     why: "Orientation to the curriculum.",
     knownGap:
-      "No words in common with the Curriculum Map; needs a synonym or a better description.",
+      "The Curriculum Map is filed as Faculty Support, which attorneys' search hides, though Home links every learner to it.",
   },
   {
     query: "Legal Skills for New Attorneys",
