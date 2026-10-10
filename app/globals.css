@@ -732,24 +732,6 @@ input::placeholder {
     border-right: 1.5px solid var(--sheet-edge);
     box-shadow: 6px 0 10px -4px var(--sheet-shadow);
   }
-
-  /* Three punched holes near the spine: board colour showing through. */
-  .binder-sheet::before {
-    content: "";
-    position: absolute;
-    left: 14px;
-    top: 0;
-    bottom: 0;
-    width: 16px;
-    pointer-events: none;
-    background:
-      radial-gradient(circle at 8px 8px, var(--board) 7px, transparent 8px) 0 18% / 16px 16px
-        no-repeat,
-      radial-gradient(circle at 8px 8px, var(--board) 7px, transparent 8px) 0 50% / 16px 16px
-        no-repeat,
-      radial-gradient(circle at 8px 8px, var(--board) 7px, transparent 8px) 0 82% / 16px 16px
-        no-repeat;
-  }
 }
 
 /* Each binder's colour, used only as a non-text mark: the switcher swatch, the
@@ -815,7 +797,8 @@ input::placeholder {
   transition: width 180ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.binder-tab:nth-child(even) {
+/* Of type, so the binder's name above the dividers doesn't shift the pattern. */
+.binder-tab:nth-of-type(even) {
   background-color: var(--divider-manila-alt);
 }
 
@@ -895,13 +878,18 @@ input::placeholder {
 }
 
 /* The binder's name above its dividers when none is open, so Home reads as
-   "the binder left on the desk", not as a page inside it. */
+   "the binder left on the desk", not as a page inside it. It sits in the space
+   above the first divider, centered on the dividers, so the dividers start at
+   the same height on every page. */
 .binder-tabs-name {
+  position: absolute;
+  top: 1rem;
+  left: 0;
+  width: 44px;
   display: flex;
   align-items: center;
   gap: 6px;
-  margin: 0 0 6px;
-  padding-left: 12px;
+  margin: 0;
   writing-mode: vertical-rl;
   font-size: 12px;
   font-weight: 800;

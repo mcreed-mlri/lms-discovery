@@ -21,7 +21,7 @@ export function isBinderRoute(pathname: string) {
 }
 
 /**
- * "<Binder> ▾" in the header, naming the open binder. Opens the list of binders
+ * "<Binder> ▾" beside the wordmark, naming the open binder. Opens the list of binders
  * (the three Legal Skills binders; substantive-law binders are named as coming)
  * and the whole-library routes that used to be their own tabs. An overlay, so it takes the focus trap
  * and scroll lock like the account menu.
@@ -69,10 +69,8 @@ export function BinderSwitcher() {
         aria-expanded={open}
         aria-haspopup="dialog"
         onClick={() => setOpen((value) => !value)}
-        className={`flex h-11 items-center gap-2 rounded-[10px] border-[1.5px] bg-[color:var(--surface)] px-3 text-[15px] text-[color:var(--ink)] transition focus-ring ${
-          current
-            ? "border-[color:var(--ink)] font-bold"
-            : "border-[color:var(--line-strong)] font-semibold hover:border-[color:var(--line-control)]"
+        className={`flex h-11 items-center gap-2 rounded-[8px] px-2.5 text-[15px] text-[color:var(--ink)] transition hover:bg-[color:var(--hover-tint)] focus-ring ${
+          current ? "font-bold" : "font-semibold"
         }`}
       >
         <span aria-hidden="true" className="binder-swatch" />

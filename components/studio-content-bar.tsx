@@ -10,9 +10,12 @@ import { getEffectiveDashboardRole } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
 
-/* Slim sticky header at the top of the page sheet. It carries the app's own
-   navigation: Home, the binder switcher, My learning and Updates, plus search,
-   the theme toggle and the account bubble. The divider tabs on the page's
+/* Slim sticky header at the top of the page sheet. Beside the wordmark, as
+   "Learning Hub / <Binder>", is the binder switcher: it says which binder is
+   open rather than being a place to go, so it sits apart from the app's own
+   navigation (Home, My learning, Updates). Then search, the theme toggle and
+   the account bubble. Home has its own search box under the greeting, so the
+   header's search button stays off Home; Ctrl K still opens search there. The divider tabs on the page's
    fore-edge are the open binder's sections, not app navigation.
    Height is `--studio-chrome` in globals.css.
 
@@ -47,6 +50,12 @@ export function StudioContentBar({
       >
         Learning Hub
       </Link>
+      <div className="hidden min-w-0 shrink-0 items-center gap-1 lg:-ml-3 lg:flex">
+        <span aria-hidden="true" className="text-[20px] font-light text-[color:var(--line-strong)]">
+          /
+        </span>
+        <BinderSwitcher />
+      </div>
 
       <nav aria-label="Main" className="hidden min-w-0 lg:block">
         <ul className="flex items-center gap-1">
@@ -54,9 +63,6 @@ export function StudioContentBar({
             <HeaderLink href="/" current={pathname === "/"}>
               Home
             </HeaderLink>
-          </li>
-          <li className="px-1">
-            <BinderSwitcher />
           </li>
           {isAdmin ? (
             <li>
@@ -83,17 +89,19 @@ export function StudioContentBar({
 
       <div className="flex-1" />
 
-      <button
-        type="button"
-        onClick={onSearch}
-        className="hidden h-11 shrink-0 items-center gap-2.5 rounded-[10px] border border-[color:var(--line-strong)] bg-[color:var(--surface)] px-3 text-[14px] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-control)] hover:text-[color:var(--ink)] focus-ring lg:flex"
-      >
-        <SearchIcon className="h-4 w-4" />
-        Search
-        <kbd className="rounded-[5px] bg-[color:var(--surface-sunken)] px-1.5 py-0.5 font-sans text-[12px] text-[color:var(--ink-soft)]">
-          Ctrl K
-        </kbd>
-      </button>
+      {pathname === "/" ? null : (
+        <button
+          type="button"
+          onClick={onSearch}
+          className="hidden h-11 shrink-0 items-center gap-2.5 rounded-[10px] border border-[color:var(--line-strong)] bg-[color:var(--surface)] px-3 text-[14px] text-[color:var(--ink-muted)] transition hover:border-[color:var(--line-control)] hover:text-[color:var(--ink)] focus-ring lg:flex"
+        >
+          <SearchIcon className="h-4 w-4" />
+          Search
+          <kbd className="hidden rounded-[5px] bg-[color:var(--surface-sunken)] px-1.5 py-0.5 font-sans text-[12px] text-[color:var(--ink-soft)] xl:inline">
+            Ctrl K
+          </kbd>
+        </button>
+      )}
 
       <div className="hidden shrink-0 lg:block">
         <ThemeToggle collapsed />
@@ -120,7 +128,7 @@ function HeaderLink({
     <Link
       href={href}
       aria-current={current ? "page" : undefined}
-      className={`relative flex h-11 items-center gap-1.5 rounded-[6px] px-3 text-[15px] transition focus-ring after:absolute after:inset-x-3 after:-bottom-3 after:h-[3px] ${
+      className={`relative flex h-11 items-center gap-1.5 whitespace-nowrap rounded-[6px] px-3 text-[15px] transition focus-ring after:absolute after:inset-x-3 after:-bottom-3 after:h-[3px] ${
         current
           ? "font-bold text-[color:var(--ink)] after:bg-[color:var(--ink)]"
           : "font-medium text-[color:var(--ink-muted)] hover:text-[color:var(--ink)]"
