@@ -797,8 +797,7 @@ input::placeholder {
   transition: width 180ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Of type, so the binder's name above the dividers doesn't shift the pattern. */
-.binder-tab:nth-of-type(even) {
+.binder-tab:nth-child(even) {
   background-color: var(--divider-manila-alt);
 }
 
@@ -875,32 +874,6 @@ input::placeholder {
   height: 14px;
   flex: none;
   color: var(--binder);
-}
-
-/* The binder's name above its dividers when none is open, so Home reads as
-   "the binder left on the desk", not as a page inside it. It sits in the space
-   above the first divider, centered on the dividers, so the dividers start at
-   the same height on every page. */
-.binder-tabs-name {
-  position: absolute;
-  top: 1rem;
-  left: 0;
-  width: 44px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 0;
-  writing-mode: vertical-rl;
-  font-size: 12px;
-  font-weight: 800;
-  color: var(--ink);
-  white-space: nowrap;
-}
-
-.binder-tabs-name .binder-swatch {
-  width: 14px;
-  height: 10px;
-  border-radius: 0 2px 2px 0;
 }
 
 .binder-tab-label {

@@ -17,10 +17,10 @@ let lastOpenHref: string | null = null;
  *
  * `rail` is the desktop column on the page's fore-edge: manila dividers, the
  * open one white and joined to the page with the binder colour on its edge.
- * Off the binder's pages (Home, My learning) nothing is open: the rail names
- * the binder and marks the divider the visitor left off on with a bookmark,
- * still manila, so
- * it never looks as if Home were a page inside the binder.
+ * Off the binder's pages (Home, My learning) nothing is open: the rail marks
+ * the divider the visitor left off on with a bookmark, still manila, so it
+ * never looks as if Home were a page inside the binder. The header's switcher
+ * names the binder.
  * `strip` is the phone version, a horizontal row of the same tabs at the top
  * of binder pages.
  */
@@ -58,12 +58,6 @@ export function BinderTabs({ variant = "rail" }: { variant?: "rail" | "strip" })
 
   return (
     <nav aria-label={label} className="binder-tabs">
-      {openHref === null ? (
-        <p aria-hidden="true" className="binder-tabs-name">
-          <span className="binder-swatch" />
-          {binder.name}
-        </p>
-      ) : null}
       {binder.tabs.map((tab) => {
         const open = tab.href === openHref;
         const leftOff = openHref === null && tab.id === leftOffTabId;
