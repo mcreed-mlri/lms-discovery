@@ -21,7 +21,7 @@ The first skill path is live in the hub at `/binder/litigation/trial-skills/obje
 
 Content lives in `lib/skill-paths.ts` (all prototype, labelled as not reviewed); progress in `lib/skill-progress.ts`. Adding level 2 means writing its `watch`, `help` and Solo drill there.
 
-## The course reads, the hub practises
+## The course reads, the hub practices
 
 The Hearsay course (`public/legal-skills-hearsay/`) is reading only: each part is
 supportive and procedural information (what hearsay is, the five steps, a drafting
@@ -62,7 +62,7 @@ Collect 20 to 40 incidents per skill area, from several people, both good and ba
 
 | What you find in the incidents                                                             | What it becomes                                        |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------------ |
-| Recurring situations                                                                       | **Learning tasks**: the whole tasks learners practise  |
+| Recurring situations                                                                       | **Learning tasks**: the whole tasks learners practice  |
 | What made some situations harder (layered statements, a hostile judge, a client in crisis) | **Task classes**: the simple-to-complex sequence       |
 | Effective and ineffective behaviours                                                       | **Rubric criteria** for feedback, human or AI          |
 | Mistakes many people make                                                                  | **Part-task drills** and **"common mistake" feedback** |

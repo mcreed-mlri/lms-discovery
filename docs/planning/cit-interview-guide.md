@@ -11,7 +11,7 @@ A guide for collecting **critical incidents**: specific, real moments where a ne
 - **Experienced attorneys and supervisors:** they have seen many new advocates handle the same situations. Most of your incidents come from them.
 - **Attorneys in their first two years:** about their own recent moments. They remember what was confusing and what they wish they had known.
 - **Judges, clerks or court staff** if anyone has access: what they see new advocates do in court.
-- **Non-lawyer advocates and paralegals** for skills they practise, so scenarios fit their role and UPL limits.
+- **Non-lawyer advocates and paralegals** for skills they practice, so scenarios fit their role and UPL limits.
 
 **How many**
 
@@ -38,7 +38,7 @@ A guide for collecting **critical incidents**: specific, real moments where a ne
 
 ### Warm-up (3 minutes)
 
-1. How long have you been practising, and in what areas?
+1. How long have you been practicing, and in what areas?
 2. How often do you work with or supervise attorneys in their first two years?
 
 ### Incident questions (repeat for each incident)
@@ -89,7 +89,7 @@ Example for eviction defense, first 48 hours:
 
 ### Closing (3 minutes)
 
-1. Is there a situation you wish new attorneys could practise before facing it for real?
+1. Is there a situation you wish new attorneys could practice before facing it for real?
 2. Is there anyone else we should talk to?
 3. Can we follow up if we have a question about an incident?
 

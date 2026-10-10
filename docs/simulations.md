@@ -117,7 +117,7 @@ WCAG 2.2 AA is binding (PRODUCT.md), and simulations are where accessibility is 
 
 - **Every voice simulation needs a text equivalent** with the same learning goals, for learners who are deaf or hard of hearing, have speech differences, or are in a shared office.
 - **Live captions and a transcript** for anything spoken.
-- **No timing that cannot be paused or extended**, unless timing is the skill being practised, and then with an alternative.
+- **No timing that cannot be paused or extended**, unless timing is the skill being practiced, and then with an alternative.
 - **Keyboard and screen-reader support** throughout, as in the current practice room.
 - **Avatars** must not be the only way information is conveyed.
 

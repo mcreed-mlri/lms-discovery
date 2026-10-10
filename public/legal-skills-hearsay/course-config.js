@@ -17,7 +17,7 @@ window.COURSE_CONFIG = {
   contentNote: "Prototype, not reviewed",
   courseSubtitle: "Recognizing and responding to hearsay objections, in writing and out loud.",
   courseBlurb:
-    "Five short parts on hearsay objections, in writing and out loud. Read each part here, then practise it in the Learning Hub. Part 2 is ready now; the others are planned.",
+    "Five short parts on hearsay objections, in writing and out loud. Read each part here, then practice it in the Learning Hub. Part 2 is ready now; the others are planned.",
 
   hubLabel: "Hub",
   courseArea: "Legal Skills",

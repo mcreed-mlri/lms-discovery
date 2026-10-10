@@ -51,7 +51,7 @@ paralegals use the hub tells us where they actually get stuck.
 - Five one-on-one sessions of about 45 minutes, on the participants' own phones,
   using the redesign preview with the corrected structure from step 1.
 - The six tasks from the team comparison guide: find your place, browse to
-  hearsay, search for it, practise one skill, read a course part and cross into
+  hearsay, search for it, practice one skill, read a course part and cross into
   practice, and get back.
 - One task the preview cannot show on its own: opening a course from the
   Brightspace app on a phone and moving into the hub's practice. This needs a

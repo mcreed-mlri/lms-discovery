@@ -2,7 +2,7 @@
   "id": "/",
   "name": "MLRI Learning Hub",
   "short_name": "Learning Hub",
-  "description": "Your binder for MLRI legal aid training: find references, practise skills and open courses.",
+  "description": "Your binder for MLRI legal aid training: find references, practice skills and open courses.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
