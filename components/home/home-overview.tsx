@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { ArrowIcon } from "@/components/icons";
-import { binders, filedItems, getSectionTabs } from "@/lib/binder";
+import { binders, filedItems, getSectionTabs, getTopic } from "@/lib/binder";
 import { getStatusTheme, resolveStatusKey } from "@/lib/course-theme";
 import { contentUpdates, type LearningItem } from "@/lib/data";
 import { drillHref, practiceDrills } from "@/lib/practice";
@@ -120,6 +120,7 @@ export function HomeOverview({ allItems }: { allItems: LearningItem[] }) {
               {practiceDrills.map((drill) => {
                 const binder = binders.find((b) => b.id === drill.binderId);
                 const tab = binder?.tabs.find((t) => t.id === drill.tabId);
+                const topic = binder && tab ? getTopic(binder, tab.id, drill.topicId) : undefined;
                 return (
                   <li key={drill.id}>
                     <Link
@@ -134,7 +135,7 @@ export function HomeOverview({ allItems }: { allItems: LearningItem[] }) {
                       </span>
                       <span className="mt-2 flex items-center gap-1 text-[12px] font-bold text-[color:var(--brand-ink)]">
                         {[
-                          binder && tab ? `${binder.name} › ${tab.label}` : null,
+                          tab && topic ? `${tab.label} › ${topic.title}` : null,
                           "not graded or recorded",
                         ]
                           .filter(Boolean)

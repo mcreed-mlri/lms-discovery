@@ -5,7 +5,7 @@ import { useEffect, useId, useRef, useState, type FormEvent, type RefObject } fr
 
 import { CheckIcon } from "@/components/icons";
 import { NotesPanel } from "@/components/notes-panel";
-import { getBinder, getSectionTab } from "@/lib/binder";
+import { getBinder, getSectionTab, getTopic } from "@/lib/binder";
 import type { PracticeDrill, PracticeRound } from "@/lib/practice";
 
 type Phase = "write" | "review" | "coached";
@@ -133,6 +133,7 @@ function Coaching({
 export function PracticeRoom({ drill }: { drill: PracticeDrill }) {
   const binder = getBinder(drill.binderId);
   const tab = binder ? getSectionTab(binder, drill.tabId) : undefined;
+  const topic = binder && tab ? getTopic(binder, tab.id, drill.topicId) : undefined;
 
   const [round, setRound] = useState(0);
   const [phase, setPhase] = useState<Phase>("write");
@@ -210,9 +211,17 @@ export function PracticeRoom({ drill }: { drill: PracticeDrill }) {
           </Link>
           {" › "}
           <Link href={tab.href} className="underline-offset-[3px] hover:underline focus-ring">
-            {tab.title}
+            {tab.label}
           </Link>
           {" › "}
+          {topic ? (
+            <>
+              <Link href={topic.href} className="underline-offset-[3px] hover:underline focus-ring">
+                {topic.title}
+              </Link>
+              {" › "}
+            </>
+          ) : null}
           <span aria-current="page" className="font-semibold text-[color:var(--ink)]">
             Practice
           </span>
@@ -412,7 +421,10 @@ export function PracticeRoom({ drill }: { drill: PracticeDrill }) {
                   Back to the lesson
                 </a>
               </div>
-              {tab ? <NotesPanel tabId={tab.id} tabTitle={tab.title} /> : null}
+              {/* Filed with the topic's notes, so they show on its page too. */}
+              {tab && topic ? (
+                <NotesPanel tabId={`${tab.id}/${topic.id}`} tabTitle={topic.title} />
+              ) : null}
             </section>
           ) : null}
         </div>

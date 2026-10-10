@@ -18,7 +18,7 @@ export type Stop = "done" | "here" | "ahead" | "coming";
 
 export type ResumeCard = {
   /** The binder and tab the course is filed under, when it has one. */
-  filing?: { binderId: string; binderName: string; tabLabel: string };
+  filing?: { binderId: string; binderName: string; tabLabel: string; topicTitle: string };
   title: string;
   subline: string;
   stops: Stop[];
@@ -65,7 +65,12 @@ export function getResumeCard(allItems: LearningItem[]): ResumeCard {
     } satisfies ResumeEntry);
   const filed = findFiling(resumeItem.id);
   const filing = filed
-    ? { binderId: filed.binder.id, binderName: filed.binder.name, tabLabel: filed.tab.label }
+    ? {
+        binderId: filed.binder.id,
+        binderName: filed.binder.name,
+        tabLabel: filed.tab.label,
+        topicTitle: filed.topic.title,
+      }
     : undefined;
 
   const openIndex = hearsaySkills.findIndex((skill) => skill.status === "open");
@@ -226,7 +231,7 @@ export function HeroSection({
           {card.filing ? (
             <p className="flex items-center gap-2 text-[12px] font-semibold text-[color:var(--feature-muted)]">
               <span aria-hidden="true" className="binder-swatch scale-90" />
-              {card.filing.binderName} › {card.filing.tabLabel}
+              {card.filing.binderName} › {card.filing.tabLabel} › {card.filing.topicTitle}
             </p>
           ) : null}
           <h2 className="mt-1.5 text-[21px] font-extrabold leading-tight tracking-[-0.01em]">

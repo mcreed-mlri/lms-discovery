@@ -192,7 +192,7 @@ test("a reference link opens its panel in the course without starting the lesson
   page,
 }) => {
   await signIn(page);
-  await page.goto("/binder/litigation/trial-skills/");
+  await page.goto("/binder/litigation/trial-skills/objections/");
   await page.getByRole("link", { name: /Procedure: answering a hearsay objection/ }).click();
   await expect(page).toHaveURL(/#procedure$/);
   await expect(page.getByRole("dialog", { name: "Procedure Reference" })).toBeVisible();
@@ -200,7 +200,10 @@ test("a reference link opens its panel in the course without starting the lesson
 
 test("the hearsay practice room runs two rounds end to end", async ({ page }) => {
   await signIn(page);
+  // Trial lists its topics; the drill lives on the Objections topic page.
   await page.goto("/binder/litigation/trial-skills/");
+  await page.getByRole("link", { name: /^Objections/ }).click();
+  await expect(page).toHaveURL(/trial-skills\/objections\/?$/);
   await page.getByRole("link", { name: /Answer a hearsay objection in writing/ }).click();
   await expect(page.getByRole("heading", { level: 1, name: /Practice:/ })).toBeVisible();
 

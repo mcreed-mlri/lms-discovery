@@ -5,13 +5,14 @@ import Link from "next/link";
 import { StudioShell } from "@/components/studio-shell";
 import { getEligibleLearningItems } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
-import { filedItems, getBinder, getPlannedTopics, getSectionTabs } from "@/lib/binder";
-import { getLearningItemById, getLearningItemUrl, type LearningItem } from "@/lib/data";
+import { getBinder, getSectionTabs } from "@/lib/binder";
+import { describeContents, getTabTopics } from "@/lib/binder-topics";
+import { getLearningItemById, type LearningItem } from "@/lib/data";
 
 /**
- * A binder's Contents divider: its sections in order, each with what is open
- * there now and how many topics are planned. Open items lead; planned counts
- * stay quiet.
+ * A binder's Contents divider: its sections in order, each with the topics
+ * open there now (linking to each topic's page) and how many are planned.
+ * Open topics lead; planned counts stay quiet.
  */
 export function BinderContentsView({ binderId }: { binderId: string }) {
   const { user } = useAuth();
@@ -19,14 +20,17 @@ export function BinderContentsView({ binderId }: { binderId: string }) {
   if (!binder) return null;
 
   const sections = getSectionTabs(binder).map((tab) => {
-    const filed = (filedItems[tab.id] ?? [])
-      .map((id) => getLearningItemById(id))
-      .filter((item): item is LearningItem => item !== undefined);
-    return {
-      tab,
-      open: getEligibleLearningItems(filed, user),
-      planned: getPlannedTopics(tab.id).length,
-    };
+    const { built, planned } = getTabTopics(binder, tab.id);
+    const open = built.map((contents) => {
+      const items = contents.itemIds
+        .map((id) => getLearningItemById(id))
+        .filter((item): item is LearningItem => item !== undefined);
+      return {
+        topic: contents.topic,
+        summary: describeContents(contents, getEligibleLearningItems(items, user).length),
+      };
+    });
+    return { tab, open, planned: planned.length };
   });
 
   return (
@@ -55,24 +59,33 @@ export function BinderContentsView({ binderId }: { binderId: string }) {
                     <span className="w-6 text-[15px] font-semibold tabular-nums text-[color:var(--ink-soft)]">
                       {index + 1}
                     </span>
-                    <span className="text-[20px] font-bold tracking-[-0.01em]">{tab.title}</span>
+                    <span className="text-[20px] font-bold tracking-[-0.01em]">{tab.label}</span>
                   </Link>
                   <span className="text-sm text-[color:var(--ink-muted)]">
                     {open.length > 0 ? `${open.length} open · ` : ""}
                     {planned} planned
                   </span>
                 </div>
+                {tab.title !== tab.label ? (
+                  <p className="mt-0.5 pl-9 text-[14px] text-[color:var(--ink-soft)]">
+                    {tab.title}
+                  </p>
+                ) : null}
                 {open.length > 0 ? (
                   <ul className="mt-3 flex flex-col gap-2 pl-9">
-                    {open.map((item) => (
-                      <li key={item.id}>
-                        <a
-                          href={getLearningItemUrl(item)}
-                          className="inline-flex min-h-11 items-center gap-2 rounded-[10px] border-[1.5px] border-[color:var(--ink)] px-4 text-[15px] font-bold text-[color:var(--ink)] hover:bg-[color:var(--hover-tint)] focus-ring"
+                    {open.map(({ topic, summary }) => (
+                      <li key={topic.id}>
+                        <Link
+                          href={topic.href}
+                          className="inline-flex min-h-11 flex-wrap items-center gap-x-3 gap-y-0.5 rounded-[10px] border-[1.5px] border-[color:var(--ink)] px-4 py-2 text-[15px] font-bold text-[color:var(--ink)] hover:bg-[color:var(--hover-tint)] focus-ring"
                         >
-                          {item.title}
-                          <span className="font-semibold text-[color:var(--brand-ink)]">Open</span>
-                        </a>
+                          {topic.title}
+                          {summary ? (
+                            <span className="text-[13px] font-semibold text-[color:var(--ink-muted)]">
+                              {summary}
+                            </span>
+                          ) : null}
+                        </Link>
                       </li>
                     ))}
                   </ul>

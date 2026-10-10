@@ -2,52 +2,42 @@
 
 import Link from "next/link";
 
-import { HearsaySkills } from "@/components/hearsay-skills";
+import { ArrowIcon } from "@/components/icons";
 import { NotesPanel } from "@/components/notes-panel";
 import { StudioShell } from "@/components/studio-shell";
 import { getEligibleLearningItems } from "@/lib/access";
 import { useAuth } from "@/lib/auth";
-import {
-  filedItems,
-  getBinder,
-  getPlannedTopics,
-  getSectionTab,
-  getSectionTabs,
-  referencePages,
-} from "@/lib/binder";
+import { getBinder, getSectionTab, getSectionTabs } from "@/lib/binder";
+import { describeContents, getTabTopics } from "@/lib/binder-topics";
 import { getStatusTheme, resolveStatusKey } from "@/lib/course-theme";
-import { drillHref, getDrillsForTab } from "@/lib/practice";
-import {
-  contentUpdates,
-  getLearningItemById,
-  getLearningItemUrl,
-  type LearningItem,
-} from "@/lib/data";
+import { getLearningItemById, type LearningItem } from "@/lib/data";
 
 /**
- * One divider's page in a binder: what's open in this section, any law change
- * that touches it, then the planned topics as a quiet "Coming" list, with the
- * advocate's own notes alongside. Kind chips wait until a tab holds three or
- * more kinds of item; until then they would be a row of zeros.
+ * One divider's page in a binder: an index of its topics. Built topics are
+ * rows that say what each holds and open the topic's own page; planned topics
+ * wait in one collapsed line, so the page stays a screen long however much
+ * the tab grows. Law changes for the tab sit under the index, and the
+ * advocate's notes for the whole tab sit alongside.
  */
 export function BinderSectionView({ binderId, tabId }: { binderId: string; tabId: string }) {
   const { user } = useAuth();
   const binder = getBinder(binderId);
   const tab = binder ? getSectionTab(binder, tabId) : undefined;
-  const filed = (filedItems[tabId] ?? [])
-    .map((id) => getLearningItemById(id))
-    .filter((item): item is LearningItem => item !== undefined);
-  const items = getEligibleLearningItems(filed, user);
-  const planned = getPlannedTopics(tabId);
-  // Law changes reach a tab through the courses filed under it.
-  const filedIds = new Set(filed.map((item) => item.id));
-  const changes = contentUpdates.filter((update) => filedIds.has(update.courseId));
-  const references = referencePages[tabId] ?? [];
-  const drills = getDrillsForTab(tabId);
-  const sections = binder ? getSectionTabs(binder) : [];
-  const position = sections.findIndex((t) => t.id === tabId) + 1;
-
   if (!binder || !tab) return null;
+
+  const { built, planned } = getTabTopics(binder, tabId);
+  const rows = built.map((contents) => {
+    const items = contents.itemIds
+      .map((id) => getLearningItemById(id))
+      .filter((item): item is LearningItem => item !== undefined);
+    const courses = getEligibleLearningItems(items, user).length;
+    return { contents, summary: describeContents(contents, courses) };
+  });
+  const changes = built.flatMap((contents) => contents.changes);
+  const sections = getSectionTabs(binder);
+  const index = sections.findIndex((t) => t.id === tabId);
+  const previous = sections[index - 1];
+  const next = sections[index + 1];
 
   return (
     <StudioShell>
@@ -56,126 +46,57 @@ export function BinderSectionView({ binderId, tabId }: { binderId: string; tabId
           <p className="text-sm font-semibold text-[color:var(--ink-muted)]">
             <Link href={binder.href} className="underline-offset-[3px] hover:underline focus-ring">
               {binder.name}
-            </Link>{" "}
-            · tab {position} of {sections.length}
+            </Link>
           </p>
           <h1 className="mt-1 text-[clamp(2rem,4vw,2.75rem)] font-extrabold leading-[1.05] tracking-[-0.025em] text-[color:var(--ink)]">
-            {tab.title}
+            {tab.label}
           </h1>
+          {tab.title !== tab.label ? (
+            <p className="mt-1.5 text-[16px] text-[color:var(--ink-muted)]">{tab.title}</p>
+          ) : null}
         </div>
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-11">
           <div className="flex min-w-0 flex-col gap-8">
-            <section aria-labelledby="open-now">
+            <section aria-labelledby="topics">
               <h2
-                id="open-now"
+                id="topics"
                 className="text-[22px] font-extrabold tracking-[-0.015em] text-[color:var(--ink)]"
               >
-                Open now
+                Open in this tab
               </h2>
-              {items.length > 0 ? (
+              {rows.length > 0 ? (
                 <ul className="mt-3 border-t-[1.5px] border-[color:var(--ink)]">
-                  {items.map((item) => (
-                    <li key={item.id} className="border-b border-[color:var(--line)]">
-                      <a
-                        href={getLearningItemUrl(item)}
-                        className="flex min-h-11 flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-4 text-[color:var(--ink)] hover:bg-[color:var(--hover-tint)] focus-ring"
-                      >
-                        <span>
-                          <span className="block text-[17px] font-bold">{item.title}</span>
-                          <span className="mt-0.5 block text-sm text-[color:var(--ink-muted)]">
-                            {item.description}
-                          </span>
-                        </span>
-                        <span className="text-[15px] font-bold text-[color:var(--brand-ink)]">
-                          Open
-                        </span>
-                      </a>
-                      {item.id === "legal-skills-hearsay" ? (
-                        <div className="pb-5">
-                          <HearsaySkills />
-                        </div>
-                      ) : null}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="mt-3 rounded-[12px] border border-dashed border-[color:var(--line-strong)] px-5 py-4 text-[15px] text-[color:var(--ink-muted)]">
-                  Nothing is open in this tab yet. Planned topics are listed below.
-                </p>
-              )}
-            </section>
-
-            {drills.length > 0 ? (
-              <section aria-labelledby="practice">
-                <h2
-                  id="practice"
-                  className="text-[22px] font-extrabold tracking-[-0.015em] text-[color:var(--ink)]"
-                >
-                  Practice
-                </h2>
-                <p className="mt-0.5 text-[13px] text-[color:var(--ink-soft)]">
-                  Rehearse before court. Nothing is graded or recorded.
-                </p>
-                <ul className="mt-3 flex flex-col gap-3">
-                  {drills.map((drill) => (
-                    <li key={drill.id}>
+                  {rows.map(({ contents, summary }) => (
+                    <li key={contents.topic.id} className="border-b border-[color:var(--line)]">
                       <Link
-                        href={drillHref(drill)}
-                        className="group flex flex-wrap items-center justify-between gap-x-6 gap-y-2 rounded-[12px] border-[1.5px] border-[color:var(--ink)] px-5 py-4 transition hover:bg-[color:var(--hover-tint)] focus-ring"
+                        href={contents.topic.href}
+                        className="group flex min-h-11 items-center justify-between gap-4 py-4 text-[color:var(--ink)] hover:bg-[color:var(--hover-tint)] focus-ring"
                       >
-                        <span className="min-w-0 flex-1 basis-80">
-                          <span className="block text-[17px] font-extrabold text-[color:var(--ink)]">
-                            {drill.title}
+                        <span className="min-w-0">
+                          <span className="block text-[18px] font-bold">
+                            {contents.topic.title}
                           </span>
-                          <span className="mt-0.5 block text-[14px] leading-relaxed text-[color:var(--ink-muted)]">
-                            {drill.summary}
+                          {contents.topic.subTopics.length > 0 ? (
+                            <span className="mt-0.5 block text-[14px] text-[color:var(--ink-muted)]">
+                              {contents.topic.subTopics.join(", ")}
+                            </span>
+                          ) : null}
+                          <span className="mt-1 block text-[13px] text-[color:var(--ink-soft)]">
+                            {summary || "Not open for your role yet"}
                           </span>
                         </span>
-                        <span className="text-[15px] font-bold text-[color:var(--brand-ink)]">
-                          Start practice
-                        </span>
+                        <ArrowIcon className="h-5 w-5 shrink-0 text-[color:var(--ink)] transition-transform group-hover:translate-x-0.5" />
                       </Link>
                     </li>
                   ))}
                 </ul>
-              </section>
-            ) : null}
-
-            {references.length > 0 ? (
-              <section aria-labelledby="keep-at-hand">
-                <h2
-                  id="keep-at-hand"
-                  className="text-[22px] font-extrabold tracking-[-0.015em] text-[color:var(--ink)]"
-                >
-                  Keep at hand
-                </h2>
-                <p className="mt-0.5 text-[13px] text-[color:var(--ink-soft)]">
-                  Reference you can open without starting the course. Prototype content, not yet
-                  reviewed.
+              ) : (
+                <p className="mt-2 text-[15px] text-[color:var(--ink-muted)]">
+                  Nothing is open in this tab yet.
                 </p>
-                <ul className="mt-3 border-t-[1.5px] border-[color:var(--ink)]">
-                  {references.map((page) => (
-                    <li key={page.href} className="border-b border-[color:var(--line)]">
-                      <a
-                        href={page.href}
-                        className="flex min-h-11 flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3.5 text-[color:var(--ink)] hover:bg-[color:var(--hover-tint)] focus-ring"
-                      >
-                        <span>
-                          <span className="block text-[16px] font-bold">{page.title}</span>
-                          <span className="mt-0.5 block text-[13px] text-[color:var(--ink-muted)]">
-                            {page.meta}
-                          </span>
-                        </span>
-                        <span className="text-[14px] font-bold text-[color:var(--brand-ink)]">
-                          Open
-                        </span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ) : null}
+              )}
+            </section>
 
             {changes.length > 0 ? (
               <section aria-labelledby="new-law">
@@ -211,32 +132,59 @@ export function BinderSectionView({ binderId, tabId }: { binderId: string; tabId
               </section>
             ) : null}
 
-            <section aria-labelledby="coming" className="pt-2">
-              <h2 id="coming" className="text-base font-bold text-[color:var(--ink)]">
-                Coming to this tab
-              </h2>
-              <p className="mt-1 text-[15px] text-[color:var(--ink-muted)]">
-                {planned.length} topics are planned. Each one shows up under Updates when it opens.
-              </p>
-              <ul className="mt-3 grid gap-x-8 text-[15px] text-[color:var(--ink-muted)] sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                {planned.map((topic) => (
-                  <li key={topic} className="border-b border-[color:var(--line-soft)] py-2.5">
-                    {topic}
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-4 text-sm text-[color:var(--ink-soft)]">
-                See where this fits on the{" "}
-                <Link href="/curriculum-map" className="underline underline-offset-[3px]">
-                  curriculum map
+            {planned.length > 0 ? (
+              <details className="group">
+                <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-[6px] text-[15px] font-semibold text-[color:var(--ink)] focus-ring [&::-webkit-details-marker]:hidden">
+                  <span
+                    aria-hidden="true"
+                    className="inline-block transition-transform group-open:rotate-90"
+                  >
+                    ›
+                  </span>
+                  {rows.length > 0
+                    ? `${planned.length} more topics planned`
+                    : `${planned.length} topics planned`}
+                </summary>
+                <p className="mt-2 text-[15px] leading-relaxed text-[color:var(--ink-muted)]">
+                  {planned.map((topic) => topic.title).join(" · ")}
+                </p>
+                <p className="mt-3 text-sm text-[color:var(--ink-soft)]">
+                  Each one shows up under Updates when it opens. See where they fit on the{" "}
+                  <Link href="/curriculum-map" className="underline underline-offset-[3px]">
+                    curriculum map
+                  </Link>
+                  .
+                </p>
+              </details>
+            ) : null}
+
+            <nav
+              aria-label="Other tabs"
+              className="flex flex-wrap justify-between gap-4 border-t border-[color:var(--line)] pt-4 text-[14px] font-semibold"
+            >
+              {previous ? (
+                <Link
+                  href={previous.href}
+                  className="rounded-[4px] text-[color:var(--ink)] underline-offset-[3px] hover:underline focus-ring"
+                >
+                  ‹ {previous.label}
                 </Link>
-                .
-              </p>
-            </section>
+              ) : (
+                <span />
+              )}
+              {next ? (
+                <Link
+                  href={next.href}
+                  className="rounded-[4px] text-[color:var(--ink)] underline-offset-[3px] hover:underline focus-ring"
+                >
+                  {next.label} ›
+                </Link>
+              ) : null}
+            </nav>
           </div>
 
           <aside className="min-w-0 lg:self-start">
-            <NotesPanel tabId={tab.id} tabTitle={tab.title} />
+            <NotesPanel tabId={tab.id} tabTitle={tab.label} />
           </aside>
         </div>
       </div>

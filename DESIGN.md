@@ -271,7 +271,7 @@ On desktop (1024px and up) the sheet runs to the top, left and bottom of the vie
 
 Inside the sheet, content is centred in a 1180px column (cap it so a very wide monitor doesn't stretch lines), with gutters of 16px (phone), 24px (640px and up) and 44px (desktop). Pages use a flexible main column and a roughly 340px side column, separated by a 44–48px gap, stacking in reading order on phones.
 
-- **Home** (outside the binders): main column holds the greeting, search and "Your binders" (name, one line, and what is ready, such as "1 course ready · 1 drill", or "Coming"; nothing else). Side column holds the resume card (the one place to continue: it names the part, where the course is filed, and draws unbuilt parts as dashed stops), "Practice", and "What changed in your binders" (only updates about something filed in a binder, else a one-line empty state). The dividers show the binder left open, with the tab the visitor left off on marked. Keep it this quiet: planned counts, tab lists and course outlines belong inside the binders. The Hearsay pilot's five skills live on Litigation › Trial, under the course.
+- **Home** (outside the binders): main column holds the greeting, search and "Your binders" (name, one line, and what is ready, such as "1 course ready · 1 drill", or "Coming"; nothing else). Side column holds the resume card (the one place to continue: it names the part, where the course is filed, and draws unbuilt parts as dashed stops), "Practice", and "What changed in your binders" (only updates about something filed in a binder, else a one-line empty state). The dividers show the binder left open, with the tab the visitor left off on marked. Keep it this quiet: planned counts, tab lists and course outlines belong inside the binders. The Hearsay pilot's five skills live on Litigation › Trial › Objections, under the course.
 - **Section tab:** title with the 4px binder rule, a tab-scoped search, kind chips, then grouped lists (Practice, Reference, Courses, New law, Coming). Side column holds My notes.
 
 The header is a slim sticky bar at the top of the sheet. Its height is `--studio-chrome`, and sticky offsets are measured against it. The bottom bar on phones (if kept for app navigation) reserves `--safe-bottom`, and the content column reserves the same amount.
@@ -318,6 +318,12 @@ The wordmark "Learning Hub" (17–19px / 800) at left, then the main nav: **Home
 ### Binder switcher
 
 A 44px outlined button showing the binder's colour swatch (10 × 14px, a tiny divider) and its name, for example "Litigation ▾". It opens a menu of binders, each with a one-line description. Each binder has its own colour from the measured tab set: Practice Foundations teal, Litigation orange, Beyond the Courtroom green. Binders without content yet are listed as "Coming", never hidden and never clickable into an empty shell. The switcher remembers the last tab per binder.
+
+### Tab index and topic pages
+
+A tab page is an index, never the content itself, so it stays a screen long however much the tab grows. Header: the binder's name as a link, the divider's short label as the title ("Trial"), the curriculum's full name under it in muted ink. Then "Open in this tab": built topics as ruled rows (title, its sub-topics, and a soft line such as "1 course · 1 drill · 2 references", with an arrow). Planned topics collapse into one `<details>` line ("13 more topics planned") listing their names as plain text. Previous and next tab links close the page; notes for the whole tab sit alongside.
+
+A topic page has a breadcrumb (Litigation › Trial › Objections) and, in this order: Keep at hand, Practice, Courses (each course with its parts), New law and rules. Its notes are filed under the topic, and the practice room files its notes there too. Only built topics have a page.
 
 ### Kind chips
 

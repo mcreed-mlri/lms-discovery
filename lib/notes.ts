@@ -10,7 +10,8 @@ import { useEffect, useState } from "react";
 
 export type Note = {
   id: string;
-  /** The binder tab this note is filed under, e.g. "trial-skills". */
+  /** Where the note is filed: a tab ("trial-skills") or a topic inside one
+   *  ("trial-skills/objections"). */
   tabId: string;
   text: string;
   /** ISO timestamp. */

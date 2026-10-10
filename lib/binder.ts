@@ -139,17 +139,69 @@ export function getPlannedTopics(tabId: string): string[] {
   return column ? column.notes.filter((note) => note.level === "topic").map((n) => n.text) : [];
 }
 
-/** Built catalog items filed under each tab, by learning-item id. The Supabase
- *  `learning_items` table replaces this when items carry their own tab. */
-export const filedItems: Record<string, string[]> = {
-  "trial-skills": ["legal-skills-hearsay"],
+export type BinderTopic = {
+  id: string;
+  /** The curriculum map's topic name. */
+  title: string;
+  href: string;
+  /** Sub-topics the map lists under it, e.g. Hearsay under Objections. */
+  subTopics: string[];
 };
 
-/** The binder and tab a built item is filed under, if any. */
-export function findFiling(itemId: string): { binder: Binder; tab: BinderTab } | undefined {
+/** "Oral Argument / Best Practice" → "oral-argument-best-practice". */
+export function topicSlug(title: string) {
+  return title
+    .toLowerCase()
+    .replace(/&/g, " ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+/** A tab's topics in curriculum-map order, each with the sub-topics under it. */
+export function getTopics(binder: Binder, tabId: string): BinderTopic[] {
+  const column = legalSkillsColumns().find((c) => c.id === tabId);
+  const tab = getSectionTab(binder, tabId);
+  if (!column || !tab) return [];
+  const topics: BinderTopic[] = [];
+  for (const note of column.notes) {
+    if (note.level === "topic") {
+      const id = topicSlug(note.text);
+      topics.push({ id, title: note.text, href: `${tab.href}/${id}`, subTopics: [] });
+    } else if (topics.length > 0) {
+      topics[topics.length - 1].subTopics.push(note.text);
+    }
+  }
+  return topics;
+}
+
+export function getTopic(binder: Binder, tabId: string, topicId: string): BinderTopic | undefined {
+  return getTopics(binder, tabId).find((topic) => topic.id === topicId);
+}
+
+/** Built catalog items filed under each topic, by tab then topic, by
+ *  learning-item id. The Supabase `learning_items` table replaces this when
+ *  items carry their own tab and topic. */
+export const filedTopics: Record<string, Record<string, string[]>> = {
+  "trial-skills": { objections: ["legal-skills-hearsay"] },
+};
+
+/** Built catalog items filed anywhere under each tab. */
+export const filedItems: Record<string, string[]> = Object.fromEntries(
+  Object.entries(filedTopics).map(([tabId, topics]) => [tabId, Object.values(topics).flat()]),
+);
+
+/** The binder, tab and topic a built item is filed under, if any. */
+export function findFiling(
+  itemId: string,
+): { binder: Binder; tab: BinderTab; topic: BinderTopic } | undefined {
   for (const binder of binders) {
-    const tab = getSectionTabs(binder).find((t) => filedItems[t.id]?.includes(itemId));
-    if (tab) return { binder, tab };
+    for (const tab of getSectionTabs(binder)) {
+      const topicId = Object.entries(filedTopics[tab.id] ?? {}).find(([, ids]) =>
+        ids.includes(itemId),
+      )?.[0];
+      const topic = topicId ? getTopic(binder, tab.id, topicId) : undefined;
+      if (topic) return { binder, tab, topic };
+    }
   }
   return undefined;
 }
@@ -161,18 +213,19 @@ export type ReferencePage = {
   href: string;
 };
 
-/** Short reference an advocate keeps open at counsel table, filed by tab. The
- *  Hearsay course's own panels open directly through their #anchors. */
+/** Short reference an advocate keeps open at counsel table, keyed by
+ *  "tab/topic". The Hearsay course's own panels open directly through their
+ *  #anchors. */
 export const referencePages: Record<string, ReferencePage[]> = {
-  "trial-skills": [
+  "trial-skills/objections": [
     {
       title: "Hearsay: key concepts",
-      meta: "Reference · from Legal Skills: Hearsay",
+      meta: "Opens a panel in Legal Skills: Hearsay",
       href: "/legal-skills-hearsay/defending-hearsay-objection-writing.html#key-concepts",
     },
     {
       title: "Procedure: answering a hearsay objection in writing",
-      meta: "Five steps and a drafting frame · from Legal Skills: Hearsay",
+      meta: "Five steps and a drafting frame · opens a panel in Legal Skills: Hearsay",
       href: "/legal-skills-hearsay/defending-hearsay-objection-writing.html#procedure",
     },
   ],

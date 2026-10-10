@@ -155,6 +155,9 @@ const legalSkills: CurriculumColumn[] = [
     t("Cross Exams"),
     t("Witnesses & Experts", "tentative"),
     t("Objections"),
+    // Hub addition: the Hearsay pilot is one kind of objection. A fixed id, not
+    // s(), so inserting it does not renumber every seed id after it.
+    { id: "sub-hearsay", text: "Hearsay", level: "sub", courseId: "legal-skills-hearsay" },
     t("Closing Statements"),
     t("Oral Argument / Best Practice", "tentative"),
   ]),

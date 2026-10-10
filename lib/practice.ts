@@ -32,6 +32,8 @@ export type PracticeDrill = {
   id: string;
   binderId: string;
   tabId: string;
+  /** The topic page it is filed under, e.g. "objections". */
+  topicId: string;
   title: string;
   summary: string;
   /** Suggested minutes per written response, from the course. */
@@ -53,6 +55,7 @@ export const practiceDrills: PracticeDrill[] = [
     id: "hearsay-objection-in-writing",
     binderId: "litigation",
     tabId: "trial-skills",
+    topicId: "objections",
     title: "Answer a hearsay objection in writing",
     summary:
       "Opposing counsel objects to a declaration as layered hearsay. Write your response, check it against the course’s checklist, then answer the pushback.",
@@ -147,6 +150,10 @@ export function getDrill(id: string): PracticeDrill | undefined {
 
 export function getDrillsForTab(tabId: string): PracticeDrill[] {
   return practiceDrills.filter((drill) => drill.tabId === tabId);
+}
+
+export function getDrillsForTopic(tabId: string, topicId: string): PracticeDrill[] {
+  return practiceDrills.filter((drill) => drill.tabId === tabId && drill.topicId === topicId);
 }
 
 export function drillHref(drill: PracticeDrill): string {

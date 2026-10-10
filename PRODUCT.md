@@ -48,7 +48,8 @@ Mockups and the flow diagram: https://claude.ai/artifact/MCQCHbvATG2m4KVNQiu3QW 
 
 - The Binders ▾ switcher opens a subject binder and remembers the last tab used.
 - A binder's divider tabs are its sections: a Contents tab plus 3–5 curriculum areas. Home sits outside the binders; off binder pages the dividers show the binder you last opened.
-- A tab holds every kind of item for that section. Chips narrow it to Reference, Courses, New law, My notes or Coming.
+- A tab is an index of its **topics**, the curriculum map's topics for that column (Trial: Objections, Discovery, Motions…). Built topics are rows that say what they hold; planned topics wait in one collapsed line and never link to an empty page.
+- A **topic page** (Litigation › Trial › Objections) holds every kind of item for that topic, quick reference first, then practice, then courses grouped by skill (Hearsay, and later Relevance, Foundation…), then law changes, with the advocate's notes for that topic alongside. Chips narrowing by kind wait until a topic holds enough kinds to need them.
 
 **Four ways in. All of them reach the same item:**
 
@@ -207,7 +208,7 @@ Explicitly undecided product facts:
 ## Evidence on Hand
 
 - **Real curriculum structure**: `lib/curriculum-map.ts` is the actual planned curriculum, not mock data.
-- **The pilot course is Legal Skills: Hearsay** (source in the sibling `brightspace-courses/Legal-Skills-Hearsay` repo). Design and build the Litigation binder around it first: its Trial tab, its reference pages, its notes, its law changes.
+- **The pilot course is Legal Skills: Hearsay** (source in the sibling `brightspace-courses/Legal-Skills-Hearsay` repo). Design and build the Litigation binder around it first: its Trial tab and the Objections topic it is filed under (Hearsay is one kind of objection), its reference pages, its notes, its law changes.
 - **Genuinely built offerings** (a small set): Legal Skills: Hearsay (pilot), Welcome to the Learning Hub, Faculty Handbook: Interactive Elements, Curriculum Map, Eviction Defense: The First 48 Hours, and Brightspace Wrapper Demo.
 - **Planning research**: `docs/planning/brightspace-learning-hub-plan.md` (including cited D2L documentation on Discover's limits), plus D2L and outsourced-IT question lists and a search-governance checklist.
 - **Faculty-facing artifact**: `public/tools-handbook/faculty-showcase.dc.html`.

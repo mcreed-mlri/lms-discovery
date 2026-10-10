@@ -85,6 +85,7 @@ test("the pilot's resume card names the open part and draws unbuilt parts as com
     binderId: "litigation",
     binderName: "Litigation",
     tabLabel: "Trial",
+    topicTitle: "Objections",
   });
 });
 
@@ -101,7 +102,7 @@ test("the resume card shows where the course is filed and links to the part", ()
     />,
   );
 
-  expect(screen.getByText("Litigation › Trial")).toBeVisible();
+  expect(screen.getByText("Litigation › Trial › Objections")).toBeVisible();
   expect(screen.getByRole("link", { name: "Resume part 2" })).toHaveAttribute(
     "href",
     "/legal-skills-hearsay/defending-hearsay-objection-writing.html",
