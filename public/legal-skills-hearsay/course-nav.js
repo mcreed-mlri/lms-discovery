@@ -193,15 +193,19 @@ document.addEventListener("DOMContentLoaded", function () {
     syncModeToggle();
   }
   function modeToggleHtml() {
-    return '<div class="mode-toggle" role="tablist" aria-label="Reading mode">' +
-      '<button data-mode-btn="read" type="button">' + icon("book", 14) + '<span class="mt-label">Read</span></button>' +
-      '<button data-mode-btn="practice" type="button">' + icon("target", 14) + '<span class="mt-label">Practice</span></button>' +
+    // A pair of toggle buttons, not tabs: tabs need tab panels. aria-label
+    // keeps each named on phones, where the text label is hidden.
+    return '<div class="mode-toggle" role="group" aria-label="Reading mode">' +
+      '<button data-mode-btn="read" type="button" aria-pressed="false" aria-label="Read">' + icon("book", 14) + '<span class="mt-label">Read</span></button>' +
+      '<button data-mode-btn="practice" type="button" aria-pressed="false" aria-label="Practice">' + icon("target", 14) + '<span class="mt-label">Practice</span></button>' +
       "</div>";
   }
   function syncModeToggle() {
     var m = document.documentElement.getAttribute("data-mode") || "read";
     document.querySelectorAll("[data-mode-btn]").forEach(function (b) {
-      b.classList.toggle("active", b.getAttribute("data-mode-btn") === m);
+      var on = b.getAttribute("data-mode-btn") === m;
+      b.classList.toggle("active", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
     });
   }
   function wireModeToggle() {
@@ -317,7 +321,7 @@ document.addEventListener("DOMContentLoaded", function () {
     rail.className = "course-rail";
     rail.setAttribute("aria-label", "Course navigation");
     rail.innerHTML =
-      '<div class="rail-brand">' + MARK + '<span class="mk-name">LACE</span>' +
+      '<div class="rail-brand">' + MARK + '<span class="mk-name">Learning Hub</span>' +
         '<span style="margin-left:auto">' + themeToggleHtml() + "</span></div>" +
       '<a class="rail-back" href="' + homeHref + '" target="_top">' + icon("arrowLeft", 16) + '<span class="rb-label">' + esc(config.homeLinkText || "Back to Hub") + "</span></a>" +
       '<div class="rail-course">' +
@@ -552,7 +556,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var nav = document.createElement("nav");
     nav.className = "lace-binder-tabs";
     nav.setAttribute("aria-label", b.name + " tabs");
-    if (b.colour) nav.style.setProperty("--binder", b.colour);
     var html = '<p class="lbt-name" aria-hidden="true"><span class="lbt-swatch"></span>' + esc(b.name) + "</p>";
     b.tabs.forEach(function (t) {
       var open = t.id === b.currentTab;
@@ -565,6 +568,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // ── Boot ───────────────────────────────────────────────────────────────────
+  // The binder's colour edges the whole course (rules, bars, the open tab),
+  // as it edges the binder's pages in the hub.
+  if (config.binder && config.binder.colour) {
+    document.documentElement.style.setProperty("--binder", config.binder.colour);
+  }
   renderBinderTabs();
   var model = navModel();
   if (chromeMode === "rail") {

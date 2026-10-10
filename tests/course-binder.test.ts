@@ -57,3 +57,20 @@ test("its breadcrumb and way back lead to where the course is filed", () => {
   ]);
   expect(config.homeLinkUrl).toBe(page(objections.href));
 });
+
+test("the course takes the hub's look and never puts text on the binder colour", () => {
+  const css = readFileSync(
+    join(__dirname, "..", "public/legal-skills-hearsay/course-style.css"),
+    "utf8",
+  );
+  // The hub's page, ink and type.
+  expect(css).toMatch(/--bg: #ffffff;/);
+  expect(css).toMatch(/--ink: #16161a;/);
+  expect(css).toContain("family=Public+Sans");
+  // The binder colour is for strokes; a rule that fills with it sets no text colour.
+  const filled = [...css.matchAll(/\{([^{}]*)\}/g)]
+    .map((m) => m[1])
+    .filter((body) => /background: var\(--brand-fill\)/.test(body));
+  expect(filled.length).toBeGreaterThan(0);
+  for (const body of filled) expect(body).not.toMatch(/(^|[\s;])color:/);
+});
