@@ -254,6 +254,8 @@ test("searching from Home goes straight to the drill inside its binder", async (
 test("See all results opens the results page, the current binder first", async ({ page }) => {
   await signIn(page);
   await page.goto("/binder/litigation/trial-skills/");
+  // Ctrl K only works once the page is running; the heading appears then.
+  await expect(page.getByRole("heading", { level: 1, name: "Trial" })).toBeVisible();
   await page.keyboard.press("ControlOrMeta+k");
   const dialog = page.getByRole("dialog", { name: /search/i });
   await dialog.getByRole("combobox").fill("hearsay");
@@ -269,4 +271,30 @@ test("See all results opens the results page, the current binder first", async (
   await expect(
     page.getByRole("region", { name: "In Litigation" }).getByRole("link").first(),
   ).toContainText("Hearsay: key concepts");
+});
+
+test("the Hearsay levels: watch, then help, and the map keeps score", async ({ page }) => {
+  await signIn(page);
+  await page.goto("/binder/litigation/trial-skills/objections/");
+  await page.getByRole("link", { name: /Hearsay: practice levels/ }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Hearsay" })).toBeVisible();
+
+  await page.getByRole("link", { name: /^Watch, next:/ }).click();
+  await page.getByRole("button", { name: /offered to show that the client reported/ }).click();
+  await expect(page.getByText(/SENTENCE 2/)).toBeVisible();
+  await page.getByRole("button", { name: "Next: finish one with help" }).click();
+
+  await expect(page).toHaveURL(/level-1\/help\/?$/);
+  await page.getByRole("button", { name: /Show a hint/ }).click();
+  await page.getByRole("textbox", { name: /Step 4/ }).fill("Alternatively, a business record.");
+  await page.getByRole("button", { name: "Check against the expert" }).click();
+  await expect(page.getByRole("heading", { name: "Check your own answer" })).toBeVisible();
+
+  await page.getByRole("link", { name: "Back to levels" }).last().click();
+  await expect(page.getByRole("link", { name: /^Watch, done:/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /^Help, done:/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /^Solo, next:/ })).toHaveAttribute(
+    "href",
+    /practice\/hearsay-objection-in-writing/,
+  );
 });

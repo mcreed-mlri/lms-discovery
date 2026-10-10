@@ -33,7 +33,8 @@ CI (`.github/workflows/ci.yml`) is three jobs: `audit` (`npm audit --omit=dev --
 - **Supabase**: `lib/supabase/server.ts` has an admin client factory, used only by the admin sync route so far. Schema draft in `docs/planning/supabase-learning-items.sql`.
 - **Admin API routes** (`app/api/admin/*`) require an `x-admin-secret` header matching `ADMIN_SYNC_SECRET` — guard them with `requireAdminSecret` from `lib/admin-auth.ts`. The config/Supabase health routes are guarded the same way; the Brightspace proxy health routes require the caller's own OAuth cookies (401 otherwise). Never add a server-wide Brightspace token fallback.
 - **Server entry points must not import a `"use client"` module.** `app/api/**/route.ts` and `proxy.ts` compile in the server layer, where a client module's exports become client-reference stubs instead of data — an import that silently resolves to `undefined` at runtime with no build error. User/persona data lives in `lib/auth-constants.ts` for exactly this reason; `lib/auth.tsx` re-exports it for client callers. `tests/server-client-boundary.test.ts` enforces this. (A server _component_ importing a client component is fine and normal — this is only about route handlers and middleware.)
-- Progress, saved items, and search analytics live in localStorage (keys prefixed `lace-`).
+- **Skill paths** (`lib/skill-paths.ts`): a skill taught the 4C/ID way, as levels each with Watch, Help and Solo plus quick drills, under `/binder/…/[topic]/[skill]`. Solo is an existing practice drill. See `docs/learning-design.md`.
+- Progress (including skill-path progress, `lib/skill-progress.ts`), saved items, and search analytics live in localStorage (keys prefixed `lace-`).
 
 ## Guardrails
 

@@ -12,6 +12,7 @@ import { getTabTopics, getTopicContents, isBuilt } from "@/lib/binder-topics";
 import { getStatusTheme, resolveStatusKey } from "@/lib/course-theme";
 import { getLearningItemById, getLearningItemUrl, type LearningItem } from "@/lib/data";
 import { drillHref } from "@/lib/practice";
+import { getSkillPathsForTopic, skillHref } from "@/lib/skill-paths";
 
 const h2Class = "text-[22px] font-extrabold tracking-[-0.015em] text-[color:var(--ink)]";
 
@@ -42,6 +43,7 @@ export function BinderTopicView({
 
   const contents = getTopicContents(tabId, topic);
   const { itemIds, references, drills, changes } = contents;
+  const skillPaths = getSkillPathsForTopic(tabId, topicId);
   const built = isBuilt(contents);
   const openNearby = built ? [] : getTabTopics(binder, tabId).built.map((nearby) => nearby.topic);
   const courses = getEligibleLearningItems(
@@ -175,7 +177,7 @@ export function BinderTopicView({
               </section>
             ) : null}
 
-            {drills.length > 0 ? (
+            {drills.length > 0 || skillPaths.length > 0 ? (
               <section aria-labelledby="practice">
                 <h2 id="practice" className={h2Class}>
                   Practice
@@ -184,6 +186,27 @@ export function BinderTopicView({
                   Rehearse before court. Nothing is graded or recorded.
                 </p>
                 <ul className="mt-3 flex flex-col gap-3">
+                  {skillPaths.map((path) => (
+                    <li key={path.id}>
+                      <Link
+                        href={skillHref(path)}
+                        className="group flex flex-wrap items-center justify-between gap-x-6 gap-y-2 rounded-[12px] border-2 border-[color:var(--binder)] px-5 py-4 transition hover:bg-[color:var(--hover-tint)] focus-ring"
+                      >
+                        <span className="min-w-0 flex-1 basis-80">
+                          <span className="block text-[17px] font-extrabold text-[color:var(--ink)]">
+                            {path.title}: practice levels
+                          </span>
+                          <span className="mt-0.5 block text-[14px] leading-relaxed text-[color:var(--ink-muted)]">
+                            {path.levels.length} levels, simple to complex. Watch an expert, finish
+                            one with help, then do it solo. Plus quick drills.
+                          </span>
+                        </span>
+                        <span className="text-[15px] font-bold text-[color:var(--brand-ink)]">
+                          Open levels
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
                   {drills.map((drill) => (
                     <li key={drill.id}>
                       <Link

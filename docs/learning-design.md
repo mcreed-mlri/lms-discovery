@@ -8,6 +8,19 @@ The team designs training with **4C/ID** (the Four-Component Instructional Desig
 - **4C/ID tells you how to teach it.** Learners do whole, realistic tasks from the start, getting harder over time, with support that fades. Information arrives in two kinds: the understanding behind the skill, and step-by-step how-to at the moment it's needed. Plus short drills for anything that must become automatic.
 - **"Interactive" mostly means learners doing tasks, not clicking through content.** Most of it needs no AI at all.
 
+## Built: the Hearsay levels
+
+The first skill path is live in the hub at `/binder/litigation/trial-skills/objections/hearsay` (linked from the Objections topic page):
+
+- **The level map:** four levels, each with Watch, Help and Solo. Level 1 is built; levels 2 to 4 show what they will be, marked "coming". The next step is marked, finished steps get a tick, and nothing built is locked.
+- **Level 1, Watch:** the expert's response, one sentence per step; choosing a sentence shows why the expert wrote it and the common mistake there.
+- **Level 1, Help:** new facts; the expert wrote steps 1 to 3, the learner writes 4 and 5, with two hints, the cheat sheet open, then the expert's version and a self-check.
+- **Level 1, Solo:** the existing practice room; finishing it ticks the step.
+- **Quick drill:** "Hearsay or not?", six items with instant feedback; missed items come back at the end, and the first-try score is kept as a best.
+- **Progress** is saved in the browser, per user, like notes. It is practice, not a training record.
+
+Content lives in `lib/skill-paths.ts` (all prototype, labelled as not reviewed); progress in `lib/skill-progress.ts`. Adding level 2 means writing its `watch`, `help` and Solo drill there.
+
 ## You are already doing it
 
 The Hearsay course (`public/legal-skills-hearsay/`) maps onto 4C/ID almost exactly:

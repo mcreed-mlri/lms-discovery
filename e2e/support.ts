@@ -33,6 +33,19 @@ export const SIGNED_IN_ROUTES = [
   { path: "/binder/litigation/trial-skills/objections/", name: "objections topic" },
   { path: "/binder/litigation/trial-skills/discovery/", name: "planned topic" },
   { path: "/search/?q=hearsay+objection", name: "search results" },
+  { path: "/binder/litigation/trial-skills/objections/hearsay/", name: "hearsay levels" },
+  {
+    path: "/binder/litigation/trial-skills/objections/hearsay/level-1/watch/",
+    name: "hearsay level 1 watch",
+  },
+  {
+    path: "/binder/litigation/trial-skills/objections/hearsay/level-1/help/",
+    name: "hearsay level 1 help",
+  },
+  {
+    path: "/binder/litigation/trial-skills/objections/hearsay/drills/hearsay-or-not/",
+    name: "hearsay quick drill",
+  },
   {
     path: "/binder/litigation/trial-skills/practice/hearsay-objection-in-writing/",
     name: "hearsay practice room",

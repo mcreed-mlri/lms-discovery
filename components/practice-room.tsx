@@ -6,7 +6,10 @@ import { useEffect, useId, useRef, useState, type FormEvent, type RefObject } fr
 import { CheckIcon } from "@/components/icons";
 import { NotesPanel } from "@/components/notes-panel";
 import { getBinder, getSectionTab, getTopic } from "@/lib/binder";
+import { useAuth } from "@/lib/auth";
 import type { PracticeDrill, PracticeRound } from "@/lib/practice";
+import { findSoloLevel, skillHref } from "@/lib/skill-paths";
+import { useSkillProgress } from "@/lib/skill-progress";
 
 type Phase = "write" | "review" | "coached";
 
@@ -134,10 +137,18 @@ export function PracticeRoom({ drill }: { drill: PracticeDrill }) {
   const binder = getBinder(drill.binderId);
   const tab = binder ? getSectionTab(binder, drill.tabId) : undefined;
   const topic = binder && tab ? getTopic(binder, tab.id, drill.topicId) : undefined;
+  // When this drill is a skill path's Solo step, finishing it ticks that step.
+  const solo = findSoloLevel(drill.id);
+  const { user } = useAuth();
+  const { markDone } = useSkillProgress(user?.id, solo?.path.id ?? "");
+  const soloLevel = solo?.level.n;
 
   const [round, setRound] = useState(0);
   const [phase, setPhase] = useState<Phase>("write");
   const [finished, setFinished] = useState(false);
+  useEffect(() => {
+    if (finished && soloLevel !== undefined) markDone(soloLevel, "solo");
+  }, [finished, soloLevel, markDone]);
   const [draft, setDraft] = useState("");
   const [responses, setResponses] = useState<{ text: string; took: string }[]>([]);
   const [checks, setChecks] = useState<boolean[][]>([]);
@@ -218,6 +229,17 @@ export function PracticeRoom({ drill }: { drill: PracticeDrill }) {
             <>
               <Link href={topic.href} className="underline-offset-[3px] hover:underline focus-ring">
                 {topic.title}
+              </Link>
+              {" › "}
+            </>
+          ) : null}
+          {solo ? (
+            <>
+              <Link
+                href={skillHref(solo.path)}
+                className="underline-offset-[3px] hover:underline focus-ring"
+              >
+                {solo.path.title}, level {solo.level.n}
               </Link>
               {" › "}
             </>
