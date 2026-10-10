@@ -6,8 +6,9 @@ import { getStatusTheme, resolveStatusKey } from "@/lib/course-theme";
 import { contentUpdates, getLearningItemUrl, modules, type LearningItem } from "@/lib/data";
 
 // Built courses an attorney can open today, other than the pilot, which the
-// resume card already carries.
-const ALSO_OPEN = ["eviction-defense-48h", "welcome-to-lace"];
+// resume card already carries. Eviction Defense is left off until a Housing
+// binder exists to file it in; search and Browse still find it.
+const ALSO_OPEN = ["welcome-to-lace"];
 
 function availableMeta(item: LearningItem) {
   if (item.type !== "COURSE") return null;
