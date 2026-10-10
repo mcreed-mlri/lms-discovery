@@ -21,7 +21,7 @@ import { useScrollLock } from "@/lib/hooks/use-scroll-lock";
 import type { BinderHit } from "@/lib/binder-search";
 import { openBinderHit } from "@/lib/open-binder-hit";
 import type { SearchResult } from "@/lib/search";
-import { searchEverything } from "@/lib/search-results";
+import { searchEverything, searchHref } from "@/lib/search-results";
 import { recordSearchAnalytics } from "@/lib/search-analytics";
 
 export function StudioShell({
@@ -50,9 +50,11 @@ export function StudioShell({
 
   const allItems = useMemo(() => getEligibleLearningItems(getLearningItems(), user), [user]);
   // Binder hits lead; the library follows, trimmed so the list stays short.
+  // Searching from a binder page puts that binder's hits first.
+  const currentBinderId = locateInBinder(pathname)?.binder.id;
   const { binderHits: globalBinderHits, library: globalResults } = useMemo(
-    () => searchEverything(allItems, globalQuery),
-    [allItems, globalQuery],
+    () => searchEverything(allItems, globalQuery, { preferBinderId: currentBinderId }),
+    [allItems, globalQuery, currentBinderId],
   );
 
   const openGlobalSearch = useCallback(() => {
@@ -246,6 +248,11 @@ export function StudioShell({
             setGlobalQuery("");
             openBinderHit(hit, globalQuery, router);
           }}
+          onSeeAll={() => {
+            setSearchOpen(false);
+            setGlobalQuery("");
+            router.push(searchHref(globalQuery, currentBinderId));
+          }}
           onChange={setGlobalQuery}
           onClose={closeGlobalSearch}
           onSelect={openGlobalSearchResult}
@@ -260,6 +267,7 @@ function GlobalSearchDialog({
   results,
   binderHits,
   onSelectBinderHit,
+  onSeeAll,
   onChange,
   onClose,
   onSelect,
@@ -268,6 +276,7 @@ function GlobalSearchDialog({
   results: SearchResult[];
   binderHits: BinderHit[];
   onSelectBinderHit: (hit: BinderHit) => void;
+  onSeeAll: () => void;
   onChange: (value: string) => void;
   onClose: () => void;
   onSelect: (result: SearchResult) => void;
@@ -304,6 +313,7 @@ function GlobalSearchDialog({
           onSelect={onSelect}
           binderHits={binderHits}
           onSelectBinderHit={onSelectBinderHit}
+          onSeeAll={onSeeAll}
           prominent
         />
         <div className="mt-3 flex items-center justify-between px-1 text-xs font-semibold text-[color:var(--ink-soft)]">

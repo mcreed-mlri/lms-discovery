@@ -168,6 +168,7 @@ export function HeroSection({
   onSelectResult,
   binderHits,
   onSelectBinderHit,
+  onSeeAll,
   allItems,
 }: {
   user: User;
@@ -178,6 +179,7 @@ export function HeroSection({
   onSelectResult: (result: SearchResult) => void;
   binderHits?: BinderHit[];
   onSelectBinderHit?: (hit: BinderHit) => void;
+  onSeeAll?: () => void;
   allItems: LearningItem[];
 }) {
   const card = useMemo(() => getResumeCard(allItems), [allItems]);
@@ -201,6 +203,7 @@ export function HeroSection({
             onSelect={onSelectResult}
             binderHits={binderHits}
             onSelectBinderHit={onSelectBinderHit}
+            onSeeAll={onSeeAll}
             placeholder="What’s in front of you today? Try “notice to quit”"
             prominent
           />

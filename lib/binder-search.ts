@@ -17,6 +17,8 @@ export type BinderHit = {
   id: string;
   kind: BinderHitKind;
   title: string;
+  /** The binder it is filed in, for "this binder first". */
+  binderId: string;
   /** Where it is filed, e.g. "Litigation › Trial › Objections". */
   context: string;
   href: string;
@@ -58,6 +60,7 @@ function buildEntries(): Entry[] {
         entries.push({
           id: `topic-${tab.id}-${topic.id}`,
           kind: "Topic",
+          binderId: binder.id,
           title: topic.title,
           context: `${binder.name} › ${tab.label}`,
           href: topic.href,
@@ -71,6 +74,7 @@ function buildEntries(): Entry[] {
           entries.push({
             id: `reference-${page.href}`,
             kind: "Reference",
+            binderId: binder.id,
             title: page.title,
             context: place,
             href: page.href,
@@ -87,6 +91,7 @@ function buildEntries(): Entry[] {
           entries.push({
             id: `practice-${drill.id}`,
             kind: "Practice",
+            binderId: binder.id,
             title: drill.title,
             context: place,
             href: drillHref(drill),
@@ -104,6 +109,7 @@ function buildEntries(): Entry[] {
             entries.push({
               id: `lesson-${HEARSAY_COURSE_ID}-${index + 1}`,
               kind: "Lesson",
+              binderId: binder.id,
               title: skill.title,
               context: `Hearsay part ${index + 1} · ${place}`,
               href: skill.href,
@@ -125,8 +131,16 @@ function buildEntries(): Entry[] {
 // Binder content is module-level data, so the index is built once.
 let index: Entry[] | null = null;
 
-/** Binder hits for a query, best first, limited to courses the user can open. */
-export function searchBinders(query: string, eligibleIds: Set<string>, limit = 4): BinderHit[] {
+/**
+ * Binder hits for a query, best first, limited to courses the user can open.
+ * With `preferBinderId` (searching from inside a binder), that binder's hits
+ * come first, each group still in score order.
+ */
+export function searchBinders(
+  query: string,
+  eligibleIds: Set<string>,
+  { limit = 4, preferBinderId }: { limit?: number; preferBinderId?: string } = {},
+): BinderHit[] {
   index ??= buildEntries();
   return index
     .filter((entry) => !entry.courseId || eligibleIds.has(entry.courseId))
@@ -135,11 +149,17 @@ export function searchBinders(query: string, eligibleIds: Set<string>, limit = 4
       return { entry, score: score > 0 ? score + kindBonus[entry.kind] : 0 };
     })
     .filter(({ score }) => score > 0)
-    .sort((a, b) => b.score - a.score || a.entry.title.localeCompare(b.entry.title))
+    .sort(
+      (a, b) =>
+        Number(b.entry.binderId === preferBinderId) - Number(a.entry.binderId === preferBinderId) ||
+        b.score - a.score ||
+        a.entry.title.localeCompare(b.entry.title),
+    )
     .slice(0, limit)
     .map(({ entry, score }) => ({
       id: entry.id,
       kind: entry.kind,
+      binderId: entry.binderId,
       title: entry.title,
       context: entry.context,
       href: entry.href,
@@ -150,5 +170,12 @@ export function searchBinders(query: string, eligibleIds: Set<string>, limit = 4
 /** Every binder entry as a hit, regardless of query or eligibility (for checks). */
 export function listBinderEntries(): BinderHit[] {
   index ??= buildEntries();
-  return index.map(({ id, kind, title, context, href }) => ({ id, kind, title, context, href }));
+  return index.map(({ id, kind, binderId, title, context, href }) => ({
+    id,
+    kind,
+    binderId,
+    title,
+    context,
+    href,
+  }));
 }

@@ -11,7 +11,7 @@ import { useAuth } from "@/lib/auth";
 import { browseHref } from "@/lib/home-helpers";
 import { useCatalogFilters } from "@/lib/hooks/use-catalog-filters";
 import { openBinderHit } from "@/lib/open-binder-hit";
-import { searchEverything } from "@/lib/search-results";
+import { searchEverything, searchHref } from "@/lib/search-results";
 import { recordSearchAnalytics } from "@/lib/search-analytics";
 import type { SearchResult } from "@/lib/search";
 
@@ -125,6 +125,7 @@ export default function Home() {
           onSelectResult={openSearchResult}
           binderHits={binderHits}
           onSelectBinderHit={(hit) => openBinderHit(hit, catalog.query, router)}
+          onSeeAll={() => router.push(searchHref(catalog.query))}
           allItems={allItems}
         />
 

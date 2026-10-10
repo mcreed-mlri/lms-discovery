@@ -32,6 +32,7 @@ export const SIGNED_IN_ROUTES = [
   { path: "/binder/litigation/trial-skills/", name: "trial tab" },
   { path: "/binder/litigation/trial-skills/objections/", name: "objections topic" },
   { path: "/binder/litigation/trial-skills/discovery/", name: "planned topic" },
+  { path: "/search/?q=hearsay+objection", name: "search results" },
   {
     path: "/binder/litigation/trial-skills/practice/hearsay-objection-in-writing/",
     name: "hearsay practice room",

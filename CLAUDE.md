@@ -21,7 +21,7 @@ Windows without global Node: prefix any script with the bundled npm, e.g. `.\too
 
 CI (`.github/workflows/ci.yml`) is three jobs: `audit` (`npm audit --omit=dev --audit-level=high`, no install — it reads the lockfile; production deps only, see the comment in `ci.yml`), `checks` (typecheck + lint + format:check + coverage + build), and `e2e` (Playwright + axe). The audit is deliberately its own job so a newly published advisory fails on its own instead of skipping every other check. Vercel deploys `main` via its git integration. A Husky pre-commit hook runs lint-staged on staged files only.
 
-**Operational docs**: [`docs/runbook.md`](docs/runbook.md) for setup and troubleshooting, [`docs/adr/`](docs/adr/README.md) for decisions that look odd and are deliberate, [`CONTRIBUTING.md`](CONTRIBUTING.md) for house rules. Read the ADR index before changing auth, colour tokens, or the lint config.
+**Operational docs**: [`docs/runbook.md`](docs/runbook.md) for setup and troubleshooting, [`docs/adr/`](docs/adr/README.md) for decisions that look odd and are deliberate, [`CONTRIBUTING.md`](CONTRIBUTING.md) for house rules, [`docs/search.md`](docs/search.md) for how search works and what it needs next. Read the ADR index before changing auth, colour tokens, or the lint config.
 
 ## Architecture
 

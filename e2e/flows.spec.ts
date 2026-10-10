@@ -250,3 +250,23 @@ test("searching from Home goes straight to the drill inside its binder", async (
   await expect(page).toHaveURL(/practice\/hearsay-objection-in-writing\/?$/);
   await expect(page.getByRole("heading", { level: 1, name: /Practice:/ })).toBeVisible();
 });
+
+test("See all results opens the results page, the current binder first", async ({ page }) => {
+  await signIn(page);
+  await page.goto("/binder/litigation/trial-skills/");
+  await page.keyboard.press("ControlOrMeta+k");
+  const dialog = page.getByRole("dialog", { name: /search/i });
+  await dialog.getByRole("combobox").fill("hearsay");
+  await dialog.getByRole("option", { name: /See all results for/ }).click();
+
+  await expect(page).toHaveURL(/\/search\/?\?q=hearsay&in=litigation$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Search" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "In Litigation" })).toBeVisible();
+
+  // Typing refines the results and keeps the address shareable.
+  await page.getByRole("searchbox").fill("hearsay exceptions");
+  await expect(page).toHaveURL(/q=hearsay\+exceptions/);
+  await expect(
+    page.getByRole("region", { name: "In Litigation" }).getByRole("link").first(),
+  ).toContainText("Hearsay: key concepts");
+});

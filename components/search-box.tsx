@@ -14,6 +14,8 @@ type SearchBoxProps = {
   /** References, drills, lessons and topic pages, listed before library results. */
   binderHits?: BinderHit[];
   onSelectBinderHit?: (hit: BinderHit) => void;
+  /** Adds a last row, "See all results", that opens the results page. */
+  onSeeAll?: () => void;
   compact?: boolean;
   prominent?: boolean;
   /** Visible prompt. Home asks in the advocate's own terms; elsewhere it stays generic. */
@@ -27,6 +29,7 @@ export function SearchBox({
   onSelect,
   binderHits = [],
   onSelectBinderHit,
+  onSeeAll,
   compact = false,
   prominent = false,
   placeholder = "Search the library",
@@ -37,8 +40,9 @@ export function SearchBox({
   const [activeIndex, setActiveIndex] = useState(0);
   const hasQuery = value.trim().length > 0;
   const showSuggestions = hasQuery && isOpen;
-  // One list for the keyboard: binder hits first, then library results.
+  // One list for the keyboard: binder hits, library results, then "See all".
   const total = binderHits.length + suggestions.length;
+  const rows = total + (onSeeAll ? 1 : 0);
 
   // Keyed on ids, not the array: callers may build a fresh array each render,
   // which would otherwise reset the highlighted row on every keypress.
@@ -64,11 +68,16 @@ export function SearchBox({
     onSelectBinderHit?.(hit);
   }
 
+  function seeAll() {
+    setIsOpen(false);
+    onSeeAll?.();
+  }
+
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === "ArrowDown") {
       event.preventDefault();
       setIsOpen(true);
-      setActiveIndex((current) => (total === 0 ? 0 : Math.min(current + 1, total - 1)));
+      setActiveIndex((current) => (rows === 0 ? 0 : Math.min(current + 1, rows - 1)));
       return;
     }
 
@@ -83,11 +92,12 @@ export function SearchBox({
       return;
     }
 
-    if (event.key === "Enter" && hasQuery && total > 0) {
+    if (event.key === "Enter" && hasQuery && rows > 0) {
       event.preventDefault();
-      const index = Math.min(activeIndex, total - 1);
+      const index = Math.min(activeIndex, rows - 1);
       if (index < binderHits.length) selectBinderHit(binderHits[index]);
-      else selectResult(suggestions[index - binderHits.length]);
+      else if (index < total) selectResult(suggestions[index - binderHits.length]);
+      else seeAll();
     }
   }
 
@@ -103,7 +113,7 @@ export function SearchBox({
       />
       <input
         aria-activedescendant={
-          showSuggestions && activeIndex < total ? `${listboxId}-${activeIndex}` : undefined
+          showSuggestions && activeIndex < rows ? `${listboxId}-${activeIndex}` : undefined
         }
         aria-autocomplete="list"
         aria-controls={listboxId}
@@ -245,6 +255,25 @@ export function SearchBox({
               No matches. Try evictions, intake, motions, or courtroom procedures.
             </div>
           )}
+          {onSeeAll ? (
+            <button
+              aria-selected={activeIndex === total}
+              className={`flex w-full items-center justify-between gap-3 border-t border-[color:var(--line)] px-3 py-3 text-left text-sm font-bold transition ${
+                activeIndex === total
+                  ? "bg-[color:var(--surface-sunken)]"
+                  : "bg-[color:var(--surface-raised)] hover:bg-[color:var(--surface)]"
+              }`}
+              id={`${listboxId}-${total}`}
+              onMouseDown={(event) => event.preventDefault()}
+              onMouseEnter={() => setActiveIndex(total)}
+              onClick={seeAll}
+              role="option"
+              type="button"
+            >
+              <span className="min-w-0 truncate">See all results for “{value.trim()}”</span>
+              <span aria-hidden="true">›</span>
+            </button>
+          ) : null}
         </div>
       )}
     </div>

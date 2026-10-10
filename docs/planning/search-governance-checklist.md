@@ -1,5 +1,7 @@
 # Search Governance Checklist
 
+How search works and its roadmap: [`docs/search.md`](../search.md).
+
 LACE search is an LMS discovery feature first. Brightspace remains the system of record for delivery, enrollment, progress, and completion; LACE owns discovery metadata, ranking cues, pathways, and search analytics.
 
 ## Required Metadata
