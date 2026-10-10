@@ -3,29 +3,29 @@ import Link from "next/link";
 import { ArrowIcon } from "@/components/icons";
 import { binders, filedItems, getSectionTabs } from "@/lib/binder";
 import { getStatusTheme, resolveStatusKey } from "@/lib/course-theme";
-import { contentUpdates, getLearningItemUrl, modules, type LearningItem } from "@/lib/data";
+import { contentUpdates, type LearningItem } from "@/lib/data";
+import { drillHref, practiceDrills } from "@/lib/practice";
 
-// Built courses an attorney can open today, other than the pilot, which the
-// resume card already carries. Eviction Defense is left off until a Housing
-// binder exists to file it in; search and Browse still find it.
-const ALSO_OPEN = ["welcome-to-lace"];
-
-function availableMeta(item: LearningItem) {
-  if (item.type !== "COURSE") return null;
-  const courseModules = modules.filter((module) => module.courseId === item.id);
-  const parts = [item.practiceArea];
-  if (courseModules.length > 0) parts.push(`${courseModules.length} modules`);
-  parts.push(item.duration.replace(/^~/, "about "));
-  return parts.join(" · ");
-}
-
-function binderOpenCount(binderId: string, eligibleIds: Set<string>) {
+/** What a binder holds today, as "1 course ready · 1 drill", or null when it has nothing built yet. */
+export function binderReadyLabel(binderId: string, eligibleIds: Set<string>) {
   const binder = binders.find((b) => b.id === binderId);
   const tabs = binder ? getSectionTabs(binder) : [];
-  return tabs.reduce(
+  const ready = tabs.reduce(
     (sum, tab) => sum + (filedItems[tab.id] ?? []).filter((id) => eligibleIds.has(id)).length,
     0,
   );
+  const drills = practiceDrills.filter((drill) => drill.binderId === binderId).length;
+  const parts = [
+    ready > 0 ? `${ready} ${ready === 1 ? "course" : "courses"} ready` : null,
+    drills > 0 ? `${drills} ${drills === 1 ? "drill" : "drills"}` : null,
+  ].filter(Boolean);
+  return parts.length > 0 ? parts.join(" · ") : null;
+}
+
+/** Updates about something filed in a binder. The rest wait on the Updates page. */
+export function binderUpdates() {
+  const filed = new Set(Object.values(filedItems).flat());
+  return contentUpdates.filter((update) => filed.has(update.courseId));
 }
 
 function YourBinders({
@@ -48,7 +48,7 @@ function YourBinders({
       </h2>
       <ul className="mt-4 border-t-[1.5px] border-[color:var(--ink)]">
         {binders.map((binder) => {
-          const open = binderOpenCount(binder.id, eligibleIds);
+          const ready = binderReadyLabel(binder.id, eligibleIds);
           return (
             <li key={binder.id}>
               <Link
@@ -64,11 +64,13 @@ function YourBinders({
                     {binder.blurb}
                   </span>
                 </span>
-                {open > 0 ? (
-                  <span className="shrink-0 pt-0.5 text-[12px] font-semibold tabular-nums text-[color:var(--ink-soft)]">
-                    {open} open
-                  </span>
-                ) : null}
+                <span
+                  className={`shrink-0 pt-0.5 text-[12px] font-semibold ${
+                    ready ? "text-[color:var(--ink)]" : "text-[color:var(--ink-soft)]"
+                  }`}
+                >
+                  {ready ?? "Coming"}
+                </span>
               </Link>
             </li>
           );
@@ -97,10 +99,7 @@ function YourBinders({
 // under search, and the side column under the resume card.
 export function HomeOverview({ allItems }: { allItems: LearningItem[] }) {
   const eligibleIds = new Set(allItems.map((item) => item.id));
-  const alsoOpen = ALSO_OPEN.map((id) =>
-    allItems.find((item) => item.type === "COURSE" && item.id === id),
-  ).filter((item): item is LearningItem => Boolean(item));
-  const update = contentUpdates[0];
+  const update = binderUpdates()[0];
   const updateStatus = update ? getStatusTheme(resolveStatusKey(update.tag)) : null;
 
   return (
@@ -109,56 +108,63 @@ export function HomeOverview({ allItems }: { allItems: LearningItem[] }) {
       <YourBinders eligibleIds={eligibleIds} catalogTotal={allItems.length} />
 
       <div className="flex min-w-0 flex-col gap-8 lg:col-start-2 lg:row-start-3">
-        {alsoOpen.length > 0 ? (
-          <section aria-labelledby="available-heading">
+        {practiceDrills.length > 0 ? (
+          <section aria-labelledby="practice-heading">
             <h2
-              id="available-heading"
+              id="practice-heading"
               className="text-[17px] font-extrabold tracking-[-0.01em] text-[color:var(--ink)]"
             >
-              Also open now
+              Practice
             </h2>
             <ul className="mt-2.5 border-t-[1.5px] border-[color:var(--ink)]">
-              {alsoOpen.map((item) => (
-                <li key={item.id}>
-                  <a
-                    href={getLearningItemUrl(item)}
-                    className="group flex items-center justify-between gap-3 border-b border-[color:var(--line)] py-3 transition hover:bg-[color:var(--hover-tint)] focus-ring"
-                  >
-                    <span className="min-w-0">
+              {practiceDrills.map((drill) => {
+                const binder = binders.find((b) => b.id === drill.binderId);
+                const tab = binder?.tabs.find((t) => t.id === drill.tabId);
+                return (
+                  <li key={drill.id}>
+                    <Link
+                      href={drillHref(drill)}
+                      className="group block border-b border-[color:var(--line)] py-3 transition hover:bg-[color:var(--hover-tint)] focus-ring"
+                    >
                       <span className="block text-[14px] font-bold text-[color:var(--ink)]">
-                        {item.title}
+                        {drill.title}
                       </span>
-                      <span className="block text-[12px] text-[color:var(--ink-soft)]">
-                        {availableMeta(item)}
+                      <span className="mt-0.5 block text-[13px] leading-snug text-[color:var(--ink-muted)]">
+                        {drill.summary}
                       </span>
-                    </span>
-                    <span className="inline-flex shrink-0 items-center gap-1 text-[12px] font-bold text-[color:var(--ink)]">
-                      Open
-                      <ArrowIcon className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-                    </span>
-                  </a>
-                </li>
-              ))}
+                      <span className="mt-2 flex items-center gap-1 text-[12px] font-bold text-[color:var(--brand-ink)]">
+                        {[
+                          binder && tab ? `${binder.name} › ${tab.label}` : null,
+                          "not graded or recorded",
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")}
+                        <ArrowIcon className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </section>
         ) : null}
 
-        {update && updateStatus ? (
-          <section aria-labelledby="update-heading">
-            <div className="flex items-baseline justify-between gap-3">
-              <h2
-                id="update-heading"
-                className="text-[17px] font-extrabold tracking-[-0.01em] text-[color:var(--ink)]"
-              >
-                Updates
-              </h2>
-              <Link
-                href="/updates"
-                className="rounded-[3px] text-[13px] font-semibold text-[color:var(--brand)] underline-offset-[3px] hover:underline focus-ring"
-              >
-                All updates
-              </Link>
-            </div>
+        <section aria-labelledby="update-heading">
+          <div className="flex items-baseline justify-between gap-3">
+            <h2
+              id="update-heading"
+              className="text-[17px] font-extrabold tracking-[-0.01em] text-[color:var(--ink)]"
+            >
+              What changed in your binders
+            </h2>
+            <Link
+              href="/updates"
+              className="shrink-0 rounded-[3px] text-[13px] font-semibold text-[color:var(--brand)] underline-offset-[3px] hover:underline focus-ring"
+            >
+              All updates
+            </Link>
+          </div>
+          {update && updateStatus ? (
             <div className="mt-2.5 rounded-[8px] border border-[color:var(--line)] bg-[color:var(--surface)] px-4 py-3.5">
               <div className="flex flex-wrap items-center gap-2">
                 <span
@@ -174,8 +180,12 @@ export function HomeOverview({ allItems }: { allItems: LearningItem[] }) {
                 {update.title}
               </p>
             </div>
-          </section>
-        ) : null}
+          ) : (
+            <p className="mt-2.5 border-t-[1.5px] border-[color:var(--ink)] pt-3 text-[14px] text-[color:var(--ink-muted)]">
+              Nothing new in your binders yet.
+            </p>
+          )}
+        </section>
       </div>
     </>
   );

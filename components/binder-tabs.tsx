@@ -16,11 +16,14 @@ let lastOpenHref: string | null = null;
  *
  * `rail` is the desktop column on the page's fore-edge: manila dividers, the
  * open one white and joined to the page with the binder colour on its edge.
+ * Off the binder's pages (Home, My learning) nothing is open: the rail names
+ * the binder and marks the divider the visitor left off on, still manila, so
+ * it never looks as if Home were a page inside the binder.
  * `strip` is the phone version, a horizontal row of the same tabs at the top
  * of binder pages.
  */
 export function BinderTabs({ variant = "rail" }: { variant?: "rail" | "strip" }) {
-  const { binder, tabId } = useOpenBinder();
+  const { binder, tabId, leftOffTabId } = useOpenBinder();
   const openHref = binder.tabs.find((tab) => tab.id === tabId)?.href ?? null;
   // Changing section: the old divider slides shut and the new one draws out.
   const previous = lastOpenHref !== null && lastOpenHref !== openHref ? lastOpenHref : null;
@@ -53,18 +56,28 @@ export function BinderTabs({ variant = "rail" }: { variant?: "rail" | "strip" })
 
   return (
     <nav aria-label={label} className="binder-tabs">
+      {openHref === null ? (
+        <p aria-hidden="true" className="binder-tabs-name">
+          <span className="binder-swatch" />
+          {binder.name}
+        </p>
+      ) : null}
       {binder.tabs.map((tab) => {
         const open = tab.href === openHref;
+        const leftOff = openHref === null && tab.id === leftOffTabId;
         return (
           <Link
             key={tab.id}
             href={tab.href}
             aria-current={open ? "page" : undefined}
+            // The two vertical labels would otherwise read as "Trialleft off here".
+            aria-label={leftOff ? `${tab.label}, where you left off` : undefined}
             className={`binder-tab focus-ring ${open && previous ? "binder-tab-opening" : ""} ${
               tab.href === previous ? "binder-tab-closing" : ""
-            }`}
+            } ${leftOff ? "binder-tab-left-off" : ""}`}
           >
             <span className="binder-tab-label">{tab.label}</span>
+            {leftOff ? <span className="binder-tab-note">left off here</span> : null}
           </Link>
         );
       })}

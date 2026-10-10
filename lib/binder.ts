@@ -145,6 +145,15 @@ export const filedItems: Record<string, string[]> = {
   "trial-skills": ["legal-skills-hearsay"],
 };
 
+/** The binder and tab a built item is filed under, if any. */
+export function findFiling(itemId: string): { binder: Binder; tab: BinderTab } | undefined {
+  for (const binder of binders) {
+    const tab = getSectionTabs(binder).find((t) => filedItems[t.id]?.includes(itemId));
+    if (tab) return { binder, tab };
+  }
+  return undefined;
+}
+
 export type ReferencePage = {
   title: string;
   /** Kind and source, shown under the title. */

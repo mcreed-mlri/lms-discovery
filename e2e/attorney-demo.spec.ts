@@ -16,7 +16,7 @@ for (const viewport of [
     const main = page.getByRole("main");
     // Home is search, then the binders; the pilot's skills live in its Trial tab.
     await expect(main.getByRole("heading", { name: "Hearsay", exact: true })).toHaveCount(0);
-    await expect(main.getByRole("heading", { name: "Your binders" })).toBeVisible();
+    await expect(main.getByRole("heading", { name: "Your binders", exact: true })).toBeVisible();
     await expect(main.getByText("Advocate & Paralegal Foundations")).toHaveCount(0);
     await expect(main.getByText("Experienced Attorney: Advanced Practice")).toHaveCount(0);
     const litigation = main.getByRole("link", { name: /^Litigation/ });

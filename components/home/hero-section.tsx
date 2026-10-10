@@ -5,12 +5,27 @@ import Link from "next/link";
 
 import { ArrowIcon } from "@/components/icons";
 import { SearchBox } from "@/components/search-box";
+import { findFiling, hearsaySkills } from "@/lib/binder";
 import { getBrightspaceManagerUrl } from "@/lib/brightspace-manager";
 import { continueLearning, courses, getContinueLearningUrl, type LearningItem } from "@/lib/data";
 import type { SearchResult } from "@/lib/search";
 import type { User } from "@/lib/auth";
 
 type ResumeEntry = Extract<(typeof continueLearning)[number], { progress: number }>;
+
+/** A stop on the resume card's line: done, the current part, still ahead, or not built yet. */
+export type Stop = "done" | "here" | "ahead" | "coming";
+
+export type ResumeCard = {
+  /** The binder and tab the course is filed under, when it has one. */
+  filing?: { binderId: string; binderName: string; tabLabel: string };
+  title: string;
+  subline: string;
+  stops: Stop[];
+  meta: string;
+  href: string;
+  action: string;
+};
 
 /**
  * Time left on a course of `duration` when the learner is on part `current` of
@@ -27,8 +42,16 @@ export function timeLeft(duration: string | undefined, current: number, total: n
   return `about ${Math.max(5, Math.round(remaining / 5) * 5)} min left`;
 }
 
-function useResumeCard(allItems: LearningItem[]) {
-  const eligibleItemIds = useMemo(() => new Set(allItems.map((item) => item.id)), [allItems]);
+const HEARSAY_COURSE_ID = "legal-skills-hearsay";
+
+/**
+ * What the resume card says. The Hearsay pilot knows which of its parts are
+ * built, so its card names the open part, resumes straight into it, and draws
+ * the unbuilt parts as "coming" rather than as done or ahead. Anything else
+ * falls back to its "2/5" progress label.
+ */
+export function getResumeCard(allItems: LearningItem[]): ResumeCard {
+  const eligibleItemIds = new Set(allItems.map((item) => item.id));
   const resumeItem =
     (continueLearning.find((item) => "progress" in item && eligibleItemIds.has(item.id)) as
       ResumeEntry | undefined) ??
@@ -40,48 +63,88 @@ function useResumeCard(allItems: LearningItem[]) {
       progress: 0,
       progressLabel: "0%",
     } satisfies ResumeEntry);
-  const resumeUrl = getContinueLearningUrl(resumeItem, allItems);
-  const resumeCourse = courses.find((course) => course.id === resumeItem.id);
+  const filed = findFiling(resumeItem.id);
+  const filing = filed
+    ? { binderId: filed.binder.id, binderName: filed.binder.name, tabLabel: filed.tab.label }
+    : undefined;
+
+  const openIndex = hearsaySkills.findIndex((skill) => skill.status === "open");
+  const openSkill = hearsaySkills[openIndex];
+  if (resumeItem.id === HEARSAY_COURSE_ID && openSkill?.href) {
+    const part = openIndex + 1;
+    const openCount = hearsaySkills.filter((skill) => skill.status === "open").length;
+    return {
+      filing,
+      title: openSkill.title,
+      subline: `${resumeItem.title}, part ${part} of ${hearsaySkills.length}`,
+      stops: hearsaySkills.map((skill, index) =>
+        index === openIndex ? "here" : skill.status === "open" ? "ahead" : "coming",
+      ),
+      meta: [
+        openCount === 1 ? "The only part open so far" : `${openCount} parts open`,
+        openSkill.minutes ? `about ${openSkill.minutes} min` : null,
+      ]
+        .filter(Boolean)
+        .join(" · "),
+      href: openSkill.href,
+      action: `Resume part ${part}`,
+    };
+  }
 
   // "2/5" → part 2 of 5, drawn as five stops. Anything else has no stops.
   const lesson = /^(\d+)\/(\d+)$/.exec(resumeItem.progressLabel ?? "");
   const current = lesson ? Number(lesson[1]) : 0;
   const total = lesson ? Number(lesson[2]) : 0;
-  // The title already names the course, so the lesson line carries only time left.
-  const context = timeLeft(resumeCourse?.duration, current, total);
-
-  return { resumeItem, resumeUrl, context, current, total };
+  const resumeCourse = courses.find((course) => course.id === resumeItem.id);
+  return {
+    filing,
+    title: resumeItem.title,
+    subline: `Next: ${resumeItem.detail}`,
+    stops: Array.from({ length: total }, (_, index) =>
+      index + 1 < current ? "done" : index + 1 === current ? "here" : "ahead",
+    ),
+    meta: [
+      total > 0 ? `Part ${current} of ${total}` : `${resumeItem.progress}% complete`,
+      timeLeft(resumeCourse?.duration, current, total),
+    ]
+      .filter(Boolean)
+      .join(" · "),
+    href: getContinueLearningUrl(resumeItem, allItems),
+    action: "Resume",
+  };
 }
 
-// The T Map's stop line: one stop per lesson, with "You are here" set under the
-// current one. Decorative; the lesson line below carries the same fact in words.
-function LessonStops({ current, total }: { current: number; total: number }) {
+const stopClass: Record<Stop, string> = {
+  // Ringed in the binder's colour; the card sets data-binder.
+  here: "h-5 w-5 bg-[color:var(--feature-ink)] shadow-[0_0_0_3px_var(--feature-surface),0_0_0_5px_var(--binder)]",
+  done: "h-3 w-3 bg-[color:var(--feature-ink)]",
+  ahead: "h-3 w-3 border-2 border-[color:var(--feature-ink)]",
+  coming: "h-2.5 w-2.5 border-2 border-[color:var(--feature-muted)]",
+};
+
+// The T Map's stop line: one stop per part, with "You are here" set under the
+// current one. Parts not built yet are small hollow dots on a dashed track. Decorative; the line under it carries the same facts in words.
+function LessonStops({ stops }: { stops: Stop[] }) {
   return (
     <div className="relative mt-4 flex items-center pb-5" aria-hidden="true">
-      {Array.from({ length: total }).map((_, index) => {
-        const stop = index + 1;
-        const here = stop === current;
-        return (
-          <span key={stop} className="contents">
-            {index > 0 ? <span className="h-0.5 flex-1 bg-[color:var(--feature-track)]" /> : null}
-            <span
-              className={`relative ${
-                here
-                  ? "h-5 w-5 shrink-0 rounded-full bg-[color:var(--feature-ink)] shadow-[0_0_0_3px_var(--feature-surface),0_0_0_5px_var(--tab-learning)]"
-                  : stop < current
-                    ? "h-3 w-3 shrink-0 rounded-full bg-[color:var(--feature-ink)]"
-                    : "h-3 w-3 shrink-0 rounded-full border-2 border-[color:var(--feature-ink)]"
-              }`}
-            >
-              {here ? (
-                <span className="absolute left-0 top-[calc(100%+6px)] whitespace-nowrap text-[12px] font-semibold text-[color:var(--feature-ink)]">
-                  You are here
-                </span>
-              ) : null}
-            </span>
+      {stops.map((stop, index) => (
+        <span key={index} className="contents">
+          {index > 0 ? (
+            stop === "coming" || stops[index - 1] === "coming" ? (
+              <span className="flex-1 border-t-2 border-dashed border-[color:var(--feature-track)]" />
+            ) : (
+              <span className="h-0.5 flex-1 bg-[color:var(--feature-track)]" />
+            )
+          ) : null}
+          <span className={`relative shrink-0 rounded-full ${stopClass[stop]}`}>
+            {stop === "here" ? (
+              <span className="absolute left-0 top-[calc(100%+6px)] whitespace-nowrap text-[12px] font-semibold text-[color:var(--feature-ink)]">
+                You are here
+              </span>
+            ) : null}
           </span>
-        );
-      })}
+        </span>
+      ))}
     </div>
   );
 }
@@ -107,12 +170,12 @@ export function HeroSection({
   onSelectResult: (result: SearchResult) => void;
   allItems: LearningItem[];
 }) {
-  const { resumeItem, resumeUrl, context, current, total } = useResumeCard(allItems);
+  const card = useMemo(() => getResumeCard(allItems), [allItems]);
 
   return (
     <>
       <div className="min-w-0 lg:col-start-1 lg:row-start-1">
-        <h1 className="hero-display text-[32px] leading-[1.08] tracking-[-0.025em] text-[color:var(--ink)] sm:text-[42px]">
+        <h1 className="hero-display text-[30px] leading-[1.1] tracking-[-0.025em] text-[color:var(--ink)] sm:text-[34px]">
           Welcome back, {user.firstName}.
         </h1>
         <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[14px] text-[color:var(--ink-muted)]">
@@ -158,29 +221,26 @@ export function HeroSection({
         <aside
           className="min-w-0 self-start rounded-[12px] bg-[color:var(--feature-surface)] px-5 py-5 text-[color:var(--feature-ink)] sm:px-6 lg:col-start-2 lg:row-span-2 lg:row-start-1"
           aria-label="Resume learning"
+          data-binder={card.filing?.binderId}
         >
-          <h2 className="text-[22px] font-extrabold leading-tight tracking-[-0.01em]">
-            {resumeItem.title}
-          </h2>
-          <p className="mt-1 text-[13px] text-[color:var(--feature-muted)]">
-            Next: {resumeItem.detail}
-          </p>
-          {total > 1 ? <LessonStops current={current} total={total} /> : null}
-          <div className="mt-4 flex items-center justify-between gap-4">
-            <p className="text-[12px] text-[color:var(--feature-muted)]">
-              {[
-                total > 0 ? `Part ${current} of ${total}` : `${resumeItem.progress}% complete`,
-                context,
-              ]
-                .filter(Boolean)
-                .join(" · ")}
+          {card.filing ? (
+            <p className="flex items-center gap-2 text-[12px] font-semibold text-[color:var(--feature-muted)]">
+              <span aria-hidden="true" className="binder-swatch scale-90" />
+              {card.filing.binderName} › {card.filing.tabLabel}
             </p>
+          ) : null}
+          <h2 className="mt-1.5 text-[21px] font-extrabold leading-tight tracking-[-0.01em]">
+            {card.title}
+          </h2>
+          <p className="mt-1 text-[13px] text-[color:var(--feature-muted)]">{card.subline}</p>
+          {card.stops.length > 1 ? <LessonStops stops={card.stops} /> : null}
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+            <p className="text-[12px] text-[color:var(--feature-muted)]">{card.meta}</p>
             <a
-              href={resumeUrl}
-              aria-label={`Resume ${resumeItem.title}`}
-              className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-[7px] bg-[color:var(--feature-action-bg)] px-4 text-[14px] font-bold text-[color:var(--feature-action-ink)] transition hover:opacity-90 focus-ring-inverse"
+              href={card.href}
+              className="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-[7px] bg-[color:var(--feature-action-bg)] px-4 text-[14px] font-bold text-[color:var(--feature-action-ink)] transition hover:opacity-90 focus-ring-inverse"
             >
-              Resume
+              {card.action}
               <ArrowIcon className="h-4 w-4" />
             </a>
           </div>

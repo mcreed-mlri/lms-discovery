@@ -756,8 +756,9 @@ input::placeholder {
    open divider's edge and the section rule. Taken from the measured --tab-*
    set. Any element can carry data-binder, so the switcher's list swatches
    show their own binder's colour. */
+/* Not --brand-fill: ultramarine means "interactive" (links, focus, avatar). */
 [data-binder="practice-foundations"] {
-  --binder: var(--brand-fill);
+  --binder: var(--tab-learning);
 }
 [data-binder="litigation"] {
   --binder: var(--tab-home);
@@ -870,6 +871,48 @@ input::placeholder {
 .binder-tab.focus-ring:focus-visible {
   outline-color: var(--ink);
   outline-offset: 3px;
+}
+
+/* Off the binder's pages: the divider the visitor left off on. It stays manila
+   (nothing is open) and carries the binder colour on its edge, plus a note. In
+   vertical-rl the note reads after the label, so it sits to the label's left. */
+.binder-tab-left-off {
+  flex-direction: row-reverse;
+  gap: 4px;
+  border-right: 4px solid var(--binder);
+}
+
+.binder-tab-left-off .binder-tab-label {
+  font-weight: 800;
+}
+
+.binder-tab-note {
+  writing-mode: vertical-rl;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+/* The binder's name above its dividers when none is open, so Home reads as
+   "the binder left on the desk", not as a page inside it. */
+.binder-tabs-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 6px;
+  padding-left: 12px;
+  writing-mode: vertical-rl;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.binder-tabs-name .binder-swatch {
+  width: 14px;
+  height: 10px;
+  border-radius: 0 2px 2px 0;
 }
 
 .binder-tab-label {

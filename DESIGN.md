@@ -203,7 +203,7 @@ A white-and-ink page on warm chipboard, with saturated binder colours rationed t
 
 ### Secondary: binders and dividers (where you are)
 
-- **Binder colour.** Each binder has one colour. Legal Skills is ultramarine (binder-legal-skills). Substantive-law binders get theirs from the divider set below when they ship: Housing orange, and so on. The binder colour appears in three places only: the switcher's swatch, the open divider's free edge (4px), and the 4px rule under the open section's title.
+- **Binder colour.** Each binder has one colour from the measured tab set: Practice Foundations teal (tab-learning), Litigation orange (tab-home), Beyond the Courtroom green (tab-paths). None is ultramarine, which means _interactive_. Substantive-law binders get theirs from the same set when they ship. The binder colour appears only as a non-text mark: the switcher's swatch, the open divider's free edge (4px), the left-off divider's edge on pages outside the binder, the 4px rule under the open section's title, and the swatch and "You are here" ring on Home's resume card.
 - **Manila dividers** (divider-manila, alternating with divider-manila-alt) are the closed tabs. They take dark ink (tab-on), like printed index dividers. No rainbow: 13 coloured tabs would be noise.
 - **The old section set** (tab-home-orange, tab-browse-amber, tab-paths-green, tab-learning-teal, tab-updates-periwinkle, measured 5.30, 8.37, 5.51, 5.34 and 5.12:1 with tab-on) is now the pool that substantive-law binder colours come from. The tokens and their recorded ratios stay locked.
 - **Notes Paper** (notes-paper, edge notes-edge): the warm fill for the My notes panel. Use it only for content the user wrote.
@@ -231,7 +231,7 @@ A white-and-ink page on warm chipboard, with saturated binder colours rationed t
 
 ### Named Rules
 
-**The Signal Rule.** Colour is a signal, never decoration. Binder colour means which binder you're in, status colour means state, and ultramarine means interactive. (Legal Skills shares ultramarine, but only on the switcher swatch, the open divider's edge and the section rule, never as text or fill.) If a colour on screen answers none of those, remove it.
+**The Signal Rule.** Colour is a signal, never decoration. Binder colour means which binder you're in, status colour means state, and ultramarine means interactive. No binder uses ultramarine. If a colour on screen answers none of those, remove it.
 
 **The Law-Changed Red Rule.** Red appears only for law-changed notices and for the unread dot that leads to them. Errors, deadlines and emphasis do not get red.
 
@@ -271,7 +271,7 @@ On desktop (1024px and up) the sheet runs to the top, left and bottom of the vie
 
 Inside the sheet, content is centred in a 1180px column (cap it so a very wide monitor doesn't stretch lines), with gutters of 16px (phone), 24px (640px and up) and 44px (desktop). Pages use a flexible main column and a roughly 340px side column, separated by a 44–48px gap, stacking in reading order on phones.
 
-- **Home** (outside the binders): main column holds the greeting, search and "Your binders" (name, one line, and an open count, nothing else). Side column holds the resume card (the one place to continue), "Also open now", and one update. Keep it this quiet: planned counts, tab lists and course outlines belong inside the binders. The Hearsay pilot's five skills live on Litigation › Trial, under the course.
+- **Home** (outside the binders): main column holds the greeting, search and "Your binders" (name, one line, and what is ready, such as "1 course ready · 1 drill", or "Coming"; nothing else). Side column holds the resume card (the one place to continue: it names the part, where the course is filed, and draws unbuilt parts as dashed stops), "Practice", and "What changed in your binders" (only updates about something filed in a binder, else a one-line empty state). The dividers show the binder left open, with the tab the visitor left off on marked. Keep it this quiet: planned counts, tab lists and course outlines belong inside the binders. The Hearsay pilot's five skills live on Litigation › Trial, under the course.
 - **Section tab:** title with the 4px binder rule, a tab-scoped search, kind chips, then grouped lists (Practice, Reference, Courses, New law, Coming). Side column holds My notes.
 
 The header is a slim sticky bar at the top of the sheet. Its height is `--studio-chrome`, and sticky offsets are measured against it. The bottom bar on phones (if kept for app navigation) reserves `--safe-bottom`, and the content column reserves the same amount.
@@ -317,7 +317,7 @@ The wordmark "Learning Hub" (17–19px / 800) at left, then the main nav: **Home
 
 ### Binder switcher
 
-A 44px outlined button showing the binder's colour swatch (10 × 14px, a tiny divider) and its name, for example "Litigation ▾". It opens a menu of binders, each with a one-line description. Each binder has its own colour from the measured tab set: Practice Foundations ultramarine, Litigation orange, Beyond the Courtroom green. Binders without content yet are listed as "Coming", never hidden and never clickable into an empty shell. The switcher remembers the last tab per binder.
+A 44px outlined button showing the binder's colour swatch (10 × 14px, a tiny divider) and its name, for example "Litigation ▾". It opens a menu of binders, each with a one-line description. Each binder has its own colour from the measured tab set: Practice Foundations teal, Litigation orange, Beyond the Courtroom green. Binders without content yet are listed as "Coming", never hidden and never clickable into an empty shell. The switcher remembers the last tab per binder.
 
 ### Kind chips
 
@@ -377,7 +377,7 @@ One treatment across the app: a 2px solid ultramarine outline at 2px offset, sho
 ### Do:
 
 - **Do** keep app navigation in the header and binder sections on the dividers. Never mix the two.
-- **Do** keep closed dividers manila. The binder colour appears only on the switcher swatch, the open divider's edge and the section rule.
+- **Do** keep closed dividers manila. Off the binder's pages, the divider the visitor left off on stays manila too, with the binder colour on its edge and "left off here" beside its label; the binder's name sits above the dividers.
 - **Do** say where every item opens.
 - **Do** put available content first and planned content in a quiet "Coming" group.
 - **Do** assign skill hues by skill id through `lib/skill-hue.ts`, so an area keeps its colour on every surface.
