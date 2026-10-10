@@ -197,3 +197,40 @@ test("a reference link opens its panel in the course without starting the lesson
   await expect(page).toHaveURL(/#procedure$/);
   await expect(page.getByRole("dialog", { name: "Procedure Reference" })).toBeVisible();
 });
+
+test("the hearsay practice room runs two rounds end to end", async ({ page }) => {
+  await signIn(page);
+  await page.goto("/binder/litigation/trial-skills/");
+  await page.getByRole("link", { name: /Answer a hearsay objection in writing/ }).click();
+  await expect(page.getByRole("heading", { level: 1, name: /Practice:/ })).toBeVisible();
+
+  // Round 1: write, tick two of the five points, read the coaching.
+  await page
+    .getByRole("textbox", { name: "Your response" })
+    .fill("The note is offered to show notice.");
+  await page.getByRole("button", { name: "Submit response" }).click();
+  await page.getByRole("checkbox", { name: /identify the challenged statement/ }).check();
+  await page.getByRole("checkbox", { name: /explain the purpose/ }).check();
+  await page.getByRole("button", { name: "See coaching" }).click();
+  await expect(page.getByText("To work on")).toHaveCount(3);
+  await expect(page.getByText("Layered statements require analysis of each layer.")).toBeVisible();
+
+  // Round 2: the pushback, labelled as unreviewed.
+  await page.getByRole("button", { name: "Answer the pushback" }).click();
+  await expect(page.getByText(/prototype prompt, not yet reviewed/)).toBeVisible();
+  await page
+    .getByRole("textbox", { name: "Your response" })
+    .fill("The client's statement is offered for notice too.");
+  await page.getByRole("button", { name: "Submit response" }).click();
+  await page.getByRole("button", { name: "See coaching" }).click();
+  await page.getByRole("button", { name: "Finish" }).click();
+
+  await expect(
+    page.getByRole("heading", { name: "Compare with the sample analysis" }),
+  ).toBeFocused();
+  await expect(page.getByRole("region", { name: "My notes" })).toBeVisible();
+
+  // Nothing typed survives leaving the page.
+  await page.reload();
+  await expect(page.getByText("The note is offered to show notice.")).toHaveCount(0);
+});

@@ -30,4 +30,8 @@ export const SIGNED_IN_ROUTES = [
   { path: "/my-learning/", name: "my learning" },
   { path: "/binder/litigation/", name: "litigation binder contents" },
   { path: "/binder/litigation/trial-skills/", name: "trial tab" },
+  {
+    path: "/binder/litigation/trial-skills/practice/hearsay-objection-in-writing/",
+    name: "hearsay practice room",
+  },
 ] as const;

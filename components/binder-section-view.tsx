@@ -16,6 +16,7 @@ import {
   referencePages,
 } from "@/lib/binder";
 import { getStatusTheme, resolveStatusKey } from "@/lib/course-theme";
+import { drillHref, getDrillsForTab } from "@/lib/practice";
 import {
   contentUpdates,
   getLearningItemById,
@@ -42,6 +43,7 @@ export function BinderSectionView({ binderId, tabId }: { binderId: string; tabId
   const filedIds = new Set(filed.map((item) => item.id));
   const changes = contentUpdates.filter((update) => filedIds.has(update.courseId));
   const references = referencePages[tabId] ?? [];
+  const drills = getDrillsForTab(tabId);
   const sections = binder ? getSectionTabs(binder) : [];
   const position = sections.findIndex((t) => t.id === tabId) + 1;
 
@@ -103,6 +105,42 @@ export function BinderSectionView({ binderId, tabId }: { binderId: string; tabId
                 </p>
               )}
             </section>
+
+            {drills.length > 0 ? (
+              <section aria-labelledby="practice">
+                <h2
+                  id="practice"
+                  className="text-[22px] font-extrabold tracking-[-0.015em] text-[color:var(--ink)]"
+                >
+                  Practice
+                </h2>
+                <p className="mt-0.5 text-[13px] text-[color:var(--ink-soft)]">
+                  Rehearse before court. Nothing is graded or recorded.
+                </p>
+                <ul className="mt-3 flex flex-col gap-3">
+                  {drills.map((drill) => (
+                    <li key={drill.id}>
+                      <Link
+                        href={drillHref(drill)}
+                        className="group flex flex-wrap items-center justify-between gap-x-6 gap-y-2 rounded-[12px] border-[1.5px] border-[color:var(--ink)] px-5 py-4 transition hover:bg-[color:var(--hover-tint)] focus-ring"
+                      >
+                        <span className="min-w-0 flex-1 basis-80">
+                          <span className="block text-[17px] font-extrabold text-[color:var(--ink)]">
+                            {drill.title}
+                          </span>
+                          <span className="mt-0.5 block text-[14px] leading-relaxed text-[color:var(--ink-muted)]">
+                            {drill.summary}
+                          </span>
+                        </span>
+                        <span className="text-[15px] font-bold text-[color:var(--brand-ink)]">
+                          Start practice
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
 
             {references.length > 0 ? (
               <section aria-labelledby="keep-at-hand">

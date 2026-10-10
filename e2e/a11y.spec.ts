@@ -83,6 +83,35 @@ ${describe(violations)}`,
     ).toEqual([]);
   });
 
+  test("the practice room mid-drill has no violations in either theme", async ({ page }) => {
+    // The coaching, the response bubble and the checklist only exist after a
+    // round is submitted, so the route sweep never sees them.
+    for (const theme of ["light", "dark"] as const) {
+      await page.addInitScript((value) => {
+        window.localStorage.setItem("lace-learning-hub-theme", value);
+      }, theme);
+      await page.goto("/binder/litigation/trial-skills/practice/hearsay-objection-in-writing/");
+      await page.getByRole("textbox", { name: "Your response" }).fill("A response.");
+      await page.getByRole("button", { name: "Submit response" }).click();
+      await page.getByRole("checkbox").first().check();
+      await expect(page.getByRole("button", { name: "See coaching" })).toBeVisible();
+      let { violations } = await scan(page);
+      expect(
+        violations,
+        `${theme} checklist
+${describe(violations)}`,
+      ).toEqual([]);
+
+      await page.getByRole("button", { name: "See coaching" }).click();
+      ({ violations } = await scan(page));
+      expect(
+        violations,
+        `${theme} coaching
+${describe(violations)}`,
+      ).toEqual([]);
+    }
+  });
+
   test("the search dialog has no accessibility violations while open", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("main")).toBeVisible();
